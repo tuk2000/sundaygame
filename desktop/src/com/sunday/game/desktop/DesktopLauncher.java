@@ -2,6 +2,7 @@ package com.sunday.game.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.sunday.game.Game;
 import com.sunday.game.SundayMain;
 
 public class DesktopLauncher {
@@ -9,9 +10,10 @@ public class DesktopLauncher {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "Sunday Game";
         config.useGL30 = true;
-        config.width = 480;
-        config.height = 320;
+        config.width = 700;
+        config.height = 600;
+        config.resizable = false;
 
-        new LwjglApplication(new SundayMain(), config);
+        new LwjglApplication(new Game(), config);
     }
 }
