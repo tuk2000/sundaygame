@@ -18,9 +18,10 @@ import com.badlogic.gdx.utils.Timer;
 public class Player implements ApplicationListener {
     SpriteBatch batch;
     Texture player;
-    Texture stillPlayer;
+    Texture background;
     TextureRegion[][] tRegions;
     Sprite sprite;
+    Sprite bgSprite;
     int frame=0,zeile = 0;
     OrthographicCamera cam;
     private float rotationSpeed;
@@ -29,7 +30,6 @@ public class Player implements ApplicationListener {
     @Override
     public void create() {
         player = new Texture("playerSp.png");
-        stillPlayer = new Texture("player_img/player2.png");
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
         tRegions = TextureRegion.split(player,275,385);
@@ -63,21 +63,34 @@ public class Player implements ApplicationListener {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         //cam.update();
         //batch.setProjectionMatrix(cam.combined);
-
+        boden();
+        Background();
         handleInput();
         batch.begin();
         sprite.setSize(75,75);
         sprite.draw(batch);
         batch.end();
-        boden();
     }
     public void boden(){
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.setColor(Color.ROYAL);
+        shapeRenderer.circle(520,0,250);
+        shapeRenderer.setColor(Color.YELLOW);
+        shapeRenderer.circle(520,0,150);
         shapeRenderer.setColor(Color.RED);
-        shapeRenderer.rect(270,20,20,20);
-        shapeRenderer.rect(0,0,1040,10,Color.BLACK,Color.GRAY,Color.DARK_GRAY,Color.LIGHT_GRAY);
+        shapeRenderer.circle(520,0,50);
         shapeRenderer.end();
 
+    }
+    public void Background(){
+        background = new Texture("bg/bg.png");
+        bgSprite = new Sprite(background);
+        batch.begin();
+        bgSprite.draw(batch);
+        bgSprite.setPosition(600,0);
+        bgSprite.setRotation(180.0f);
+        bgSprite.draw(batch);
+        batch.end();
     }
     @Override
     public void pause() {
