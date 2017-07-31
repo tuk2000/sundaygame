@@ -27,8 +27,9 @@ public class Game implements ApplicationListener{
     public void create() {
         player1 = new Texture("playerSp.png");
         batch = new SpriteBatch();
-        //font = new BitmapFont();
-        //font.setColor(Color.RED);
+        Player pl = new Player();
+        font = new BitmapFont();
+        font.setColor(Color.RED);
         shapeRenderer = new ShapeRenderer();
         tRegions = TextureRegion.split(player1,18,385);
         sprite = new Sprite(tRegions[0][0]);
@@ -59,18 +60,13 @@ public class Game implements ApplicationListener{
     public void render() {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        /*shapeRenderer.begin(ShapeType.Filled);
+        shapeRenderer.begin(ShapeType.Filled);
         shapeRenderer.setColor(Color.RED);
         shapeRenderer.rect(70,20,20,20);
         shapeRenderer.rect(0,0,800,20,Color.BLACK,Color.GRAY,Color.DARK_GRAY,Color.LIGHT_GRAY);
         shapeRenderer.end();
         batch.begin();
         font.draw(batch,"Sunday Game",200,200);
-        batch.end();*/
-        batch.begin();
-        //batch.draw((Texture) animation.getKeyFrame(elapsedTime,true),0,0);
-        sprite.draw(batch);
-        //batch.draw(player1,0,0);
         batch.end();
     }
 

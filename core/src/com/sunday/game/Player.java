@@ -2,6 +2,7 @@ package com.sunday.game;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -12,9 +13,13 @@ import com.badlogic.gdx.utils.Timer;
 public class Player implements ApplicationListener {
     SpriteBatch batch;
     Texture player;
+
+
     TextureRegion[][] tRegions;
     Sprite sprite;
+    public Sprite tempSprite;
     int frame=0,zeile = 0;
+    MovePlayer mvPlayer;
 
     @Override
     public void create() {
@@ -48,7 +53,22 @@ public class Player implements ApplicationListener {
     public void render() {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        if (Gdx.input.isKeyJustPressed(Input.Keys.LEFT)){
+
+            if (sprite.getX()> -200) {
+                sprite.translateX(-11f);
+                if (!sprite.isFlipX()){
+                    sprite.flip(true,false);
+                }
+            }
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)){
+            if (sprite.getX()<1030) {
+                sprite.translateX(11f);
+            }
+        }
         batch.begin();
+        sprite.setSize(75,75);
         sprite.draw(batch);
         batch.end();
     }
