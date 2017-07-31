@@ -10,10 +10,10 @@ public class PhysicalEmulationTest {
         entity.setLocation(new Vector2(50.0f, 50.0f));
         entity.setMotionRestrctionControl(new MotionRestrctionControl() {
             @Override
-            public boolean checkHasInterput(Entity entity) {
-                System.out.println("checkHasInterput");
+            public boolean InterruptTriggerCallRoutine(Entity entity) {
+                System.out.println("InterruptTriggerCallRoutine");
                 entity.printBasicInfo();
-               return entity.getVelocity().x< 0.01f;
+               return entity.getVelocity().x< 0.01f || entity.getLocation().x<48;
             }
         });
         entity.executeMove();

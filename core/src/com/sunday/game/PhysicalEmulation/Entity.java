@@ -48,7 +48,7 @@ public class Entity {
         Interrupted=false;
         while (!Interrupted ) {
             if(motionRestrctionControl!=null){
-                Interrupted=motionRestrctionControl.checkHasInterput(this);
+                Interrupted=motionRestrctionControl.InterruptTriggerCallRoutine(this);
                 if(Interrupted) return;
             }
             runSimulation();
