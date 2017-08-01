@@ -1,17 +1,19 @@
 package com.sunday.game.World;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.physics.box2d.*;
+import com.sunday.game.Menu.LevelMenuManager;
+import com.sunday.game.UserInput.UserInputManager;
 
 public class GamePlay implements Screen {
+    private static final float TIMESTEP = 1/60f;
+    private static final int VELOCITYITERATIONS = 8,POSITIONITERATIONS = 3;
     private World world;
     private Box2DDebugRenderer box2DDebugRenderer;
     private OrthographicCamera camera;
@@ -26,16 +28,43 @@ public class GamePlay implements Screen {
     public void show() {
         world = new World(new Vector2(0,-9.81f),true);
         box2DDebugRenderer = new Box2DDebugRenderer();
+
+
         //The Camera variable when we divide width and height by for eg.  5 it will be 5:1
-        camera = new OrthographicCamera(Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+        camera = new OrthographicCamera(Gdx.graphics.getWidth()/10,Gdx.graphics.getHeight()/10);
+
+        Gdx.input.setInputProcessor(new UserInputManager(){
+            @Override
+            public boolean keyDown(int keycode) {
+                if (keycode == Input.Keys.ESCAPE){
+                    ((Game)Gdx.app.getApplicationListener()).setScreen(new LevelMenuManager());
+                }
+                return true;
+            }
+        });
         //Shape Renderer
         shapeRenderer = new ShapeRenderer();
+
         //Body Definition
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(0,1);
+
+        //Ball Shape
+        CircleShape shape = new CircleShape();
+        shape.setRadius(.5f);
+
         //Fixture Definition
-        
+        //We cann add fixture to a body like the properties below
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.density = 2.5f;
+        fixtureDef.friction =.25f;
+        fixtureDef.restitution = -.75f;
+
+        //uses all the properties and creates body
+        world.createBody(bodyDef).createFixture(fixtureDef);
+        shape.dispose();
     }
 
     @Override
@@ -44,8 +73,9 @@ public class GamePlay implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //Renders new world with camera combined
-        box2DDebugRenderer.render(world,camera.combined);
         boden();
+        box2DDebugRenderer.render(world,camera.combined);
+        world.step(TIMESTEP,VELOCITYITERATIONS,POSITIONITERATIONS);
     }
 
     public void boden(){
@@ -76,7 +106,7 @@ public class GamePlay implements Screen {
 
     @Override
     public void hide() {
-
+        dispose();
     }
 
     @Override
