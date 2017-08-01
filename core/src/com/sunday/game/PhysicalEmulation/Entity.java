@@ -2,88 +2,104 @@ package com.sunday.game.PhysicalEmulation;
 
 import com.badlogic.gdx.math.Vector2;
 
-public class Entity {
-    private Vector2 acc;
-    private Vector2 velocity;
-    private Vector2 location;
-    private MotionRestrctionControl motionRestrctionControl;
+public class Entity implements EntityInterface {
     //only used in the class
     private Boolean Interrupted;
-    private Vector2 locCpy;
-    private TimeSlot timeSlot;
-    private long slot;
-
+    private VirtualEntity shadowEntityFirst;
+    private VirtualEntity shadowEntitySecond;
+    private VirtualEntity currentEntity;
+    private VirtualEntity nextEntity;
 
     public Entity() {
         Interrupted = true;
-        acc = new Vector2(.0f, .0f);
-        velocity = new Vector2(.0f, .0f);
-        location=new Vector2(.0f, .0f);
-        locCpy=new Vector2(location);
-        timeSlot = new TimeSlot(10);
-        slot=0;
+        shadowEntityFirst = new VirtualEntity();
+        currentEntity = shadowEntityFirst;
+        shadowEntitySecond = new VirtualEntity();
+        nextEntity = shadowEntitySecond;
     }
 
+    private void syncShadows() {
+        VirtualEntity.copyEntityFormAToB(currentEntity, nextEntity);
+    }
+
+    @Override
     public Vector2 getAcceleration() {
-        return acc;
+        return currentEntity.getAcceleration();
     }
 
     public void setAcceleration(Vector2 acc) {
-        Interrupted=true;
-        slot=0;
-        this.acc = acc;
+        Interrupted = true;
+        currentEntity.setAcceleration(acc);
+        syncShadows();
     }
 
+    @Override
     public Vector2 getVelocity() {
-        return velocity;
+        return currentEntity.getVelocity();
     }
+
 
     public void setVelocity(Vector2 velocity) {
-        Interrupted=true;
-        slot=0;
-        this.velocity = velocity;
+        Interrupted = true;
+        currentEntity.setVelocity(velocity);
+        syncShadows();
     }
 
-    public void executeMove() {
-        Interrupted=false;
-        while (!Interrupted ) {
-            if(motionRestrctionControl!=null){
-                Interrupted=motionRestrctionControl.InterruptTriggerCallRoutine(this);
-                if(Interrupted) return;
-            }
-            runSimulation();
-        }
-    }
-
-    private void runSimulation() {
-        double slotssqrt;
-        if (timeSlot.TickTock) {
-            slot++;
-            slotssqrt = Math.pow(slot,2);
-            velocity.add(acc);
-            location.set((float) (.5f * acc.x * slotssqrt + locCpy.x), (float) (.5f * acc.y * slotssqrt + locCpy.y));
-        }
-    }
-
+    @Override
     public Vector2 getLocation() {
-        return location;
+        return currentEntity.getLocation();
     }
 
     public void setLocation(Vector2 location) {
-        Interrupted=true;
-        slot=0;
-        this.location = location;
-        locCpy = new Vector2(location);
+        Interrupted = true;
+        currentEntity.setLocation(location);
+        syncShadows();
     }
 
+    @Override
     public void setMotionRestrctionControl(MotionRestrctionControl motionRestrctionControl) {
-        this.motionRestrctionControl = motionRestrctionControl;
+        currentEntity.setMotionRestrctionControl(motionRestrctionControl);
+        syncShadows();
     }
-    public void printBasicInfo(){
-        System.out.println(slot);
-        System.out.println(acc.toString());
-        System.out.println(velocity.toString());
-        System.out.println(location.toString());
-        System.out.println();
+
+    @Override
+    public void printBasicInfo() {
+        currentEntity.printBasicInfo();
     }
+
+    public void executeMove() {
+
+        boolean RestrictionSuccessed = true;
+        Interrupted = false;
+
+        RestrictionSuccessed = currentEntity.checkRestriction();
+
+        if (!RestrictionSuccessed) {
+            return;
+        }
+
+        while (!Interrupted) {
+
+            VirtualEntity.runSingleSimulationFromAtoB(currentEntity, nextEntity);
+            RestrictionSuccessed = nextEntity.checkRestriction();
+
+            if (RestrictionSuccessed) {
+                nextStepConfig();
+            } else {
+                Interrupted = true;
+            }
+        }
+    }
+
+    private void nextStepConfig() {
+
+        if (currentEntity.equals(shadowEntityFirst)) {
+            currentEntity = shadowEntitySecond;
+            nextEntity = shadowEntityFirst;
+        } else {
+            currentEntity = shadowEntityFirst;
+            nextEntity = shadowEntitySecond;
+        }
+    }
+
 }

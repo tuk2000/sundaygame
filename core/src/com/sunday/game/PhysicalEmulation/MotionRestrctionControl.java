@@ -1,5 +1,6 @@
 package com.sunday.game.PhysicalEmulation;
 
 public interface MotionRestrctionControl {
-    boolean InterruptTriggerCallRoutine(Entity entity);
+    //return true when the entity satisfiy the restrictions
+    boolean checkRestrictionRoutine(EntityInterface entity);
 }
