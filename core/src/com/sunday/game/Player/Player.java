@@ -1,4 +1,4 @@
-package com.sunday.game;
+package com.sunday.game.Player;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
@@ -59,11 +59,8 @@ public class Player implements ApplicationListener {
 
     @Override
     public void render() {
-        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClearColor(171/255f, 216/255f, 227/255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        //cam.update();
-        //batch.setProjectionMatrix(cam.combined);
-        boden();
         Background();
         handleInput();
         batch.begin();
@@ -83,12 +80,22 @@ public class Player implements ApplicationListener {
 
     }
     public void Background(){
-        background = new Texture("bg/bg.png");
+        background = new Texture("bg/bg_1280_some.png");
         bgSprite = new Sprite(background);
         batch.begin();
+        //bgSprite.setPosition(0,200);
         bgSprite.draw(batch);
-        bgSprite.setPosition(600,0);
-        bgSprite.setRotation(180.0f);
+        //bgSprite.setRotation(180.0f);
+        //bgSprite.draw(batch);
+        batch.end();
+        background = new Texture("grass/tile_grass_02.png");
+        bgSprite = new Sprite(background);
+        bgSprite.setPosition(0,0);
+        bgSprite.setSize(bgSprite.getHeight(),bgSprite.getHeight()/2);
+        float x = bgSprite.getWidth();
+        batch.begin();
+        bgSprite.draw(batch);
+        bgSprite.setPosition(x,0);
         bgSprite.draw(batch);
         batch.end();
     }
@@ -123,7 +130,10 @@ public class Player implements ApplicationListener {
     }
     @Override
     public void dispose() {
-
+        batch.dispose();
+        player.dispose();
+        background.dispose();
+        shapeRenderer.dispose();
     }
 }
 
