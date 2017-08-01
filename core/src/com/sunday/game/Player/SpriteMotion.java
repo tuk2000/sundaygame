@@ -1,4 +1,4 @@
-package com.sunday.game;
+package com.sunday.game.Player;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
