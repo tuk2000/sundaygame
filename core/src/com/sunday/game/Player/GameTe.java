@@ -11,7 +11,7 @@ import com.badlogic.gdx.utils.Timer;
 
 import static com.badlogic.gdx.graphics.glutils.ShapeRenderer.*;
 
-public class Game implements ApplicationListener{
+public class GameTe implements ApplicationListener{
      SpriteBatch batch;
      Texture player1;
      TextureRegion[] animationFrames;
@@ -65,7 +65,7 @@ public class Game implements ApplicationListener{
         shapeRenderer.rect(0,0,800,20,Color.BLACK,Color.GRAY,Color.DARK_GRAY,Color.LIGHT_GRAY);
         shapeRenderer.end();
         batch.begin();
-        font.draw(batch,"Sunday Game",200,200);
+        font.draw(batch,"Sunday GameTe",200,200);
         batch.end();
     }
 

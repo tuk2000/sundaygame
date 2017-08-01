@@ -1,19 +1,29 @@
 package com.sunday.game.Player;
 
 import com.badlogic.gdx.ApplicationListener;
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g3d.utils.MeshBuilder;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Timer;
+import com.sunday.game.World.GamePlay;
 
 public class Player implements ApplicationListener {
     SpriteBatch batch;
@@ -26,9 +36,30 @@ public class Player implements ApplicationListener {
     OrthographicCamera cam;
     private float rotationSpeed;
     ShapeRenderer shapeRenderer;
+    Stage stage;
+    TextButton button;
+    TextButton.TextButtonStyle textButtonStyle;
+    Skin skin;
+    BitmapFont font;
 
     @Override
     public void create() {
+        //Button
+        stage = new Stage();
+        Gdx.input.setInputProcessor(stage);
+        font = new BitmapFont();
+        skin = new Skin();
+        textButtonStyle = new TextButton.TextButtonStyle();
+        textButtonStyle.font = font;
+        button = new TextButton("Play",textButtonStyle);
+        stage.addActor(button);
+        button.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                ((Game)Gdx.app.getApplicationListener()).setScreen(new GamePlay());
+            }
+        });
+        button.pad(15);
         player = new Texture("playerSp.png");
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
@@ -63,7 +94,9 @@ public class Player implements ApplicationListener {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Background();
         handleInput();
+        stage.draw();
         batch.begin();
+
         sprite.setSize(75,75);
         sprite.draw(batch);
         batch.end();
