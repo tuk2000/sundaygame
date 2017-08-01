@@ -44,7 +44,7 @@ public class Player implements ApplicationListener {
 
     @Override
     public void create() {
-        //Button
+        /*/Button
         stage = new Stage();
         Gdx.input.setInputProcessor(stage);
         font = new BitmapFont();
@@ -59,7 +59,7 @@ public class Player implements ApplicationListener {
                 ((Game)Gdx.app.getApplicationListener()).setScreen(new GamePlay());
             }
         });
-        button.pad(15);
+        button.pad(15);*/
         player = new Texture("playerSp.png");
         shapeRenderer = new ShapeRenderer();
         batch = new SpriteBatch();
@@ -94,7 +94,6 @@ public class Player implements ApplicationListener {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         Background();
         handleInput();
-        stage.draw();
         batch.begin();
 
         sprite.setSize(75,75);
