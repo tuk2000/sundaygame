@@ -2,7 +2,7 @@ package com.sunday.game.PhysicalEmulation;
 
 import com.badlogic.gdx.math.Vector2;
 
-public interface EntityInterface {
+public interface EntityInterface extends TimeSlotReciver{
 
     Vector2 getAcceleration();
 
@@ -16,6 +16,8 @@ public interface EntityInterface {
     Vector2 getLocation();
 
     void setLocation(Vector2 location);
+
+    void setSimulationResultReciver(SimulationResultReciver simulationResultReciver);
 
     void setMotionRestrctionControl(MotionRestrctionControl motionRestrctionControl);
 

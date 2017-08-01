@@ -57,6 +57,16 @@ public class Entity implements EntityInterface {
     }
 
     @Override
+    public void newTimeSlot(){
+        currentEntity.newTimeSlot();
+    }
+
+    @Override
+    public void setSimulationResultReciver(SimulationResultReciver simulationResultReciver){
+        currentEntity.setSimulationResultReciver(simulationResultReciver);
+    }
+
+    @Override
     public void setMotionRestrctionControl(MotionRestrctionControl motionRestrctionControl) {
         currentEntity.setMotionRestrctionControl(motionRestrctionControl);
         syncShadows();
