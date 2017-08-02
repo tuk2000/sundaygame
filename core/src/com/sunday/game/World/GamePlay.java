@@ -1,9 +1,6 @@
 package com.sunday.game.World;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -13,9 +10,10 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.sunday.game.Menu.LevelMenuManager;
 import com.sunday.game.UserInput.UserInputManager;
 
-public class GamePlay implements Screen {
-    private static final float TIMESTEP = 1/60f;
-    private static final int VELOCITYITERATIONS = 8,POSITIONITERATIONS = 3;
+public class GamePlay implements Screen, InputReciver {
+    private  InputAdapter inputAdapter ;
+    private static final float TIMESTEP = 1 / 60f;
+    private static final int VELOCITYITERATIONS = 8, POSITIONITERATIONS = 3;
     private World world;
     private Box2DDebugRenderer box2DDebugRenderer;
     private OrthographicCamera camera;
@@ -31,25 +29,13 @@ public class GamePlay implements Screen {
 
     public GamePlay(Welcome game) {
         this.game = game;
-    }
 
-    @Override
-    public void show() {
-        batch = new SpriteBatch();
-        font = new BitmapFont();
-        world = new World(new Vector2(0,-9.81f),true);
-        box2DDebugRenderer = new Box2DDebugRenderer();
-
-
-        //The Camera variable when we divide width and height by for eg.  5 it will be 5:1
-        camera = new OrthographicCamera(Gdx.graphics.getWidth()/20,Gdx.graphics.getHeight()/20);
-
-        Gdx.input.setInputProcessor(new UserInputManager(){
+        inputAdapter= new InputAdapter() {
             @Override
             public boolean keyDown(int keycode) {
-                switch (keycode){
+                switch (keycode) {
                     case Input.Keys.ESCAPE:
-                        ((Game)Gdx.app.getApplicationListener()).setScreen(new LevelMenuManager());
+                        GamePlay.this.game.setScreen(new LevelMenuManager());
                         break;
                     case Input.Keys.SPACE:
                         movement.y = 1.5f * speed;
@@ -63,12 +49,13 @@ public class GamePlay implements Screen {
                 }
                 return true;
             }
+
             @Override
             public boolean keyUp(int keycode) {
-                switch (keycode){
+                switch (keycode) {
                     case Input.Keys.SPACE:
                     case Input.Keys.LEFT:
-                        movement.y =0;
+                        movement.y = 0;
                         break;
                     case Input.Keys.RIGHT:
                         movement.x = 0;
@@ -76,13 +63,27 @@ public class GamePlay implements Screen {
                 }
                 return true;
             }
-        });
+        };
+    }
+
+
+    @Override
+    public void show() {
+
+        batch = new SpriteBatch();
+        font = new BitmapFont();
+        world = new World(new Vector2(0, -9.81f), true);
+        box2DDebugRenderer = new Box2DDebugRenderer();
+
+        //The Camera variable when we divide width and height by for eg.  5 it will be 5:1
+        camera = new OrthographicCamera(Gdx.graphics.getWidth() / 20, Gdx.graphics.getHeight() / 20);
+
         //Shape Renderer
         shapeRenderer = new ShapeRenderer();
         //Body Definition
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(0,10);
+        bodyDef.position.set(0, 10);
 
         //Ball Shape
         CircleShape shape = new CircleShape();
@@ -93,7 +94,7 @@ public class GamePlay implements Screen {
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.density = 4.5f;
-        fixtureDef.friction =.25f;
+        fixtureDef.friction = .25f;
         fixtureDef.restitution = -.75f;
 
         //uses all the properties and creates body
@@ -101,10 +102,10 @@ public class GamePlay implements Screen {
         shape.dispose();
         //Box
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(2.5f,10);
+        bodyDef.position.set(2.5f, 10);
 
         PolygonShape boxShape = new PolygonShape();
-        boxShape.setAsBox(.5f,1f);
+        boxShape.setAsBox(.5f, 1f);
 
         fixtureDef.shape = boxShape;
         fixtureDef.friction = .75f;
@@ -118,15 +119,15 @@ public class GamePlay implements Screen {
 
         //Body Definition
         bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(0,0);
+        bodyDef.position.set(0, 0);
         //Boden
         ChainShape chainShape = new ChainShape();
-        chainShape.createChain(new Vector2[]{new Vector2(-50,0),new Vector2(50,0)});
+        chainShape.createChain(new Vector2[]{new Vector2(-50, 0), new Vector2(50, 0)});
 
         //Fixture Definition
         //We cann add fixture to a body like the properties below
         fixtureDef.shape = chainShape;
-        fixtureDef.friction =.5f;
+        fixtureDef.friction = .5f;
         fixtureDef.restitution = 0;
 
         //uses all the properties and creates body
@@ -136,36 +137,37 @@ public class GamePlay implements Screen {
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(171/255f, 216/255f, 227/255f, 1);
-        Gdx.gl.glClearColor(0,0,0,1);
+        Gdx.gl.glClearColor(171 / 255f, 216 / 255f, 227 / 255f, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //Renders new world with camera combined
         boden();
-        box2DDebugRenderer.render(world,camera.combined);
-        world.step(TIMESTEP,VELOCITYITERATIONS,POSITIONITERATIONS);
-        box.applyForceToCenter(movement,true);
+        box2DDebugRenderer.render(world, camera.combined);
+        world.step(TIMESTEP, VELOCITYITERATIONS, POSITIONITERATIONS);
+        box.applyForceToCenter(movement, true);
         batch.begin();
-        font.draw(batch,"Space for UP \n Left Arrow -> for Left\n Right Arrow <- for Right",200,200);
+        font.draw(batch, "Space for UP \n Left Arrow -> for Left\n Right Arrow <- for Right", 200, 200);
         batch.end();
 
     }
 
-    public void boden(){
+    public void boden() {
         shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         shapeRenderer.setColor(Color.ROYAL);
-        shapeRenderer.circle(520,0,250);
+        shapeRenderer.circle(520, 0, 250);
         shapeRenderer.setColor(Color.YELLOW);
-        shapeRenderer.circle(520,0,150);
+        shapeRenderer.circle(520, 0, 150);
         shapeRenderer.setColor(Color.RED);
-        shapeRenderer.circle(520,0,50);
+        shapeRenderer.circle(520, 0, 50);
         shapeRenderer.end();
 
     }
+
     @Override
     public void resize(int width, int height) {
-        camera.viewportWidth = width/25;
-        camera.viewportWidth = height/25;
+        camera.viewportWidth = width / 25;
+        camera.viewportWidth = height / 25;
         camera.update();
     }
 
@@ -189,5 +191,10 @@ public class GamePlay implements Screen {
         world.dispose();
         box2DDebugRenderer.dispose();
         shapeRenderer.dispose();
+    }
+
+    @Override
+    public InputAdapter getInputAdapter() {
+        return inputAdapter;
     }
 }
