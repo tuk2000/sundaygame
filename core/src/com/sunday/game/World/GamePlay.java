@@ -5,6 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
@@ -24,12 +26,17 @@ public class GamePlay implements Screen {
     private Vector2 movement = new Vector2();
     private Body box;
 
+    private SpriteBatch batch;
+    private BitmapFont font;
+
     public GamePlay(Welcome game) {
         this.game = game;
     }
 
     @Override
     public void show() {
+        batch = new SpriteBatch();
+        font = new BitmapFont();
         world = new World(new Vector2(0,-9.81f),true);
         box2DDebugRenderer = new Box2DDebugRenderer();
 
@@ -85,7 +92,7 @@ public class GamePlay implements Screen {
         //We cann add fixture to a body like the properties below*/
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
-        fixtureDef.density = 2.5f;
+        fixtureDef.density = 4.5f;
         fixtureDef.friction =.25f;
         fixtureDef.restitution = -.75f;
 
@@ -102,7 +109,7 @@ public class GamePlay implements Screen {
         fixtureDef.shape = boxShape;
         fixtureDef.friction = .75f;
         fixtureDef.restitution = .1f;
-        fixtureDef.density = 50f;
+        fixtureDef.density = 15f;
 
         box = world.createBody(bodyDef);
         box.createFixture(fixtureDef);
@@ -138,6 +145,9 @@ public class GamePlay implements Screen {
         box2DDebugRenderer.render(world,camera.combined);
         world.step(TIMESTEP,VELOCITYITERATIONS,POSITIONITERATIONS);
         box.applyForceToCenter(movement,true);
+        batch.begin();
+        font.draw(batch,"Space for UP \n Left Arrow -> for Left\n Right Arrow <- for Right",200,200);
+        batch.end();
 
     }
 
