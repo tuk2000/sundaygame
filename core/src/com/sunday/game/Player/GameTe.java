@@ -65,7 +65,7 @@ public class GameTe implements ApplicationListener{
         shapeRenderer.rect(0,0,800,20,Color.BLACK,Color.GRAY,Color.DARK_GRAY,Color.LIGHT_GRAY);
         shapeRenderer.end();
         batch.begin();
-        font.draw(batch,"Sunday GameTe",200,200);
+        font.draw(batch,"Sunday Game",200,200);
         batch.end();
     }
 

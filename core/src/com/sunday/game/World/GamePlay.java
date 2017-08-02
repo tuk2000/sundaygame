@@ -20,6 +20,10 @@ public class GamePlay implements Screen {
     private ShapeRenderer shapeRenderer;
     private Welcome game;
 
+    private float speed = 500;
+    private Vector2 movement = new Vector2();
+    private Body box;
+
     public GamePlay(Welcome game) {
         this.game = game;
     }
@@ -31,31 +35,54 @@ public class GamePlay implements Screen {
 
 
         //The Camera variable when we divide width and height by for eg.  5 it will be 5:1
-        camera = new OrthographicCamera(Gdx.graphics.getWidth()/10,Gdx.graphics.getHeight()/10);
+        camera = new OrthographicCamera(Gdx.graphics.getWidth()/20,Gdx.graphics.getHeight()/20);
 
         Gdx.input.setInputProcessor(new UserInputManager(){
             @Override
             public boolean keyDown(int keycode) {
-                if (keycode == Input.Keys.ESCAPE){
-                    ((Game)Gdx.app.getApplicationListener()).setScreen(new LevelMenuManager());
+                switch (keycode){
+                    case Input.Keys.ESCAPE:
+                        ((Game)Gdx.app.getApplicationListener()).setScreen(new LevelMenuManager());
+                        break;
+                    case Input.Keys.SPACE:
+                        movement.y = 1.5f * speed;
+                        break;
+                    case Input.Keys.LEFT:
+                        movement.x = -speed;
+                        break;
+                    case Input.Keys.RIGHT:
+                        movement.x = speed;
+
+                }
+                return true;
+            }
+            @Override
+            public boolean keyUp(int keycode) {
+                switch (keycode){
+                    case Input.Keys.SPACE:
+                    case Input.Keys.LEFT:
+                        movement.y =0;
+                        break;
+                    case Input.Keys.RIGHT:
+                        movement.x = 0;
+
                 }
                 return true;
             }
         });
         //Shape Renderer
         shapeRenderer = new ShapeRenderer();
-
         //Body Definition
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(0,1);
+        bodyDef.position.set(0,10);
 
         //Ball Shape
         CircleShape shape = new CircleShape();
         shape.setRadius(.5f);
 
         //Fixture Definition
-        //We cann add fixture to a body like the properties below
+        //We cann add fixture to a body like the properties below*/
         FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = shape;
         fixtureDef.density = 2.5f;
@@ -65,17 +92,53 @@ public class GamePlay implements Screen {
         //uses all the properties and creates body
         world.createBody(bodyDef).createFixture(fixtureDef);
         shape.dispose();
+        //Box
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(2.5f,10);
+
+        PolygonShape boxShape = new PolygonShape();
+        boxShape.setAsBox(.5f,1f);
+
+        fixtureDef.shape = boxShape;
+        fixtureDef.friction = .75f;
+        fixtureDef.restitution = .1f;
+        fixtureDef.density = 50f;
+
+        box = world.createBody(bodyDef);
+        box.createFixture(fixtureDef);
+
+        boxShape.dispose();
+
+        //Body Definition
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(0,0);
+        //Boden
+        ChainShape chainShape = new ChainShape();
+        chainShape.createChain(new Vector2[]{new Vector2(-50,0),new Vector2(50,0)});
+
+        //Fixture Definition
+        //We cann add fixture to a body like the properties below
+        fixtureDef.shape = chainShape;
+        fixtureDef.friction =.5f;
+        fixtureDef.restitution = 0;
+
+        //uses all the properties and creates body
+        world.createBody(bodyDef).createFixture(fixtureDef);
+        chainShape.dispose();
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(171/255f, 216/255f, 227/255f, 1);
+        Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //Renders new world with camera combined
         boden();
         box2DDebugRenderer.render(world,camera.combined);
         world.step(TIMESTEP,VELOCITYITERATIONS,POSITIONITERATIONS);
+        box.applyForceToCenter(movement,true);
+
     }
 
     public void boden(){
@@ -91,7 +154,9 @@ public class GamePlay implements Screen {
     }
     @Override
     public void resize(int width, int height) {
-
+        camera.viewportWidth = width/25;
+        camera.viewportWidth = height/25;
+        camera.update();
     }
 
     @Override
