@@ -7,8 +7,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.sunday.game.GameFramework.InputReciver;
 import com.sunday.game.Menu.LevelMenuManager;
-import com.sunday.game.UserInput.UserInputManager;
 
 public class GamePlay implements Screen, InputReciver {
     private  InputAdapter inputAdapter ;

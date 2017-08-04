@@ -1,5 +1,6 @@
-package com.sunday.game.GameEntry;
+package com.sunday.game.GameFramework;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
 
 
@@ -7,20 +8,26 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GameAdaptor implements ApplicationListener {
     private static GameAdaptor adaptorInstance;
-    private ApplicationListener currentListener = null;
-    private AtomicBoolean secureTransmit;
+    private  static ApplicationListener currentListener = null;
+    private static AtomicBoolean secureTransmit=new AtomicBoolean(false);;
 
     private GameAdaptor() {
-        secureTransmit = new AtomicBoolean(false);
+
     }
 
     public final ApplicationListener getCurrentListener() {
         return currentListener;
     }
 
-    public final synchronized void setCurrentListener(ApplicationListener currentListener) {
+    public static synchronized void setCurrentListener(ApplicationListener currentListener) {
+        System.out.println(Thread.currentThread().toString());
+        String name = Thread.currentThread().getStackTrace()[3].getClassName();
+        System.out.println(System.nanoTime() + " GameAdaptor.setCurrentListener() was called by " + name);
         secureTransmit.set(false);
-        this.currentListener = currentListener;
+        if(GameAdaptor.currentListener!=null){
+            currentListener.create();
+        }
+        GameAdaptor.currentListener = currentListener;
         secureTransmit.set(true);
     }
 
@@ -37,8 +44,14 @@ public class GameAdaptor implements ApplicationListener {
      */
     @Override
     public void create() {
-        if (secureTransmit.get())
+        GameFramework.intialGameFrameWork();
+        System.out.println(Thread.currentThread().toString());
+        String name = Thread.currentThread().getStackTrace()[3].getClassName();
+        System.out.println(System.nanoTime() + " GameAdaptor.create() was called by " + name);
+        if (secureTransmit.get()) {
             currentListener.create();
+        }
+
     }
 
     /**

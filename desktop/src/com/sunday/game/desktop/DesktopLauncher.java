@@ -1,13 +1,8 @@
 package com.sunday.game.desktop;
 
-import com.badlogic.gdx.Files;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.sunday.game.GameEntry.GameAdaptor;
-import com.sunday.game.GameEntry.GameFramework;
-import com.sunday.game.Player.Player;
-import com.sunday.game.World.GamePlay;
-import com.sunday.game.World.Welcome;
+import com.sunday.game.GameFramework.GameAdaptor;
 
 public class DesktopLauncher {
     public static void main(String[] arg) {
@@ -19,6 +14,5 @@ public class DesktopLauncher {
         config.resizable = false;
 
         new LwjglApplication(GameAdaptor.getInstance(), config);
-        new GameFramework();
     }
 }

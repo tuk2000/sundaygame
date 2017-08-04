@@ -1,9 +1,8 @@
-package com.sunday.game.GameEntry;
+package com.sunday.game.GameFramework;
+
+import com.sunday.game.World.Welcome;
 
 public class GameFlowManager {
-    public enum GameStatus {
-        Loading, Intro, Setting, InGame,
-    }
 
     private static GameFlowManager gameFlowManager = new GameFlowManager();
     private GameStatus gameStatus;
@@ -21,15 +20,22 @@ public class GameFlowManager {
 
     public final synchronized void setGameStatus(GameStatus gameStatus) {
         this.gameStatus=gameStatus;
+        excuteGameStatus(gameStatus);
     }
 
     private void excuteGameStatus(GameStatus gameStatus){
-        switch (GameStatus.Intro){
+        Welcome welcome=new Welcome(gameStatus);
+        GameAdaptor.setCurrentListener(welcome);
+        UserInputManager.getInstance().setInputReciver(welcome);
+
+        switch (gameStatus){
             case Loading:
+
                 break;
             case Setting:
                 break;
             case Intro:
+
                 break;
             case InGame:
                 break;

@@ -1,22 +1,48 @@
 package com.sunday.game.World;
 
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.sunday.game.GameFramework.GameStatus;
+import com.sunday.game.GameFramework.InputReciver;
 
 
 public class Welcome extends Game implements InputReciver {
-   //SpriteBatch batch;
+    //SpriteBatch batch;
+    Screen currentGame;
+    InputReciver currentReciver;
     GamePlay gamePlay;
+    GameIntro gameIntro;
 
-    public Welcome() {
-        gamePlay = new GamePlay(this);
+    public Welcome(GameStatus gameStatus) {
+        switch (gameStatus) {
+            case Loading:
+
+                break;
+            case Setting:
+                break;
+            case Intro:
+                gameIntro = new GameIntro();
+                currentGame = gameIntro;
+                currentReciver = gameIntro;
+                break;
+            case InGame:
+                gamePlay = new GamePlay(this);
+                currentGame = gamePlay;
+                currentReciver = gamePlay;
+                break;
+        }
+
+
     }
 
     @Override
     public void create() {
         //batch = new SpriteBatch();
-        setScreen(gamePlay);
+        String name = Thread.currentThread().getStackTrace()[3].getClassName();
+        System.out.println(System.nanoTime() + " Welcome.create() was called by " + name);
+        //setScreen(gamePlay);
+        setScreen(currentGame);
     }
 
     @Override
@@ -26,6 +52,6 @@ public class Welcome extends Game implements InputReciver {
 
     @Override
     public InputAdapter getInputAdapter() {
-        return gamePlay.getInputAdapter();
+        return currentReciver.getInputAdapter();
     }
 }

@@ -1,4 +1,4 @@
-package com.sunday.game.World;
+package com.sunday.game.GameFramework;
 
 import com.badlogic.gdx.InputAdapter;
 
