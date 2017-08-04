@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.sunday.game.GameFramework.InputReciver;
-import com.sunday.game.Menu.LevelMenuManager;
 
 public class GamePlay implements Screen, InputReciver {
     private  InputAdapter inputAdapter ;
@@ -18,7 +17,6 @@ public class GamePlay implements Screen, InputReciver {
     private Box2DDebugRenderer box2DDebugRenderer;
     private OrthographicCamera camera;
     private ShapeRenderer shapeRenderer;
-    private Welcome game;
 
     private float speed = 500;
     private Vector2 movement = new Vector2();
@@ -27,16 +25,12 @@ public class GamePlay implements Screen, InputReciver {
     private SpriteBatch batch;
     private BitmapFont font;
 
-    public GamePlay(Welcome game) {
-        this.game = game;
+    public GamePlay() {
 
         inputAdapter= new InputAdapter() {
             @Override
             public boolean keyDown(int keycode) {
                 switch (keycode) {
-                    case Input.Keys.ESCAPE:
-                        GamePlay.this.game.setScreen(new LevelMenuManager());
-                        break;
                     case Input.Keys.SPACE:
                         movement.y = 1.5f * speed;
                         break;

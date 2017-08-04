@@ -27,7 +27,7 @@ public class Welcome extends Game implements InputReciver {
                 currentReciver = gameIntro;
                 break;
             case InGame:
-                gamePlay = new GamePlay(this);
+                gamePlay = new GamePlay();
                 currentGame = gamePlay;
                 currentReciver = gamePlay;
                 break;

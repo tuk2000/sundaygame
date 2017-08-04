@@ -48,11 +48,18 @@ public class GameIntro implements Screen, InputReciver {
         exit.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                System.exit(0);
+                Gdx.app.exit();
             }
         });
+
         setting = new TextButton("SETTING", textButtonStyle);
         test = new TextButton("TEST", textButtonStyle);
+        test.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+               GameFlowManager.getInstance().setGameStatus(GameStatus.Test);
+            }
+        });
 
     }
 
@@ -109,7 +116,9 @@ public class GameIntro implements Screen, InputReciver {
 
     @Override
     public void dispose() {
-
+        font.dispose();
+        buttonTextures.dispose();
+        stage.dispose();
     }
 
     @Override

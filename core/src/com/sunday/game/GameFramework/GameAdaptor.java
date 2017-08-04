@@ -8,8 +8,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GameAdaptor implements ApplicationListener {
     private static GameAdaptor adaptorInstance;
-    private  static ApplicationListener currentListener = null;
-    private static AtomicBoolean secureTransmit=new AtomicBoolean(false);;
+    private static ApplicationListener currentListener = null;
+    private static AtomicBoolean secureTransmit = new AtomicBoolean(false);
 
     private GameAdaptor() {
 
@@ -24,10 +24,11 @@ public class GameAdaptor implements ApplicationListener {
         String name = Thread.currentThread().getStackTrace()[3].getClassName();
         System.out.println(System.nanoTime() + " GameAdaptor.setCurrentListener() was called by " + name);
         secureTransmit.set(false);
-        if(GameAdaptor.currentListener!=null){
+        ApplicationListener old = GameAdaptor.currentListener;
+        GameAdaptor.currentListener = currentListener;
+        if (old == null || old != currentListener) {
             currentListener.create();
         }
-        GameAdaptor.currentListener = currentListener;
         secureTransmit.set(true);
     }
 
@@ -44,14 +45,10 @@ public class GameAdaptor implements ApplicationListener {
      */
     @Override
     public void create() {
-        GameFramework.intialGameFrameWork();
+        new GameFramework();
         System.out.println(Thread.currentThread().toString());
         String name = Thread.currentThread().getStackTrace()[3].getClassName();
         System.out.println(System.nanoTime() + " GameAdaptor.create() was called by " + name);
-        if (secureTransmit.get()) {
-            currentListener.create();
-        }
-
     }
 
     /**

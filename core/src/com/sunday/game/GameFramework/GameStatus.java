@@ -1,5 +1,5 @@
 package com.sunday.game.GameFramework;
 
 public enum GameStatus {
-    Loading, Intro, Setting, InGame,
+    Loading, Intro, Setting, InGame,Test
 }
