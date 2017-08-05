@@ -126,24 +126,23 @@ public class GamePlay implements Screen, InputReciver {
 
         //uses all the properties and creates body
         world.createBody(bodyDef).createFixture(fixtureDef);
+
+
         chainShape.dispose();
     }
 
     @Override
     public void render(float delta) {
-        Gdx.gl.glClearColor(171 / 255f, 216 / 255f, 227 / 255f, 1);
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //Renders new world with camera combined
         boden();
         box2DDebugRenderer.render(world, camera.combined);
-        world.step(TIMESTEP, VELOCITYITERATIONS, POSITIONITERATIONS);
         box.applyForceToCenter(movement, true);
         batch.begin();
         font.draw(batch, "Space for UP \n Left Arrow -> for Left\n Right Arrow <- for Right", 200, 200);
         batch.end();
 
+        world.step(TIMESTEP, VELOCITYITERATIONS, POSITIONITERATIONS);
     }
 
     public void boden() {
@@ -155,7 +154,6 @@ public class GamePlay implements Screen, InputReciver {
         shapeRenderer.setColor(Color.RED);
         shapeRenderer.circle(520, 0, 50);
         shapeRenderer.end();
-
     }
 
     @Override

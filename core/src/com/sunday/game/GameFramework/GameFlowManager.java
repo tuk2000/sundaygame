@@ -32,22 +32,22 @@ public class GameFlowManager {
         GameAdaptor.setCurrentListener(welcome);
         UserInputManager.setInputReciver(welcome);
 
-        switch (gameStatus){
-            case Loading:
-                //listenerStack.add(welcome);
-                break;
-            case Setting:
-                break;
-            case Intro:
-                if(listenerStack.size()>1)
-                    listenerStack.pop().dispose();
-                listenerStack.push(welcome);
-                break;
-            case InGame:
-                listenerStack.push(welcome);
-                break;
-        }
-        System.out.println(listenerStack.toString());
+//        switch (gameStatus){
+//            case Loading:
+//                //listenerStack.add(welcome);
+//                break;
+//            case Setting:
+//                break;
+//            case Intro:
+//                if(listenerStack.size()>1)
+//                    listenerStack.pop().dispose();
+//                listenerStack.push(welcome);
+//                break;
+//            case InGame:
+//                listenerStack.push(welcome);
+//                break;
+//        }
+//        System.out.println(listenerStack.toString());
     }
 
 }
