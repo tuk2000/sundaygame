@@ -7,7 +7,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class UserInputManager implements InputProcessor {
     private static UserInputManager userInputManager = null;
-    private static InputReciver inputReciver = null;
+    private static InputReceiver inputReceiver = null;
     private static AtomicBoolean secureTransmit= new AtomicBoolean(false);
 
     private UserInputManager() {
@@ -21,9 +21,9 @@ public final class UserInputManager implements InputProcessor {
         return userInputManager;
     }
 
-    public static final synchronized void setInputReciver(InputReciver inputReciver) {
+    public static final synchronized void setInputReciver(InputReceiver inputReceiver) {
         secureTransmit.set(false);
-        UserInputManager.inputReciver = inputReciver;
+        UserInputManager.inputReceiver = inputReceiver;
         secureTransmit.set(true);
     }
 
@@ -35,41 +35,41 @@ public final class UserInputManager implements InputProcessor {
             System.out.println("Key Esc pressed ");
             GameFlowManager.getInstance().setGameStatus(GameStatus.Intro);
         }
-        return secureTransmit.get() ? inputReciver.getInputAdapter().keyDown(keycode) : false;
+        return secureTransmit.get() ? inputReceiver.getInputAdapter().keyDown(keycode) : false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        return secureTransmit.get() ? inputReciver.getInputAdapter().keyUp(keycode) : false;
+        return secureTransmit.get() ? inputReceiver.getInputAdapter().keyUp(keycode) : false;
     }
 
     @Override
     public boolean keyTyped(char character) {
-        return secureTransmit.get() ? inputReciver.getInputAdapter().keyTyped(character) : false;
+        return secureTransmit.get() ? inputReceiver.getInputAdapter().keyTyped(character) : false;
     }
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return secureTransmit.get() ? inputReciver.getInputAdapter().touchDown(screenX, screenY, pointer, button) : false;
+        return secureTransmit.get() ? inputReceiver.getInputAdapter().touchDown(screenX, screenY, pointer, button) : false;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return secureTransmit.get() ? inputReciver.getInputAdapter().touchUp(screenX, screenY, pointer, button) : false;
+        return secureTransmit.get() ? inputReceiver.getInputAdapter().touchUp(screenX, screenY, pointer, button) : false;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return secureTransmit.get() ? inputReciver.getInputAdapter().touchDragged(screenX, screenY, pointer) : false;
+        return secureTransmit.get() ? inputReceiver.getInputAdapter().touchDragged(screenX, screenY, pointer) : false;
     }
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        return secureTransmit.get() ? inputReciver.getInputAdapter().mouseMoved(screenX, screenY) : false;
+        return secureTransmit.get() ? inputReceiver.getInputAdapter().mouseMoved(screenX, screenY) : false;
     }
 
     @Override
     public boolean scrolled(int amount) {
-        return secureTransmit.get() ? inputReciver.getInputAdapter().scrolled(amount) : false;
+        return secureTransmit.get() ? inputReceiver.getInputAdapter().scrolled(amount) : false;
     }
 }

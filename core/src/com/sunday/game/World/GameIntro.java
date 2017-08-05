@@ -12,10 +12,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.sunday.game.GameFramework.GameFlowManager;
 import com.sunday.game.GameFramework.GameStatus;
-import com.sunday.game.GameFramework.InputReciver;
+import com.sunday.game.GameFramework.InputReceiver;
 
 
-public class GameIntro implements Screen, InputReciver {
+public class GameIntro implements Screen, InputReceiver {
     private Stage stage;
     private Button start;
     private Button exit;
@@ -27,6 +27,7 @@ public class GameIntro implements Screen, InputReciver {
     private Texture buttonTextures;
 
     public GameIntro() {
+        stage = new Stage();
         font = new BitmapFont();
         buttonTextures = new Texture("buttons/buttons_small.png");
         textureRegions = TextureRegion.split(buttonTextures, 150, 75);
@@ -65,7 +66,7 @@ public class GameIntro implements Screen, InputReciver {
 
     @Override
     public void show() {
-        stage = new Stage();
+
 
         float heightdivfive = stage.getHeight() / 5;
         float widthmid = stage.getWidth() / 2;

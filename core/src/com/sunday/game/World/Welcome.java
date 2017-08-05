@@ -7,16 +7,15 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.sunday.game.GameFramework.GameFramework;
 import com.sunday.game.GameFramework.GameStatus;
-import com.sunday.game.GameFramework.InputReciver;
+import com.sunday.game.GameFramework.InputReceiver;
 
 
-public class Welcome extends Game implements InputReciver {
+public class Welcome extends Game implements InputReceiver {
     SpriteBatch batch;
     BitmapFont font;
     Screen currentGame;
-    InputReciver currentReciver;
+    InputReceiver currentReciver;
     GamePlay gamePlay;
     GameIntro gameIntro;
     private float duration;
@@ -44,8 +43,6 @@ public class Welcome extends Game implements InputReciver {
                 currentReciver = gamePlay;
                 break;
         }
-
-
     }
 
     @Override
@@ -57,13 +54,21 @@ public class Welcome extends Game implements InputReciver {
         System.out.println(System.nanoTime() + " Welcome.create() was called by " + name);
         //setScreen(gamePlay);
         setScreen(currentGame);
+
+        //ClearColor White and it needs to be  defined only once
         Gdx.gl.glClearColor(1, 1, 1, 1);
     }
 
     @Override
     public void render() {
+
+        //clear the screen before anything rendered
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        //render the currentScreen
         super.render();
+
+        //render additional information at tops layer of all
         batch.begin();
         font.draw(batch, "Infos", 0, 720);
         font.draw(batch, "DeltaTime : " + Gdx.graphics.getDeltaTime(), 0, 700);
@@ -76,6 +81,7 @@ public class Welcome extends Game implements InputReciver {
         }
         font.draw(batch, "MemoryUsage : " + memeoryUsage + " KB", 0, 640);
         batch.end();
+
     }
 
     @Override

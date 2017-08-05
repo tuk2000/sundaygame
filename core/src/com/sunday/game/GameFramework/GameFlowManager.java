@@ -22,6 +22,9 @@ public class GameFlowManager {
         return gameFlowManager;
     }
 
+    /**
+     * Called when it needs to change status of the game
+     */
     public static final synchronized void setGameStatus(GameStatus gameStatus) {
         GameFlowManager.gameStatus =gameStatus;
         excuteGameStatus(gameStatus);

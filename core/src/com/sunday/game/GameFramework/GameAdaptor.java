@@ -19,6 +19,9 @@ public class GameAdaptor implements ApplicationListener {
         return currentListener;
     }
 
+    /**
+     * Called when it needs to change the specific game
+     */
     public static synchronized void setCurrentListener(ApplicationListener currentListener) {
         System.out.println(Thread.currentThread().toString());
         String name = Thread.currentThread().getStackTrace()[3].getClassName();
@@ -42,6 +45,7 @@ public class GameAdaptor implements ApplicationListener {
 
     /**
      * Called when the {@link Application} is first created.
+     * It will be called only once and finishes the initalazation of the GameFramework
      */
     @Override
     public void create() {

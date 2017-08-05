@@ -4,7 +4,16 @@ import com.badlogic.gdx.Gdx;
 import com.sunday.game.Graphic.GraphicPresentation;
 import com.sunday.game.World.GameUniverse;
 
-public class GameFramework extends Gdx{
+/**
+ * the GameFramework consists of  GameAdaptor , UserInputManager and GameFlowManager
+ * <p>
+ * GameAdaptor  implements the ApplicationListener  and  it  proceeds all  methods from ApplicationListener  to  a certain Game , which was defined in World package .
+ * UserInputManager  implements the InputAdaptor and it proceeds all methods from InputAdaptor to a certain InputReceiver . It will be in GameFramework  appointed as default InputProcessor .
+ * GameFlowManager  conducts the statues of the game .
+ * <p>
+ * Most of  Methods of UserInputManager and GameFlowManager are static , which means they could be called  in any places using Classname.Methode to change game status .
+ */
+public class GameFramework extends Gdx {
 
     public static GraphicPresentation graphic;
     public static GameUniverse gameUniverse;

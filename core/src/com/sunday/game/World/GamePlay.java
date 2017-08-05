@@ -7,9 +7,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.sunday.game.GameFramework.InputReciver;
+import com.sunday.game.GameFramework.InputReceiver;
 
-public class GamePlay implements Screen, InputReciver {
+public class GamePlay implements Screen, InputReceiver {
     private  InputAdapter inputAdapter ;
     private static final float TIMESTEP = 1 / 60f;
     private static final int VELOCITYITERATIONS = 8, POSITIONITERATIONS = 3;
@@ -26,6 +26,17 @@ public class GamePlay implements Screen, InputReciver {
     private BitmapFont font;
 
     public GamePlay() {
+
+        batch = new SpriteBatch();
+        font = new BitmapFont();
+        world = new World(new Vector2(0, -9.81f), true);
+        box2DDebugRenderer = new Box2DDebugRenderer();
+
+        //The Camera variable when we divide width and height by for eg.  5 it will be 5:1
+        camera = new OrthographicCamera(Gdx.graphics.getWidth() / 20, Gdx.graphics.getHeight() / 20);
+
+        //Shape Renderer
+        shapeRenderer = new ShapeRenderer();
 
         inputAdapter= new InputAdapter() {
             @Override
@@ -60,20 +71,12 @@ public class GamePlay implements Screen, InputReciver {
         };
     }
 
-
+    /** Called when this screen becomes the current screen -->
+     * that means , we dont need to create any graphic related objects in this method ,
+     * instead they shall be initialized in constructor !!!*/
     @Override
     public void show() {
 
-        batch = new SpriteBatch();
-        font = new BitmapFont();
-        world = new World(new Vector2(0, -9.81f), true);
-        box2DDebugRenderer = new Box2DDebugRenderer();
-
-        //The Camera variable when we divide width and height by for eg.  5 it will be 5:1
-        camera = new OrthographicCamera(Gdx.graphics.getWidth() / 20, Gdx.graphics.getHeight() / 20);
-
-        //Shape Renderer
-        shapeRenderer = new ShapeRenderer();
         //Body Definition
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -128,7 +131,7 @@ public class GamePlay implements Screen, InputReciver {
         world.createBody(bodyDef).createFixture(fixtureDef);
 
 
-        chainShape.dispose();
+       // chainShape.dispose();
     }
 
     @Override
@@ -142,6 +145,7 @@ public class GamePlay implements Screen, InputReciver {
         font.draw(batch, "Space for UP \n Left Arrow -> for Left\n Right Arrow <- for Right", 200, 200);
         batch.end();
 
+        //execute simulation after finishing all graphical updates
         world.step(TIMESTEP, VELOCITYITERATIONS, POSITIONITERATIONS);
     }
 
