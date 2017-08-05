@@ -16,15 +16,15 @@ import com.sunday.game.GameFramework.InputReciver;
 
 
 public class GameIntro implements Screen, InputReciver {
-    Stage stage;
-    Button start;
-    Button exit;
-    Button setting;
-    Button test;
-    TextButton.TextButtonStyle textButtonStyle;
-    BitmapFont font;
-    TextureRegion[][] textureRegions;
-    Texture buttonTextures;
+    private Stage stage;
+    private Button start;
+    private Button exit;
+    private Button setting;
+    private Button test;
+    private TextButton.TextButtonStyle textButtonStyle;
+    private BitmapFont font;
+    private TextureRegion[][] textureRegions;
+    private Texture buttonTextures;
 
     public GameIntro() {
         font = new BitmapFont();
@@ -41,7 +41,7 @@ public class GameIntro implements Screen, InputReciver {
         start.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                GameFlowManager.getInstance().setGameStatus(GameStatus.InGame);
+                GameFlowManager.setGameStatus(GameStatus.InGame);
             }
         });
         exit = new TextButton("EXIT", textButtonStyle);
@@ -57,7 +57,7 @@ public class GameIntro implements Screen, InputReciver {
         test.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-               GameFlowManager.getInstance().setGameStatus(GameStatus.Test);
+               GameFlowManager.setGameStatus(GameStatus.Test);
             }
         });
 

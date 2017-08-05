@@ -50,8 +50,15 @@ public class Welcome extends Game implements InputReciver {
         super.render();
     }
 
+    public void dispose () {
+        currentGame.dispose();
+    }
+
+
     @Override
     public InputAdapter getInputAdapter() {
         return currentReciver.getInputAdapter();
     }
+
+
 }

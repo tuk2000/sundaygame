@@ -7,11 +7,11 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class UserInputManager implements InputProcessor {
     private static UserInputManager userInputManager = null;
-    private InputReciver inputReciver = null;
-    private AtomicBoolean secureTransmit;
+    private static InputReciver inputReciver = null;
+    private static AtomicBoolean secureTransmit= new AtomicBoolean(false);
 
     private UserInputManager() {
-        secureTransmit = new AtomicBoolean(false);
+
     }
 
     public static final synchronized UserInputManager getInstance() {
@@ -21,9 +21,9 @@ public final class UserInputManager implements InputProcessor {
         return userInputManager;
     }
 
-    public final synchronized void setInputReciver(InputReciver inputReciver) {
+    public static final synchronized void setInputReciver(InputReciver inputReciver) {
         secureTransmit.set(false);
-        this.inputReciver = inputReciver;
+        UserInputManager.inputReciver = inputReciver;
         secureTransmit.set(true);
     }
 

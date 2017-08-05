@@ -12,13 +12,11 @@ public class GameFramework extends Gdx{
     //GameFramework basic Component
     private final UserInputManager userInputManager;
     private final GameFlowManager gameFlowManager;
-    private static GameFramework framework;
 
     public GameFramework() {
-        framework=this;
         userInputManager = UserInputManager.getInstance();
         gameFlowManager = GameFlowManager.getInstance();
-        gameFlowManager.setGameStatus(GameStatus.Intro);
+        GameFlowManager.setGameStatus(GameStatus.Intro);
         app.getInput().setInputProcessor(userInputManager);
     }
 
