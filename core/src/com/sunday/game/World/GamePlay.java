@@ -4,10 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
@@ -23,12 +22,13 @@ public class GamePlay implements Screen, InputReceiver {
     private OrthographicCamera camera;
     private ShapeRenderer shapeRenderer;
 
-    private float speed = 50;
+    private float speed = 250;
     private Vector2 movement = new Vector2();
     private Body box;
 
     private SpriteBatch batch;
     private BitmapFont font;
+
 
     public GamePlay() {
 
@@ -75,7 +75,7 @@ public class GamePlay implements Screen, InputReceiver {
         box2DDebugRenderer = new Box2DDebugRenderer();
 
         //The Camera variable when we divide width and height by for eg.  5 it will be 5:1
-        camera = new OrthographicCamera(Gdx.graphics.getWidth() / 20, Gdx.graphics.getHeight() / 20);
+        camera = new OrthographicCamera(Gdx.graphics.getWidth() / 10, Gdx.graphics.getHeight() / 10);
 
         //Shape Renderer
         shapeRenderer = new ShapeRenderer();
@@ -123,7 +123,7 @@ public class GamePlay implements Screen, InputReceiver {
         bodyDef.position.set(0, 0);
         //Boden
         ChainShape chainShape = new ChainShape();
-        chainShape.createChain(new Vector2[]{new Vector2(-10, 0), new Vector2(10, 0)});
+        chainShape.createChain(new Vector2[]{new Vector2(-10, -75), new Vector2(10, -75)});
 
         //Fixture Definition
         //We cann add fixture to a body like the properties below
@@ -139,7 +139,6 @@ public class GamePlay implements Screen, InputReceiver {
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(171 / 255f, 216 / 255f, 227 / 255f, 1);
-        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //Renders new world with camera combined

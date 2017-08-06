@@ -5,20 +5,22 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sunday.game.GameFramework.GameStatus;
 import com.sunday.game.GameFramework.InputReceiver;
 
 
 public class Welcome extends Game implements InputReceiver {
-    SpriteBatch batch;
-    BitmapFont font;
-    Screen currentGame;
-    InputReceiver currentReciver;
-    GamePlay gamePlay;
-    GameIntro gameIntro;
-    GameTest gameTest;
+    private SpriteBatch batch;
+    private BitmapFont font;
+    private Screen currentGame;
+    private InputReceiver currentReciver;
+    private GamePlay gamePlay;
+    private GameIntro gameIntro;
+    private GameTest gameTest;
     private float duration;
     private long memeoryUsage;
     private boolean isToDestroyed;
@@ -73,7 +75,6 @@ public class Welcome extends Game implements InputReceiver {
 
         //render the currentScreen
         super.render();
-
         //render additional information at tops layer of all
         batch.begin();
         font.draw(batch, "Infos", 0, 720);
