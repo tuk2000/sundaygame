@@ -1,7 +1,12 @@
 package com.sunday.game.World;
 
-import com.badlogic.gdx.*;
-import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -18,7 +23,7 @@ public class GamePlay implements Screen, InputReceiver {
     private OrthographicCamera camera;
     private ShapeRenderer shapeRenderer;
 
-    private float speed = 500;
+    private float speed = 50;
     private Vector2 movement = new Vector2();
     private Body box;
 
@@ -26,17 +31,6 @@ public class GamePlay implements Screen, InputReceiver {
     private BitmapFont font;
 
     public GamePlay() {
-
-        batch = new SpriteBatch();
-        font = new BitmapFont();
-        world = new World(new Vector2(0, -9.81f), true);
-        box2DDebugRenderer = new Box2DDebugRenderer();
-
-        //The Camera variable when we divide width and height by for eg.  5 it will be 5:1
-        camera = new OrthographicCamera(Gdx.graphics.getWidth() / 20, Gdx.graphics.getHeight() / 20);
-
-        //Shape Renderer
-        shapeRenderer = new ShapeRenderer();
 
         inputAdapter= new InputAdapter() {
             @Override
@@ -71,32 +65,24 @@ public class GamePlay implements Screen, InputReceiver {
         };
     }
 
-    /** Called when this screen becomes the current screen -->
-     * that means , we dont need to create any graphic related objects in this method ,
-     * instead they shall be initialized in constructor !!!*/
+
     @Override
     public void show() {
 
+        batch = new SpriteBatch();
+        font = new BitmapFont();
+        world = new World(new Vector2(0, -9.81f), true);
+        box2DDebugRenderer = new Box2DDebugRenderer();
+
+        //The Camera variable when we divide width and height by for eg.  5 it will be 5:1
+        camera = new OrthographicCamera(Gdx.graphics.getWidth() / 20, Gdx.graphics.getHeight() / 20);
+
+        //Shape Renderer
+        shapeRenderer = new ShapeRenderer();
+        //Fixture Definition
+        FixtureDef fixtureDef = new FixtureDef();
         //Body Definition
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(0, 10);
-
-        //Ball Shape
-        CircleShape shape = new CircleShape();
-        shape.setRadius(.5f);
-
-        //Fixture Definition
-        //We cann add fixture to a body like the properties below*/
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = shape;
-        fixtureDef.density = 4.5f;
-        fixtureDef.friction = .25f;
-        fixtureDef.restitution = -.75f;
-
-        //uses all the properties and creates body
-        world.createBody(bodyDef).createFixture(fixtureDef);
-        shape.dispose();
         //Box
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(2.5f, 10);
@@ -114,12 +100,30 @@ public class GamePlay implements Screen, InputReceiver {
 
         boxShape.dispose();
 
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(0, 10);
+        //Ball Shape
+        CircleShape shape = new CircleShape();
+        shape.setRadius(.5f);
+
+        //We cann add fixture to a body like the properties below/
+        fixtureDef.shape = shape;
+        fixtureDef.density = 10.5f;
+        fixtureDef.friction = .25f;
+        fixtureDef.restitution = .75f;
+
+        //uses all the properties and creates body
+        //world.createBody(bodyDef).createFixture(fixtureDef);
+        box = world.createBody(bodyDef);
+        box.createFixture(fixtureDef);
+        shape.dispose();
+
         //Body Definition
         bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(0, 0);
         //Boden
         ChainShape chainShape = new ChainShape();
-        chainShape.createChain(new Vector2[]{new Vector2(-50, 0), new Vector2(50, 0)});
+        chainShape.createChain(new Vector2[]{new Vector2(-10, 0), new Vector2(10, 0)});
 
         //Fixture Definition
         //We cann add fixture to a body like the properties below
@@ -129,24 +133,27 @@ public class GamePlay implements Screen, InputReceiver {
 
         //uses all the properties and creates body
         world.createBody(bodyDef).createFixture(fixtureDef);
-
-
-       // chainShape.dispose();
+        chainShape.dispose();
     }
 
     @Override
     public void render(float delta) {
+        Gdx.gl.glClearColor(171 / 255f, 216 / 255f, 227 / 255f, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //Renders new world with camera combined
         boden();
         box2DDebugRenderer.render(world, camera.combined);
+        world.step(TIMESTEP, VELOCITYITERATIONS, POSITIONITERATIONS);
         box.applyForceToCenter(movement, true);
+        //Camera moves with the player
+        camera.position.set(box.getPosition().x,box.getPosition().y,0);
+        camera.update();//Wenn wir kein Update schreiben dann funktionert die Kamera gar nicht
         batch.begin();
         font.draw(batch, "Space for UP \n Left Arrow -> for Left\n Right Arrow <- for Right", 200, 200);
         batch.end();
 
-        //execute simulation after finishing all graphical updates
-        world.step(TIMESTEP, VELOCITYITERATIONS, POSITIONITERATIONS);
     }
 
     public void boden() {
@@ -158,6 +165,7 @@ public class GamePlay implements Screen, InputReceiver {
         shapeRenderer.setColor(Color.RED);
         shapeRenderer.circle(520, 0, 50);
         shapeRenderer.end();
+
     }
 
     @Override
