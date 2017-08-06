@@ -21,7 +21,7 @@ public final class UserInputManager implements InputProcessor {
         return userInputManager;
     }
 
-    public static final synchronized void setInputReciver(InputReceiver inputReceiver) {
+    public static final synchronized void setInputReceiver(InputReceiver inputReceiver) {
         secureTransmit.set(false);
         UserInputManager.inputReceiver = inputReceiver;
         secureTransmit.set(true);

@@ -33,7 +33,7 @@ public class GameFlowManager {
     private static  void excuteGameStatus(GameStatus gameStatus){
         Welcome welcome=new Welcome(gameStatus);
         GameAdaptor.setCurrentListener(welcome);
-        UserInputManager.setInputReciver(welcome);
+        UserInputManager.setInputReceiver(welcome);
 
 //        switch (gameStatus){
 //            case Loading:

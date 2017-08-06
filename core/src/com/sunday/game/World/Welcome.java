@@ -18,6 +18,7 @@ public class Welcome extends Game implements InputReceiver {
     InputReceiver currentReciver;
     GamePlay gamePlay;
     GameIntro gameIntro;
+    GameTest gameTest;
     private float duration;
     private long memeoryUsage;
     private boolean isToDestroyed;
@@ -41,6 +42,11 @@ public class Welcome extends Game implements InputReceiver {
                 gamePlay = new GamePlay();
                 currentGame = gamePlay;
                 currentReciver = gamePlay;
+                break;
+            case Test:
+                gameTest = new GameTest();
+                currentGame = gameTest;
+                currentReciver = gameTest;
                 break;
         }
     }
