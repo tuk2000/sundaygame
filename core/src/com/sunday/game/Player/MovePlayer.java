@@ -1,13 +1,8 @@
 package com.sunday.game.Player;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import sun.security.pkcs11.wrapper.Constants;
 
 public class MovePlayer extends Sprite {
    private World world;

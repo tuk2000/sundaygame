@@ -3,17 +3,19 @@ package com.sunday.game.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.*;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.sunday.game.GameFramework.InputReceiver;
+import com.sunday.game.GameFramework.FocusedScreen;
+import com.sunday.game.GameFramework.GameFlowManager;
+import com.sunday.game.GameFramework.GameStatus;
 
-public class GamePlay implements Screen, InputReceiver {
+public class GamePlay extends FocusedScreen {
     private  InputAdapter inputAdapter ;
     private static final float TIMESTEP = 1 / 60f;
     private static final int VELOCITYITERATIONS = 8, POSITIONITERATIONS = 3;
@@ -44,7 +46,10 @@ public class GamePlay implements Screen, InputReceiver {
                         break;
                     case Input.Keys.RIGHT:
                         movement.x = speed;
-
+                        break;
+                    case Input.Keys.P:
+                        GameFlowManager.setGameStatus(GameStatus.GamePause);
+                        break;
                 }
                 return true;
             }
@@ -186,14 +191,15 @@ public class GamePlay implements Screen, InputReceiver {
 
     @Override
     public void hide() {
-        dispose();
+        //dispose();
     }
 
     @Override
     public void dispose() {
         world.dispose();
-        box2DDebugRenderer.dispose();
         shapeRenderer.dispose();
+        box2DDebugRenderer.dispose();
+
     }
 
     @Override

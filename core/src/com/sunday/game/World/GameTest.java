@@ -3,13 +3,12 @@ package com.sunday.game.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.sunday.game.GameFramework.InputReceiver;
+import com.sunday.game.GameFramework.FocusedScreen;
 
-public class GameTest implements Screen, InputReceiver {
+public class GameTest extends FocusedScreen {
     private int PPM = 50; // 1 meter = PPM pixels
     private InputAdapter inputAdapter = new InputAdapter() {
         @Override

@@ -30,10 +30,15 @@ public final class UserInputManager implements InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        if(keycode== Input.Keys.ESCAPE)
-        {
-            System.out.println("Key Esc pressed ");
-            GameFlowManager.getInstance().setGameStatus(GameStatus.Intro);
+        switch (keycode){
+            case Input.Keys.ESCAPE:
+                System.out.println("Key Esc pressed ");
+                GameFlowManager.setGameStatus(GameStatus.Intro);
+                break;
+            case Input.Keys.BACKSPACE:
+                System.out.println("Key BACKSPACE pressed ");
+                GameFlowManager.backToPreviewStatus();
+                break;
         }
         return secureTransmit.get() ? inputReceiver.getInputAdapter().keyDown(keycode) : false;
     }

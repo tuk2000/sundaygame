@@ -3,7 +3,6 @@ package com.sunday.game.GameFramework;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
 
-
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class GameAdaptor implements ApplicationListener {
@@ -49,7 +48,7 @@ public class GameAdaptor implements ApplicationListener {
      */
     @Override
     public void create() {
-        new GameFramework();
+       new GameFramework();
         System.out.println(Thread.currentThread().toString());
         String name = Thread.currentThread().getStackTrace()[3].getClassName();
         System.out.println(System.nanoTime() + " GameAdaptor.create() was called by " + name);

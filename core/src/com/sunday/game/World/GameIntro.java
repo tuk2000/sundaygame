@@ -1,21 +1,22 @@
 package com.sunday.game.World;
 
-import com.badlogic.gdx.*;
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.sunday.game.GameFramework.FocusedScreen;
 import com.sunday.game.GameFramework.GameFlowManager;
 import com.sunday.game.GameFramework.GameStatus;
-import com.sunday.game.GameFramework.InputReceiver;
 
 
-public class GameIntro implements Screen, InputReceiver {
+public class GameIntro extends FocusedScreen {
     private Stage stage;
     private Button start;
     private Button exit;
@@ -54,6 +55,12 @@ public class GameIntro implements Screen, InputReceiver {
         });
 
         setting = new TextButton("SETTING", textButtonStyle);
+        setting.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                GameFlowManager.setGameStatus(GameStatus.Setting);
+            }
+        });
         test = new TextButton("TEST", textButtonStyle);
         test.addListener(new ChangeListener() {
             @Override
