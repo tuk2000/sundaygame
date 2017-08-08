@@ -1,9 +1,6 @@
 package com.sunday.game.Graphic;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -13,8 +10,9 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.sunday.game.GameFramework.InputReceiver;
 
-public class TiledGameMap extends ApplicationAdapter implements InputProcessor {
+public class TiledGameMap extends ApplicationAdapter implements InputReceiver{
     private World world;
     private Box2DDebugRenderer box2DDebugRenderer;
     private Texture img;
@@ -37,11 +35,11 @@ public class TiledGameMap extends ApplicationAdapter implements InputProcessor {
         camera.setToOrtho(false,w/5,h/5);
         camera.update();
         //It's same as the Texture Load
-        //tiledMap = new TmxMapLoader().load("TileMap/MainGameMap.tmx");
-        tiledMap = new TmxMapLoader().load("TileMap/test/thuloMap.tmx");
+        tiledMap = new TmxMapLoader().load("TileMap/MainGameMap.tmx");
+        //tiledMap = new TmxMapLoader().load("TileMap/test/thuloMap.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
         //we can change it with our own inputprocessor
-        Gdx.input.setInputProcessor(this);
+        Gdx.input.setInputProcessor(getInputAdapter());
 
         //Fixture Definition
         FixtureDef fixtureDef = new FixtureDef();
@@ -97,57 +95,6 @@ public class TiledGameMap extends ApplicationAdapter implements InputProcessor {
     }
 
     @Override
-    public boolean keyDown(int keycode) {
-        return false;
-    }
-
-    @Override
-    public boolean keyUp(int keycode) {
-//        if(keycode == Input.Keys.LEFT)
-//            camera.translate(-32,0);
-//        if(keycode == Input.Keys.RIGHT)
-//            camera.translate(32,0);
-//        if(keycode == Input.Keys.UP)
-//            camera.translate(0,-32);
-//        if(keycode == Input.Keys.DOWN)
-//            camera.translate(0,32);
-//        if(keycode == Input.Keys.NUM_1)
-//            tiledMap.getLayers().get(0).setVisible(!tiledMap.getLayers().get(0).isVisible());
-//        if(keycode == Input.Keys.NUM_2)
-//            tiledMap.getLayers().get(1).setVisible(!tiledMap.getLayers().get(1).isVisible());
-        return false;
-    }
-
-    @Override
-    public boolean keyTyped(char character) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
-    }
-
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return false;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(int amount) {
-        return false;
-    }
-    @Override
     public void resize(int width, int height) {
         camera.viewportWidth = width/5 ;
         camera.viewportWidth = height/5 ;
@@ -159,5 +106,10 @@ public class TiledGameMap extends ApplicationAdapter implements InputProcessor {
         world.dispose();
         box2DDebugRenderer.dispose();
         tiledMap.dispose();
+    }
+
+    @Override
+    public InputAdapter getInputAdapter() {
+        return null;
     }
 }
