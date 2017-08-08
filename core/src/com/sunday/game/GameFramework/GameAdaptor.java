@@ -22,9 +22,9 @@ public class GameAdaptor implements ApplicationListener {
      * Called when it needs to change the specific game
      */
     public static synchronized void setCurrentListener(ApplicationListener currentListener) {
-        System.out.println(Thread.currentThread().toString());
-        String name = Thread.currentThread().getStackTrace()[3].getClassName();
-        System.out.println(System.nanoTime() + " GameAdaptor.setCurrentListener() was called by " + name);
+//        System.out.println(Thread.currentThread().toString());
+//        String name = Thread.currentThread().getStackTrace()[3].getClassName();
+//        System.out.println(System.nanoTime() + " GameAdaptor.setCurrentListener() was called by " + name);
         secureTransmit.set(false);
         ApplicationListener old = GameAdaptor.currentListener;
         GameAdaptor.currentListener = currentListener;
