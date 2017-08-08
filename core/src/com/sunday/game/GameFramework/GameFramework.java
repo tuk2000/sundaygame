@@ -25,7 +25,7 @@ public class GameFramework extends Gdx {
     public GameFramework() {
         userInputManager = UserInputManager.getInstance();
         gameFlowManager = GameFlowManager.getInstance();
-        GameFlowManager.setGameStatus(GameStatus.Intro);
+        GameFlowManager.setGameStatus(GameStatus.Loading);
         app.getInput().setInputProcessor(userInputManager);
     }
 
