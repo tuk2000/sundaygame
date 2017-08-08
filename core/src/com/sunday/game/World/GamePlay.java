@@ -9,6 +9,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.maps.tiled.AtlasTmxMapLoader;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.sunday.game.GameFramework.FocusedScreen;
@@ -30,6 +33,9 @@ public class GamePlay extends FocusedScreen {
 
     private SpriteBatch batch;
     private BitmapFont font;
+
+    private TiledMap tiledMap;
+    private OrthogonalTiledMapRenderer tiledMapRenderer;
 
 
     public GamePlay() {
@@ -79,6 +85,8 @@ public class GamePlay extends FocusedScreen {
         world = new World(new Vector2(0, -9.81f), true);
         box2DDebugRenderer = new Box2DDebugRenderer();
 
+        //TiledMAp
+        tiledMap = new TiledMap();
         //The Camera variable when we divide width and height by for eg.  5 it will be 5:1
         camera = new OrthographicCamera(Gdx.graphics.getWidth()/10, Gdx.graphics.getHeight()/10);
 
@@ -181,12 +189,10 @@ public class GamePlay extends FocusedScreen {
     }
 
     @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
+    public void dispose() {
+        world.dispose();
+        shapeRenderer.dispose();
+        box2DDebugRenderer.dispose();
 
     }
 
@@ -194,12 +200,13 @@ public class GamePlay extends FocusedScreen {
     public void hide() {
         dispose();
     }
+    @Override
+    public void pause() {
+
+    }
 
     @Override
-    public void dispose() {
-        world.dispose();
-        shapeRenderer.dispose();
-        box2DDebugRenderer.dispose();
+    public void resume() {
 
     }
 

@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sunday.game.GameFramework.GameStatus;
 import com.sunday.game.GameFramework.InputReceiver;
+import com.sunday.game.Graphic.TiledGameMap;
 
 
 public class Welcome extends Game implements InputReceiver {
@@ -19,6 +20,7 @@ public class Welcome extends Game implements InputReceiver {
     private GamePlay gamePlay;
     private GameIntro gameIntro;
     private GameTest gameTest;
+    private TiledGameMap gameMap;
     private float duration;
     private long memeoryUsage;
     private boolean isToDestroyed;
