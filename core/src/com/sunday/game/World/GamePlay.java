@@ -80,7 +80,7 @@ public class GamePlay extends FocusedScreen {
         box2DDebugRenderer = new Box2DDebugRenderer();
 
         //The Camera variable when we divide width and height by for eg.  5 it will be 5:1
-        camera = new OrthographicCamera(Gdx.graphics.getWidth() / 10, Gdx.graphics.getHeight() / 10);
+        camera = new OrthographicCamera(Gdx.graphics.getWidth()/10, Gdx.graphics.getHeight()/10);
 
         //Shape Renderer
         shapeRenderer = new ShapeRenderer();
@@ -108,27 +108,26 @@ public class GamePlay extends FocusedScreen {
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(0, 10);
         //Ball Shape
-        CircleShape shape = new CircleShape();
-        shape.setRadius(.5f);
+        CircleShape circleShape = new CircleShape();
+        circleShape.setRadius(.5f);
 
         //We cann add fixture to a body like the properties below/
-        fixtureDef.shape = shape;
+        fixtureDef.shape = circleShape;
         fixtureDef.density = 10.5f;
         fixtureDef.friction = .25f;
         fixtureDef.restitution = .75f;
 
         //uses all the properties and creates body
         //world.createBody(bodyDef).createFixture(fixtureDef);
-        box = world.createBody(bodyDef);
-        box.createFixture(fixtureDef);
-        shape.dispose();
+         world.createBody(bodyDef).createFixture(fixtureDef);
+        circleShape.dispose();
 
         //Body Definition
         bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(0, 0);
         //Boden
         ChainShape chainShape = new ChainShape();
-        chainShape.createChain(new Vector2[]{new Vector2(-10, -75), new Vector2(10, -75)});
+        chainShape.createChain(new Vector2[]{new Vector2(-10, 0), new Vector2(10, 0)});
 
         //Fixture Definition
         //We cann add fixture to a body like the properties below
@@ -139,11 +138,13 @@ public class GamePlay extends FocusedScreen {
         //uses all the properties and creates body
         world.createBody(bodyDef).createFixture(fixtureDef);
         chainShape.dispose();
+
     }
 
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(171 / 255f, 216 / 255f, 227 / 255f, 1);
+        Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //Renders new world with camera combined
@@ -152,7 +153,7 @@ public class GamePlay extends FocusedScreen {
         world.step(TIMESTEP, VELOCITYITERATIONS, POSITIONITERATIONS);
         box.applyForceToCenter(movement, true);
         //Camera moves with the player
-        camera.position.set(box.getPosition().x,box.getPosition().y,0);
+        camera.position.set(box.getPosition().x,box.getPosition().y/2,0);
         camera.update();//Wenn wir kein Update schreiben dann funktionert die Kamera gar nicht
         batch.begin();
         font.draw(batch, "Space for UP \n Left Arrow -> for Left\n Right Arrow <- for Right", 200, 200);
@@ -174,8 +175,8 @@ public class GamePlay extends FocusedScreen {
 
     @Override
     public void resize(int width, int height) {
-        camera.viewportWidth = width / 25;
-        camera.viewportWidth = height / 25;
+        camera.viewportWidth = width/25 ;
+        camera.viewportWidth = height/25 ;
         camera.update();
     }
 
@@ -191,7 +192,7 @@ public class GamePlay extends FocusedScreen {
 
     @Override
     public void hide() {
-        //dispose();
+        dispose();
     }
 
     @Override
