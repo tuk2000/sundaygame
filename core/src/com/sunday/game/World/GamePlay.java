@@ -34,9 +34,6 @@ public class GamePlay extends FocusedScreen {
     private SpriteBatch batch;
     private BitmapFont font;
 
-    private TiledMap tiledMap;
-    private OrthogonalTiledMapRenderer tiledMapRenderer;
-
 
     public GamePlay() {
 
@@ -84,9 +81,6 @@ public class GamePlay extends FocusedScreen {
         font = new BitmapFont();
         world = new World(new Vector2(0, -9.81f), true);
         box2DDebugRenderer = new Box2DDebugRenderer();
-
-        //TiledMAp
-        tiledMap = new TiledMap();
         //The Camera variable when we divide width and height by for eg.  5 it will be 5:1
         camera = new OrthographicCamera(Gdx.graphics.getWidth()/10, Gdx.graphics.getHeight()/10);
 
