@@ -35,8 +35,8 @@ public class TiledGameMap extends ApplicationAdapter implements InputReceiver{
         camera.setToOrtho(false,w/5,h/5);
         camera.update();
         //It's same as the Texture Load
-        tiledMap = new TmxMapLoader().load("TileMap/MainGameMap.tmx");
-        //tiledMap = new TmxMapLoader().load("TileMap/test/thuloMap.tmx");
+        //tiledMap = new TmxMapLoader().load("TileMap/MainGameMap.tmx");
+        tiledMap = new TmxMapLoader().load("TileMap/test/thuloMap.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
         //we can change it with our own inputprocessor
         Gdx.input.setInputProcessor(getInputAdapter());
