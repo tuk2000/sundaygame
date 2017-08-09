@@ -12,6 +12,7 @@ public class DesktopLauncher {
         config.useGL30 = true;
         config.width = 720;
         config.height = 800;
+        //config.fullscreen =true;
         config.resizable = false;
 
         new LwjglApplication(GameAdaptor.getInstance(), config);

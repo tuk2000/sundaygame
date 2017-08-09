@@ -13,6 +13,8 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.sunday.game.GameFramework.FocusedScreen;
+import com.sunday.game.GameFramework.GameFlowManager;
+import com.sunday.game.GameFramework.GameStatus;
 import com.sunday.game.Player.Player;
 
 /**
@@ -27,7 +29,9 @@ public class TiledGameMap extends FocusedScreen {
     private OrthographicCamera camera;
     private TiledMapRenderer tiledMapRenderer;
     private Body box;
-    Player player;
+    private Player player;
+    private  InputAdapter inputAdapter ;
+    private float speed = 550;
 
     private static final float TIMESTEP = 1 / 60f;
     private static final int VELOCITYITERATIONS = 8, POSITIONITERATIONS = 3;
@@ -53,8 +57,6 @@ public class TiledGameMap extends FocusedScreen {
         //tiledMap = new TmxMapLoader().load("TileMap/MainGameMap.tmx");
         tiledMap = new TmxMapLoader().load("TileMap/sTest/sTest.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
-        //we can change it with our own inputprocessor
-        Gdx.input.setInputProcessor(getInputAdapter());
 
         //Focus the camera inside map
         MapProperties mapProperties = tiledMap.getProperties();
@@ -80,7 +82,6 @@ public class TiledGameMap extends FocusedScreen {
         fixtureDef.friction = .75f;
         fixtureDef.restitution = .75f;
         fixtureDef.density = 15f;
-
         box = world.createBody(bodyDef);
         box.createFixture(fixtureDef);
 
@@ -119,6 +120,41 @@ public class TiledGameMap extends FocusedScreen {
         world.createBody(bodyDef).createFixture(fixtureDef);
         chainShape1.dispose();
 
+        //input
+        inputAdapter= new InputAdapter() {
+            @Override
+            public boolean keyDown(int keycode) {
+                switch (keycode) {
+                    case Input.Keys.SPACE:
+                        movement.y = 50f * speed;
+                        break;
+                    case Input.Keys.LEFT:
+                        movement.x = -speed;
+                        break;
+                    case Input.Keys.RIGHT:
+                        movement.x = speed;
+                        break;
+                    case Input.Keys.P:
+                        GameFlowManager.setGameStatus(GameStatus.GamePause);
+                        break;
+                }
+                return true;
+            }
+
+            @Override
+            public boolean keyUp(int keycode) {
+                switch (keycode) {
+                    case Input.Keys.SPACE:
+                    case Input.Keys.LEFT:
+                        movement.y = 0;
+                        break;
+                    case Input.Keys.RIGHT:
+                        movement.x = 0;
+
+                }
+                return true;
+            }
+        };
     }
 
     @Override
@@ -170,6 +206,6 @@ public class TiledGameMap extends FocusedScreen {
 
     @Override
     public InputAdapter getInputAdapter() {
-        return null;
+        return inputAdapter;
     }
 }
