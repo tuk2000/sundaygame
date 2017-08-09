@@ -62,7 +62,7 @@ public class GameFlowManager {
                         traceStack("GameLoading deleted!");
                     } else {
                         /* either only GameIntro in Stack or return to GameIntro */
-                        excuteGameStatus(GameStatus.Loading.BackToIntro);
+                        excuteGameStatus(GameStatus.BackToIntro);
                     }
                 }
                 break;
@@ -113,7 +113,7 @@ public class GameFlowManager {
                 break;
             case Exit:
                 /* clean all saved screens */
-                while ((focusedScreen = (FocusedScreen) ScreenStack.pop()) != null) {
+                while ((focusedScreen = ScreenStack.pop()) != null) {
                     focusedScreen.dispose();
                 }
                 Gdx.app.exit();

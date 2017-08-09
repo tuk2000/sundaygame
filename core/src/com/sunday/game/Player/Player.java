@@ -1,6 +1,7 @@
 package com.sunday.game.Player;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -8,6 +9,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
+import com.sunday.game.GameFramework.GameFlowManager;
+import com.sunday.game.GameFramework.GameStatus;
 
 
 public class Player extends Sprite implements InputProcessor {
@@ -21,20 +24,24 @@ public class Player extends Sprite implements InputProcessor {
     private TiledMapTileLayer collisionLayer;
 
     private String intercept = "intercept";
+    private Vector2 movement = new Vector2();
 
-    public Player(Animation rest,Animation left,Animation right,TiledMapTileLayer collisionLayer){
-        super((Texture) rest.getKeyFrame(0));
-        this.rest = rest;
+    //public Player(Animation rest,Animation left,Animation right,TiledMapTileLayer collisionLayer){
+    public Player(Texture texture,float x,float y){
+        this.setTexture(texture);
+        this.setPosition(x,y);
+        this.setSize(this.getWidth()/5,this.getHeight()/5);
+       /* this.rest = rest;
         this.left = left;
         this.right = right;
         this.collisionLayer = collisionLayer;
-        setSize(collisionLayer.getWidth()/3,collisionLayer.getHeight()*1.25f);
+        setSize(collisionLayer.getWidth()/3,collisionLayer.getHeight()*1.25f);*/
     }
 
     @Override
     public void draw(Batch batch) {
         update(Gdx.graphics.getDeltaTime());
-        super.draw(batch);
+        batch.draw(this.getTexture(),this.getX(),this.getY());
     }
 
     public void update(float delta){
@@ -59,8 +66,23 @@ public class Player extends Sprite implements InputProcessor {
 
 
     @Override
-    public boolean keyDown(int keycode) {
-        return false;
+    public boolean keyDown(int keycode){
+        switch (keycode) {
+            case Input.Keys.SPACE:
+                movement.y = 50f * speed;
+                break;
+            case Input.Keys.LEFT:
+                movement.x = -speed;
+                break;
+            case Input.Keys.RIGHT:
+                movement.x = speed;
+                break;
+            case Input.Keys.P:
+                GameFlowManager.setGameStatus(GameStatus.GamePause);
+                break;
+        }
+
+    return false;
     }
 
     @Override

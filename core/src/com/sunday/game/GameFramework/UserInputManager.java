@@ -40,41 +40,41 @@ public final class UserInputManager implements InputProcessor {
                 GameFlowManager.backToPreviewStatus();
                 break;
         }
-        return secureTransmit.get() ? inputReceiver.getInputAdapter().keyDown(keycode) : false;
+        return secureTransmit.get() && inputReceiver.getInputAdapter().keyDown(keycode);
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        return secureTransmit.get() ? inputReceiver.getInputAdapter().keyUp(keycode) : false;
+        return secureTransmit.get() && inputReceiver.getInputAdapter().keyUp(keycode);
     }
 
     @Override
     public boolean keyTyped(char character) {
-        return secureTransmit.get() ? inputReceiver.getInputAdapter().keyTyped(character) : false;
+        return secureTransmit.get() && inputReceiver.getInputAdapter().keyTyped(character);
     }
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return secureTransmit.get() ? inputReceiver.getInputAdapter().touchDown(screenX, screenY, pointer, button) : false;
+        return secureTransmit.get() && inputReceiver.getInputAdapter().touchDown(screenX, screenY, pointer, button);
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return secureTransmit.get() ? inputReceiver.getInputAdapter().touchUp(screenX, screenY, pointer, button) : false;
+        return secureTransmit.get() && inputReceiver.getInputAdapter().touchUp(screenX, screenY, pointer, button);
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return secureTransmit.get() ? inputReceiver.getInputAdapter().touchDragged(screenX, screenY, pointer) : false;
+        return secureTransmit.get() && inputReceiver.getInputAdapter().touchDragged(screenX, screenY, pointer);
     }
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        return secureTransmit.get() ? inputReceiver.getInputAdapter().mouseMoved(screenX, screenY) : false;
+        return secureTransmit.get() && inputReceiver.getInputAdapter().mouseMoved(screenX, screenY);
     }
 
     @Override
     public boolean scrolled(int amount) {
-        return secureTransmit.get() ? inputReceiver.getInputAdapter().scrolled(amount) : false;
+        return secureTransmit.get() && inputReceiver.getInputAdapter().scrolled(amount);
     }
 }

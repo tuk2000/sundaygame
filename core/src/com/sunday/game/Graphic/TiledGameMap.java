@@ -4,7 +4,9 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
@@ -32,6 +34,7 @@ public class TiledGameMap extends FocusedScreen {
     private Player player;
     private  InputAdapter inputAdapter ;
     private float speed = 550;
+    private Batch batch;
 
     private static final float TIMESTEP = 1 / 60f;
     private static final int VELOCITYITERATIONS = 8, POSITIONITERATIONS = 3;
@@ -49,7 +52,9 @@ public class TiledGameMap extends FocusedScreen {
         world = new World(new Vector2(0, -9.81f), true);
         box2DDebugRenderer = new Box2DDebugRenderer();
         //new player class test
-        //player = new Player(new Sprite(new Texture("player_img/player1.png")));
+        batch = new SpriteBatch();
+        Texture playerTxt = new Texture("player_img/player1.png");
+        player = new Player(playerTxt,64,64);
         camera = new OrthographicCamera();
         camera.setToOrtho(false,w,h);
         camera.update();
@@ -171,7 +176,9 @@ public class TiledGameMap extends FocusedScreen {
         box2DDebugRenderer.render(world, camera.combined);
         world.step(TIMESTEP, VELOCITYITERATIONS, POSITIONITERATIONS);
         box.applyForceToCenter(movement, true);
-
+        batch.begin();
+        player.draw(batch);
+        batch.end();
     }
 
     @Override
