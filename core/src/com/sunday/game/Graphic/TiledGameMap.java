@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
@@ -14,6 +15,9 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.sunday.game.GameFramework.FocusedScreen;
 import com.sunday.game.Player.Player;
 
+/**
+ * IMPORTANT: each tile is of 16px
+ */
 public class TiledGameMap extends FocusedScreen {
 //public class TiledGameMap implements Screen{
     private World world;
@@ -28,24 +32,38 @@ public class TiledGameMap extends FocusedScreen {
     private static final float TIMESTEP = 1 / 60f;
     private static final int VELOCITYITERATIONS = 8, POSITIONITERATIONS = 3;
     private Vector2 movement = new Vector2();
+    private float w;
+    private float h;
+    //to focus the camera inside the map
+    private int levelPixelWidth;
+    private int levelPixelHeight;
 
     @Override
     public void show(){
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
+        w = Gdx.graphics.getWidth();
+        h = Gdx.graphics.getHeight();
         world = new World(new Vector2(0, -9.81f), true);
         box2DDebugRenderer = new Box2DDebugRenderer();
         //new player class test
         //player = new Player(new Sprite(new Texture("player_img/player1.png")));
         camera = new OrthographicCamera();
-        camera.setToOrtho(false,w/5,h/5);
+        camera.setToOrtho(false,w,h);
         camera.update();
         //It's same as the Texture Load
         //tiledMap = new TmxMapLoader().load("TileMap/MainGameMap.tmx");
-        tiledMap = new TmxMapLoader().load("TileMap/test/thuloMap.tmx");
+        tiledMap = new TmxMapLoader().load("TileMap/sTest/sTest.tmx");
         tiledMapRenderer = new OrthogonalTiledMapRenderer(tiledMap);
         //we can change it with our own inputprocessor
         Gdx.input.setInputProcessor(getInputAdapter());
+
+        //Focus the camera inside map
+        MapProperties mapProperties = tiledMap.getProperties();
+        int levelWidth = mapProperties.get("width",Integer.class);
+        int levelHeight = mapProperties.get("height",Integer.class);
+        int tilePixelWidth = mapProperties.get("tilewidth",Integer.class);
+        int tilePixelHeight = mapProperties.get("tileheight",Integer.class);
+        levelPixelWidth = levelWidth * tilePixelWidth;
+        levelPixelHeight = levelHeight * tilePixelHeight;
 
         //Fixture Definition
         FixtureDef fixtureDef = new FixtureDef();
@@ -53,7 +71,7 @@ public class TiledGameMap extends FocusedScreen {
         BodyDef bodyDef = new BodyDef();
         //Box
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(16f, 50f);
+        bodyDef.position.set(64f, 64f);
 
         PolygonShape boxShape = new PolygonShape();
         boxShape.setAsBox(5f, 10f);
@@ -72,7 +90,7 @@ public class TiledGameMap extends FocusedScreen {
         bodyDef.position.set(0, 0);
         //Boden
         ChainShape chainShape = new ChainShape();
-        chainShape.createChain(new Vector2[]{new Vector2(-1000, 16), new Vector2(1000, 16)});
+        chainShape.createChain(new Vector2[]{new Vector2(-1000, 32), new Vector2(1000, 32)});
         //chainShape.createChain(new Vector2[]{new Vector2(-1000, 150), new Vector2(1000, 150)});
 
         //Fixture Definition
@@ -92,6 +110,9 @@ public class TiledGameMap extends FocusedScreen {
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA,GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        //camera movement
+        camera.position.x = Math.min(Math.max(box.getPosition().x,w/0.005f),levelPixelWidth -(w/1.99f));
+        camera.position.y = Math.min(Math.max(box.getPosition().y,h/2),levelPixelWidth -(h/2.5f));
         camera.update();
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
@@ -103,8 +124,8 @@ public class TiledGameMap extends FocusedScreen {
 
     @Override
     public void resize(int width, int height) {
-        camera.viewportWidth = width/5 ;
-        camera.viewportWidth = height/5 ;
+        camera.viewportWidth = width/1.12f ;
+        camera.viewportWidth = height/1.12f ;
         camera.update();
     }
 

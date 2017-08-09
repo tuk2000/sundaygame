@@ -10,7 +10,7 @@ public class DesktopLauncher {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "Sunday Game";
         config.useGL30 = true;
-        config.width = 800;
+        config.width = 720;
         config.height = 800;
         config.resizable = false;
 
