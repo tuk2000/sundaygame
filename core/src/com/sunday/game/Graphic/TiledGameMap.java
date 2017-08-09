@@ -74,7 +74,7 @@ public class TiledGameMap extends FocusedScreen {
         bodyDef.position.set(64f, 64f);
 
         PolygonShape boxShape = new PolygonShape();
-        boxShape.setAsBox(5f, 10f);
+        boxShape.setAsBox(16f, 20f);
 
         fixtureDef.shape = boxShape;
         fixtureDef.friction = .75f;
@@ -90,7 +90,7 @@ public class TiledGameMap extends FocusedScreen {
         bodyDef.position.set(0, 0);
         //Boden
         ChainShape chainShape = new ChainShape();
-        chainShape.createChain(new Vector2[]{new Vector2(-1000, 32), new Vector2(1000, 32)});
+        chainShape.createChain(new Vector2[]{new Vector2(32, 32), new Vector2(688, 32)});
         //chainShape.createChain(new Vector2[]{new Vector2(-1000, 150), new Vector2(1000, 150)});
 
         //Fixture Definition
@@ -102,6 +102,22 @@ public class TiledGameMap extends FocusedScreen {
         //uses all the properties and creates body
         world.createBody(bodyDef).createFixture(fixtureDef);
         chainShape.dispose();
+
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(0, 0);
+        ChainShape chainShape1 = new ChainShape();
+        chainShape.createChain(new Vector2[]{new Vector2(32, 32), new Vector2(32, 1000)});
+        //chainShape.createChain(new Vector2[]{new Vector2(-1000, 150), new Vector2(1000, 150)});
+
+        //Fixture Definition
+        //We cann add fixture to a body like the properties below
+        fixtureDef.shape = chainShape1;
+        fixtureDef.friction = .5f;
+        fixtureDef.restitution = 0;
+
+        //uses all the properties and creates body
+        world.createBody(bodyDef).createFixture(fixtureDef);
+        chainShape1.dispose();
 
     }
 
@@ -149,6 +165,7 @@ public class TiledGameMap extends FocusedScreen {
         world.dispose();
         box2DDebugRenderer.dispose();
         tiledMap.dispose();
+
     }
 
     @Override
