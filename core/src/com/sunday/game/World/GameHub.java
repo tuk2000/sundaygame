@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sunday.game.GameFramework.FocusedScreen;
 import com.sunday.game.GameFramework.GameStatus;
+import com.sunday.game.Graphic.TiledGameMap;
 
 public class GameHub extends Game {
     private FocusedScreen currentFocusedScreen;
@@ -67,6 +68,10 @@ public class GameHub extends Game {
         switch (gameStatus) {
             case Loading:
                 currentFocusedScreen = new GameLoading();
+                setCurrentFocusedScreen(currentFocusedScreen);
+                break;
+            case MapOfGame:
+                currentFocusedScreen = new TiledGameMap();
                 setCurrentFocusedScreen(currentFocusedScreen);
                 break;
             case Intro:

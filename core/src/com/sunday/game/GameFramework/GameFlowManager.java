@@ -79,6 +79,16 @@ public class GameFlowManager {
                 */
                 addStatus(gameStatus);
                 break;
+            case MapOfGame:
+                /*
+                Intro : the MainMenu screen
+                Setting : add new Setting screen at MainMenu
+                InGame: add new game screen
+                GamePause: add new GamePause screen
+                Test : add new Test screen at MainMenu
+                */
+                addStatus(gameStatus);
+                break;
             case WorldShiftStart:
             case WorldShiftEnd:
                 /*

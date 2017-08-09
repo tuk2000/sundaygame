@@ -22,6 +22,7 @@ public class GameIntro extends FocusedScreen {
     private Button exit;
     private Button setting;
     private Button test;
+    private Button tiledMap;
     private TextButton.TextButtonStyle textButtonStyle;
     private BitmapFont font;
     private TextureRegion[][] textureRegions;
@@ -61,11 +62,18 @@ public class GameIntro extends FocusedScreen {
                 GameFlowManager.setGameStatus(GameStatus.Setting);
             }
         });
-        test = new TextButton("TEST", textButtonStyle);
+        /*test = new TextButton("TEST", textButtonStyle);
         test.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                GameFlowManager.setGameStatus(GameStatus.Test);
+            }
+        });*/
+        test = new TextButton("Tiled Map", textButtonStyle);
+        test.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                GameFlowManager.setGameStatus(GameStatus.MapOfGame);
             }
         });
 

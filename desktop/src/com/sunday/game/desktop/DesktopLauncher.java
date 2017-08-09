@@ -14,7 +14,7 @@ public class DesktopLauncher {
         config.height = 800;
         config.resizable = false;
 
-        //new LwjglApplication(GameAdaptor.getInstance(), config);
-        new LwjglApplication(new TiledGameMap(), config);
+        new LwjglApplication(GameAdaptor.getInstance(), config);
+        //new LwjglApplication(new TiledGameMap(), config);
     }
 }

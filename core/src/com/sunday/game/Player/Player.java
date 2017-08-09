@@ -1,164 +1,100 @@
 package com.sunday.game.Player;
 
-import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.math.Vector2;
 
-public class Player implements ApplicationListener {
-    SpriteBatch batch;
-    Texture player;
-    Texture background;
-    TextureRegion[][] tRegions;
-    Sprite sprite;
-    Sprite bgSprite;
-    int frame=0,zeile = 0;
-    OrthographicCamera cam;
-    private float rotationSpeed;
-    ShapeRenderer shapeRenderer;
-    Stage stage;
-    TextButton button;
-    TextButton.TextButtonStyle textButtonStyle;
-    Skin skin;
-    BitmapFont font;
 
-    @Override
-    public void create() {
-        /*/Button
-        stage = new Stage();
-        Gdx.input.setInputProcessor(stage);
-        font = new BitmapFont();
-        skin = new Skin();
-        textButtonStyle = new TextButton.TextButtonStyle();
-        textButtonStyle.font = font;
-        button = new TextButton("Play",textButtonStyle);
-        stage.addActor(button);
-        button.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                ((Game)Gdx.app.getApplicationListener()).setScreen(new GamePlay());
-            }
-        });
-        button.pad(15);*/
-        player = new Texture("playerSp.png");
-        shapeRenderer = new ShapeRenderer();
-        batch = new SpriteBatch();
-        tRegions = TextureRegion.split(player,275,385);
-        sprite = new Sprite(tRegions[0][0]);
-        //Camera
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
-        cam = new OrthographicCamera(30, 30 * (h / w));
-        cam.position.set(cam.viewportWidth / 2f, cam.viewportHeight / 2f, 0);
-        cam.update();
-        Timer.schedule(new Timer.Task() {
-            @Override
-            public void run() {
-                frame++;
-                if (frame>4){
-                    frame = 0;
-                    if (zeile==1){
-                        zeile = 0;
-                    }else {
-                        zeile = 1;
-                    }
-                }
-                sprite.setRegion(tRegions[zeile][frame]);
-            }
-        },0,1/15f);
+public class Player extends Sprite implements InputProcessor {
+
+    private float speed = 60 * 2, gravity = 60 * 1.8f, animationTime = 0, increment;
+    private Vector2 velocity = new Vector2();
+
+    private boolean jumpState;
+    //rest : player will do nothing
+    private Animation left,right,rest;
+    private TiledMapTileLayer collisionLayer;
+
+    private String intercept = "intercept";
+
+    public Player(Animation rest,Animation left,Animation right,TiledMapTileLayer collisionLayer){
+        super((Texture) rest.getKeyFrame(0));
+        this.rest = rest;
+        this.left = left;
+        this.right = right;
+        this.collisionLayer = collisionLayer;
+        setSize(collisionLayer.getWidth()/3,collisionLayer.getHeight()*1.25f);
     }
 
     @Override
-    public void render() {
-        Gdx.gl.glClearColor(171/255f, 216/255f, 227/255f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Background();
-        handleInput();
-        batch.begin();
-
-        sprite.setSize(75,75);
-        sprite.draw(batch);
-        batch.end();
-    }
-    public void boden(){
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(Color.ROYAL);
-        shapeRenderer.circle(520,0,250);
-        shapeRenderer.setColor(Color.YELLOW);
-        shapeRenderer.circle(520,0,150);
-        shapeRenderer.setColor(Color.RED);
-        shapeRenderer.circle(520,0,50);
-        shapeRenderer.end();
-
-    }
-    public void Background(){
-        background = new Texture("bg/bg_1280_some.png");
-        bgSprite = new Sprite(background);
-        batch.begin();
-        //bgSprite.setPosition(0,200);
-        bgSprite.draw(batch);
-        //bgSprite.setRotation(180.0f);
-        //bgSprite.draw(batch);
-        batch.end();
-        background = new Texture("grass/tile_grass_02.png");
-        bgSprite = new Sprite(background);
-        bgSprite.setPosition(0,0);
-        bgSprite.setSize(bgSprite.getHeight(),bgSprite.getHeight()/2);
-        float x = bgSprite.getWidth();
-        batch.begin();
-        bgSprite.draw(batch);
-        bgSprite.setPosition(x,0);
-        bgSprite.draw(batch);
-        batch.end();
-    }
-    @Override
-    public void pause() {
-
+    public void draw(Batch batch) {
+        update(Gdx.graphics.getDeltaTime());
+        super.draw(batch);
     }
 
-    @Override
-    public void resume() {
+    public void update(float delta){
+        //here we apply gravity
+        velocity.y -= gravity*delta;
 
-    }
-    private void handleInput() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)){
-            if (sprite.getX()> -200) {
-                sprite.translateX(-3f);
-                sprite.translateY(10f);
-            }
+        //velocity clamp
+        if (velocity.y > speed){
+            velocity.y = speed;
+        }else if (velocity.y < speed){
+            velocity.y = -speed;
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.RIGHT)){
-            if (sprite.getX()<1030) {
-                sprite.translateX(11f);
-            }
-        }
+        //save data
+        float oldX = getX(),oldY = getY();
+        boolean collisionX = false,collisionY = false;
+
+        //player movement on x
+        setX(getX() + velocity.x *delta);
+        //player movement on y
+        setX(getY() + velocity.y *delta);
+    }
+
+
+    @Override
+    public boolean keyDown(int keycode) {
+        return false;
     }
 
     @Override
-    public void resize(int width, int height) {
-        cam.viewportWidth = 30f;
-        cam.viewportHeight = 30f * height/width;
-        cam.update();
+    public boolean keyUp(int keycode) {
+        return false;
     }
+
     @Override
-    public void dispose() {
-        batch.dispose();
-        player.dispose();
-        background.dispose();
-        shapeRenderer.dispose();
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
     }
 }
-
-

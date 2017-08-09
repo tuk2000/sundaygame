@@ -29,7 +29,7 @@ public class GameTe implements ApplicationListener{
     public void create() {
         player1 = new Texture("playerSp.png");
         batch = new SpriteBatch();
-        Player pl = new Player();
+        //Player pl = new Player();
         font = new BitmapFont();
         font.setColor(Color.RED);
         shapeRenderer = new ShapeRenderer();
