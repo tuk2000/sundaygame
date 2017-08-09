@@ -64,6 +64,7 @@ public class GameHub extends Game {
         setScreen(currentFocusedScreen);
     }
 
+    /*  setStatus should only be called by GameFlowManager , in oder to change game status and change FocusedScreen*/
     public void setStatus(GameStatus gameStatus) {
         switch (gameStatus) {
             case Loading:
