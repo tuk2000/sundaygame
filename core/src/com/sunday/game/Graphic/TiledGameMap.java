@@ -4,8 +4,7 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
@@ -13,10 +12,12 @@ import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
+import com.sunday.game.Enemies.Saw;
 import com.sunday.game.GameFramework.FocusedScreen;
 import com.sunday.game.GameFramework.GameFlowManager;
 import com.sunday.game.GameFramework.GameStatus;
 import com.sunday.game.Player.Player;
+import net.dermetfan.gdx.graphics.g2d.AnimatedSprite;
 
 /**
  * IMPORTANT: each tile is of 16px
@@ -43,6 +44,12 @@ public class TiledGameMap extends FocusedScreen {
     //to focus the camera inside the map
     private int levelPixelWidth;
     private int levelPixelHeight;
+    //Enemies
+    private Saw saw;
+    private TextureRegion tr1,tr2,tr3,tr4,tr5,tr6,tr7,tr8;
+    private int elapsedTime = 0;
+    private Animation sawAnimation;
+    private AnimatedSprite sawSprite;
 
     @Override
     public void show(){
@@ -54,6 +61,22 @@ public class TiledGameMap extends FocusedScreen {
         batch = new SpriteBatch();
         final Texture playerTxt = new Texture("player_img/player2.png");
         player = new Player(playerTxt,32,20);
+        //Enemy
+        Texture sawTex = new Texture("Enemies/saw.png");
+        //saw = new Saw(sawTex,152,32);
+        tr1 = new TextureRegion(new Texture("Enemies/saw.png"));
+        //tr1.setRegion();
+        tr2 = new TextureRegion(new Texture("Enemies/saw2.png"));
+        tr3 = new TextureRegion(new Texture("Enemies/saw3.png"));
+        tr4 = new TextureRegion(new Texture("Enemies/saw4.png"));
+        tr5 = new TextureRegion(new Texture("Enemies/saw5.png"));
+        tr6 = new TextureRegion(new Texture("Enemies/saw6.png"));
+        tr7 = new TextureRegion(new Texture("Enemies/saw7.png"));
+        tr8 = new TextureRegion(new Texture("Enemies/saw8.png"));
+        sawAnimation = new Animation(1/10f, tr1, tr2, tr3, tr4,tr5,tr6,tr7,tr8);
+        sawAnimation.setPlayMode(Animation.PlayMode.LOOP);
+        sawSprite = new AnimatedSprite(sawAnimation);
+
         camera = new OrthographicCamera();
         camera.setToOrtho(false,w,h);
         camera.update();
@@ -172,9 +195,14 @@ public class TiledGameMap extends FocusedScreen {
         box2DDebugRenderer.render(world, camera.combined);
         world.step(TIMESTEP, VELOCITYITERATIONS, POSITIONITERATIONS);
         box.applyForceToCenter(movement, true);
+        //elapsedTime += Gdx.graphics.getDeltaTime();
         batch.begin();
         player.draw(batch);
         player.update();
+        batch.end();
+        batch.begin();
+        sawSprite.draw(batch);
+        //saw.draw(batch);
         batch.end();
 
     }
