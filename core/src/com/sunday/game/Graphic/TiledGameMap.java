@@ -5,7 +5,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -53,8 +52,8 @@ public class TiledGameMap extends FocusedScreen {
         box2DDebugRenderer = new Box2DDebugRenderer();
         //new player class test
         batch = new SpriteBatch();
-        Texture playerTxt = new Texture("player_img/player1.png");
-        player = new Player(playerTxt,64,64);
+        final Texture playerTxt = new Texture("player_img/player2.png");
+        player = new Player(playerTxt,32,20);
         camera = new OrthographicCamera();
         camera.setToOrtho(false,w,h);
         camera.update();
@@ -97,7 +96,6 @@ public class TiledGameMap extends FocusedScreen {
         //Boden
         ChainShape chainShape = new ChainShape();
         chainShape.createChain(new Vector2[]{new Vector2(32, 32), new Vector2(688, 32)});
-        //chainShape.createChain(new Vector2[]{new Vector2(-1000, 150), new Vector2(1000, 150)});
 
         //Fixture Definition
         //We cann add fixture to a body like the properties below
@@ -113,7 +111,6 @@ public class TiledGameMap extends FocusedScreen {
         bodyDef.position.set(0, 0);
         ChainShape chainShape1 = new ChainShape();
         chainShape.createChain(new Vector2[]{new Vector2(32, 32), new Vector2(32, 1000)});
-        //chainShape.createChain(new Vector2[]{new Vector2(-1000, 150), new Vector2(1000, 150)});
 
         //Fixture Definition
         //We cann add fixture to a body like the properties below
@@ -125,19 +122,18 @@ public class TiledGameMap extends FocusedScreen {
         world.createBody(bodyDef).createFixture(fixtureDef);
         chainShape1.dispose();
 
-        //input
         inputAdapter= new InputAdapter() {
             @Override
             public boolean keyDown(int keycode) {
                 switch (keycode) {
                     case Input.Keys.SPACE:
-                        movement.y = 50f * speed;
+                        player.translateY(64f);
                         break;
                     case Input.Keys.LEFT:
-                        movement.x = -speed;
+                        player.translateX(-16f);
                         break;
                     case Input.Keys.RIGHT:
-                        movement.x = speed;
+                        player.translateX(16f);
                         break;
                     case Input.Keys.P:
                         GameFlowManager.setGameStatus(GameStatus.GamePause);
@@ -178,7 +174,9 @@ public class TiledGameMap extends FocusedScreen {
         box.applyForceToCenter(movement, true);
         batch.begin();
         player.draw(batch);
+        player.update();
         batch.end();
+
     }
 
     @Override
@@ -200,7 +198,7 @@ public class TiledGameMap extends FocusedScreen {
 
     @Override
     public void hide() {
-
+        dispose();
     }
 
     @Override
