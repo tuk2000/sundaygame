@@ -76,6 +76,7 @@ public class TiledGameMap extends FocusedScreen {
         sawAnimation = new Animation(1/10f, tr1, tr2, tr3, tr4,tr5,tr6,tr7,tr8);
         sawAnimation.setPlayMode(Animation.PlayMode.LOOP);
         sawSprite = new AnimatedSprite(sawAnimation);
+        sawSprite.setSize(48,48);
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false,w,h);
@@ -201,8 +202,16 @@ public class TiledGameMap extends FocusedScreen {
         player.update();
         batch.end();
         batch.begin();
-        sawSprite.draw(batch);
-        //saw.draw(batch);
+        sawSprite.setPosition(150,32);
+        int num=0;
+        int posX = 150;
+        while(num!=11){
+            sawSprite.draw(batch);
+            sawSprite.setPosition(posX,32);
+            posX += 48;
+            sawSprite.draw(batch);
+            num++;
+        }
         batch.end();
 
     }
