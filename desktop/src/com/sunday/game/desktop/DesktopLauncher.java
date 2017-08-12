@@ -3,7 +3,6 @@ package com.sunday.game.desktop;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.sunday.game.GameFramework.GameAdaptor;
-import com.sunday.game.Graphic.TiledGameMap;
 
 public class DesktopLauncher {
     public static void main(String[] arg) {
@@ -14,7 +13,6 @@ public class DesktopLauncher {
         config.height = 800;
         config.resizable = false;
 
-        //new LwjglApplication(GameAdaptor.getInstance(), config);
-        new LwjglApplication(new TiledGameMap(), config);
+        new LwjglApplication(GameAdaptor.getInstance(), config);
     }
 }

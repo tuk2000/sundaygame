@@ -13,7 +13,7 @@ public class GameHub extends Game {
     private SpriteBatch batch;
     private BitmapFont font;
     private float duration;
-    private long memeoryUsage;
+    private long memoryUsage;
     private boolean isToDestroyed;
 
     @Override
@@ -43,10 +43,10 @@ public class GameHub extends Game {
         font.draw(batch, "FrameId : " + Gdx.graphics.getFrameId(), 0, 660);
         duration += Gdx.graphics.getDeltaTime();
         if (!isToDestroyed & duration > 1.0) {
-            memeoryUsage = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024;
+            memoryUsage = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024;
             duration = 0;
         }
-        font.draw(batch, "MemoryUsage : " + memeoryUsage + " KB", 0, 640);
+        font.draw(batch, "MemoryUsage : " + memoryUsage + " KB", 0, 640);
         font.draw(batch, "press Esc -> go to GameIntro ", 0, 620);
         font.draw(batch, "press BackSpace -> return to last screen " , 0, 600);
         font.draw(batch, "press P in GamePlay  -> pause game ", 0, 580);

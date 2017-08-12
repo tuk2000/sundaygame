@@ -1,14 +1,15 @@
 package com.sunday.game.GameFramework;
 
 import com.badlogic.gdx.Gdx;
-import com.sunday.game.World.*;
+import com.sunday.game.World.GameHub;
+import com.sunday.game.World.GameIntro;
+import com.sunday.game.World.GameLoading;
 
 import java.util.Stack;
 
 public class GameFlowManager {
-
     private static GameFlowManager gameFlowManager = null;
-    private static final Stack<FocusedScreen> ScreenStack = new Stack<FocusedScreen>();
+    private final Stack<FocusedScreen> ScreenStack = new Stack<FocusedScreen>();
 
     private GameFlowManager() {
 
@@ -24,7 +25,7 @@ public class GameFlowManager {
     /**
      * Called when it needs to change status of the game
      */
-    public static final synchronized void setGameStatus(final GameStatus gameStatus) {
+    public final synchronized void setGameStatus(final GameStatus gameStatus) {
         /* this should be executed asynchronous ,otherwise it may dispose the original caller (such as InGame)  and
         * lead to program crash
         */
@@ -39,14 +40,14 @@ public class GameFlowManager {
         });
     }
 
-    private static void excuteGameStatus(GameStatus gameStatus) {
+    private void excuteGameStatus(GameStatus gameStatus) {
         GameHub gameHub;
         FocusedScreen focusedScreen;
         switch (gameStatus) {
             case Loading:
                 /* this will be executed at first the program runs */
                 gameHub = new GameHub();
-                GameAdaptor.setCurrentListener(gameHub);
+                GameAdaptor.getInstance().setCurrentListener(gameHub);
                 addStatus(gameStatus);
                 break;
             case Intro:
@@ -112,16 +113,16 @@ public class GameFlowManager {
 
     }
 
-    private static void addStatus(GameStatus gameStatus) {
+    private void addStatus(GameStatus gameStatus) {
         GameHub gameHub = (GameHub) GameAdaptor.getInstance().getCurrentListener();
         gameHub.setStatus(gameStatus);
         FocusedScreen focusedScreen = gameHub.getCurrentFocusedScreen();
-        UserInputManager.setInputReceiver(focusedScreen);
+        UserInputManager.getInstance().setInputReceiver(focusedScreen);
         ScreenStack.push(focusedScreen);
         traceStack("After  add Status " + gameStatus.name());
     }
 
-    private static void replaceGameIntro() {
+    private void replaceGameIntro() {
         if (ScreenStack.size() == 1) {
             FocusedScreen focusedScreen = ScreenStack.peek();
             if (focusedScreen instanceof GameIntro) {
@@ -133,7 +134,7 @@ public class GameFlowManager {
         }
     }
 
-    public static void backToPreviewStatus() {
+    public void backToPreviewStatus() {
         /*
         this will be executed  when Backspace pressed
         and there muss be at least 2 screens in the ScreenStack
@@ -151,7 +152,7 @@ public class GameFlowManager {
                 GameHub gameHub = (GameHub) GameAdaptor.getInstance().getCurrentListener();
                 /* set stack top als the current screen */
                 gameHub.setCurrentFocusedScreen(focusedScreen);
-                UserInputManager.setInputReceiver(focusedScreen);
+                UserInputManager.getInstance().setInputReceiver(focusedScreen);
                 focusedScreen_old.dispose();
                 traceStack("after backToPreviewStatus ");
             }
