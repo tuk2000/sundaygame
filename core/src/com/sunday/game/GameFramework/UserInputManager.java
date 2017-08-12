@@ -7,10 +7,10 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class UserInputManager implements InputProcessor {
     private static UserInputManager userInputManager = null;
-    private static InputReceiver inputReceiver = null;
-    private static AtomicBoolean secureTransmit= new AtomicBoolean(false);
+    private  InputReceiver inputReceiver = null;
+    private  AtomicBoolean secureTransmit= new AtomicBoolean(false);
 
-    private UserInputManager() {
+    protected UserInputManager() {
 
     }
 
@@ -21,9 +21,9 @@ public final class UserInputManager implements InputProcessor {
         return userInputManager;
     }
 
-    public static final synchronized void setInputReceiver(InputReceiver inputReceiver) {
+    public  final synchronized void setInputReceiver(InputReceiver inputReceiver) {
         secureTransmit.set(false);
-        UserInputManager.inputReceiver = inputReceiver;
+        this.inputReceiver = inputReceiver;
         secureTransmit.set(true);
     }
 
@@ -33,11 +33,11 @@ public final class UserInputManager implements InputProcessor {
         switch (keycode){
             case Input.Keys.ESCAPE:
                 System.out.println("Key Esc pressed ");
-                GameFlowManager.setGameStatus(GameStatus.Intro);
+                GameFlowManager.getInstance().setGameStatus(GameStatus.Intro);
                 break;
             case Input.Keys.BACKSPACE:
                 System.out.println("Key BACKSPACE pressed ");
-                GameFlowManager.backToPreviewStatus();
+                GameFlowManager.getInstance().backToPreviewStatus();
                 break;
         }
         return secureTransmit.get() && inputReceiver.getInputAdapter().keyDown(keycode);

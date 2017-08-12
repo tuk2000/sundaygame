@@ -10,12 +10,11 @@ public class DesktopLauncher {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "Sunday Game";
         config.useGL30 = true;
-        config.width = 720;
+        config.width = 800;
         config.height = 800;
-        //config.fullscreen =true;
         config.resizable = false;
 
-        new LwjglApplication(GameAdaptor.getInstance(), config);
-        //new LwjglApplication(new TiledGameMap(), config);
+        //new LwjglApplication(GameAdaptor.getInstance(), config);
+        new LwjglApplication(new TiledGameMap(), config);
     }
 }

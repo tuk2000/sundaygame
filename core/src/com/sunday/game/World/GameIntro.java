@@ -44,7 +44,7 @@ public class GameIntro extends FocusedScreen {
         start.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                GameFlowManager.setGameStatus(GameStatus.InGame);
+                GameFlowManager.getInstance().setGameStatus(GameStatus.InGame);
             }
         });
         exit = new TextButton("EXIT", textButtonStyle);
@@ -59,14 +59,14 @@ public class GameIntro extends FocusedScreen {
         setting.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                GameFlowManager.setGameStatus(GameStatus.Setting);
+                GameFlowManager.getInstance().setGameStatus(GameStatus.Setting);
             }
         });
         /*test = new TextButton("TEST", textButtonStyle);
         test.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-               GameFlowManager.setGameStatus(GameStatus.Test);
+               GameFlowManager.getInstance().setGameStatus(GameStatus.Test);
             }
         });*/
         test = new TextButton("Tiled Map", textButtonStyle);
