@@ -36,7 +36,7 @@ public class Player extends Sprite {
 
     @Override
     public void draw(Batch batch) {
-        update();
+        //update();
         batch.draw(this.getTexture(), this.getX(), this.getY(), 64, 64);
     }
 

@@ -4,4 +4,22 @@
  <tile id="0">
   <objectgroup draworder="index" name="intercept"/>
  </tile>
+ <tile id="1">
+  <objectgroup draworder="index" name="intercept"/>
+ </tile>
+ <tile id="2">
+  <objectgroup draworder="index" name="intercept"/>
+ </tile>
+ <tile id="3">
+  <objectgroup draworder="index" name="intercept"/>
+ </tile>
+ <tile id="4">
+  <objectgroup draworder="index" name="intercept"/>
+ </tile>
+ <tile id="5">
+  <objectgroup draworder="index" name="intercept"/>
+ </tile>
+ <tile id="6">
+  <objectgroup draworder="index" name="intercept"/>
+ </tile>
 </tileset>

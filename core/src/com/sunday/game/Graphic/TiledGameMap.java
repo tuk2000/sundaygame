@@ -33,7 +33,7 @@ public class TiledGameMap extends FocusedScreen {
     private Body box;
     private Player player;
     private  InputAdapter inputAdapter ;
-    private float speed = 550;
+    private float speed = 1000;
     private Batch batch;
 
     private static final float TIMESTEP = 1 / 60f;
@@ -52,15 +52,12 @@ public class TiledGameMap extends FocusedScreen {
     private AnimatedSprite sawSprite;
 
     @Override
-    public void show(){
+    public void show() {
         w = Gdx.graphics.getWidth();
         h = Gdx.graphics.getHeight();
+        //TODO gravity to be added as -9.81
         world = new World(new Vector2(0, -9.81f), true);
         box2DDebugRenderer = new Box2DDebugRenderer();
-        //new player class test
-        batch = new SpriteBatch();
-        final Texture playerTxt = new Texture("player_img/player2.png");
-        player = new Player(playerTxt,32,20);
         //Enemy
         Texture sawTex = new Texture("Enemies/saw.png");
         //saw = new Saw(sawTex,152,32);
@@ -73,13 +70,13 @@ public class TiledGameMap extends FocusedScreen {
         tr6 = new TextureRegion(new Texture("Enemies/saw6.png"));
         tr7 = new TextureRegion(new Texture("Enemies/saw7.png"));
         tr8 = new TextureRegion(new Texture("Enemies/saw8.png"));
-        sawAnimation = new Animation(1/10f, tr1, tr2, tr3, tr4,tr5,tr6,tr7,tr8);
+        sawAnimation = new Animation(1 / 10f, tr1, tr2, tr3, tr4, tr5, tr6, tr7, tr8);
         sawAnimation.setPlayMode(Animation.PlayMode.LOOP);
         sawSprite = new AnimatedSprite(sawAnimation);
-        sawSprite.setSize(48,48);
+        sawSprite.setSize(48, 48);
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false,w,h);
+        camera.setToOrtho(false, w, h);
         camera.update();
         //It's same as the Texture Load
         //tiledMap = new TmxMapLoader().load("TileMap/MainGameMap.tmx");
@@ -88,32 +85,46 @@ public class TiledGameMap extends FocusedScreen {
 
         //Focus the camera inside map
         MapProperties mapProperties = tiledMap.getProperties();
-        int levelWidth = mapProperties.get("width",Integer.class);
-        int levelHeight = mapProperties.get("height",Integer.class);
-        int tilePixelWidth = mapProperties.get("tilewidth",Integer.class);
-        int tilePixelHeight = mapProperties.get("tileheight",Integer.class);
+        int levelWidth = mapProperties.get("width", Integer.class);
+        int levelHeight = mapProperties.get("height", Integer.class);
+        int tilePixelWidth = mapProperties.get("tilewidth", Integer.class);
+        int tilePixelHeight = mapProperties.get("tileheight", Integer.class);
         levelPixelWidth = levelWidth * tilePixelWidth;
         levelPixelHeight = levelHeight * tilePixelHeight;
 
-        //Fixture Definition
-        FixtureDef fixtureDef = new FixtureDef();
         //Body Definition
         BodyDef bodyDef = new BodyDef();
+        //Fixture Definition
+        FixtureDef fixtureDef = new FixtureDef();
         //Box
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(64f, 64f);
+        bodyDef.position.set(64, 64);
+        //Ball Shape
+        CircleShape circleShape = new CircleShape();
+        circleShape.setRadius(16);
 
-        PolygonShape boxShape = new PolygonShape();
-        boxShape.setAsBox(16f, 20f);
+        //We cann add fixture to a body like the properties below/
+        fixtureDef.shape = circleShape;
+        fixtureDef.density = 0.6f;
+        fixtureDef.friction = 2.5f;
+        fixtureDef.restitution = 0.5f;
 
-        fixtureDef.shape = boxShape;
-        fixtureDef.friction = .75f;
-        fixtureDef.restitution = .75f;
-        fixtureDef.density = 15f;
+        //uses all the properties and creates body
+        //world.createBody(bodyDef).createFixture(fixtureDef);
+
         box = world.createBody(bodyDef);
         box.createFixture(fixtureDef);
+        //world.createBody(bodyDef).createFixture(fixtureDef);
+        circleShape.dispose();
 
-        boxShape.dispose();
+
+        //Linking player with body
+        //new player class test
+        batch = new SpriteBatch();
+        final Texture playerTxt = new Texture("player_img/player2.png");
+        //player = new Player(playerTxt, box.getPosition().x, box.getPosition().y);
+        player = new Player(playerTxt,200,200);
+        //player.setPosition(bodyDef.position.x,bodyDef.position.y);
         //Body Definition
         bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(0, 0);
@@ -146,51 +157,18 @@ public class TiledGameMap extends FocusedScreen {
         world.createBody(bodyDef).createFixture(fixtureDef);
         chainShape1.dispose();
 
-        inputAdapter= new InputAdapter() {
-            @Override
-            public boolean keyDown(int keycode) {
-                switch (keycode) {
-                    case Input.Keys.SPACE:
-                        player.translateY(64f);
-                        break;
-                    case Input.Keys.LEFT:
-                        player.translateX(-16f);
-                        break;
-                    case Input.Keys.RIGHT:
-                        player.translateX(16f);
-                        break;
-                    case Input.Keys.P:
-                        GameFlowManager.setGameStatus(GameStatus.GamePause);
-                        break;
-                }
-                return true;
-            }
-
-            @Override
-            public boolean keyUp(int keycode) {
-                switch (keycode) {
-                    case Input.Keys.SPACE:
-                    case Input.Keys.LEFT:
-                        movement.y = 0;
-                        break;
-                    case Input.Keys.RIGHT:
-                        movement.x = 0;
-
-                }
-                return true;
-            }
-        };
     }
-
     @Override
     public void render(float delta){
         Gdx.gl.glClearColor(0,0,0,1);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA,GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         //camera movement
-        camera.position.x = Math.min(Math.max(box.getPosition().x,w/0.005f),levelPixelWidth -(w/1.99f));
-        camera.position.y = Math.min(Math.max(box.getPosition().y,h/2),levelPixelWidth -(h/2.5f));
+        camera.position.x = Math.min(Math.max(player.getX(),w/0.005f),levelPixelWidth -(w/1.99f));
+        camera.position.y = Math.min(Math.max(player.getY(),h/2),levelPixelWidth -(h/2.5f));
         camera.update();
+        //camera.position.y = player.getY();
+        //camera.update();
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
         box2DDebugRenderer.render(world, camera.combined);
@@ -198,6 +176,7 @@ public class TiledGameMap extends FocusedScreen {
         box.applyForceToCenter(movement, true);
         //elapsedTime += Gdx.graphics.getDeltaTime();
         batch.begin();
+        player.setPosition(box.getPosition().x,box.getPosition().y);
         player.draw(batch);
         player.update();
         batch.end();
@@ -221,6 +200,7 @@ public class TiledGameMap extends FocusedScreen {
         camera.viewportWidth = width/1.12f ;
         camera.viewportWidth = height/1.12f ;
         camera.update();
+
     }
 
     @Override
@@ -243,11 +223,50 @@ public class TiledGameMap extends FocusedScreen {
         world.dispose();
         box2DDebugRenderer.dispose();
         tiledMap.dispose();
-
     }
 
+    public  TiledGameMap(){
+        this.inputAdapter= new InputAdapter() {
+            @Override
+            public boolean keyDown(int keycode) {
+                switch (keycode) {
+                    case Input.Keys.SPACE:
+                        movement.y = 115f * speed;
+                        break;
+                    case Input.Keys.DOWN:
+                        movement.y = -115f * speed;
+                        break;
+                    case Input.Keys.LEFT:
+                        movement.x = -15*speed;
+                        break;
+                    case Input.Keys.RIGHT:
+                        movement.x = 15*speed;
+                        break;
+                    case Input.Keys.P:
+                        GameFlowManager.setGameStatus(GameStatus.GamePause);
+                        break;
+                }
+                return true;
+            }
+
+            @Override
+            public boolean keyUp(int keycode) {
+                switch (keycode) {
+                    case Input.Keys.SPACE:
+                    case Input.Keys.LEFT:
+                        movement.y = 0;
+                        break;
+                    case Input.Keys.RIGHT:
+                        movement.x = 0;
+
+                }
+                return true;
+            }
+        };
+
+}
     @Override
     public InputAdapter getInputAdapter() {
-        return inputAdapter;
+        return this.inputAdapter;
     }
 }
