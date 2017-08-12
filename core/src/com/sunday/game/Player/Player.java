@@ -24,20 +24,17 @@ public class Player extends Sprite {
     private Vector2 gravityVector = new Vector2(0,-1);
 
     //public Player(Animation rest,Animation left,Animation right,TiledMapTileLayer collisionLayer){
-    public Player(Texture texture, float x, float y) {
+    public Player(Texture texture, float x, float y,float pWidth,float pHeight) {
         this.setTexture(texture);
-        this.setPosition(x, 256);
-       /* this.rest = rest;
-        this.left = left;
-        this.right = right;
-        this.collisionLayer = collisionLayer;
-        setSize(collisionLayer.getWidth()/3,collisionLayer.getHeight()*1.25f);*/
+        this.setPosition(x, y);
+        this.setSize(pWidth,pHeight);
+
     }
 
     @Override
     public void draw(Batch batch) {
         //update();
-        batch.draw(this.getTexture(), this.getX(), this.getY(), 64, 64);
+        batch.draw(this.getTexture(), this.getX(), this.getY(), this.getWidth(), this.getHeight());
     }
 
     public void update() {

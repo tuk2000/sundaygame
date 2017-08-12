@@ -73,7 +73,7 @@ public class GameIntro extends FocusedScreen {
         test.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                GameFlowManager.setGameStatus(GameStatus.MapOfGame);
+                GameFlowManager.getInstance().setGameStatus(GameStatus.MapOfGame);
             }
         });
 

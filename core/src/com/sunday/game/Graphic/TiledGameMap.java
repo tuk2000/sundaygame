@@ -2,6 +2,7 @@ package com.sunday.game.Graphic;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -25,7 +26,7 @@ import net.dermetfan.gdx.graphics.g2d.AnimatedSprite;
  * IMPORTANT: each tile is of 16px
  */
 public class TiledGameMap extends FocusedScreen {
-//public class TiledGameMap implements Screen{
+    //public class TiledGameMap implements Screen{
     private World world;
     private Box2DDebugRenderer box2DDebugRenderer;
     private Texture img;
@@ -43,6 +44,7 @@ public class TiledGameMap extends FocusedScreen {
     private Vector2 movement = new Vector2();
     private float w;
     private float h;
+    private float pWidth = 64,pHeight=64;
     //to focus the camera inside the map
     private int levelPixelWidth;
     private int levelPixelHeight;
@@ -102,11 +104,11 @@ public class TiledGameMap extends FocusedScreen {
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(64, 64);
         //Ball Shape
-        CircleShape circleShape = new CircleShape();
-        circleShape.setRadius(16);
+        PolygonShape playerBody = new PolygonShape();
+        playerBody.setAsBox(10,20);
 
         //We cann add fixture to a body like the properties below/
-        fixtureDef.shape = circleShape;
+        fixtureDef.shape = playerBody;
         fixtureDef.density = 0.6f;
         fixtureDef.friction = 2.5f;
         fixtureDef.restitution = 0.5f;
@@ -117,7 +119,7 @@ public class TiledGameMap extends FocusedScreen {
         box = world.createBody(bodyDef);
         box.createFixture(fixtureDef);
         //world.createBody(bodyDef).createFixture(fixtureDef);
-        circleShape.dispose();
+        playerBody.dispose();
 
 
         //Linking player with body
@@ -125,7 +127,7 @@ public class TiledGameMap extends FocusedScreen {
         batch = new SpriteBatch();
         final Texture playerTxt = new Texture("player_img/player2.png");
         //player = new Player(playerTxt, box.getPosition().x, box.getPosition().y);
-        player = new Player(playerTxt,200,200);
+        player = new Player(playerTxt,box.getPosition().x/2 , box.getPosition().y/2,pWidth,pHeight );
         //player.setPosition(bodyDef.position.x,bodyDef.position.y);
         //Body Definition
         bodyDef.type = BodyDef.BodyType.StaticBody;
@@ -178,9 +180,11 @@ public class TiledGameMap extends FocusedScreen {
         box.applyForceToCenter(movement, true);
         //elapsedTime += Gdx.graphics.getDeltaTime();
         batch.begin();
-        player.setPosition(box.getPosition().x,box.getPosition().y);
+        player.setOrigin(pWidth/2,pHeight/2);
+        player.setPosition(box.getPosition().x/2,box.getPosition().y/2);
         player.draw(batch);
-        player.update();
+        player.setRotation(box.getAngle() * 180 / (float) Math.PI);
+        //player.update();
         batch.end();
         batch.begin();
         sawSprite.setPosition(150,32);
@@ -245,7 +249,7 @@ public class TiledGameMap extends FocusedScreen {
                         movement.x = 15*speed;
                         break;
                     case Input.Keys.P:
-                        GameFlowManager.setGameStatus(GameStatus.GamePause);
+                        GameFlowManager.getInstance().setGameStatus(GameStatus.GamePause);
                         break;
                 }
                 return true;
@@ -266,7 +270,7 @@ public class TiledGameMap extends FocusedScreen {
             }
         };
 
-}
+    }
     @Override
     public InputAdapter getInputAdapter() {
         return this.inputAdapter;
