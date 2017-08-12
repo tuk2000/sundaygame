@@ -127,7 +127,7 @@ public class TiledGameMap extends FocusedScreen {
         batch = new SpriteBatch();
         final Texture playerTxt = new Texture("player_img/player2.png");
         //player = new Player(playerTxt, box.getPosition().x, box.getPosition().y);
-        player = new Player(playerTxt,box.getPosition().x/2 , box.getPosition().y/2,pWidth,pHeight );
+        player = new Player(playerTxt,box.getPosition().x , box.getPosition().y,pWidth,pHeight );
         //player.setPosition(bodyDef.position.x,bodyDef.position.y);
         //Body Definition
         bodyDef.type = BodyDef.BodyType.StaticBody;
@@ -168,7 +168,7 @@ public class TiledGameMap extends FocusedScreen {
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA,GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         //camera movement
-        camera.position.x = Math.min(Math.max(player.getX(),w/0.005f),levelPixelWidth -(w/1.99f));
+        camera.position.x = Math.min(Math.max(player.getX(),w/0.005f),levelPixelWidth -(w/2.23f));
         camera.position.y = Math.min(Math.max(player.getY(),h/2),levelPixelWidth -(h/2.5f));
         camera.update();
         //camera.position.y = player.getY();
