@@ -34,6 +34,7 @@ public class TiledGameMap extends FocusedScreen {
     private OrthographicCamera camera;
     private TiledMapRenderer tiledMapRenderer;
     private Body box;
+    private Body body;
     private Player player;
     private  InputAdapter inputAdapter ;
     private float speed = 1000;
@@ -54,6 +55,8 @@ public class TiledGameMap extends FocusedScreen {
     private int elapsedTime = 0;
     private Animation sawAnimation;
     private AnimatedSprite sawSprite;
+    //Ourshapes
+    private OurShapes ourShapes;
 
     @Override
     public void show() {
@@ -62,6 +65,7 @@ public class TiledGameMap extends FocusedScreen {
         //TODO gravity to be added as -9.81
         world = new World(new Vector2(0, -9.81f), true);
         box2DDebugRenderer = new Box2DDebugRenderer();
+        ourShapes = new OurShapes(world,body,box2DDebugRenderer,camera);
         //Enemy
         Texture sawTex = new Texture("Enemies/saw.png");
         //saw = new Saw(sawTex,152,32);
@@ -120,6 +124,24 @@ public class TiledGameMap extends FocusedScreen {
         box.createFixture(fixtureDef);
         //world.createBody(bodyDef).createFixture(fixtureDef);
         playerBody.dispose();
+        //SAW shape
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(50, 100);
+        //Ball Shape
+        CircleShape circleShape = new CircleShape();
+        circleShape.setRadius(15f);
+
+        //We cann add fixture to a body like the properties below/
+        fixtureDef.shape = circleShape;
+        fixtureDef.density = 10.5f;
+        fixtureDef.friction = .25f;
+        fixtureDef.restitution = .75f;
+
+        //uses all the properties and creates body
+        //world.createBody(bodyDef).createFixture(fixtureDef);
+        world.createBody(bodyDef).createFixture(fixtureDef);
+        circleShape.dispose();
+
 
 
         //Linking player with body
@@ -134,7 +156,8 @@ public class TiledGameMap extends FocusedScreen {
         bodyDef.position.set(0, 0);
         //Boden
         ChainShape chainShape = new ChainShape();
-        chainShape.createChain(new Vector2[]{new Vector2(32, 32), new Vector2(688, 32)});
+        chainShape.createChain(new Vector2[]{new Vector2(32, 32), new Vector2(688, 32),new Vector2(688, 1160),
+        new Vector2(32,1160),new Vector2(32, 32), new Vector2(32, 1160)});
 
         //Fixture Definition
         //We cann add fixture to a body like the properties below
@@ -145,21 +168,6 @@ public class TiledGameMap extends FocusedScreen {
         //uses all the properties and creates body
         world.createBody(bodyDef).createFixture(fixtureDef);
         chainShape.dispose();
-
-        bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(0, 0);
-        ChainShape chainShape1 = new ChainShape();
-        chainShape.createChain(new Vector2[]{new Vector2(32, 32), new Vector2(32, 1000)});
-
-        //Fixture Definition
-        //We cann add fixture to a body like the properties below
-        fixtureDef.shape = chainShape1;
-        fixtureDef.friction = .5f;
-        fixtureDef.restitution = 0;
-
-        //uses all the properties and creates body
-        world.createBody(bodyDef).createFixture(fixtureDef);
-        chainShape1.dispose();
 
     }
     @Override
@@ -178,7 +186,9 @@ public class TiledGameMap extends FocusedScreen {
         box2DDebugRenderer.render(world, camera.combined);
         world.step(TIMESTEP, VELOCITYITERATIONS, POSITIONITERATIONS);
         box.applyForceToCenter(movement, true);
+        ourShapes.create();
         //elapsedTime += Gdx.graphics.getDeltaTime();
+
         batch.begin();
         player.setOrigin(pWidth/2,pHeight/2);
         player.setPosition(box.getPosition().x/2,box.getPosition().y/2);
