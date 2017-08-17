@@ -34,11 +34,21 @@ public class ResourceManager {
         return descriptorStorage == null || assetManager.update();
     }
 
+    public void makeSureFinishLoading(){
+        assetManager.finishLoading();
+    }
+
     public float getLoadingProgress() {
         return descriptorStorage == null ? 1.0f : assetManager.getProgress();
     }
 
     public <T> T getAsset(String path, Class<T> cls) {
         return descriptorStorage == null ? null : assetManager.get(path, cls);
+    }
+
+    public <T> T getAsset(String path){
+        String format=path.substring(path.lastIndexOf(".")+1);
+        Class cls=GameResourceType.getRelatedClass(format);
+        return getAsset(path, (Class<T>) cls);
     }
 }

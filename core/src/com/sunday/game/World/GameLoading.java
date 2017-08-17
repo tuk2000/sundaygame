@@ -15,7 +15,6 @@ public class GameLoading extends FocusedScreen {
     private BitmapFont font;
     private ResourceManager resourceManager;
     private boolean finishing = false;
-    private float waitingTime;
 
     @Override
     public void show() {
@@ -33,11 +32,11 @@ public class GameLoading extends FocusedScreen {
             finishing = resourceManager.isFinishLoading();
         }
         if (finishing) {
-            font.draw(batch, "LOADING GAME 100%", Gdx.graphics.getWidth() / 2-80, Gdx.graphics.getHeight() / 2);
-            waitingTime += delta;
-            if (waitingTime > 1.0) GameFlowManager.getInstance().setGameStatus(GameStatus.Loading.Intro);
+            font.draw(batch, "LOADING GAME 100%", Gdx.graphics.getWidth() / 2 - 80, Gdx.graphics.getHeight() / 2);
+            resourceManager.makeSureFinishLoading();
+            GameFlowManager.getInstance().setGameStatus(GameStatus.Loading.Intro);
         } else {
-            font.draw(batch, "LOADING GAME " + (int) (100 * resourceManager.getLoadingProgress())+"%", Gdx.graphics.getWidth() / 2-80, Gdx.graphics.getHeight() );
+            font.draw(batch, "LOADING GAME " + (int) (100 * resourceManager.getLoadingProgress()) + "%", Gdx.graphics.getWidth() / 2 - 80, Gdx.graphics.getHeight() / 2);
         }
 
         batch.end();

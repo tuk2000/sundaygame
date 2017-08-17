@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.sunday.game.GameFramework.FocusedScreen;
 import com.sunday.game.GameFramework.GameFlowManager;
 import com.sunday.game.GameFramework.GameStatus;
+import com.sunday.game.GameFramework.ResourceManager;
 
 
 public class GameIntro extends FocusedScreen {
@@ -31,7 +32,8 @@ public class GameIntro extends FocusedScreen {
     public GameIntro() {
         stage = new Stage();
         font = new BitmapFont();
-        buttonTextures = new Texture("buttons/buttons_small.png");
+//        buttonTextures = new Texture("buttons/buttons_small.png");
+        buttonTextures = ResourceManager.getInstance().getAsset("buttons/buttons_small.png");
         textureRegions = TextureRegion.split(buttonTextures, 150, 75);
 
         textButtonStyle = new TextButton.TextButtonStyle();
