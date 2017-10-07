@@ -1,11 +1,9 @@
 package com.sunday.game.GameFramework;
 
-        import com.badlogic.gdx.audio.Music;
-        import com.badlogic.gdx.audio.Sound;
-        import com.badlogic.gdx.files.FileHandle;
-        import com.badlogic.gdx.graphics.Texture;
-
-        import java.util.logging.FileHandler;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Texture;
 
 public enum GameResourceType {
     None(Object.class), Texture(Texture.class), Music(Music.class), Sound(Sound.class);
@@ -16,7 +14,7 @@ public enum GameResourceType {
     }
 
 
-    public static Class getRelatedClass(FileHandle file){
+    public static Class getRelatedClass(FileHandle file) {
         return getRelatedClass(file.extension());
     }
 

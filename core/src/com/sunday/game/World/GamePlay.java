@@ -16,9 +16,9 @@ import com.sunday.game.GameFramework.GameFlowManager;
 import com.sunday.game.GameFramework.GameStatus;
 
 public class GamePlay extends FocusedScreen {
-    private  InputAdapter inputAdapter ;
     private static final float TIMESTEP = 1 / 60f;
     private static final int VELOCITYITERATIONS = 8, POSITIONITERATIONS = 3;
+    private InputAdapter inputAdapter;
     private World world;
     private Box2DDebugRenderer box2DDebugRenderer;
     private OrthographicCamera camera;
@@ -34,7 +34,7 @@ public class GamePlay extends FocusedScreen {
 
     public GamePlay() {
 
-        inputAdapter= new InputAdapter() {
+        inputAdapter = new InputAdapter() {
             @Override
             public boolean keyDown(int keycode) {
                 switch (keycode) {
@@ -79,7 +79,7 @@ public class GamePlay extends FocusedScreen {
         world = new World(new Vector2(0, -9.81f), true);
         box2DDebugRenderer = new Box2DDebugRenderer();
         //The Camera variable when we divide width and height by for eg.  5 it will be 5:1
-        camera = new OrthographicCamera(Gdx.graphics.getWidth()/10, Gdx.graphics.getHeight()/10);
+        camera = new OrthographicCamera(Gdx.graphics.getWidth() / 10, Gdx.graphics.getHeight() / 10);
 
         //Shape Renderer
         shapeRenderer = new ShapeRenderer();
@@ -118,7 +118,7 @@ public class GamePlay extends FocusedScreen {
 
         //uses all the properties and creates body
         //world.createBody(bodyDef).createFixture(fixtureDef);
-         world.createBody(bodyDef).createFixture(fixtureDef);
+        world.createBody(bodyDef).createFixture(fixtureDef);
         circleShape.dispose();
 
         //Body Definition
@@ -143,7 +143,7 @@ public class GamePlay extends FocusedScreen {
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(171 / 255f, 216 / 255f, 227 / 255f, 1);
-        Gdx.gl.glClearColor(0,0,0,1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //Renders new world with camera combined
@@ -152,7 +152,7 @@ public class GamePlay extends FocusedScreen {
         world.step(TIMESTEP, VELOCITYITERATIONS, POSITIONITERATIONS);
         box.applyForceToCenter(movement, true);
         //Camera moves with the player
-        camera.position.set(box.getPosition().x,box.getPosition().y/2,0);
+        camera.position.set(box.getPosition().x, box.getPosition().y / 2, 0);
         camera.update();//Wenn wir kein Update schreiben dann funktionert die Kamera gar nicht
         batch.begin();
         font.draw(batch, "Space for UP \n Left Arrow -> for Left\n Right Arrow <- for Right", 200, 200);
@@ -174,8 +174,8 @@ public class GamePlay extends FocusedScreen {
 
     @Override
     public void resize(int width, int height) {
-        camera.viewportWidth = width/25 ;
-        camera.viewportWidth = height/25 ;
+        camera.viewportWidth = width / 25;
+        camera.viewportWidth = height / 25;
         camera.update();
     }
 
@@ -190,6 +190,7 @@ public class GamePlay extends FocusedScreen {
     @Override
     public void hide() {
     }
+
     @Override
     public void pause() {
 

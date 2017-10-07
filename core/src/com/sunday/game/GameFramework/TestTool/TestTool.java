@@ -13,7 +13,7 @@ public class TestTool {
 
     }
 
-    public static void StopMonitorObject(Class<?>cls, Object obj){
+    public static void StopMonitorObject(Class<?> cls, Object obj) {
         clsToObjMap.get(cls).remove(obj);
         clsToFormMap.get(cls).setTableModel(new TestDataTableModel(cls, clsToObjMap.get(cls)));
         clsToFormMap.get(cls).updateTable();

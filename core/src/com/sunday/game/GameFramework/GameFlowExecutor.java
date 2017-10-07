@@ -2,9 +2,9 @@ package com.sunday.game.GameFramework;
 
 public interface GameFlowExecutor {
 
-    void setCurrentFocusedScreen(FocusedScreen focusedScreen);
-
     FocusedScreen getCurrentFocusedScreen();
+
+    void setCurrentFocusedScreen(FocusedScreen focusedScreen);
 
     FocusedScreen generateFocusedScreen(GameStatus gameStatus);
 }

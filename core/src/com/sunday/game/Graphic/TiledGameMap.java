@@ -1,13 +1,15 @@
 package com.sunday.game.Graphic;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
@@ -26,6 +28,8 @@ import net.dermetfan.gdx.graphics.g2d.AnimatedSprite;
  * IMPORTANT: each tile is of 16px
  */
 public class TiledGameMap extends FocusedScreen {
+    private static final float TIMESTEP = 1 / 60f;
+    private static final int VELOCITYITERATIONS = 8, POSITIONITERATIONS = 3;
     //public class TiledGameMap implements Screen{
     private World world;
     private Box2DDebugRenderer box2DDebugRenderer;
@@ -35,25 +39,63 @@ public class TiledGameMap extends FocusedScreen {
     private TiledMapRenderer tiledMapRenderer;
     private Body box;
     private Player player;
-    private  InputAdapter inputAdapter ;
+    private InputAdapter inputAdapter;
     private float speed = 1000;
     private Batch batch;
-
-    private static final float TIMESTEP = 1 / 60f;
-    private static final int VELOCITYITERATIONS = 8, POSITIONITERATIONS = 3;
     private Vector2 movement = new Vector2();
     private float w;
     private float h;
-    private float pWidth = 64,pHeight=64;
+    private float pWidth = 64, pHeight = 64;
     //to focus the camera inside the map
     private int levelPixelWidth;
     private int levelPixelHeight;
     //Enemies
     private Saw saw;
-    private TextureRegion tr1,tr2,tr3,tr4,tr5,tr6,tr7,tr8;
+    private TextureRegion tr1, tr2, tr3, tr4, tr5, tr6, tr7, tr8;
     private int elapsedTime = 0;
     private Animation sawAnimation;
     private AnimatedSprite sawSprite;
+
+    public TiledGameMap() {
+        this.inputAdapter = new InputAdapter() {
+            @Override
+            public boolean keyDown(int keycode) {
+                switch (keycode) {
+                    case Input.Keys.SPACE:
+                        movement.y = 115f * speed;
+                        break;
+                    case Input.Keys.DOWN:
+                        movement.y = -115f * speed;
+                        break;
+                    case Input.Keys.LEFT:
+                        movement.x = -15 * speed;
+                        break;
+                    case Input.Keys.RIGHT:
+                        movement.x = 15 * speed;
+                        break;
+                    case Input.Keys.P:
+                        GameFlowManager.getInstance().setGameStatus(GameStatus.GamePause);
+                        break;
+                }
+                return true;
+            }
+
+            @Override
+            public boolean keyUp(int keycode) {
+                switch (keycode) {
+                    case Input.Keys.SPACE:
+                    case Input.Keys.LEFT:
+                        movement.y = 0;
+                        break;
+                    case Input.Keys.RIGHT:
+                        movement.x = 0;
+
+                }
+                return true;
+            }
+        };
+
+    }
 
     @Override
     public void show() {
@@ -105,7 +147,7 @@ public class TiledGameMap extends FocusedScreen {
         bodyDef.position.set(64, 64);
         //Ball Shape
         PolygonShape playerBody = new PolygonShape();
-        playerBody.setAsBox(10,20);
+        playerBody.setAsBox(10, 20);
 
         //We cann add fixture to a body like the properties below/
         fixtureDef.shape = playerBody;
@@ -127,7 +169,7 @@ public class TiledGameMap extends FocusedScreen {
         batch = new SpriteBatch();
         final Texture playerTxt = new Texture("player_img/player2.png");
         //player = new Player(playerTxt, box.getPosition().x, box.getPosition().y);
-        player = new Player(playerTxt,box.getPosition().x/2 , box.getPosition().y/2,pWidth,pHeight );
+        player = new Player(playerTxt, box.getPosition().x / 2, box.getPosition().y / 2, pWidth, pHeight);
         //player.setPosition(bodyDef.position.x,bodyDef.position.y);
         //Body Definition
         bodyDef.type = BodyDef.BodyType.StaticBody;
@@ -162,14 +204,15 @@ public class TiledGameMap extends FocusedScreen {
         chainShape1.dispose();
 
     }
+
     @Override
-    public void render(float delta){
-        Gdx.gl.glClearColor(0,0,0,1);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA,GL20.GL_ONE_MINUS_SRC_ALPHA);
+    public void render(float delta) {
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         //camera movement
-        camera.position.x = Math.min(Math.max(player.getX(),w/0.005f),levelPixelWidth -(w/1.99f));
-        camera.position.y = Math.min(Math.max(player.getY(),h/2),levelPixelWidth -(h/2.5f));
+        camera.position.x = Math.min(Math.max(player.getX(), w / 0.005f), levelPixelWidth - (w / 1.99f));
+        camera.position.y = Math.min(Math.max(player.getY(), h / 2), levelPixelWidth - (h / 2.5f));
         camera.update();
         //camera.position.y = player.getY();
         //camera.update();
@@ -180,19 +223,19 @@ public class TiledGameMap extends FocusedScreen {
         box.applyForceToCenter(movement, true);
         //elapsedTime += Gdx.graphics.getDeltaTime();
         batch.begin();
-        player.setOrigin(pWidth/2,pHeight/2);
-        player.setPosition(box.getPosition().x/2,box.getPosition().y/2);
+        player.setOrigin(pWidth / 2, pHeight / 2);
+        player.setPosition(box.getPosition().x / 2, box.getPosition().y / 2);
         player.draw(batch);
         player.setRotation(box.getAngle() * 180 / (float) Math.PI);
         //player.update();
         batch.end();
         batch.begin();
-        sawSprite.setPosition(150,32);
-        int num=0;
+        sawSprite.setPosition(150, 32);
+        int num = 0;
         int posX = 150;
-        while(num!=11){
+        while (num != 11) {
             sawSprite.draw(batch);
-            sawSprite.setPosition(posX,32);
+            sawSprite.setPosition(posX, 32);
             posX += 48;
             sawSprite.draw(batch);
             num++;
@@ -203,8 +246,8 @@ public class TiledGameMap extends FocusedScreen {
 
     @Override
     public void resize(int width, int height) {
-        camera.viewportWidth = width/1.12f ;
-        camera.viewportWidth = height/1.12f ;
+        camera.viewportWidth = width / 1.12f;
+        camera.viewportWidth = height / 1.12f;
         camera.update();
 
     }
@@ -230,46 +273,6 @@ public class TiledGameMap extends FocusedScreen {
         tiledMap.dispose();
     }
 
-    public  TiledGameMap(){
-        this.inputAdapter= new InputAdapter() {
-            @Override
-            public boolean keyDown(int keycode) {
-                switch (keycode) {
-                    case Input.Keys.SPACE:
-                        movement.y = 115f * speed;
-                        break;
-                    case Input.Keys.DOWN:
-                        movement.y = -115f * speed;
-                        break;
-                    case Input.Keys.LEFT:
-                        movement.x = -15*speed;
-                        break;
-                    case Input.Keys.RIGHT:
-                        movement.x = 15*speed;
-                        break;
-                    case Input.Keys.P:
-                        GameFlowManager.getInstance().setGameStatus(GameStatus.GamePause);
-                        break;
-                }
-                return true;
-            }
-
-            @Override
-            public boolean keyUp(int keycode) {
-                switch (keycode) {
-                    case Input.Keys.SPACE:
-                    case Input.Keys.LEFT:
-                        movement.y = 0;
-                        break;
-                    case Input.Keys.RIGHT:
-                        movement.x = 0;
-
-                }
-                return true;
-            }
-        };
-
-    }
     @Override
     public InputAdapter getInputAdapter() {
         return this.inputAdapter;

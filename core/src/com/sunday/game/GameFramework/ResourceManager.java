@@ -11,15 +11,15 @@ public class ResourceManager {
     private AssetManager assetManager;
     private DescriptorStorage descriptorStorage;
 
+    private ResourceManager() {
+        assetManager = new AssetManager();
+    }
+
     public static ResourceManager getInstance() {
         if (resourceManager == null) {
             resourceManager = new ResourceManager();
         }
         return resourceManager;
-    }
-
-    private ResourceManager() {
-        assetManager = new AssetManager();
     }
 
     public void loadResourceFromDescriptorStorage(DescriptorStorage descriptorStorage) {
@@ -34,7 +34,7 @@ public class ResourceManager {
         return descriptorStorage == null || assetManager.update();
     }
 
-    public void makeSureFinishLoading(){
+    public void makeSureFinishLoading() {
         assetManager.finishLoading();
     }
 
@@ -46,9 +46,9 @@ public class ResourceManager {
         return descriptorStorage == null ? null : assetManager.get(path, cls);
     }
 
-    public <T> T getAsset(String path){
-        String format=path.substring(path.lastIndexOf(".")+1);
-        Class cls=GameResourceType.getRelatedClass(format);
+    public <T> T getAsset(String path) {
+        String format = path.substring(path.lastIndexOf(".") + 1);
+        Class cls = GameResourceType.getRelatedClass(format);
         return getAsset(path, (Class<T>) cls);
     }
 }

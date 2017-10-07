@@ -22,12 +22,12 @@ public class ToolForm extends JFrame {
         defaultTable = new JTable(tableModel);
     }
 
-    public void setTableModel(TestDataTableModel tableModel){
+    public void setTableModel(TestDataTableModel tableModel) {
         this.tableModel = tableModel;
         defaultTable.setModel(tableModel);
     }
 
-    public void updateTable(){
+    public void updateTable() {
         defaultTable.updateUI();
         defaultPanel.updateUI();
     }

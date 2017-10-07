@@ -91,7 +91,7 @@ public class GameIntro extends FocusedScreen {
         float buttonwidthmid = start.getWidth() / 2;
         float buttonwidmidall = widthmid - buttonwidthmid;
 
-        start.setPosition(buttonwidmidall, 4*heightdivfive - buttonheightmid);
+        start.setPosition(buttonwidmidall, 4 * heightdivfive - buttonheightmid);
 
         exit.setPosition(buttonwidmidall, 3 * heightdivfive - buttonheightmid);
 

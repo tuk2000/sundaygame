@@ -1,7 +1,5 @@
 package com.sunday.game.GameFramework.TestTool;
 
-import com.intellij.ui.AddEditRemovePanel;
-
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 import java.util.ArrayList;
@@ -9,13 +7,12 @@ import java.util.ArrayList;
 public class TestDataTableModel implements TableModel {
     private Class<?> cls;
     private ArrayList<Object> arrayList;
+    private String[] tableFieldName = {"Class", "Object",};
 
     TestDataTableModel(Class<?> cls, ArrayList<Object> arrayList) {
         this.cls = cls;
         this.arrayList = arrayList;
     }
-
-    private String[] tableFieldName = {"Class", "Object",};
 
     /**
      * Returns the number of rows in the model. A

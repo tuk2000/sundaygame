@@ -29,7 +29,7 @@ public class ResourceDescriptorStorage implements DescriptorStorage {
         ArrayList<String> filepaths = new ArrayList<>();
         String rootPath = Gdx.files.getLocalStoragePath();
         searchFiles(new File(rootPath), filepaths);
-        filepaths=trimRootPaths(filepaths,rootPath.length());
+        filepaths = trimRootPaths(filepaths, rootPath.length());
         return filterFiles(filepaths);
     }
 
@@ -46,12 +46,12 @@ public class ResourceDescriptorStorage implements DescriptorStorage {
         }
     }
 
-    private ArrayList<String > trimRootPaths(ArrayList<String> container,int rootLength){
+    private ArrayList<String> trimRootPaths(ArrayList<String> container, int rootLength) {
         ArrayList<String> container_tmp = new ArrayList<>();
         for (String path : container) {
-                path=path.substring(rootLength);
-                container_tmp.add(path);
-            }
+            path = path.substring(rootLength);
+            container_tmp.add(path);
+        }
         return container_tmp;
     }
 

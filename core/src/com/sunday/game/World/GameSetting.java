@@ -43,6 +43,7 @@ public class GameSetting extends FocusedScreen {
     public void hide() {
 
     }
+
     @Override
     public void dispose() {
 

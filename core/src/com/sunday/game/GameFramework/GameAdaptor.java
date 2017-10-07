@@ -14,6 +14,13 @@ public class GameAdaptor implements ApplicationListener {
 
     }
 
+    public static final synchronized GameAdaptor getInstance() {
+        if (adaptorInstance == null) {
+            adaptorInstance = new GameAdaptor();
+        }
+        return adaptorInstance;
+    }
+
     public final ApplicationListener getCurrentListener() {
         return currentListener;
     }
@@ -33,14 +40,6 @@ public class GameAdaptor implements ApplicationListener {
         }
         secureTransmit.set(true);
     }
-
-    public static final synchronized GameAdaptor getInstance() {
-        if (adaptorInstance == null) {
-            adaptorInstance = new GameAdaptor();
-        }
-        return adaptorInstance;
-    }
-
 
     /**
      * Called when the {@link Application} is first created.

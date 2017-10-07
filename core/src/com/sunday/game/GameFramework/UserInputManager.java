@@ -7,8 +7,8 @@ import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class UserInputManager implements InputProcessor {
     private static UserInputManager userInputManager = null;
-    private  InputReceiver inputReceiver = null;
-    private  AtomicBoolean secureTransmit= new AtomicBoolean(false);
+    private InputReceiver inputReceiver = null;
+    private AtomicBoolean secureTransmit = new AtomicBoolean(false);
 
     protected UserInputManager() {
 
@@ -21,7 +21,7 @@ public final class UserInputManager implements InputProcessor {
         return userInputManager;
     }
 
-    public  final synchronized void setInputReceiver(InputReceiver inputReceiver) {
+    public final synchronized void setInputReceiver(InputReceiver inputReceiver) {
         secureTransmit.set(false);
         this.inputReceiver = inputReceiver;
         secureTransmit.set(true);
@@ -30,7 +30,7 @@ public final class UserInputManager implements InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        switch (keycode){
+        switch (keycode) {
             case Input.Keys.ESCAPE:
                 System.out.println("Key Esc pressed ");
                 GameFlowManager.getInstance().setGameStatus(GameStatus.Intro);

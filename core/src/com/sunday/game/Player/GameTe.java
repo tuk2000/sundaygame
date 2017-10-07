@@ -14,16 +14,16 @@ import com.badlogic.gdx.utils.Timer;
 
 import static com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 
-public class GameTe implements ApplicationListener{
-     SpriteBatch batch;
-     Texture player1;
-     TextureRegion[] animationFrames;
-     BitmapFont font;
-     Sprite sprite;
-     ShapeRenderer shapeRenderer;
-     TextureRegion[][] tRegions;
-     int frame = 0;
-     int zeile = 0;
+public class GameTe implements ApplicationListener {
+    SpriteBatch batch;
+    Texture player1;
+    TextureRegion[] animationFrames;
+    BitmapFont font;
+    Sprite sprite;
+    ShapeRenderer shapeRenderer;
+    TextureRegion[][] tRegions;
+    int frame = 0;
+    int zeile = 0;
 
     @Override
     public void create() {
@@ -33,23 +33,23 @@ public class GameTe implements ApplicationListener{
         font = new BitmapFont();
         font.setColor(Color.RED);
         shapeRenderer = new ShapeRenderer();
-        tRegions = TextureRegion.split(player1,18,385);
+        tRegions = TextureRegion.split(player1, 18, 385);
         sprite = new Sprite(tRegions[0][0]);
         Timer.schedule(new Timer.Task() {
             @Override
             public void run() {
                 frame++;
-                if (frame>4){
+                if (frame > 4) {
                     frame = 0;
-                    if (zeile==1){
+                    if (zeile == 1) {
                         zeile = 0;
-                    }else {
+                    } else {
                         zeile = 1;
                     }
                 }
                 sprite.setRegion(tRegions[zeile][frame]);
             }
-        },0,1/20f);
+        }, 0, 1 / 20f);
         //animation = new Animation(1f/2f,test,36.112,385);
         //sprite.setSize(400,100);
     }
@@ -64,11 +64,11 @@ public class GameTe implements ApplicationListener{
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         shapeRenderer.begin(ShapeType.Filled);
         shapeRenderer.setColor(Color.RED);
-        shapeRenderer.rect(70,20,20,20);
-        shapeRenderer.rect(0,0,800,20,Color.BLACK,Color.GRAY,Color.DARK_GRAY,Color.LIGHT_GRAY);
+        shapeRenderer.rect(70, 20, 20, 20);
+        shapeRenderer.rect(0, 0, 800, 20, Color.BLACK, Color.GRAY, Color.DARK_GRAY, Color.LIGHT_GRAY);
         shapeRenderer.end();
         batch.begin();
-        font.draw(batch,"Sunday Game",200,200);
+        font.draw(batch, "Sunday Game", 200, 200);
         batch.end();
     }
 
