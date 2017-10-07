@@ -1,6 +1,7 @@
 package com.sunday.game.GameFramework;
 
 import com.badlogic.gdx.Gdx;
+import com.sunday.game.GameFramework.TestTool.TestTool;
 
 /**
  * the GameFramework consists of  GameAdaptor , UserInputManager and GameFlowManager
@@ -26,4 +27,15 @@ public class GameFramework extends Gdx {
         app.getInput().setInputProcessor(userInputManager);
     }
 
+    public static void MonitorObject(Class<?> cls, Object obj) {
+        app.postRunnable(() -> {
+            TestTool.MonitorObject(cls,obj);
+        });
+    }
+
+    public static void StopMonitorObject(Class<?> cls, Object obj){
+        app.postRunnable(() -> {
+            TestTool.StopMonitorObject(cls,obj);
+        });
+    }
 }

@@ -6,11 +6,14 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sunday.game.GameFramework.FocusedScreen;
+import com.sunday.game.GameFramework.GameFlowExecutor;
 import com.sunday.game.GameFramework.GameStatus;
 import com.sunday.game.Graphic.TiledGameMap;
 
-public class GameHub extends Game {
-    private FocusedScreen currentFocusedScreen;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+public class GameHub extends Game implements GameFlowExecutor {
     private SpriteBatch batch;
     private BitmapFont font;
     private float duration;
@@ -55,55 +58,40 @@ public class GameHub extends Game {
 
     }
 
+    @Override
     public FocusedScreen getCurrentFocusedScreen() {
-        return currentFocusedScreen;
+        return (FocusedScreen)screen;
     }
-
+    /*  setCurrentFocusedScreen should only be called by GameFlowManager , in oder to change game status and change FocusedScreen*/
+    @Override
     public void setCurrentFocusedScreen(FocusedScreen currentFocusedScreen) {
-        this.currentFocusedScreen = currentFocusedScreen;
         setScreen(currentFocusedScreen);
     }
-
-    /*  setStatus should only be called by GameFlowManager , in oder to change game status and change FocusedScreen*/
-    public void setStatus(GameStatus gameStatus) {
+    /*  generateFocusedScreen should only be called by GameFlowManager */
+    @Override
+    public  FocusedScreen generateFocusedScreen(GameStatus gameStatus){
         switch (gameStatus) {
             case Loading:
-                currentFocusedScreen = new GameLoading();
-                setCurrentFocusedScreen(currentFocusedScreen);
-                break;
-            case MapOfGame:
-                currentFocusedScreen = new TiledGameMap();
-                setCurrentFocusedScreen(currentFocusedScreen);
-                break;
+                return new GameLoading();
+         case MapOfGame:
+                return new TiledGameMap();
             case Intro:
-                currentFocusedScreen = new GameIntro();
-                setCurrentFocusedScreen(currentFocusedScreen);
-                break;
+                return  new GameIntro();
             case Setting:
-                currentFocusedScreen = new GameSetting();
-                setCurrentFocusedScreen(currentFocusedScreen);
-                break;
+                return new GameSetting();
             case InGame:
-                currentFocusedScreen = new GamePlay();
-                setCurrentFocusedScreen(currentFocusedScreen);
-                break;
+                return new GamePlay();
             case GamePause:
-                currentFocusedScreen = new GamePause();
-                setCurrentFocusedScreen(currentFocusedScreen);
-                break;
+                return new GamePause();
             case Test:
-                currentFocusedScreen = new GameTest();
-                setCurrentFocusedScreen(currentFocusedScreen);
-                break;
+                return new GameTest();
             case WorldShiftStart:
                 //WorldShiftStart: clear the old Game ,shift not into intro but instead into an Animation
-                break;
+                return null;
             case WorldShiftEnd:
-
                 //WorldShiftEnd: clear the Animation ,shift into new game screen
-                break;
             default:
-                break;
+                return null;
         }
     }
 }
