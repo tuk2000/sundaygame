@@ -9,7 +9,7 @@ public class GameFlowManager {
     private static GameFlowManager gameFlowManager = null;
     private GameFlowExecutor gameFlowExecutor;
     private Stack<GameStatus> statusStack = new Stack<GameStatus>();
-    private Stack<FocusedScreen> screenStack=new Stack<FocusedScreen>();
+    private Stack<FocusedScreen> screenStack = new Stack<FocusedScreen>();
 
     private GameFlowManager() {
 
@@ -115,9 +115,9 @@ public class GameFlowManager {
     private void disposeCurrentFocusScreen() {
         FocusedScreen focusedScreen = screenStack.pop();
         statusStack.pop();
+        gameFlowExecutor.setCurrentFocusedScreen(screenStack.peek());
         GameFramework.StopMonitorObject(focusedScreen.getClass().getSuperclass(), focusedScreen);
-            gameFlowExecutor.setCurrentFocusedScreen(screenStack.peek());
-    //    focusedScreen.dispose();
+        focusedScreen.dispose();
     }
 
     private void shiftToNextFocusedScreen(GameStatus gameStatus) {
@@ -135,20 +135,32 @@ public class GameFlowManager {
         this will be executed  when Backspace pressed
         and there muss be at least 2 screens in the ScreenStack
         */
-        switch (statusStack.peek()) {
-            case Intro:
-                disposeCurrentFocusScreen();
-                shiftToNextFocusedScreen(GameStatus.Intro);
-                break;
-            default:
-                disposeCurrentFocusScreen();
-                if (statusStack.peek() == GameStatus.Intro) {
-                    disposeCurrentFocusScreen();
-                    shiftToNextFocusedScreen(GameStatus.Intro);
-                } else {
-                    shiftToNextFocusedScreen(statusStack.peek());
+
+          /*
+        *this should be executed asynchronous ,otherwise it may dispose the original caller (such as InGame)  and
+        * lead to program crash
+        */
+        Gdx.app.postRunnable(new Runnable() {
+            @Override
+            public void run() {
+                switch (statusStack.peek()) {
+                    case Intro:
+                        disposeCurrentFocusScreen();
+                        shiftToNextFocusedScreen(GameStatus.Intro);
+                        break;
+                    default:
+                        disposeCurrentFocusScreen();
+                        if (statusStack.peek() == GameStatus.Intro) {
+                            disposeCurrentFocusScreen();
+                            shiftToNextFocusedScreen(GameStatus.Intro);
+                        } else {
+                            shiftToNextFocusedScreen(statusStack.peek());
+                        }
                 }
-        }
+            }
+        });
+
+
     }
 
 

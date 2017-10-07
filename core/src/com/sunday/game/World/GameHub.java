@@ -10,20 +10,19 @@ import com.sunday.game.GameFramework.GameFlowExecutor;
 import com.sunday.game.GameFramework.GameStatus;
 import com.sunday.game.Graphic.TiledGameMap;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 public class GameHub extends Game implements GameFlowExecutor {
     private SpriteBatch batch;
     private BitmapFont font;
     private float duration;
     private long memoryUsage;
     private boolean isToDestroyed;
+    private FocusedScreen focusedScreenToSet;
 
     @Override
     public void create() {
         duration = 1.0f;
         isToDestroyed = false;
+        focusedScreenToSet = null;
         batch = new SpriteBatch();
         font = new BitmapFont();
         font.setColor(1, 0, 0, 1);
@@ -33,6 +32,10 @@ public class GameHub extends Game implements GameFlowExecutor {
 
     @Override
     public void render() {
+        if (focusedScreenToSet != null) {
+            setScreen(focusedScreenToSet);
+            focusedScreenToSet = null;
+        }
 
         //clear the screen before anything rendered
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -52,7 +55,7 @@ public class GameHub extends Game implements GameFlowExecutor {
         }
         font.draw(batch, "MemoryUsage : " + memoryUsage + " KB", 0, 640);
         font.draw(batch, "press Esc -> go to GameIntro ", 0, 620);
-        font.draw(batch, "press BackSpace -> return to last screen " , 0, 600);
+        font.draw(batch, "press BackSpace -> return to last screen ", 0, 600);
         font.draw(batch, "press P in GamePlay  -> pause game ", 0, 580);
         batch.end();
 
@@ -60,23 +63,25 @@ public class GameHub extends Game implements GameFlowExecutor {
 
     @Override
     public FocusedScreen getCurrentFocusedScreen() {
-        return (FocusedScreen)screen;
+        return (FocusedScreen) screen;
     }
+
     /*  setCurrentFocusedScreen should only be called by GameFlowManager , in oder to change game status and change FocusedScreen*/
     @Override
     public void setCurrentFocusedScreen(FocusedScreen currentFocusedScreen) {
-        setScreen(currentFocusedScreen);
+        focusedScreenToSet = currentFocusedScreen;
     }
+
     /*  generateFocusedScreen should only be called by GameFlowManager */
     @Override
-    public  FocusedScreen generateFocusedScreen(GameStatus gameStatus){
+    public FocusedScreen generateFocusedScreen(GameStatus gameStatus) {
         switch (gameStatus) {
             case Loading:
                 return new GameLoading();
-         case MapOfGame:
+            case MapOfGame:
                 return new TiledGameMap();
             case Intro:
-                return  new GameIntro();
+                return new GameIntro();
             case Setting:
                 return new GameSetting();
             case InGame:

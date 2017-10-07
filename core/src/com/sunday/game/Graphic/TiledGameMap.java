@@ -221,7 +221,6 @@ public class TiledGameMap extends FocusedScreen {
 
     @Override
     public void hide() {
-        dispose();
     }
 
     @Override

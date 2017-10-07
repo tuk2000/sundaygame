@@ -189,7 +189,6 @@ public class GamePlay extends FocusedScreen {
 
     @Override
     public void hide() {
-        dispose();
     }
     @Override
     public void pause() {

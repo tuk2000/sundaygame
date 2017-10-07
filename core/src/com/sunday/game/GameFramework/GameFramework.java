@@ -27,15 +27,16 @@ public class GameFramework extends Gdx {
         app.getInput().setInputProcessor(userInputManager);
     }
 
-    public static void MonitorObject(Class<?> cls, Object obj) {
+    public static void MonitorObject(Class<?> clazz, Object obj) {
         app.postRunnable(() -> {
-            TestTool.MonitorObject(cls,obj);
+            TestTool.MonitorObject(clazz, obj);
         });
     }
 
-    public static void StopMonitorObject(Class<?> cls, Object obj){
+    public static void StopMonitorObject(Class<?> clazz, Object obj) {
         app.postRunnable(() -> {
-            TestTool.StopMonitorObject(cls,obj);
+            TestTool.StopMonitorObject(clazz, obj);
         });
     }
+
 }
