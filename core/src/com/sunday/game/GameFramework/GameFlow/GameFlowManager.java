@@ -1,25 +1,20 @@
-package com.sunday.game.GameFramework;
+package com.sunday.game.GameFramework.GameFlow;
 
 import com.badlogic.gdx.Gdx;
-import com.sunday.game.World.GameHub;
+import com.sunday.game.GameFramework.FocusedScreen;
+import com.sunday.game.GameFramework.GameFramework;
 
 import java.util.Stack;
 
 public class GameFlowManager {
-    private static GameFlowManager gameFlowManager = null;
+    private FocusedScreenGenerator focusedScreenGenerator;
     private GameFlowExecutor gameFlowExecutor;
     private Stack<GameStatus> statusStack = new Stack<GameStatus>();
     private Stack<FocusedScreen> screenStack = new Stack<FocusedScreen>();
 
-    private GameFlowManager() {
-
-    }
-
-    public static final synchronized GameFlowManager getInstance() {
-        if (gameFlowManager == null) {
-            gameFlowManager = new GameFlowManager();
-        }
-        return gameFlowManager;
+    public GameFlowManager(FocusedScreenGenerator focusedScreenGenerator, GameFlowExecutor gameFlowExecutor) {
+        this.focusedScreenGenerator = focusedScreenGenerator;
+        this.gameFlowExecutor = gameFlowExecutor;
     }
 
     /**
@@ -46,9 +41,6 @@ public class GameFlowManager {
         switch (gameStatus) {
             case Loading:
                 /* this will be executed at first the program runs */
-                GameHub gameHub = new GameHub();
-                GameAdaptor.getInstance().setCurrentListener(gameHub);
-                gameFlowExecutor = gameHub;
                 shiftToNextFocusedScreen(gameStatus);
                 break;
             case Intro:
@@ -121,8 +113,8 @@ public class GameFlowManager {
     }
 
     private void shiftToNextFocusedScreen(GameStatus gameStatus) {
-        FocusedScreen focusedScreen = gameFlowExecutor.generateFocusedScreen(gameStatus);
-        UserInputManager.getInstance().setInputReceiver(focusedScreen);
+        FocusedScreen focusedScreen = focusedScreenGenerator.generateFocusedScreen(gameStatus);
+        GameFramework.setInputReceiver(focusedScreen);
         GameFramework.MonitorObject(focusedScreen.getClass().getSuperclass(), focusedScreen);
         gameFlowExecutor.setCurrentFocusedScreen(focusedScreen);
         statusStack.push(gameStatus);
@@ -159,9 +151,5 @@ public class GameFlowManager {
                 }
             }
         });
-
-
     }
-
-
 }

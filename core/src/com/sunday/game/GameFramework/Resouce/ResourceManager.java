@@ -1,4 +1,4 @@
-package com.sunday.game.GameFramework;
+package com.sunday.game.GameFramework.Resouce;
 
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.assets.AssetManager;
@@ -7,20 +7,13 @@ import java.util.ArrayList;
 
 
 public class ResourceManager {
-    private static ResourceManager resourceManager = null;
     private AssetManager assetManager;
     private DescriptorStorage descriptorStorage;
 
-    private ResourceManager() {
+    public ResourceManager() {
         assetManager = new AssetManager();
     }
 
-    public static ResourceManager getInstance() {
-        if (resourceManager == null) {
-            resourceManager = new ResourceManager();
-        }
-        return resourceManager;
-    }
 
     public void loadResourceFromDescriptorStorage(DescriptorStorage descriptorStorage) {
         this.descriptorStorage = descriptorStorage;

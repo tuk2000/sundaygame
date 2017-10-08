@@ -1,4 +1,4 @@
-package com.sunday.game.GameFramework;
+package com.sunday.game.GameFramework.Resouce;
 
 import com.badlogic.gdx.assets.AssetDescriptor;
 

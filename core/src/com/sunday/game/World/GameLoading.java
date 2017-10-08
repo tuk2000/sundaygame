@@ -5,15 +5,13 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sunday.game.GameFramework.FocusedScreen;
-import com.sunday.game.GameFramework.GameFlowManager;
-import com.sunday.game.GameFramework.GameStatus;
-import com.sunday.game.GameFramework.ResourceManager;
+import com.sunday.game.GameFramework.GameFlow.GameStatus;
+import com.sunday.game.GameFramework.GameFramework;
 import com.sunday.game.Resource.ResourceDescriptorStorage;
 
 public class GameLoading extends FocusedScreen {
     private SpriteBatch batch;
     private BitmapFont font;
-    private ResourceManager resourceManager;
     private boolean finishing = false;
 
     @Override
@@ -21,22 +19,21 @@ public class GameLoading extends FocusedScreen {
         batch = new SpriteBatch();
         font = new BitmapFont();
         font.setColor(0, 0, 0, 1);
-        resourceManager = ResourceManager.getInstance();
-        resourceManager.loadResourceFromDescriptorStorage(new ResourceDescriptorStorage());
+        GameFramework.Resource.loadResourceFromDescriptorStorage(new ResourceDescriptorStorage());
     }
 
     @Override
     public void render(float delta) {
         batch.begin();
         if (!finishing) {
-            finishing = resourceManager.isFinishLoading();
+            finishing = GameFramework.Resource.isFinishLoading();
         }
         if (finishing) {
             font.draw(batch, "LOADING GAME 100%", Gdx.graphics.getWidth() / 2 - 80, Gdx.graphics.getHeight() / 2);
-            resourceManager.makeSureFinishLoading();
-            GameFlowManager.getInstance().setGameStatus(GameStatus.Loading.Intro);
+            GameFramework.Resource.makeSureFinishLoading();
+            GameFramework.GameFlow.setGameStatus(GameStatus.Loading.Intro);
         } else {
-            font.draw(batch, "LOADING GAME " + (int) (100 * resourceManager.getLoadingProgress()) + "%", Gdx.graphics.getWidth() / 2 - 80, Gdx.graphics.getHeight() / 2);
+            font.draw(batch, "LOADING GAME " + (int) (100 * GameFramework.Resource.getLoadingProgress()) + "%", Gdx.graphics.getWidth() / 2 - 80, Gdx.graphics.getHeight() / 2);
         }
 
         batch.end();

@@ -1,14 +1,11 @@
-package com.sunday.game.World;
+package com.sunday.game.GameFramework;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.sunday.game.GameFramework.FocusedScreen;
-import com.sunday.game.GameFramework.GameFlowExecutor;
-import com.sunday.game.GameFramework.GameStatus;
-import com.sunday.game.Graphic.TiledGameMap;
+import com.sunday.game.GameFramework.GameFlow.GameFlowExecutor;
 
 public class GameHub extends Game implements GameFlowExecutor {
     private SpriteBatch batch;
@@ -70,33 +67,5 @@ public class GameHub extends Game implements GameFlowExecutor {
     @Override
     public void setCurrentFocusedScreen(FocusedScreen currentFocusedScreen) {
         focusedScreenToSet = currentFocusedScreen;
-    }
-
-    /*  generateFocusedScreen should only be called by GameFlowManager */
-    @Override
-    public FocusedScreen generateFocusedScreen(GameStatus gameStatus) {
-        switch (gameStatus) {
-            case Loading:
-                return new GameLoading();
-            case MapOfGame:
-                return new TiledGameMap();
-            case Intro:
-                return new GameIntro();
-            case Setting:
-                return new GameSetting();
-            case InGame:
-                return new GamePlay();
-            case GamePause:
-                return new GamePause();
-            case Test:
-                return new GameTest();
-            case WorldShiftStart:
-                //WorldShiftStart: clear the old Game ,shift not into intro but instead into an Animation
-                return null;
-            case WorldShiftEnd:
-                //WorldShiftEnd: clear the Animation ,shift into new game screen
-            default:
-                return null;
-        }
     }
 }

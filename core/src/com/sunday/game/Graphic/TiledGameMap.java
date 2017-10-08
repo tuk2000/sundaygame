@@ -19,8 +19,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.sunday.game.Enemies.Saw;
 import com.sunday.game.GameFramework.FocusedScreen;
-import com.sunday.game.GameFramework.GameFlowManager;
-import com.sunday.game.GameFramework.GameStatus;
+import com.sunday.game.GameFramework.GameFlow.GameStatus;
+import com.sunday.game.GameFramework.GameFramework;
 import com.sunday.game.Player.Player;
 import net.dermetfan.gdx.graphics.g2d.AnimatedSprite;
 
@@ -74,7 +74,7 @@ public class TiledGameMap extends FocusedScreen {
                         movement.x = 15 * speed;
                         break;
                     case Input.Keys.P:
-                        GameFlowManager.getInstance().setGameStatus(GameStatus.GamePause);
+                        GameFramework.GameFlow.setGameStatus(GameStatus.GamePause);
                         break;
                 }
                 return true;

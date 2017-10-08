@@ -1,4 +1,6 @@
-package com.sunday.game.GameFramework;
+package com.sunday.game.GameFramework.GameFlow;
+
+import com.sunday.game.GameFramework.FocusedScreen;
 
 public interface GameFlowExecutor {
 
@@ -6,5 +8,4 @@ public interface GameFlowExecutor {
 
     void setCurrentFocusedScreen(FocusedScreen focusedScreen);
 
-    FocusedScreen generateFocusedScreen(GameStatus gameStatus);
 }

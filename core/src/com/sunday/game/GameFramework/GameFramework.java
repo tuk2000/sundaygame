@@ -1,7 +1,13 @@
 package com.sunday.game.GameFramework;
 
 import com.badlogic.gdx.Gdx;
+import com.sunday.game.GameFramework.GameFlow.GameFlowManager;
+import com.sunday.game.GameFramework.GameFlow.GameStatus;
+import com.sunday.game.GameFramework.Input.InputReceiver;
+import com.sunday.game.GameFramework.Input.UserInputManager;
+import com.sunday.game.GameFramework.Resouce.ResourceManager;
 import com.sunday.game.GameFramework.TestTool.TestTool;
+import com.sunday.game.World.GameScreenGenerator;
 
 /**
  * the GameFramework consists of  GameAdaptor , UserInputManager and GameFlowManager
@@ -15,16 +21,27 @@ import com.sunday.game.GameFramework.TestTool.TestTool;
 public class GameFramework extends Gdx {
 
     //GameFramework basic Component
-    public static UserInputManager userInputManager;
-    public static GameFlowManager gameFlowManager;
-    public static ResourceManager resourceManager;
+    public static UserInputManager Input;
+    public static GameFlowManager GameFlow;
+    public static ResourceManager Resource;
 
     public GameFramework() {
-        resourceManager = resourceManager.getInstance();
-        gameFlowManager = GameFlowManager.getInstance();
-        gameFlowManager.setGameStatus(GameStatus.Loading);
-        userInputManager = UserInputManager.getInstance();
-        app.getInput().setInputProcessor(userInputManager);
+        GameHub gameHub = new GameHub();
+        GameAdaptor.getInstance().setCurrentListener(gameHub);
+
+        Resource = new ResourceManager();
+
+        GameFlow = new GameFlowManager(new GameScreenGenerator(), gameHub);
+        GameFlow.setGameStatus(GameStatus.Loading);
+
+        Input = new UserInputManager();
+        app.getInput().setInputProcessor(Input);
+
+
+    }
+
+    public static void setInputReceiver(InputReceiver inputReceiver) {
+        Input.setInputReceiver(inputReceiver);
     }
 
     public static void MonitorObject(Class<?> clazz, Object obj) {

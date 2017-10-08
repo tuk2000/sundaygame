@@ -1,6 +1,7 @@
 package com.sunday.game.GameFramework;
 
 import com.badlogic.gdx.Screen;
+import com.sunday.game.GameFramework.Input.InputReceiver;
 
 /*
 * the abstract class should used as model for all game screens

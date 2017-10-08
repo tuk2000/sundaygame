@@ -12,9 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.sunday.game.GameFramework.FocusedScreen;
-import com.sunday.game.GameFramework.GameFlowManager;
-import com.sunday.game.GameFramework.GameStatus;
-import com.sunday.game.GameFramework.ResourceManager;
+import com.sunday.game.GameFramework.GameFlow.GameStatus;
+import com.sunday.game.GameFramework.GameFramework;
 
 
 public class GameIntro extends FocusedScreen {
@@ -33,7 +32,7 @@ public class GameIntro extends FocusedScreen {
         stage = new Stage();
         font = new BitmapFont();
 //        buttonTextures = new Texture("buttons/buttons_small.png");
-        buttonTextures = ResourceManager.getInstance().getAsset("buttons/buttons_small.png");
+        buttonTextures = GameFramework.Resource.getAsset("buttons/buttons_small.png");
         textureRegions = TextureRegion.split(buttonTextures, 150, 75);
 
         textButtonStyle = new TextButton.TextButtonStyle();
@@ -46,7 +45,7 @@ public class GameIntro extends FocusedScreen {
         start.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                GameFlowManager.getInstance().setGameStatus(GameStatus.InGame);
+                GameFramework.GameFlow.setGameStatus(GameStatus.InGame);
             }
         });
         exit = new TextButton("EXIT", textButtonStyle);
@@ -61,7 +60,7 @@ public class GameIntro extends FocusedScreen {
         setting.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                GameFlowManager.getInstance().setGameStatus(GameStatus.Setting);
+                GameFramework.GameFlow.setGameStatus(GameStatus.Setting);
             }
         });
         /*test = new TextButton("TEST", textButtonStyle);
@@ -75,7 +74,7 @@ public class GameIntro extends FocusedScreen {
         test.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                GameFlowManager.getInstance().setGameStatus(GameStatus.MapOfGame);
+                GameFramework.GameFlow.setGameStatus(GameStatus.MapOfGame);
             }
         });
 
