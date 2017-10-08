@@ -23,19 +23,19 @@ public class GameHub extends Game implements GameFlowExecutor {
         batch = new SpriteBatch();
         font = new BitmapFont();
         font.setColor(1, 0, 0, 1);
-        //ClearColor White and it needs to be  defined only once
-        Gdx.gl.glClearColor(1, 1, 1, 1);
     }
 
     @Override
     public void render() {
+        //ClearColor White and it needs to be  defined only once before all render
+        Gdx.gl.glClearColor(1, 1, 1, 1);
+        //clear the screen before anything rendered
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         if (focusedScreenToSet != null) {
             setScreen(focusedScreenToSet);
             focusedScreenToSet = null;
         }
-
-        //clear the screen before anything rendered
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         //render the currentScreen
         super.render();

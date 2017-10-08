@@ -24,12 +24,10 @@ public class ToolForm extends JFrame {
 
     public void setTableModel(TestDataTableModel tableModel) {
         this.tableModel = tableModel;
-        defaultTable.setModel(tableModel);
-    }
-
-    public void updateTable() {
-        defaultTable.updateUI();
-        defaultPanel.updateUI();
+        SwingUtilities.invokeLater(() -> {
+            defaultTable.setModel(tableModel);
+            defaultTable.revalidate();
+        });
     }
 
 }

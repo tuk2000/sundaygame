@@ -110,6 +110,7 @@ public class GameFlowManager {
         gameFlowExecutor.setCurrentFocusedScreen(screenStack.peek());
         GameFramework.StopMonitorObject(focusedScreen.getClass().getSuperclass(), focusedScreen);
         focusedScreen.dispose();
+        System.gc();
     }
 
     private void shiftToNextFocusedScreen(GameStatus gameStatus) {

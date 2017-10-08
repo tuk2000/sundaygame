@@ -5,12 +5,12 @@ import javax.swing.table.TableModel;
 import java.util.ArrayList;
 
 public class TestDataTableModel implements TableModel {
-    private Class<?> cls;
+    private Class<?> clazz;
     private ArrayList<Object> arrayList;
-    private String[] tableFieldName = {"Class", "Object",};
+    private String[] tableFieldName = {"Class", "Object"};
 
-    TestDataTableModel(Class<?> cls, ArrayList<Object> arrayList) {
-        this.cls = cls;
+    TestDataTableModel(Class<?> clazz, ArrayList<Object> arrayList) {
+        this.clazz = clazz;
         this.arrayList = arrayList;
     }
 
@@ -25,7 +25,7 @@ public class TestDataTableModel implements TableModel {
      */
     @Override
     public int getRowCount() {
-        return arrayList.size();
+           return arrayList.size();
     }
 
     /**
@@ -64,7 +64,7 @@ public class TestDataTableModel implements TableModel {
      */
     @Override
     public Class<?> getColumnClass(int columnIndex) {
-        return cls;
+        return clazz;
     }
 
     /**
@@ -95,7 +95,7 @@ public class TestDataTableModel implements TableModel {
     public Object getValueAt(int rowIndex, int columnIndex) {
         switch (columnIndex) {
             case 0:
-                return cls.getName();
+                return clazz.getName();
             case 1:
                 return arrayList.get(rowIndex).toString();
             default:

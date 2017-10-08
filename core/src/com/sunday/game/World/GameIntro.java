@@ -132,7 +132,7 @@ public class GameIntro extends FocusedScreen {
     @Override
     public void dispose() {
         font.dispose();
-        buttonTextures.dispose();
+        //buttonTextures.dispose();
         stage.dispose();
     }
 
