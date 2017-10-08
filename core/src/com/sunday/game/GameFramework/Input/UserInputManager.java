@@ -1,27 +1,19 @@
-package com.sunday.game.GameFramework;
+package com.sunday.game.GameFramework.Input;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.sunday.game.GameFramework.GameFlow.GameStatus;
+import com.sunday.game.GameFramework.GameFramework;
 
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public final class UserInputManager implements InputProcessor {
     private static UserInputManager userInputManager = null;
-    private  InputReceiver inputReceiver = null;
-    private  AtomicBoolean secureTransmit= new AtomicBoolean(false);
+    private InputReceiver inputReceiver = null;
+    private AtomicBoolean secureTransmit = new AtomicBoolean(false);
 
-    protected UserInputManager() {
 
-    }
-
-    public static final synchronized UserInputManager getInstance() {
-        if (userInputManager == null) {
-            userInputManager = new UserInputManager();
-        }
-        return userInputManager;
-    }
-
-    public  final synchronized void setInputReceiver(InputReceiver inputReceiver) {
+    public final synchronized void setInputReceiver(InputReceiver inputReceiver) {
         secureTransmit.set(false);
         this.inputReceiver = inputReceiver;
         secureTransmit.set(true);
@@ -30,14 +22,14 @@ public final class UserInputManager implements InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        switch (keycode){
+        switch (keycode) {
             case Input.Keys.ESCAPE:
                 System.out.println("Key Esc pressed ");
-                GameFlowManager.getInstance().setGameStatus(GameStatus.Intro);
+                GameFramework.GameFlow.setGameStatus(GameStatus.Intro);
                 break;
             case Input.Keys.BACKSPACE:
                 System.out.println("Key BACKSPACE pressed ");
-                GameFlowManager.getInstance().backToPreviewStatus();
+                GameFramework.GameFlow.backToPreviewStatus();
                 break;
         }
         return secureTransmit.get() && inputReceiver.getInputAdapter().keyDown(keycode);

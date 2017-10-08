@@ -10,27 +10,25 @@ import com.sunday.game.GameFramework.FocusedScreen;
 
 public class GameTest extends FocusedScreen {
     private int PPM = 50; // 1 meter = PPM pixels
+    private World world;
+    private OrthographicCamera camera;
+    private Box2DDebugRenderer box2DDebugRenderer;
+    private Body testBody;
+    private BodyDef testBodyDef;
+    private FixtureDef testBodyFixtureDef;
+    private Vector2 force;
     private InputAdapter inputAdapter = new InputAdapter() {
         @Override
         public boolean keyDown(int keycode) {
             if (keycode == Input.Keys.SPACE) {
                 //testBody.applyTorque(2.0f, true);
-                testBody.applyLinearImpulse(new Vector2(-0.1f,0),testBody.getLocalCenter(),true);
+                testBody.applyLinearImpulse(new Vector2(-0.1f, 0), testBody.getLocalCenter(), true);
                 //force.add(-0.1f, 0);
                 System.out.println(force.toString());
             }
             return false;
         }
     };
-    private World world;
-    private OrthographicCamera camera;
-    private Box2DDebugRenderer box2DDebugRenderer;
-
-    private Body testBody;
-    private BodyDef testBodyDef;
-    private FixtureDef testBodyFixtureDef;
-
-    private Vector2 force;
 
     public GameTest() {
         world = new World(new Vector2(0, 0f), false);
@@ -80,7 +78,7 @@ public class GameTest extends FocusedScreen {
     @Override
     public void render(float delta) {
 
-       // camera.setToOrtho(false, (testBody.getLocalCenter()).x*PPM,(testBody.getLocalCenter()).y*PPM);
+        // camera.setToOrtho(false, (testBody.getLocalCenter()).x*PPM,(testBody.getLocalCenter()).y*PPM);
         box2DDebugRenderer.render(world, camera.combined);
 
         world.step(0.16f, 8, 3);

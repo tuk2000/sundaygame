@@ -3,7 +3,7 @@ package com.sunday.game.Graphic;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.physics.box2d.*;
-import com.sunday.game.GameFramework.InputReceiver;
+import com.sunday.game.GameFramework.Input.InputReceiver;
 
 public class OurShapes implements InputReceiver{
     private static final float TIMESTEP = 1 / 60f;

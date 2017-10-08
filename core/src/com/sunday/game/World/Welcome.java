@@ -7,8 +7,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.sunday.game.GameFramework.GameStatus;
-import com.sunday.game.GameFramework.InputReceiver;
+import com.sunday.game.GameFramework.GameFlow.GameStatus;
+import com.sunday.game.GameFramework.Input.InputReceiver;
 import com.sunday.game.Graphic.TiledGameMap;
 
 
