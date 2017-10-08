@@ -31,7 +31,7 @@ public class GameLoading extends FocusedScreen {
         if (finishing) {
             font.draw(batch, "LOADING GAME 100%", Gdx.graphics.getWidth() / 2 - 80, Gdx.graphics.getHeight() / 2);
             GameFramework.Resource.makeSureFinishLoading();
-            GameFramework.GameFlow.setGameStatus(GameStatus.Loading.Intro);
+            GameFramework.GameFlow.setGameStatus(GameStatus.Intro);
         } else {
             font.draw(batch, "LOADING GAME " + (int) (100 * GameFramework.Resource.getLoadingProgress()) + "%", Gdx.graphics.getWidth() / 2 - 80, Gdx.graphics.getHeight() / 2);
         }
