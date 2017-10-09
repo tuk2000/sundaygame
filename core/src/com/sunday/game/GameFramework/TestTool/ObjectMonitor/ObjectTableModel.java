@@ -1,15 +1,15 @@
-package com.sunday.game.GameFramework.TestTool;
+package com.sunday.game.GameFramework.TestTool.ObjectMonitor;
 
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 import java.util.ArrayList;
 
-public class TestDataTableModel implements TableModel {
+public class ObjectTableModel implements TableModel {
     private Class<?> clazz;
     private ArrayList<Object> arrayList;
     private String[] tableFieldName = {"Class", "Object"};
 
-    TestDataTableModel(Class<?> clazz, ArrayList<Object> arrayList) {
+    ObjectTableModel(Class<?> clazz, ArrayList<Object> arrayList) {
         this.clazz = clazz;
         this.arrayList = arrayList;
     }

@@ -26,6 +26,7 @@ public class GameFlowManager {
         } else {
             GameFlow.appendGameFlow(status, focusedScreen);
         }
+        GameFramework.app.log("GameFlowManager","GameStatus changed to "+status.name());
         GameFramework.MonitorObject(focusedScreen.getClass().getSuperclass(), focusedScreen);
         applyFocusedScreen(focusedScreen);
     }
@@ -37,10 +38,12 @@ public class GameFlowManager {
             replaceIntroScreen();
         } else {
             FocusedScreen focusedScreen = GameFlow.getCurrentScreen();
+            GameFramework.app.log("GameFlowManager",GameFlow.getCurrentGameStatus().name()+" closed");
             GameFramework.StopMonitorObject(focusedScreen.getClass().getSuperclass(), focusedScreen);
             System.gc();
 
             GameFlow.backToPreviewGameFlow();
+            GameFramework.app.log("GameFlowManager",GameFlow.getCurrentGameStatus().name()+" opened");
             if (GameFlow.getCurrentGameStatus() == GameStatus.Intro) {
                 replaceIntroScreen();
             } else {
@@ -57,6 +60,7 @@ public class GameFlowManager {
         GameFramework.StopMonitorObject(focusedScreen.getClass().getSuperclass(), focusedScreen);
         System.gc();
         focusedScreen = focusedScreenGenerator.generateFocusedScreen(GameStatus.Intro);
+        GameFramework.app.log("GameFlowManager","IntroScreen replaced");
         GameFramework.MonitorObject(focusedScreen.getClass().getSuperclass(), focusedScreen);
         GameFlow.getCurrentGameFlow().screen = focusedScreen;
         applyFocusedScreen(focusedScreen);

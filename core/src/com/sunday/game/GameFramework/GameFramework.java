@@ -6,7 +6,8 @@ import com.sunday.game.GameFramework.GameFlow.GameStatus;
 import com.sunday.game.GameFramework.Input.InputReceiver;
 import com.sunday.game.GameFramework.Input.UserInputManager;
 import com.sunday.game.GameFramework.Resouce.ResourceManager;
-import com.sunday.game.GameFramework.TestTool.TestTool;
+import com.sunday.game.GameFramework.TestTool.Logger.GameLogger;
+import com.sunday.game.GameFramework.TestTool.ObjectMonitor.ObjectMonitor;
 import com.sunday.game.World.GameScreenGenerator;
 
 /**
@@ -26,6 +27,9 @@ public class GameFramework extends Gdx {
     public static ResourceManager Resource;
 
     public GameFramework() {
+
+        app.setApplicationLogger(new GameLogger());
+
         GameHub gameHub = new GameHub();
         GameAdaptor.getInstance().setCurrentListener(gameHub);
 
@@ -37,22 +41,17 @@ public class GameFramework extends Gdx {
         Input = new UserInputManager();
         app.getInput().setInputProcessor(Input);
 
-
-    }
-
-    public static void setInputReceiver(InputReceiver inputReceiver) {
-        Input.setInputReceiver(inputReceiver);
     }
 
     public static void MonitorObject(Class<?> clazz, Object obj) {
         app.postRunnable(() -> {
-            TestTool.MonitorObject(clazz, obj);
+            ObjectMonitor.MonitorObject(clazz, obj);
         });
     }
 
     public static void StopMonitorObject(Class<?> clazz, Object obj) {
         app.postRunnable(() -> {
-            TestTool.StopMonitorObject(clazz, obj);
+            ObjectMonitor.StopMonitorObject(clazz, obj);
         });
     }
 

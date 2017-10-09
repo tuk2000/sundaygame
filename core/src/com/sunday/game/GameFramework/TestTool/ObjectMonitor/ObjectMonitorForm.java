@@ -1,14 +1,14 @@
-package com.sunday.game.GameFramework.TestTool;
+package com.sunday.game.GameFramework.TestTool.ObjectMonitor;
 
 import javax.swing.*;
 
-public class ToolForm extends JFrame {
+public class ObjectMonitorForm extends JFrame {
     private JTable defaultTable;
     private JPanel defaultPanel;
-    private TestDataTableModel tableModel;
+    private ObjectTableModel tableModel;
 
 
-    public ToolForm(TestDataTableModel tableModel) {
+    public ObjectMonitorForm(ObjectTableModel tableModel) {
         this.tableModel = tableModel;
         setSize(400, 800);
         setVisible(true);
@@ -22,7 +22,7 @@ public class ToolForm extends JFrame {
         defaultTable = new JTable(tableModel);
     }
 
-    public void setTableModel(TestDataTableModel tableModel) {
+    public void setTableModel(ObjectTableModel tableModel) {
         this.tableModel = tableModel;
         SwingUtilities.invokeLater(() -> {
             defaultTable.setModel(tableModel);

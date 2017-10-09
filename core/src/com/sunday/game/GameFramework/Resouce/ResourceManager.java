@@ -14,7 +14,6 @@ public class ResourceManager {
         assetManager = new AssetManager();
     }
 
-
     public void loadResourceFromDescriptorStorage(DescriptorStorage descriptorStorage) {
         this.descriptorStorage = descriptorStorage;
         if (descriptorStorage != null) {
@@ -43,5 +42,10 @@ public class ResourceManager {
         String format = path.substring(path.lastIndexOf(".") + 1);
         Class cls = GameResourceType.getRelatedClass(format);
         return getAsset(path, (Class<T>) cls);
+    }
+
+    public boolean disposeAsset(Object obj) {
+
+        return false;
     }
 }
