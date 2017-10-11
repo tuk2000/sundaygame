@@ -1,17 +1,22 @@
 package com.sunday.game.GameFramework.TestTool.ObjectMonitor;
 
+
 import javax.swing.event.TableModelListener;
 import javax.swing.table.TableModel;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class ObjectTableModel implements TableModel {
-    private Class<?> clazz;
-    private ArrayList<Object> arrayList;
+    private ArrayList<Object> arrayList = new ArrayList<>();
     private String[] tableFieldName = {"Class", "Object"};
 
-    ObjectTableModel(Class<?> clazz, ArrayList<Object> arrayList) {
-        this.clazz = clazz;
-        this.arrayList = arrayList;
+    ObjectTableModel(HashMap<Class, ArrayList<Object>> groups) {
+        arrayList = new ArrayList<>();
+        groups.forEach((clazz, objects) -> {
+            objects.forEach(object->{
+                arrayList.add(object);
+            });
+        });
     }
 
     /**
@@ -25,7 +30,7 @@ public class ObjectTableModel implements TableModel {
      */
     @Override
     public int getRowCount() {
-           return arrayList.size();
+        return arrayList.size();
     }
 
     /**
@@ -64,7 +69,7 @@ public class ObjectTableModel implements TableModel {
      */
     @Override
     public Class<?> getColumnClass(int columnIndex) {
-        return clazz;
+        return String.class;
     }
 
     /**
@@ -93,11 +98,12 @@ public class ObjectTableModel implements TableModel {
      */
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
+        Object obj=arrayList.get(rowIndex);
         switch (columnIndex) {
             case 0:
-                return clazz.getName();
+                return obj.getClass().getSimpleName();
             case 1:
-                return arrayList.get(rowIndex).toString();
+                return obj.toString();
             default:
                 return null;
         }

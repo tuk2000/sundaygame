@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.sunday.game.GameFramework.TestTool.Logger.LogPanel">
+  <grid id="27dc6" binding="panel" layout-manager="BorderLayout" hgap="0" vgap="0">
+    <constraints>
+      <xy x="20" y="20" width="525" height="594"/>
+    </constraints>
+    <properties>
+      <minimumSize width="400" height="400"/>
+      <preferredSize width="400" height="400"/>
+    </properties>
+    <border type="none"/>
+    <children>
+      <scrollpane id="4eb4b">
+        <constraints border-constraint="Center"/>
+        <properties>
+          <minimumSize width="400" height="400"/>
+          <preferredSize width="400" height="400"/>
+        </properties>
+        <border type="none"/>
+        <children>
+          <component id="bbb03" class="javax.swing.JList" binding="logList" custom-create="true">
+            <constraints/>
+            <properties>
+              <minimumSize width="400" height="400"/>
+              <preferredSize width="400" height="400"/>
+            </properties>
+          </component>
+        </children>
+      </scrollpane>
+    </children>
+  </grid>
+</form>

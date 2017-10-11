@@ -1,34 +1,58 @@
 package com.sunday.game.GameFramework.TestTool.ObjectMonitor;
 
+import com.sunday.game.GameFramework.TestTool.ToolExtender;
+
+import javax.swing.*;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
-public class ObjectMonitor {
-    private static Map<Class<?>, ArrayList<Object>> clsToObjMap = new HashMap<Class<?>, ArrayList<Object>>();
-    private static Map<Class<?>, ObjectMonitorForm> clsToFormMap = new HashMap<Class<?>, ObjectMonitorForm>();
+public class ObjectMonitor implements ToolExtender {
 
+    private HashMap<Class, ArrayList<Object>> clsToObjMap = new HashMap<>();
+    private static ObjectMonitor objectMonitor = new ObjectMonitor();
 
-    public static void StopMonitorObject(Class<?> cls, Object obj) {
-        clsToObjMap.get(cls).remove(obj);
-        if(clsToObjMap.get(cls).size()==0){
-            clsToObjMap.remove(cls);
-            clsToFormMap.remove(cls);
-        }else{
-            clsToFormMap.get(cls).setTableModel(new ObjectTableModel(cls, clsToObjMap.get(cls)));
-        }
+    private ObjectMonitor() {
     }
 
-    public static void MonitorObject(Class<?> cls, Object obj) {
+    public static ObjectMonitor getInstance() {
+        return objectMonitor;
+    }
 
-        if (clsToObjMap.containsKey(cls)) {
-            clsToObjMap.get(cls).add(obj);
-            clsToFormMap.get(cls).setTableModel(new ObjectTableModel(cls, clsToObjMap.get(cls)));
-        } else {
-            ArrayList<Object> arrayList = new ArrayList<Object>();
-            arrayList.add(obj);
-            clsToFormMap.put(cls, new ObjectMonitorForm(new ObjectTableModel(cls, arrayList)));
-            clsToObjMap.put(cls, arrayList);
+    public void StopMonitorObject(Object object) {
+        Class clazz = object.getClass();
+        clsToObjMap.get(clazz).remove(object);
+        if (clsToObjMap.get(clazz).size() == 0) {
+            clsToObjMap.remove(clazz);
         }
+        updateContent();
+    }
+
+    public void MonitorObject(Object object) {
+        Class clazz = object.getClass();
+        if (clsToObjMap.containsKey(clazz)) {
+            clsToObjMap.get(clazz).add(object);
+        } else {
+            ArrayList<Object> arrayList = new ArrayList<>();
+            arrayList.add(object);
+            clsToObjMap.put(clazz, arrayList);
+        }
+        updateContent();
+    }
+
+    private ObjectMonitorPanel monitorForm;
+
+    @Override
+    public void updateContent() {
+        monitorForm.setTableModel(new ObjectTableModel(clsToObjMap));
+    }
+
+    @Override
+    public <T  extends JComponent> void setContentPanel(T frame) {
+        monitorForm = (ObjectMonitorPanel) frame;
+    }
+
+    @Override
+    public <T extends JComponent> T getContentPanel() {
+        return (T) monitorForm;
     }
 }

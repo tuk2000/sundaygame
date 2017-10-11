@@ -1,33 +1,34 @@
 package com.sunday.game.GameFramework.TestTool.Logger;
 
 import com.badlogic.gdx.ApplicationLogger;
+import com.sunday.game.GameFramework.TestTool.ToolExtender;
 
 import javax.swing.*;
-import javax.swing.event.ListDataListener;
 import java.util.ArrayList;
 
 ;
 
-public class GameLogger implements ApplicationLogger {
-    public static final int LOG_NONE = 0;
-    public static final int LOG_DEBUG = 3;
-    public static final int LOG_INFO = 2;
-    public static final int LOG_ERROR = 1;
+public class GameLogger implements ApplicationLogger ,ToolExtender {
+//    public static final int LOG_NONE = 0;
+//    public static final int LOG_DEBUG = 3;
+//    public static final int LOG_INFO = 2;
+//    public static final int LOG_ERROR = 1;
+    private static GameLogger gameLogger;
 
-    private LogForm logForm;
+    public static GameLogger getInstance() {
+        if(gameLogger==null){
+            gameLogger=new GameLogger();
+        }
+        return gameLogger;
+    }
+
 
     private ArrayList<LogMessage> logs = new ArrayList<>();
 
 
-    public GameLogger() {
-        logForm = new LogForm();
-        logForm.setLocation(0, 200);
+    private GameLogger() {
     }
 
-
-    private void UpdateLogForm() {
-        logForm.UpdateList(new LogListModel(logs));
-    }
 
     /**
      * Logs a message with a tag
@@ -37,9 +38,8 @@ public class GameLogger implements ApplicationLogger {
      */
     @Override
     public void log(String tag, String message) {
-        System.out.println(tag + ": " + message);
         logs.add(new LogMessage(LogType.NONE, tag, message));
-        UpdateLogForm();
+        updateContent();
     }
 
     /**
@@ -52,7 +52,7 @@ public class GameLogger implements ApplicationLogger {
     @Override
     public void log(String tag, String message, Throwable exception) {
         logs.add(new LogMessage(LogType.NONE, tag, message));
-        UpdateLogForm();
+        updateContent();
     }
 
     /**
@@ -64,7 +64,7 @@ public class GameLogger implements ApplicationLogger {
     @Override
     public void error(String tag, String message) {
         logs.add(new LogMessage(LogType.ERROR, tag, message));
-        UpdateLogForm();
+        updateContent();
     }
 
     /**
@@ -77,7 +77,7 @@ public class GameLogger implements ApplicationLogger {
     @Override
     public void error(String tag, String message, Throwable exception) {
         logs.add(new LogMessage(LogType.ERROR, tag, message));
-        UpdateLogForm();
+        updateContent();
     }
 
     /**
@@ -89,7 +89,7 @@ public class GameLogger implements ApplicationLogger {
     @Override
     public void debug(String tag, String message) {
         logs.add(new LogMessage(LogType.DEBUG, tag, message));
-        UpdateLogForm();
+        updateContent();
     }
 
     /**
@@ -102,6 +102,23 @@ public class GameLogger implements ApplicationLogger {
     @Override
     public void debug(String tag, String message, Throwable exception) {
         logs.add(new LogMessage(LogType.DEBUG, tag, message));
-        UpdateLogForm();
+        updateContent();
+    }
+
+    private LogPanel logPanel;
+
+    @Override
+    public void updateContent() {
+        logPanel.UpdateList(new LogListModel(logs));
+    }
+
+    @Override
+    public <T  extends JComponent> void setContentPanel(T frame) {
+        logPanel = (LogPanel) frame;
+    }
+
+    @Override
+    public  <T extends JComponent> T getContentPanel() {
+        return (T) logPanel;
     }
 }
