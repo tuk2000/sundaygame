@@ -109,12 +109,13 @@ public class GameLogger implements ApplicationLogger ,ToolExtender {
 
     @Override
     public void updateContent() {
-        logPanel.UpdateList(new LogListModel(logs));
+        logPanel.updateView();
     }
 
     @Override
     public <T  extends JComponent> void setContentPanel(T frame) {
         logPanel = (LogPanel) frame;
+        logPanel.useListMode(new LogListModel(logs));
     }
 
     @Override

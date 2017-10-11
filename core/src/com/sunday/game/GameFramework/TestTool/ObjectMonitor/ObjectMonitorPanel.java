@@ -12,11 +12,13 @@ public class ObjectMonitorPanel extends JComponent {
         defaultTable = new JTable(new ObjectTableModel(new HashMap<>()));
     }
 
-    public void setTableModel(ObjectTableModel tableModel) {
-        SwingUtilities.invokeLater(() -> {
-            defaultTable.setModel(tableModel);
-            defaultTable.revalidate();
-        });
+    public void updateView() {
+        SwingUtilities.invokeLater(defaultTable::updateUI);
+    }
+
+    public void useTableModel(ObjectTableModel tableModel){
+        defaultTable.setModel(tableModel);
+        updateView();
     }
 
 }

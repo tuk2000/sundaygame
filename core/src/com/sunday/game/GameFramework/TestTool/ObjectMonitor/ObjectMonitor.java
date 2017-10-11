@@ -43,12 +43,13 @@ public class ObjectMonitor implements ToolExtender {
 
     @Override
     public void updateContent() {
-        monitorForm.setTableModel(new ObjectTableModel(clsToObjMap));
+        monitorForm.updateView();
     }
 
     @Override
     public <T  extends JComponent> void setContentPanel(T frame) {
         monitorForm = (ObjectMonitorPanel) frame;
+        monitorForm.useTableModel(new ObjectTableModel(clsToObjMap));
     }
 
     @Override

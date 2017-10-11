@@ -7,11 +7,13 @@ public class LogPanel extends JComponent {
     private JList logList;
     private JPanel panel;
 
-    public void UpdateList(ListModel listModel) {
-        SwingUtilities.invokeLater(() -> {
-            logList.setModel(listModel);
-            logList.validate();
-        });
+    public void updateView() {
+        SwingUtilities.invokeLater(logList::updateUI);
+    }
+
+    public void useListMode(ListModel listModel) {
+        logList.setModel(listModel);
+        updateView();
     }
 
     private void createUIComponents() {
