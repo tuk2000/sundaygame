@@ -1,6 +1,7 @@
 package com.sunday.game.GameFramework.GameFlow;
 
 import com.sunday.game.GameFramework.FocusedScreen;
+
 /*
     class GameFlow peserves the history of GameStatus and FocusedScreen like stack
     most useful is the getCurrentGameFlow() , it tells the presents GameStatus and FocusedScreen
@@ -15,20 +16,22 @@ class GameFlow {
     private static GameFlow firstGameFlow = new GameFlow();
     private static GameFlow currentGameFlow;
 
-    public static GameFlow getCurrentGameFlow() {
-        return currentGameFlow;
-    }
-
     public static GameStatus getCurrentGameStatus() {
         return currentGameFlow.status;
     }
 
-    public static FocusedScreen getCurrentScreen(){
+    public static void setCurrentScreen(FocusedScreen screen) {
+        currentGameFlow.screen = screen;
+    }
+
+    public static FocusedScreen getCurrentScreen() {
         return currentGameFlow.screen;
     }
 
-
     public static void setFirstGameFlow(GameStatus status, FocusedScreen screen) {
+        while (currentGameFlow != null) {
+            backToPreviewGameFlow();
+        }
         firstGameFlow.preview = null;
         firstGameFlow.status = status;
         firstGameFlow.screen = screen;
@@ -45,8 +48,10 @@ class GameFlow {
 
     public static void backToPreviewGameFlow() {
         if (currentGameFlow == firstGameFlow) {
+            firstGameFlow.preview=null;
             firstGameFlow.status = null;
             firstGameFlow.screen = null;
+            currentGameFlow=null;
         } else {
             GameFlow previewFlow = currentGameFlow.preview;
             currentGameFlow.preview = null;

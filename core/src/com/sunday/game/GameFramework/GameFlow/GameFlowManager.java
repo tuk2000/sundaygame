@@ -56,13 +56,13 @@ public class GameFlowManager {
     private void replaceIntroScreen() {
         if (GameFlow.getCurrentGameStatus() != GameStatus.Intro)
             return;
-        FocusedScreen focusedScreen = GameFlow.getCurrentGameFlow().screen;
+        FocusedScreen focusedScreen = GameFlow.getCurrentScreen();
         GameFramework.StopMonitorObject(focusedScreen);
         System.gc();
         focusedScreen = focusedScreenGenerator.generateFocusedScreen(GameStatus.Intro);
         GameFramework.app.log("GameFlowManager","IntroScreen replaced");
         GameFramework.MonitorObject(focusedScreen);
-        GameFlow.getCurrentGameFlow().screen = focusedScreen;
+        GameFlow.setCurrentScreen(focusedScreen);
         applyFocusedScreen(focusedScreen);
     }
 
