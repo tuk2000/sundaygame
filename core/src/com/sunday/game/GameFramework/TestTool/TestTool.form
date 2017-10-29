@@ -2,7 +2,7 @@
 <form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.sunday.game.GameFramework.TestTool.TestTool">
   <grid id="27dc6" binding="panel" layout-manager="BorderLayout" hgap="0" vgap="0">
     <constraints>
-      <xy x="286" y="590" width="1000" height="400"/>
+      <xy x="286" y="116" width="1000" height="629"/>
     </constraints>
     <properties>
       <minimumSize width="1000" height="400"/>
@@ -14,27 +14,51 @@
     </clientProperties>
     <border type="none"/>
     <children>
-      <splitpane id="61447">
+      <tabbedpane id="a8cb9" binding="tabbedPane1" default-binding="true">
         <constraints border-constraint="Center"/>
-        <properties>
-          <dividerSize value="5"/>
-          <minimumSize width="600" height="400"/>
-          <preferredSize width="600" height="400"/>
-        </properties>
+        <properties/>
         <border type="none"/>
         <children>
-          <nested-form id="1747e" form-file="com/sunday/game/GameFramework/TestTool/Logger/LogPanel.form" binding="logPanel" custom-create="true">
+          <grid id="84611" layout-manager="BorderLayout" hgap="0" vgap="0">
             <constraints>
-              <splitpane position="left"/>
+              <tabbedpane title="Screen"/>
             </constraints>
-          </nested-form>
-          <nested-form id="c6f45" form-file="com/sunday/game/GameFramework/TestTool/ObjectMonitor/ObjectMonitorPanel.form" binding="objectMonitorPanel" custom-create="true">
+            <properties/>
+            <border type="none"/>
+            <children>
+              <splitpane id="d2a26">
+                <constraints border-constraint="Center"/>
+                <properties/>
+                <border type="none"/>
+                <children>
+                  <nested-form id="6f7ab" form-file="com/sunday/game/GameFramework/TestTool/ScreenLoader/ScreenLoaderPanel.form" binding="screenLoaderPanel" custom-create="true">
+                    <constraints>
+                      <splitpane position="left"/>
+                    </constraints>
+                  </nested-form>
+                  <nested-form id="70756" form-file="com/sunday/game/GameFramework/TestTool/ObjectMonitor/ObjectMonitorPanel.form" binding="objectMonitorPanel" custom-create="true">
+                    <constraints>
+                      <splitpane position="right"/>
+                    </constraints>
+                  </nested-form>
+                </children>
+              </splitpane>
+            </children>
+          </grid>
+          <grid id="abbb5" layout-manager="BorderLayout" hgap="0" vgap="0">
             <constraints>
-              <splitpane position="right"/>
+              <tabbedpane title="Log"/>
             </constraints>
-          </nested-form>
+            <properties/>
+            <border type="none"/>
+            <children>
+              <nested-form id="ee099" form-file="com/sunday/game/GameFramework/TestTool/Logger/LogPanel.form" binding="logPanel" custom-create="true">
+                <constraints border-constraint="Center"/>
+              </nested-form>
+            </children>
+          </grid>
         </children>
-      </splitpane>
+      </tabbedpane>
     </children>
   </grid>
 </form>

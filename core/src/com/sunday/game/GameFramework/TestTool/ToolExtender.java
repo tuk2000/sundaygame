@@ -1,10 +1,20 @@
 package com.sunday.game.GameFramework.TestTool;
 
-import javax.swing.*;
+public abstract class ToolExtender<T extends ToolPanel> {
+    private T contentPanel;
 
-public interface ToolExtender {
-//    void switchDetachMode();//in TestTool or alone
-    void updateContent();
-    <T extends JComponent> void setContentPanel(T frame);
-    <T extends JComponent> T getContentPanel();
+    public void updateContentView() {
+        contentPanel.updateView();
+    }
+
+    public abstract Object getContentData();
+
+    public void setContentPanel(T contentPanel) {
+        this.contentPanel = contentPanel;
+        this.contentPanel.useContentData(getContentData());
+    }
+
+    public T getContentPanel() {
+        return contentPanel;
+    }
 }

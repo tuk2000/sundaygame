@@ -7,6 +7,7 @@ import com.sunday.game.GameFramework.Input.UserInputManager;
 import com.sunday.game.GameFramework.Resouce.ResourceManager;
 import com.sunday.game.GameFramework.TestTool.Logger.GameLogger;
 import com.sunday.game.GameFramework.TestTool.ObjectMonitor.ObjectMonitor;
+import com.sunday.game.GameFramework.TestTool.ScreenLoader.ScreenLoader;
 import com.sunday.game.GameFramework.TestTool.TestTool;
 import com.sunday.game.World.GameScreenGenerator;
 
@@ -29,17 +30,18 @@ public class GameFramework extends Gdx {
 
     public GameFramework() {
         app.setApplicationLogger(GameLogger.getInstance());
+        GameScreenGenerator gameScreenGenerator=new GameScreenGenerator();
+
         app.postRunnable(() -> {
             Tool =new TestTool();
-
+            ScreenLoader.getInstance().loadGameStatusEnum(gameScreenGenerator.enumGameStatus());
         });
 
         GameHub gameHub = new GameHub();
         GameAdaptor.getInstance().setCurrentListener(gameHub);
 
         Resource = new ResourceManager();
-
-        GameFlow = new GameFlowManager(new GameScreenGenerator(), gameHub);
+        GameFlow = new GameFlowManager(gameScreenGenerator, gameHub);
         GameFlow.setGameStatus(GameStatus.Loading);
 
         Input = new UserInputManager();

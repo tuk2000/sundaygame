@@ -6,7 +6,7 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ObjectMonitor implements ToolExtender {
+public class ObjectMonitor extends ToolExtender <ObjectMonitorPanel>{
 
     private HashMap<Class, ArrayList<Object>> clsToObjMap = new HashMap<>();
     private static ObjectMonitor objectMonitor = new ObjectMonitor();
@@ -24,7 +24,7 @@ public class ObjectMonitor implements ToolExtender {
         if (clsToObjMap.get(clazz).size() == 0) {
             clsToObjMap.remove(clazz);
         }
-        updateContent();
+        updateContentView();
     }
 
     public void MonitorObject(Object object) {
@@ -36,24 +36,11 @@ public class ObjectMonitor implements ToolExtender {
             arrayList.add(object);
             clsToObjMap.put(clazz, arrayList);
         }
-        updateContent();
-    }
-
-    private ObjectMonitorPanel monitorForm;
-
-    @Override
-    public void updateContent() {
-        monitorForm.updateView();
+        updateContentView();
     }
 
     @Override
-    public <T  extends JComponent> void setContentPanel(T frame) {
-        monitorForm = (ObjectMonitorPanel) frame;
-        monitorForm.useTableModel(new ObjectTableModel(clsToObjMap));
-    }
-
-    @Override
-    public <T extends JComponent> T getContentPanel() {
-        return (T) monitorForm;
+    public Object getContentData() {
+        return new ObjectTableModel(clsToObjMap);
     }
 }

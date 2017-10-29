@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="com.sunday.game.GameFramework.TestTool.ScreenLoader.ScreenLoaderPanel">
+  <grid id="27dc6" binding="panel" layout-manager="BorderLayout" hgap="0" vgap="0">
+    <constraints>
+      <xy x="20" y="20" width="249" height="480"/>
+    </constraints>
+    <properties>
+      <minimumSize width="100" height="200"/>
+      <preferredSize width="100" height="200"/>
+    </properties>
+    <border type="none"/>
+    <children>
+      <scrollpane id="e8cc9">
+        <constraints border-constraint="Center"/>
+        <properties/>
+        <border type="none"/>
+        <children>
+          <component id="f292f" class="javax.swing.JList" binding="list" custom-create="true">
+            <constraints/>
+            <properties/>
+          </component>
+        </children>
+      </scrollpane>
+      <component id="be6a6" class="javax.swing.JButton" binding="btnLoad">
+        <constraints border-constraint="South"/>
+        <properties>
+          <text value="Load"/>
+        </properties>
+      </component>
+    </children>
+  </grid>
+</form>

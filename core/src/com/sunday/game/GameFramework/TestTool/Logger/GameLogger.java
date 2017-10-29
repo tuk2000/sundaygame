@@ -3,21 +3,18 @@ package com.sunday.game.GameFramework.TestTool.Logger;
 import com.badlogic.gdx.ApplicationLogger;
 import com.sunday.game.GameFramework.TestTool.ToolExtender;
 
-import javax.swing.*;
 import java.util.ArrayList;
 
-;
-
-public class GameLogger implements ApplicationLogger ,ToolExtender {
-//    public static final int LOG_NONE = 0;
+public class GameLogger extends ToolExtender<LogPanel> implements ApplicationLogger {
+    //    public static final int LOG_NONE = 0;
 //    public static final int LOG_DEBUG = 3;
 //    public static final int LOG_INFO = 2;
 //    public static final int LOG_ERROR = 1;
     private static GameLogger gameLogger;
 
     public static GameLogger getInstance() {
-        if(gameLogger==null){
-            gameLogger=new GameLogger();
+        if (gameLogger == null) {
+            gameLogger = new GameLogger();
         }
         return gameLogger;
     }
@@ -39,7 +36,7 @@ public class GameLogger implements ApplicationLogger ,ToolExtender {
     @Override
     public void log(String tag, String message) {
         logs.add(new LogMessage(LogType.NONE, tag, message));
-        updateContent();
+        updateContentView();
     }
 
     /**
@@ -52,7 +49,7 @@ public class GameLogger implements ApplicationLogger ,ToolExtender {
     @Override
     public void log(String tag, String message, Throwable exception) {
         logs.add(new LogMessage(LogType.NONE, tag, message));
-        updateContent();
+        updateContentView();
     }
 
     /**
@@ -64,7 +61,7 @@ public class GameLogger implements ApplicationLogger ,ToolExtender {
     @Override
     public void error(String tag, String message) {
         logs.add(new LogMessage(LogType.ERROR, tag, message));
-        updateContent();
+        updateContentView();
     }
 
     /**
@@ -77,7 +74,7 @@ public class GameLogger implements ApplicationLogger ,ToolExtender {
     @Override
     public void error(String tag, String message, Throwable exception) {
         logs.add(new LogMessage(LogType.ERROR, tag, message));
-        updateContent();
+        updateContentView();
     }
 
     /**
@@ -89,7 +86,7 @@ public class GameLogger implements ApplicationLogger ,ToolExtender {
     @Override
     public void debug(String tag, String message) {
         logs.add(new LogMessage(LogType.DEBUG, tag, message));
-        updateContent();
+        updateContentView();
     }
 
     /**
@@ -102,24 +99,11 @@ public class GameLogger implements ApplicationLogger ,ToolExtender {
     @Override
     public void debug(String tag, String message, Throwable exception) {
         logs.add(new LogMessage(LogType.DEBUG, tag, message));
-        updateContent();
-    }
-
-    private LogPanel logPanel;
-
-    @Override
-    public void updateContent() {
-        logPanel.updateView();
+        updateContentView();
     }
 
     @Override
-    public <T  extends JComponent> void setContentPanel(T frame) {
-        logPanel = (LogPanel) frame;
-        logPanel.useListMode(new LogListModel(logs));
-    }
-
-    @Override
-    public  <T extends JComponent> T getContentPanel() {
-        return (T) logPanel;
+    public Object getContentData() {
+        return new LogListModel(logs);
     }
 }

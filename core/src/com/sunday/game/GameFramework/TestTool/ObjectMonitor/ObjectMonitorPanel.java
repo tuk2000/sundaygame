@@ -1,9 +1,11 @@
 package com.sunday.game.GameFramework.TestTool.ObjectMonitor;
 
+import com.sunday.game.GameFramework.TestTool.ToolPanel;
+
 import javax.swing.*;
 import java.util.HashMap;
 
-public class ObjectMonitorPanel extends JComponent {
+public class ObjectMonitorPanel extends ToolPanel {
     private JTable defaultTable;
     private JPanel panel;
 
@@ -16,8 +18,11 @@ public class ObjectMonitorPanel extends JComponent {
         SwingUtilities.invokeLater(defaultTable::updateUI);
     }
 
-    public void useTableModel(ObjectTableModel tableModel){
-        defaultTable.setModel(tableModel);
+    @Override
+    public void useContentData(Object contentData) {
+        if(contentData instanceof  ObjectTableModel){
+            defaultTable.setModel((ObjectTableModel)contentData);
+        }
         updateView();
     }
 
