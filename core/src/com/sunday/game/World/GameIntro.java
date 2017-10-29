@@ -31,7 +31,6 @@ public class GameIntro extends FocusedScreen {
     public GameIntro() {
         stage = new Stage();
         font = new BitmapFont();
-//        buttonTextures = new Texture("buttons/buttons_small.png");
         buttonTextures = GameFramework.Resource.getAsset("buttons/buttons_small.png");
         textureRegions = TextureRegion.split(buttonTextures, 150, 75);
 
@@ -84,19 +83,19 @@ public class GameIntro extends FocusedScreen {
     public void show() {
 
 
-        float heightdivfive = stage.getHeight() / 5;
-        float widthmid = stage.getWidth() / 2;
-        float buttonheightmid = start.getHeight() / 2;
-        float buttonwidthmid = start.getWidth() / 2;
-        float buttonwidmidall = widthmid - buttonwidthmid;
+        float height = stage.getHeight() / 5;
+        float width_mid = stage.getWidth() / 2;
+        float button_height_mid = start.getHeight() / 2;
+        float button_width_mid = start.getWidth() / 2;
+        float button_width_mid_all = width_mid - button_width_mid;
 
-        start.setPosition(buttonwidmidall, 4 * heightdivfive - buttonheightmid);
+        start.setPosition(button_width_mid_all, 4 * height - button_height_mid);
 
-        exit.setPosition(buttonwidmidall, 3 * heightdivfive - buttonheightmid);
+        exit.setPosition(button_width_mid_all, 3 * height - button_height_mid);
 
-        setting.setPosition(buttonwidmidall, 2 * heightdivfive - buttonheightmid);
+        setting.setPosition(button_width_mid_all, 2 * height - button_height_mid);
 
-        test.setPosition(buttonwidmidall, 1 * heightdivfive - buttonheightmid);
+        test.setPosition(button_width_mid_all, 1 * height - button_height_mid);
 
         stage.addActor(start);
         stage.addActor(exit);
@@ -132,7 +131,6 @@ public class GameIntro extends FocusedScreen {
     @Override
     public void dispose() {
         font.dispose();
-        //buttonTextures.dispose();
         stage.dispose();
     }
 

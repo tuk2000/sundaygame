@@ -3,7 +3,6 @@ package com.sunday.game.World;
 import com.sunday.game.GameFramework.FocusedScreen;
 import com.sunday.game.GameFramework.GameFlow.FocusedScreenGenerator;
 import com.sunday.game.GameFramework.GameFlow.GameStatus;
-import com.sunday.game.Graphic.TiledGameMap;
 
 import java.util.ArrayList;
 
