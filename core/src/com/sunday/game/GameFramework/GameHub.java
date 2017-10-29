@@ -41,19 +41,19 @@ public class GameHub extends Game implements GameFlowExecutor {
         super.render();
         //render additional information at tops layer of all
         batch.begin();
-        font.draw(batch, "Infos", 0, 720);
+        font.draw(batch, "Info", 0, 720);
         font.draw(batch, "DeltaTime : " + Gdx.graphics.getDeltaTime(), 0, 700);
-        font.draw(batch, "Framerate : " + Gdx.graphics.getFramesPerSecond(), 0, 680);
+        font.draw(batch, "FramePerSecond : " + Gdx.graphics.getFramesPerSecond(), 0, 680);
         font.draw(batch, "FrameId : " + Gdx.graphics.getFrameId(), 0, 660);
         duration += Gdx.graphics.getDeltaTime();
         if (!isToDestroyed & duration > 1.0) {
-            memoryUsage = (Runtime.getRuntime().totalMemory() - Runtime.getRuntime().freeMemory()) / 1024;
+            memoryUsage = (Gdx.app.getJavaHeap()) / 1024;
             duration = 0;
         }
         font.draw(batch, "MemoryUsage : " + memoryUsage + " KB", 0, 640);
         font.draw(batch, "press Esc -> go to GameIntro ", 0, 620);
-        font.draw(batch, "press BackSpace -> return to last screen ", 0, 600);
-        font.draw(batch, "press P in GamePlay  -> pause game ", 0, 580);
+        font.draw(batch, "press BackSpace -> turn back to last screen ", 0, 600);
+        font.draw(batch, "press P -> go to GamePause , when it is supported", 0, 580);
         batch.end();
 
     }

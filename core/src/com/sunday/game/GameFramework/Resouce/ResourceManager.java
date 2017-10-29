@@ -6,13 +6,9 @@ import com.badlogic.gdx.assets.AssetManager;
 import java.util.ArrayList;
 
 
-public class ResourceManager {
-    private AssetManager assetManager;
+public final class ResourceManager {
+    private AssetManager assetManager = new AssetManager();
     private DescriptorStorage descriptorStorage;
-
-    public ResourceManager() {
-        assetManager = new AssetManager();
-    }
 
     public void loadResourceFromDescriptorStorage(DescriptorStorage descriptorStorage) {
         this.descriptorStorage = descriptorStorage;

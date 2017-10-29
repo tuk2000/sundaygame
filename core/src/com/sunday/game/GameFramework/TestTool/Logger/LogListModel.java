@@ -18,7 +18,7 @@ class LogListModel<String> implements ListModel<String> {
 
     @Override
     public String getElementAt(int index) {
-        LogMessage logMessage = logs.get(logs.size()-1-index);
+        LogMessage logMessage = logs.get(logs.size() - 1 - index);
         StringBuilder builder = new StringBuilder();
         builder.append(logMessage.type.name());
         builder.append("-");

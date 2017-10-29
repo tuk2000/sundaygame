@@ -2,24 +2,23 @@ package com.sunday.game.GameFramework.TestTool.ObjectMonitor;
 
 
 import javax.swing.event.TableModelListener;
-import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 public class ObjectTableModel implements TableModel {
-    private ArrayList<Object> arrayList= new ArrayList<>();
+    private ArrayList<Object> arrayList = new ArrayList<>();
     private HashMap<Class, ArrayList<Object>> groups;
     private String[] tableFieldName = {"Class", "Object"};
 
     ObjectTableModel(HashMap<Class, ArrayList<Object>> groups) {
-        this.groups=groups;
+        this.groups = groups;
     }
 
-    private ArrayList<Object> getObjectList(){
+    private ArrayList<Object> getObjectList() {
         arrayList.clear();
         groups.forEach((clazz, objects) -> {
-            objects.forEach(object->{
+            objects.forEach(object -> {
                 arrayList.add(object);
             });
         });
@@ -105,7 +104,7 @@ public class ObjectTableModel implements TableModel {
      */
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
-        Object obj=getObjectList().get(rowIndex);
+        Object obj = getObjectList().get(rowIndex);
         switch (columnIndex) {
             case 0:
                 return obj.getClass().getSimpleName();

@@ -14,7 +14,7 @@
     </clientProperties>
     <border type="none"/>
     <children>
-      <tabbedpane id="a8cb9" binding="tabbedPane1" default-binding="true">
+      <tabbedpane id="a8cb9" binding="tabbedPanel">
         <constraints border-constraint="Center"/>
         <properties/>
         <border type="none"/>

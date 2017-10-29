@@ -10,22 +10,8 @@ public class GameLogger extends ToolExtender<LogPanel> implements ApplicationLog
 //    public static final int LOG_DEBUG = 3;
 //    public static final int LOG_INFO = 2;
 //    public static final int LOG_ERROR = 1;
-    private static GameLogger gameLogger;
-
-    public static GameLogger getInstance() {
-        if (gameLogger == null) {
-            gameLogger = new GameLogger();
-        }
-        return gameLogger;
-    }
-
 
     private ArrayList<LogMessage> logs = new ArrayList<>();
-
-
-    private GameLogger() {
-    }
-
 
     /**
      * Logs a message with a tag

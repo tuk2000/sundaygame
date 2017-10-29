@@ -5,10 +5,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.physics.box2d.*;
 import com.sunday.game.GameFramework.Input.InputReceiver;
 
-public class OurShapes implements InputReceiver{
+public class OurShapes implements InputReceiver {
     private static final float TIMESTEP = 1 / 60f;
-    private static final int VELOCITYITERATIONS = 8 ;
-    private static final int POSITIONITERATIONS = 3 ;
+    private static final int VELOCITYITERATIONS = 8;
+    private static final int POSITIONITERATIONS = 3;
     private World world;
     private Body body;
     private FixtureDef fixtureDef;
@@ -22,7 +22,8 @@ public class OurShapes implements InputReceiver{
         this.box2DDebugRenderer = box2DDebugRenderer;
         this.camera = camera;
     }
-    public void create(){
+
+    public void create() {
         render();
         bodyDef = new BodyDef();
         fixtureDef = new FixtureDef();
@@ -31,7 +32,7 @@ public class OurShapes implements InputReceiver{
         bodyDef.position.set(450, 700);
         //Ball Shape
         PolygonShape playerBody = new PolygonShape();
-        playerBody.setAsBox(10,20);
+        playerBody.setAsBox(10, 20);
 
         //We cann add fixture to a body like the properties below/
         fixtureDef.shape = playerBody;
@@ -47,7 +48,8 @@ public class OurShapes implements InputReceiver{
         playerBody.dispose();
 
     }
-    public void render(){
+
+    public void render() {
         //box2DDebugRenderer.render(this.world, this.camera.combined);
         //this.world.step(this.TIMESTEP, this.VELOCITYITERATIONS, this.POSITIONITERATIONS);
     }

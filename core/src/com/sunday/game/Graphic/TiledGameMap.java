@@ -107,7 +107,7 @@ public class TiledGameMap extends FocusedScreen {
         //TODO gravity to be added as -9.81
         world = new World(new Vector2(0, -9.81f), true);
         box2DDebugRenderer = new Box2DDebugRenderer();
-        ourShapes = new OurShapes(world,body,box2DDebugRenderer,camera);
+        ourShapes = new OurShapes(world, body, box2DDebugRenderer, camera);
         //Enemy
         Texture sawTex = new Texture("Enemies/saw.png");
         //saw = new Saw(sawTex,152,32);
@@ -185,21 +185,20 @@ public class TiledGameMap extends FocusedScreen {
         circleShape.dispose();
 
 
-
         //Linking player with body
         //new player class test
         batch = new SpriteBatch();
         final Texture playerTxt = new Texture("player_img/player2.png");
         //player = new Player(playerTxt, box.getPosition().x, box.getPosition().y);
-        player = new Player(playerTxt,box.getPosition().x , box.getPosition().y,pWidth,pHeight );
+        player = new Player(playerTxt, box.getPosition().x, box.getPosition().y, pWidth, pHeight);
         //player.setPosition(bodyDef.position.x,bodyDef.position.y);
         //Body Definition
         bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(0, 0);
         //Boden
         ChainShape chainShape = new ChainShape();
-        chainShape.createChain(new Vector2[]{new Vector2(32, 32), new Vector2(688, 32),new Vector2(688, 1160),
-        new Vector2(32,1160),new Vector2(32, 32), new Vector2(32, 1160)});
+        chainShape.createChain(new Vector2[]{new Vector2(32, 32), new Vector2(688, 32), new Vector2(688, 1160),
+                new Vector2(32, 1160), new Vector2(32, 32), new Vector2(32, 1160)});
 
         //Fixture Definition
         //We cann add fixture to a body like the properties below
@@ -220,8 +219,8 @@ public class TiledGameMap extends FocusedScreen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         //camera movement
 
-        camera.position.x = Math.min(Math.max(player.getX(),w/0.005f),levelPixelWidth -(w/2.23f));
-        camera.position.y = Math.min(Math.max(player.getY(),h/2),levelPixelWidth -(h/2.5f));
+        camera.position.x = Math.min(Math.max(player.getX(), w / 0.005f), levelPixelWidth - (w / 2.23f));
+        camera.position.y = Math.min(Math.max(player.getY(), h / 2), levelPixelWidth - (h / 2.5f));
         camera.update();
         //camera.position.y = player.getY();
         //camera.update();

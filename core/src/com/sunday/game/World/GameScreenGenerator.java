@@ -37,7 +37,7 @@ public class GameScreenGenerator implements FocusedScreenGenerator {
 
     @Override
     public ArrayList<GameStatus> enumGameStatus() {
-        ArrayList<GameStatus> arrayList=new ArrayList<>();
+        ArrayList<GameStatus> arrayList = new ArrayList<>();
         arrayList.add(GameStatus.Loading);
         arrayList.add(GameStatus.Intro);
         arrayList.add(GameStatus.MapOfGame);

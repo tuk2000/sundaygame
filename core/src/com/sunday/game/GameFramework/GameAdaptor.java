@@ -26,16 +26,13 @@ public class GameAdaptor implements ApplicationListener {
     }
 
     /**
-     * Called when it needs to change the specific game
+     * Called when it needs to change the currentListener to specific game
      */
-    public synchronized void setCurrentListener(ApplicationListener currentListener) {
-//        System.out.println(Thread.currentThread().toString());
-//        String name = Thread.currentThread().getStackTrace()[3].getClassName();
-//        System.out.println(System.nanoTime() + " GameAdaptor.setCurrentListener() was called by " + name);
+    public final synchronized void setCurrentListener(ApplicationListener applicationListener) {
         secureTransmit.set(false);
         ApplicationListener old = this.currentListener;
-        this.currentListener = currentListener;
-        if (old == null || old != this.currentListener) {
+        if (old == null || old != applicationListener) {
+            this.currentListener = applicationListener;
             this.currentListener.create();
         }
         secureTransmit.set(true);
@@ -43,14 +40,14 @@ public class GameAdaptor implements ApplicationListener {
 
     /**
      * Called when the {@link Application} is first created.
-     * It will be called only once and finishes the initalazation of the GameFramework
+     * It will be called only once by LwjglApplication
+     * the initialization of the GameFramework should done after Gdx is initialed , which will be done before ApplicationListener.create() was called
      */
     @Override
     public void create() {
         new GameFramework();
-        System.out.println(Thread.currentThread().toString());
         String name = Thread.currentThread().getStackTrace()[3].getClassName();
-        System.out.println(System.nanoTime() + " GameAdaptor.create() was called by " + name);
+        GameFramework.app.log("GameAdaptor", " GameAdaptor.create() was called by " + name);
     }
 
     /**

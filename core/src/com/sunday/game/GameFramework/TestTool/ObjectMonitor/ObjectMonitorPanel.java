@@ -20,8 +20,8 @@ public class ObjectMonitorPanel extends ToolPanel {
 
     @Override
     public void useContentData(Object contentData) {
-        if(contentData instanceof  ObjectTableModel){
-            defaultTable.setModel((ObjectTableModel)contentData);
+        if (contentData instanceof ObjectTableModel) {
+            defaultTable.setModel((ObjectTableModel) contentData);
         }
         updateView();
     }

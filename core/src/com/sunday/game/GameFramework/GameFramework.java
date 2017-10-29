@@ -5,36 +5,40 @@ import com.sunday.game.GameFramework.GameFlow.GameFlowManager;
 import com.sunday.game.GameFramework.GameFlow.GameStatus;
 import com.sunday.game.GameFramework.Input.UserInputManager;
 import com.sunday.game.GameFramework.Resouce.ResourceManager;
-import com.sunday.game.GameFramework.TestTool.Logger.GameLogger;
-import com.sunday.game.GameFramework.TestTool.ObjectMonitor.ObjectMonitor;
-import com.sunday.game.GameFramework.TestTool.ScreenLoader.ScreenLoader;
 import com.sunday.game.GameFramework.TestTool.TestTool;
 import com.sunday.game.World.GameScreenGenerator;
 
 /**
  * the GameFramework consists of  GameAdaptor , UserInputManager and GameFlowManager
  * <p>
- * GameAdaptor  implements the ApplicationListener  and  it  proceeds all  methods from ApplicationListener  to  GameHub , which was defined in World package .
- * UserInputManager  implements the InputAdaptor and it proceeds all methods from InputAdaptor to a certain InputReceiver . It will be in GameFramework  appointed as default InputProcessor .
+ * GameAdaptor  implements the ApplicationListener  and  it  redirect all  methods from LwjglApplication  to  a certain ApplicationListener (such as GameHub).
+ * <p>
+ * UserInputManager  implements the InputProcessor and it proceeds all input events to a certain InputReceiver .
+ * It will be in GameFramework  appointed as default InputProcessor .
+ * <p>
  * GameFlowManager  conducts the statues of the game .
  * <p>
- * Most of  Methods of UserInputManager and GameFlowManager are static , which means they could be called  in any places using Classname.Methode to change game status .
+ * TestTool contains basic information while the game is running and provides some shortcuts in oder to control the game.
+ * <p>
+ * When all the above components need at any place , it should be called through GameFramework , just like Gdx.
+ * <p>
  */
 public class GameFramework extends Gdx {
 
-    //GameFramework basic Component
-    public static UserInputManager Input;
+    //GameFramework basic Components
+    public static UserInputManager InputProcessor;
     public static GameFlowManager GameFlow;
     public static ResourceManager Resource;
     public static TestTool Tool;
 
     public GameFramework() {
-        app.setApplicationLogger(GameLogger.getInstance());
-        GameScreenGenerator gameScreenGenerator=new GameScreenGenerator();
+        app.setApplicationLogger(TestTool.gameLogger);
+
+        GameScreenGenerator gameScreenGenerator = new GameScreenGenerator();
 
         app.postRunnable(() -> {
-            Tool =new TestTool();
-            ScreenLoader.getInstance().loadGameStatusEnum(gameScreenGenerator.enumGameStatus());
+            Tool = new TestTool();
+            TestTool.screenLoader.loadGameStatusEnum(gameScreenGenerator.enumGameStatus());
         });
 
         GameHub gameHub = new GameHub();
@@ -44,20 +48,7 @@ public class GameFramework extends Gdx {
         GameFlow = new GameFlowManager(gameScreenGenerator, gameHub);
         GameFlow.setGameStatus(GameStatus.Loading);
 
-        Input = new UserInputManager();
-        app.getInput().setInputProcessor(Input);
+        InputProcessor = new UserInputManager();
+        input.setInputProcessor(InputProcessor);
     }
-
-    public static void MonitorObject(Object obj) {
-        app.postRunnable(() -> {
-            ObjectMonitor.getInstance().MonitorObject(obj);
-        });
-    }
-
-    public static void StopMonitorObject(Object obj) {
-        app.postRunnable(() -> {
-            ObjectMonitor.getInstance().StopMonitorObject(obj);
-        });
-    }
-
 }

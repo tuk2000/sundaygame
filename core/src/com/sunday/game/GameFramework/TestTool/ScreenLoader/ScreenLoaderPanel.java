@@ -23,7 +23,7 @@ public class ScreenLoaderPanel extends ToolPanel {
              */
             @Override
             public void actionPerformed(ActionEvent e) {
-                GameFramework.app.log("ScreenLoader","GameStatus selected");
+                GameFramework.app.log("ScreenLoader", "GameStatus selected");
                 GameFramework.GameFlow.setGameStatus((GameStatus) list.getSelectedValue());
             }
         });

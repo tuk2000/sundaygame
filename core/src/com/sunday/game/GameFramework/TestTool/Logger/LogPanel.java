@@ -15,9 +15,9 @@ public class LogPanel extends ToolPanel {
     }
 
     @Override
-    public  void useContentData(Object contentData) {
-        if(contentData instanceof ListModel){
-            logList.setModel((ListModel)contentData);
+    public void useContentData(Object contentData) {
+        if (contentData instanceof ListModel) {
+            logList.setModel((ListModel) contentData);
         }
         updateView();
     }

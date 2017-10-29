@@ -7,5 +7,6 @@ import java.util.ArrayList;
 public interface FocusedScreenGenerator {
     /*  generateFocusedScreen should only be called by GameFlowManager */
     FocusedScreen generateFocusedScreen(GameStatus gameStatus);
+
     ArrayList<GameStatus> enumGameStatus();
 }

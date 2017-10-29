@@ -6,19 +6,11 @@ import com.sunday.game.GameFramework.TestTool.ToolExtender;
 import java.util.ArrayList;
 
 public class ScreenLoader extends ToolExtender<ScreenLoaderPanel> {
-    private ArrayList<GameStatus> arrayList=new ArrayList<>();
-    private static ScreenLoader screenLoader = new ScreenLoader();
+    private ArrayList<GameStatus> arrayList = new ArrayList<>();
 
-    private ScreenLoader() {
-    }
-
-    public static ScreenLoader getInstance() {
-        return screenLoader;
-    }
-
-    public void loadGameStatusEnum(ArrayList<GameStatus> arrayList){
+    public void loadGameStatusEnum(ArrayList<GameStatus> arrayList) {
         this.arrayList.clear();
-        arrayList.forEach(e->{
+        arrayList.forEach(e -> {
             this.arrayList.add(e);
         });
         updateContentView();

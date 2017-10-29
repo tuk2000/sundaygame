@@ -48,10 +48,10 @@ class GameFlow {
 
     public static void backToPreviewGameFlow() {
         if (currentGameFlow == firstGameFlow) {
-            firstGameFlow.preview=null;
+            firstGameFlow.preview = null;
             firstGameFlow.status = null;
             firstGameFlow.screen = null;
-            currentGameFlow=null;
+            currentGameFlow = null;
         } else {
             GameFlow previewFlow = currentGameFlow.preview;
             currentGameFlow.preview = null;

@@ -4,6 +4,7 @@ public abstract class ToolExtender<T extends ToolPanel> {
     private T contentPanel;
 
     public void updateContentView() {
+        if (contentPanel == null) return;
         contentPanel.updateView();
     }
 

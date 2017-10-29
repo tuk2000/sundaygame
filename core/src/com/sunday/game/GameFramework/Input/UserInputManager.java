@@ -5,12 +5,8 @@ import com.badlogic.gdx.InputProcessor;
 import com.sunday.game.GameFramework.GameFlow.GameStatus;
 import com.sunday.game.GameFramework.GameFramework;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 public final class UserInputManager implements InputProcessor {
-    private static UserInputManager userInputManager = null;
     private InputReceiver inputReceiver = null;
-
 
     public final synchronized void setInputReceiver(InputReceiver inputReceiver) {
         this.inputReceiver = inputReceiver;
@@ -20,19 +16,19 @@ public final class UserInputManager implements InputProcessor {
     public boolean keyDown(int keycode) {
         switch (keycode) {
             case Input.Keys.ESCAPE:
-                GameFramework.app.log("UserInputManager","Key Esc pressed ");
+                GameFramework.app.log("UserInputManager", "Key Esc pressed ");
                 GameFramework.GameFlow.setGameStatus(GameStatus.Intro);
                 break;
             case Input.Keys.BACKSPACE:
-                GameFramework.app.log("UserInputManager","Key BACKSPACE pressed ");
+                GameFramework.app.log("UserInputManager", "Key BACKSPACE pressed ");
                 GameFramework.GameFlow.backToPreviewStatus();
                 break;
             case Input.Keys.F1:
-                GameFramework.app.log("UserInputManager","Key F1 pressed ");
-               GameFramework.Tool.switchOnOrOff();
+                GameFramework.app.log("UserInputManager", "Key F1 pressed ");
+                GameFramework.Tool.switchOnOrOff();
                 break;
         }
-        return  inputReceiver.getInputAdapter().keyDown(keycode);
+        return inputReceiver.getInputAdapter().keyDown(keycode);
     }
 
     @Override
