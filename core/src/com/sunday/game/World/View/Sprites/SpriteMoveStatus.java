@@ -1,6 +1,4 @@
-package com.sunday.game.World.Sprites;
-
-import com.badlogic.gdx.math.Vector2;
+package com.sunday.game.World.View.Sprites;
 
 public class SpriteMoveStatus {
     public enum FacingDirection {

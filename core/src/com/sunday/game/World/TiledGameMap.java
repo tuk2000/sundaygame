@@ -17,9 +17,9 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.sunday.game.GameFramework.FocusedScreen;
 import com.sunday.game.GameFramework.GameFlow.GameStatus;
 import com.sunday.game.GameFramework.GameFramework;
-import com.sunday.game.World.Animation.AnimationSetting;
-import com.sunday.game.World.Sprites.HeroSprite;
-import com.sunday.game.World.Sprites.SawSprite;
+import com.sunday.game.World.View.Animation.AnimationSetting;
+import com.sunday.game.World.View.Sprites.HeroSprite;
+import com.sunday.game.World.View.Sprites.SawSprite;
 
 /**
  * IMPORTANT: each tile is of 16px

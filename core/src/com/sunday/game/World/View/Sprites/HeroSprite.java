@@ -1,9 +1,8 @@
-package com.sunday.game.World.Sprites;
+package com.sunday.game.World.View.Sprites;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Vector2;
-import com.sunday.game.World.Animation.HeroAnimation;
+import com.sunday.game.World.View.Animation.HeroAnimation;
 
 
 public class HeroSprite extends Sprite {

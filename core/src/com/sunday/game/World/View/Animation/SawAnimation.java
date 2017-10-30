@@ -1,4 +1,4 @@
-package com.sunday.game.World.Animation;
+package com.sunday.game.World.View.Animation;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;

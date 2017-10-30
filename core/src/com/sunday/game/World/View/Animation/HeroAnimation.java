@@ -1,10 +1,10 @@
-package com.sunday.game.World.Animation;
+package com.sunday.game.World.View.Animation;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.utils.Array;
 import com.sunday.game.GameFramework.GameFramework;
-import com.sunday.game.World.Sprites.SpriteMoveStatus;
+import com.sunday.game.World.View.Sprites.SpriteMoveStatus;
 
 public class HeroAnimation {
     private Animation runningAnimation;

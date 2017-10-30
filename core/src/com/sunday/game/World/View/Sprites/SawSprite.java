@@ -1,9 +1,8 @@
-package com.sunday.game.World.Sprites;
+package com.sunday.game.World.View.Sprites;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Vector2;
-import com.sunday.game.World.Animation.SawAnimation;
+import com.sunday.game.World.View.Animation.SawAnimation;
 
 public class SawSprite extends Sprite {
     private SawAnimation sawAnimation;

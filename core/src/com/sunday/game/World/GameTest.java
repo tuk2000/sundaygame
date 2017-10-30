@@ -6,9 +6,9 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sunday.game.GameFramework.FocusedScreen;
-import com.sunday.game.World.Animation.AnimationSetting;
-import com.sunday.game.World.Sprites.HeroSprite;
-import com.sunday.game.World.Sprites.SawSprite;
+import com.sunday.game.World.View.Animation.AnimationSetting;
+import com.sunday.game.World.View.Sprites.HeroSprite;
+import com.sunday.game.World.View.Sprites.SawSprite;
 
 public class GameTest extends FocusedScreen {
     private static final float SecondPerFrame = 1 / 60f;

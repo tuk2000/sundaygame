@@ -1,4 +1,4 @@
-package com.sunday.game.World.Animation;
+package com.sunday.game.World.View.Animation;
 
 public class AnimationSetting {
     public final static float FramePerSecond=1/60f;

@@ -1,4 +1,4 @@
-package com.sunday.game.World.Menu;
+package com.sunday.game.World.View.Menu;
 
 import com.badlogic.gdx.Screen;
 
