@@ -70,8 +70,8 @@ public class TiledGameMap extends FocusedScreen {
         int tilePixelHeight = mapProperties.get("tileheight", Integer.class);
         int levelPixelWidth = levelWidth * tilePixelWidth;
         int levelPixelHeight = levelHeight * tilePixelHeight;
-        camera.viewportWidth=levelPixelWidth;
-        camera.viewportHeight=levelPixelHeight;
+        camera.viewportWidth = levelPixelWidth;
+        camera.viewportHeight = levelPixelHeight;
         camera.update();
 
         //Linking heroSprite with body
@@ -80,7 +80,7 @@ public class TiledGameMap extends FocusedScreen {
 
     @Override
     public void render(float delta) {
-        AnimationSetting.DeltaTime+=Gdx.graphics.getDeltaTime();
+        AnimationSetting.DeltaTime += Gdx.graphics.getDeltaTime();
         //camera movement
         camera.update();
         //camera.position.y = heroSprite.getY();

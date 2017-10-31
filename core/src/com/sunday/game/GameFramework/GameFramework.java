@@ -41,11 +41,9 @@ public class GameFramework extends Gdx {
             TestTool.screenLoader.loadGameStatusEnum(gameScreenGenerator.enumGameStatus());
         });
 
-        GameHub gameHub = new GameHub();
-        GameAdaptor.getInstance().setCurrentListener(gameHub);
 
         Resource = new ResourceManager();
-        GameFlow = new GameFlowManager(gameScreenGenerator, gameHub);
+        GameFlow = new GameFlowManager(gameScreenGenerator, GameAdaptor.getInstance());
         GameFlow.setGameStatus(GameStatus.Loading);
 
         InputProcessor = new UserInputManager();

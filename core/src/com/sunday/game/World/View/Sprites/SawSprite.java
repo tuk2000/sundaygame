@@ -13,7 +13,7 @@ public class SawSprite extends Sprite {
 
     @Override
     public void draw(Batch batch) {
-        batch.draw(sawAnimation.getKeyFrame(),getX(), getY());
+        batch.draw(sawAnimation.getKeyFrame(), getX(), getY());
     }
 
 }

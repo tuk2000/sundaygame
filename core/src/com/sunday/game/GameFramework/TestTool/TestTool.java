@@ -2,6 +2,8 @@ package com.sunday.game.GameFramework.TestTool;
 
 import com.badlogic.gdx.Gdx;
 import com.sunday.game.GameFramework.GameFramework;
+import com.sunday.game.GameFramework.TestTool.GameMonitor.GameMonitor;
+import com.sunday.game.GameFramework.TestTool.GameMonitor.GameMonitorPanel;
 import com.sunday.game.GameFramework.TestTool.Logger.GameLogger;
 import com.sunday.game.GameFramework.TestTool.Logger.LogPanel;
 import com.sunday.game.GameFramework.TestTool.ObjectMonitor.ObjectMonitor;
@@ -17,7 +19,9 @@ public class TestTool extends JFrame {
     private LogPanel logPanel;
     private ObjectMonitorPanel objectMonitorPanel;
     private ScreenLoaderPanel screenLoaderPanel;
+    private GameMonitorPanel gameMonitorPanel;
 
+    final public static GameMonitor gameMonitor = new GameMonitor();
     final public static GameLogger gameLogger = new GameLogger();
     final public static ObjectMonitor objectMonitor = new ObjectMonitor();
     final public static ScreenLoader screenLoader = new ScreenLoader();
@@ -43,6 +47,9 @@ public class TestTool extends JFrame {
 
         screenLoaderPanel = new ScreenLoaderPanel();
         screenLoader.setContentPanel(screenLoaderPanel);
+
+        gameMonitorPanel = new GameMonitorPanel();
+        gameMonitor.setContentPanel(gameMonitorPanel);
     }
 
     public void switchOnOrOff() {
