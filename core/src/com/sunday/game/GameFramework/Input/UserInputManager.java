@@ -26,6 +26,7 @@ public final class UserInputManager implements InputProcessor {
             case Input.Keys.F1:
                 GameFramework.app.log("UserInputManager", "Key F1 pressed ");
                 GameFramework.Tool.switchOnOrOff();
+                GameFramework.toolApplication.switchOnOrOff();
                 break;
         }
         return inputReceiver.getInputAdapter().keyDown(keycode);
