@@ -15,7 +15,9 @@ public class ToolApplication extends Application implements Runnable {
     public void start(Stage primaryStage) throws Exception {
         wnd = primaryStage;
         Platform.setImplicitExit(false);
-        Parent root = FXMLLoader.load(getClass().getResource("Tool.fxml"));
+        FXMLLoader loader=new FXMLLoader();
+        loader.setLocation(getClass().getResource("/Tool.fxml"));
+        Parent root = loader.load();
         Scene scene = new Scene(root);
         primaryStage.setTitle("TestTool");
         primaryStage.setScene(scene);
