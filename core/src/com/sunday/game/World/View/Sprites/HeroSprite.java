@@ -14,6 +14,14 @@ public class HeroSprite extends Sprite {
         heroAnimation = new HeroAnimation();
     }
 
+    public void jump(){
+        spriteMoveStatus.action=SpriteMoveStatus.Action.Jumping;
+    }
+
+    public void trunaround(){
+        spriteMoveStatus.facingDirection=SpriteMoveStatus.FacingDirection.Left;
+    }
+
     @Override
     public void draw(Batch batch) {
         batch.draw(heroAnimation.getKeyFrame(spriteMoveStatus), getX(), getY());

@@ -141,10 +141,10 @@ public class TiledGameMap extends FocusedScreen {
         public boolean keyDown(int keycode) {
             switch (keycode) {
                 case Input.Keys.SPACE:
-                    heroSprite.translateY(20);
+                    heroSprite.jump();
                     break;
                 case Input.Keys.DOWN:
-                    heroSprite.translateY(-20);
+                    heroSprite.trunaround();
                     break;
                 case Input.Keys.LEFT:
                     heroSprite.translateX(-20);
