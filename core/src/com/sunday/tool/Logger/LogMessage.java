@@ -1,4 +1,4 @@
-package com.sunday.game.GameFramework.TestTool.Logger;
+package com.sunday.tool.Logger;
 
 class LogMessage {
     LogType type;

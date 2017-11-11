@@ -1,6 +1,6 @@
-package com.sunday.game.GameFramework.TestTool.GameMonitor;
+package com.sunday.tool.GameMonitor;
 
-import com.sunday.game.GameFramework.TestTool.ToolPanel;
+import com.sunday.tool.ToolPanel;
 
 import javax.swing.*;
 

@@ -1,6 +1,6 @@
-package com.sunday.game.GameFramework.TestTool.ObjectMonitor;
+package com.sunday.tool.ObjectMonitor;
 
-import com.sunday.game.GameFramework.TestTool.ToolPanel;
+import com.sunday.tool.ToolPanel;
 
 import javax.swing.*;
 import java.util.HashMap;

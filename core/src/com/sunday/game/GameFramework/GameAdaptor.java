@@ -48,7 +48,7 @@ public class GameAdaptor extends Game implements GameFlowExecutor {
         super.render();
         duration += Gdx.graphics.getDeltaTime();
         if (duration > 0.10f) {
-            GameFramework.Tool.gameMonitor.updateGameData();
+            //GameFramework.Tool.gameMonitor.updateGameData();
             duration = 0.0f;
         }
     }

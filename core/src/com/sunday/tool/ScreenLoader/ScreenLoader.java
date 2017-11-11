@@ -1,7 +1,7 @@
-package com.sunday.game.GameFramework.TestTool.ScreenLoader;
+package com.sunday.tool.ScreenLoader;
 
 import com.sunday.game.GameFramework.GameFlow.GameStatus;
-import com.sunday.game.GameFramework.TestTool.ToolExtender;
+import com.sunday.tool.ToolExtender;
 
 import java.util.ArrayList;
 

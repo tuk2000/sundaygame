@@ -5,9 +5,8 @@ import com.sunday.game.GameFramework.GameFlow.GameFlowManager;
 import com.sunday.game.GameFramework.GameFlow.GameStatus;
 import com.sunday.game.GameFramework.Input.UserInputManager;
 import com.sunday.game.GameFramework.Resouce.ResourceManager;
-import com.sunday.game.GameFramework.TestTool.TestTool;
-import com.sunday.game.GameFramework.TestTool.ToolApplication;
 import com.sunday.game.World.GameScreenGenerator;
+import com.sunday.tool.ToolApplication;
 
 /**
  * the GameFramework consists of  GameAdaptor , UserInputManager and GameFlowManager
@@ -30,18 +29,16 @@ public class GameFramework extends Gdx {
     public static UserInputManager InputProcessor;
     public static GameFlowManager GameFlow;
     public static ResourceManager Resource;
-    public static TestTool Tool;
     public static ToolApplication toolApplication;
 
     public GameFramework() {
-        app.setApplicationLogger(TestTool.gameLogger);
+        app.setApplicationLogger(ToolApplication.gameLogger);
 
         GameScreenGenerator gameScreenGenerator = new GameScreenGenerator();
 
         toolApplication = new ToolApplication();
         app.postRunnable(() -> {
-            Tool = new TestTool();
-            TestTool.screenLoader.loadGameStatusEnum(gameScreenGenerator.enumGameStatus());
+            ToolApplication.screenLoader.loadGameStatusEnum(gameScreenGenerator.enumGameStatus());
             Thread toolLauncherThread = new Thread(toolApplication);
             toolLauncherThread.start();
         });

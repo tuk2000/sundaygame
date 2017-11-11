@@ -1,4 +1,4 @@
-package com.sunday.game.GameFramework.TestTool;
+package com.sunday.tool;
 
 import javax.swing.*;
 

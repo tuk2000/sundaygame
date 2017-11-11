@@ -1,7 +1,7 @@
-package com.sunday.game.GameFramework.TestTool.Logger;
+package com.sunday.tool.Logger;
 
 import com.badlogic.gdx.ApplicationLogger;
-import com.sunday.game.GameFramework.TestTool.ToolExtender;
+import com.sunday.tool.ToolExtender;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.sunday.game.GameFramework.TestTool.GameMonitor;
+package com.sunday.tool.GameMonitor;
 
 public class GameData {
     public long FramePerSecond;

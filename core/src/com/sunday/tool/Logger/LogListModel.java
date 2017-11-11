@@ -1,4 +1,4 @@
-package com.sunday.game.GameFramework.TestTool.Logger;
+package com.sunday.tool.Logger;
 
 import javax.swing.*;
 import javax.swing.event.ListDataListener;

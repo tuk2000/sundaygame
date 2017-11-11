@@ -1,6 +1,6 @@
-package com.sunday.game.GameFramework.TestTool.Logger;
+package com.sunday.tool.Logger;
 
-import com.sunday.game.GameFramework.TestTool.ToolPanel;
+import com.sunday.tool.ToolPanel;
 
 import javax.swing.*;
 import java.util.ArrayList;

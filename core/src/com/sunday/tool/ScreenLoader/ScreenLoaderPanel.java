@@ -1,8 +1,8 @@
-package com.sunday.game.GameFramework.TestTool.ScreenLoader;
+package com.sunday.tool.ScreenLoader;
 
 import com.sunday.game.GameFramework.GameFlow.GameStatus;
 import com.sunday.game.GameFramework.GameFramework;
-import com.sunday.game.GameFramework.TestTool.ToolPanel;
+import com.sunday.tool.ToolPanel;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

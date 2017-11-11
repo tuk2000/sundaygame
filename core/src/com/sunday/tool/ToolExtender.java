@@ -1,4 +1,4 @@
-package com.sunday.game.GameFramework.TestTool;
+package com.sunday.tool;
 
 public abstract class ToolExtender<T extends ToolPanel> {
     private T contentPanel;
