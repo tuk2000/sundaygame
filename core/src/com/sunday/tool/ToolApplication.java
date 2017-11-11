@@ -2,8 +2,6 @@ package com.sunday.tool;
 
 import com.badlogic.gdx.Gdx;
 import com.sunday.tool.Logger.GameLogger;
-import com.sunday.tool.ObjectMonitor.ObjectMonitor;
-import com.sunday.tool.ScreenLoader.ScreenLoader;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;

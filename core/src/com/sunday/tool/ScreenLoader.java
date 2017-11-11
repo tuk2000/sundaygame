@@ -1,11 +1,10 @@
-package com.sunday.tool.ScreenLoader;
+package com.sunday.tool;
 
 import com.sunday.game.GameFramework.GameFlow.GameStatus;
-import com.sunday.tool.ToolExtender;
 
 import java.util.ArrayList;
 
-public class ScreenLoader extends ToolExtender<ScreenLoaderPanel> {
+public class ScreenLoader {
     private ArrayList<GameStatus> arrayList = new ArrayList<>();
 
     public void loadGameStatusEnum(ArrayList<GameStatus> arrayList) {
@@ -13,11 +12,6 @@ public class ScreenLoader extends ToolExtender<ScreenLoaderPanel> {
         arrayList.forEach(e -> {
             this.arrayList.add(e);
         });
-        updateContentView();
     }
 
-    @Override
-    public Object getContentData() {
-        return arrayList;
-    }
 }

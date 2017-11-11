@@ -1,11 +1,9 @@
-package com.sunday.tool.ObjectMonitor;
-
-import com.sunday.tool.ToolExtender;
+package com.sunday.tool;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ObjectMonitor extends ToolExtender<ObjectMonitorPanel> {
+public class ObjectMonitor {
 
     private HashMap<Class, ArrayList<Object>> clsToObjMap = new HashMap<>();
 
@@ -18,7 +16,6 @@ public class ObjectMonitor extends ToolExtender<ObjectMonitorPanel> {
             arrayList.add(object);
             clsToObjMap.put(clazz, arrayList);
         }
-        updateContentView();
     }
 
     public void StopMonitorObject(Object object) {
@@ -27,11 +24,6 @@ public class ObjectMonitor extends ToolExtender<ObjectMonitorPanel> {
         if (clsToObjMap.get(clazz).size() == 0) {
             clsToObjMap.remove(clazz);
         }
-        updateContentView();
     }
 
-    @Override
-    public Object getContentData() {
-        return new ObjectTableModel(clsToObjMap);
-    }
 }
