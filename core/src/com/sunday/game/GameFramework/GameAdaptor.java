@@ -9,7 +9,6 @@ import com.sunday.game.GameFramework.GameFlow.GameFlowExecutor;
 public class GameAdaptor extends Game implements GameFlowExecutor {
     private static GameAdaptor adaptorInstance;
     private FocusedScreen focusedScreenToSet;
-    private float duration = 0.0f;
 
     private GameAdaptor() {
 
@@ -46,11 +45,7 @@ public class GameAdaptor extends Game implements GameFlowExecutor {
         }
 
         super.render();
-        duration += Gdx.graphics.getDeltaTime();
-        if (duration > 0.10f) {
-            //GameFramework.Tool.gameMonitor.updateGameData();
-            duration = 0.0f;
-        }
+        GameFramework.toolApplication.updateView();
     }
 
     @Override

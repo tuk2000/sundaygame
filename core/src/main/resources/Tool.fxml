@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.effect.*?>
+<?import java.lang.*?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.LineChart?>
 <?import javafx.scene.chart.NumberAxis?>
@@ -14,43 +20,36 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.TextFlow?>
 
-<AnchorPane prefHeight="558.0" prefWidth="1063.0" xmlns="http://javafx.com/javafx/8.0.121" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sunday.tool.Tool">
+<AnchorPane prefHeight="558.0" prefWidth="1063.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sunday.tool.ToolController">
     <children>
       <TabPane prefHeight="558.0" prefWidth="1063.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <tabs>
             <Tab text="GameMonitor">
                <content>
-                  <VBox>
-                     <children>
-                        <VBox prefHeight="96.0" prefWidth="1063.0">
-                           <children>
-                              <TextFlow prefHeight="200.0" prefWidth="200.0" />
-                              <TextFlow prefHeight="200.0" prefWidth="200.0" />
-                              <TextFlow prefHeight="0.0" prefWidth="1063.0" />
-                           </children>
-                        </VBox>
-                          <SplitPane dividerPositions="0.5">
-                              <items>
-                                  <LineChart legendSide="LEFT" prefHeight="371.0" prefWidth="417.0" title="MemoryChart">
-                                      <xAxis>
-                                          <CategoryAxis label="Time(Second)" />
-                                      </xAxis>
-                                      <yAxis>
-                                          <NumberAxis label="MemoryUsage(MB)" prefHeight="400.0" prefWidth="66.0" side="LEFT" tickLabelGap="16.0" upperBound="1024.0" />
-                                      </yAxis>
-                                  </LineChart>
-                                  <LineChart legendSide="RIGHT" prefHeight="400.0" prefWidth="600.0" title="FPS">
-                                      <xAxis>
-                                          <CategoryAxis label="Time(Second)" side="BOTTOM" />
-                                      </xAxis>
-                                      <yAxis>
-                                          <NumberAxis label="FPS" side="LEFT" tickLabelGap="5.0" />
-                                      </yAxis>
-                                  </LineChart>
-                              </items>
-                          </SplitPane>
-                     </children>
-                  </VBox>
+                    <SplitPane dividerPositions="0.5" orientation="VERTICAL">
+                        <items>
+                        <StackedAreaChart fx:id="memoryChart" animated="false" prefHeight="400.0" prefWidth="385.0" title="MemoryUsage">
+                          <xAxis>
+                            <NumberAxis label="Time(S)" minorTickCount="1" side="BOTTOM">
+                                 <effect>
+                                    <Blend />
+                                 </effect>
+                              </NumberAxis>
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis label="KB" minorTickCount="16" side="LEFT" upperBound="102400.0" />
+                          </yAxis>
+                        </StackedAreaChart>
+                        <StackedAreaChart fx:id="fpsChart" animated="false" title="FPS">
+                          <xAxis>
+                            <NumberAxis label="Time(S)" side="BOTTOM" />
+                          </xAxis>
+                          <yAxis>
+                            <NumberAxis label="FPS" side="LEFT" />
+                          </yAxis>
+                        </StackedAreaChart>
+                        </items>
+                    </SplitPane>
                </content>
             </Tab>
             <Tab text="Screen">
@@ -60,10 +59,10 @@
                         <SplitPane dividerPositions="0.7" orientation="VERTICAL">
                            <items>
                               <ListView prefHeight="529.0" prefWidth="210.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                              <Button contentDisplay="TOP" mnemonicParsing="false" text="Load" />
+                              <Button fx:id="btLoad" contentDisplay="TOP" mnemonicParsing="false" onAction="#loadScreen" text="Load" />
                            </items>
                         </SplitPane>
-                        <TableView prefHeight="529.0" prefWidth="570.0">
+                        <TableView fx:id="screenTable" prefHeight="529.0" prefWidth="570.0">
                           <columns>
                             <TableColumn prefWidth="75.0" text="C1" />
                             <TableColumn prefWidth="75.0" text="C2" />
@@ -77,7 +76,7 @@
                <content>
                   <AnchorPane>
                      <children>
-                        <ListView AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <ListView fx:id="logList" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                      </children>
                   </AnchorPane>
                </content>
