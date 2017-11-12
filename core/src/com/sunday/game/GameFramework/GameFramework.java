@@ -29,16 +29,19 @@ public class GameFramework extends Gdx {
     public static UserInputManager InputProcessor;
     public static GameFlowManager GameFlow;
     public static ResourceManager Resource;
-    public static ToolApplication toolApplication;
+    private static ToolApplication toolApplication;
 
     public GameFramework() {
-        app.setApplicationLogger(ToolApplication.gameLogger);
 
         GameScreenGenerator gameScreenGenerator = new GameScreenGenerator();
 
         toolApplication = new ToolApplication();
-        app.postRunnable(() -> {
+        toolApplication.runAfterInitial(() -> {
+            app.setApplicationLogger(ToolApplication.gameLogger);
             ToolApplication.screenLoader.loadGameStatusEnum(gameScreenGenerator.enumGameStatus());
+        });
+
+        app.postRunnable(() -> {
             Thread toolLauncherThread = new Thread(toolApplication);
             toolLauncherThread.start();
         });
@@ -50,5 +53,9 @@ public class GameFramework extends Gdx {
 
         InputProcessor = new UserInputManager();
         input.setInputProcessor(InputProcessor);
+    }
+
+    public static void switchToolOnOrOff() {
+        toolApplication.switchOnOrOff();
     }
 }

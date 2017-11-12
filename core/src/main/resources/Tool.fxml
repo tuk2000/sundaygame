@@ -45,7 +45,7 @@
                             <NumberAxis label="Time(S)" side="BOTTOM" />
                           </xAxis>
                           <yAxis>
-                            <NumberAxis label="FPS" side="LEFT" />
+                            <NumberAxis label="FPS" side="LEFT" tickLabelGap="1.0" upperBound="80.0" />
                           </yAxis>
                         </StackedAreaChart>
                         </items>
@@ -76,7 +76,13 @@
                <content>
                   <AnchorPane>
                      <children>
-                        <ListView fx:id="logList" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                        <TableView fx:id="logTable" layoutX="14.0" layoutY="14.0" prefHeight="529.0" prefWidth="1063.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                          <columns>
+                            <TableColumn prefWidth="75.0" text="Type" />
+                            <TableColumn prefWidth="75.0" text="Tag" />
+                              <TableColumn prefWidth="75.0" text="Content" />
+                          </columns>
+                        </TableView>
                      </children>
                   </AnchorPane>
                </content>

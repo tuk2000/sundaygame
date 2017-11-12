@@ -5,6 +5,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.sunday.game.GameFramework.GameFlow.GameFlowExecutor;
+import com.sunday.tool.ToolApplication;
 
 public class GameAdaptor extends Game implements GameFlowExecutor {
     private static GameAdaptor adaptorInstance;
@@ -45,7 +46,10 @@ public class GameAdaptor extends Game implements GameFlowExecutor {
         }
 
         super.render();
-        GameFramework.toolApplication.updateView();
+        float delta = Gdx.graphics.getDeltaTime();
+        long memoryUsage = Gdx.app.getJavaHeap();
+        int fps = Gdx.graphics.getFramesPerSecond();
+        ToolApplication.gameMonitor.updateData(delta, memoryUsage, fps);
     }
 
     @Override
