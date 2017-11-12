@@ -3,6 +3,6 @@ package com.sunday.tool.ObjectMonitor;
 import com.sunday.tool.ToolExtenderController;
 
 public interface ObjectMonitorController extends ToolExtenderController {
-    void addMonitoredObject(Object object);
-    void removeMonitoredObject(Object object);
+    void addMonitoredObject(MonitoredObject monitoredObject);
+    void removeMonitoredObject(MonitoredObject monitoredObject);
 }

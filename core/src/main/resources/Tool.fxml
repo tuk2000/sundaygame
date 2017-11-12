@@ -58,7 +58,7 @@
                      <items>
                         <SplitPane dividerPositions="0.7" orientation="VERTICAL">
                            <items>
-                              <ListView prefHeight="529.0" prefWidth="210.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                              <ListView fx:id="gameStatusList" prefHeight="529.0" prefWidth="210.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
                               <Button fx:id="btLoad" contentDisplay="TOP" mnemonicParsing="false" onAction="#loadScreen" text="Load" />
                            </items>
                         </SplitPane>
@@ -78,9 +78,9 @@
                      <children>
                         <TableView fx:id="logTable" layoutX="14.0" layoutY="14.0" prefHeight="529.0" prefWidth="1063.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                           <columns>
-                            <TableColumn prefWidth="75.0" text="Type" />
-                            <TableColumn prefWidth="75.0" text="Tag" />
-                              <TableColumn prefWidth="75.0" text="Content" />
+                            <TableColumn prefWidth="75.0" sortable="false" text="Type" />
+                            <TableColumn prefWidth="75.0" sortable="false" text="Tag" />
+                              <TableColumn prefWidth="75.0" sortable="false" text="Content" />
                           </columns>
                         </TableView>
                      </children>

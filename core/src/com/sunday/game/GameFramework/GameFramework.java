@@ -32,7 +32,6 @@ public class GameFramework extends Gdx {
     private static ToolApplication toolApplication;
 
     public GameFramework() {
-
         GameScreenGenerator gameScreenGenerator = new GameScreenGenerator();
 
         toolApplication = new ToolApplication();

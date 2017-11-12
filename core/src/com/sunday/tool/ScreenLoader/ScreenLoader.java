@@ -15,11 +15,6 @@ public class ScreenLoader extends ToolExtender<ScreenLoaderController> {
         });
 
         getController().loadGameStatusEnum(arrayList);
-
-    }
-
-    public void initGameStatusEnum() {
-        getController().loadGameStatusEnum(arrayList);
     }
 
 }

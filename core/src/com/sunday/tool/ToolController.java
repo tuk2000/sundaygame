@@ -1,23 +1,23 @@
 package com.sunday.tool;
 
 import com.sunday.game.GameFramework.GameFlow.GameStatus;
+import com.sunday.game.GameFramework.GameFramework;
 import com.sunday.tool.GameMonitor.GameMonitorController;
 import com.sunday.tool.Logger.GameLoggerController;
 import com.sunday.tool.Logger.LogMessage;
+import com.sunday.tool.ObjectMonitor.MonitoredObject;
 import com.sunday.tool.ObjectMonitor.ObjectMonitorController;
 import com.sunday.tool.ScreenLoader.ScreenLoaderController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.geometry.Pos;
 import javafx.scene.chart.StackedAreaChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
+import javafx.scene.control.ListView;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.Callback;
 
 import java.util.ArrayList;
 
@@ -30,7 +30,10 @@ public class ToolController implements GameMonitorController, GameLoggerControll
     private StackedAreaChart<Number, Number> memoryChart;
 
     @FXML
-    private TableView<Object> screenTable;
+    private ListView<GameStatus> gameStatusList;
+
+    @FXML
+    private TableView<MonitoredObject> screenTable;
 
     @FXML
     private TableView<LogMessage> logTable;
@@ -42,7 +45,10 @@ public class ToolController implements GameMonitorController, GameLoggerControll
     @FXML
     void loadScreen(ActionEvent event) {
         if (event.getSource().equals(btLoad)) {
-            System.out.println("LoadScreen");
+            GameStatus gameStatus = gameStatusList.getSelectionModel().getSelectedItem();
+            if (gameStatus != null) {
+                GameFramework.GameFlow.setGameStatus(gameStatus);
+            }
         }
     }
 
@@ -55,8 +61,17 @@ public class ToolController implements GameMonitorController, GameLoggerControll
         fpsChart.setLegendVisible(false);
         fpsChart.getData().add(fpsSeries);
 
+
+        TableColumn classCol = screenTable.getColumns().get(0);
+        classCol.setMinWidth(400);
+        classCol.setCellValueFactory(new PropertyValueFactory<MonitoredObject, String>("ClassName"));
+        TableColumn objectCol = screenTable.getColumns().get(1);
+        objectCol.setMinWidth(400);
+        objectCol.setCellValueFactory(new PropertyValueFactory<MonitoredObject, String>("ObjectName"));
+
+
         TableColumn typeCol = logTable.getColumns().get(0);
-        typeCol.setMinWidth(200);
+        typeCol.setMinWidth(100);
         typeCol.setCellValueFactory(new PropertyValueFactory<LogMessage, String>("Type"));
 
         TableColumn tagCol = logTable.getColumns().get(1);
@@ -66,6 +81,7 @@ public class ToolController implements GameMonitorController, GameLoggerControll
         TableColumn contentCol = logTable.getColumns().get(2);
         contentCol.setMinWidth(800);
         contentCol.setCellValueFactory(new PropertyValueFactory<LogMessage, String>("Content"));
+
 
     }
 
@@ -84,18 +100,26 @@ public class ToolController implements GameMonitorController, GameLoggerControll
     }
 
     @Override
-    public void addMonitoredObject(Object object) {
-
+    public void addMonitoredObject(MonitoredObject monitoredObject) {
+        Platform.runLater(() -> {
+            screenTable.getItems().add(monitoredObject);
+        });
     }
 
     @Override
-    public void removeMonitoredObject(Object object) {
-
+    public void removeMonitoredObject(MonitoredObject monitoredObject) {
+        Platform.runLater(() -> {
+            screenTable.getItems().remove(monitoredObject);
+        });
     }
 
     @Override
     public void loadGameStatusEnum(ArrayList<GameStatus> arrayList) {
-
+        Platform.runLater(() -> {
+            arrayList.forEach(e -> {
+                gameStatusList.getItems().add(e);
+            });
+        });
     }
 
     @Override

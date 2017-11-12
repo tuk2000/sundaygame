@@ -12,12 +12,18 @@ public class GameLogger extends ToolExtender<GameLoggerController> implements Ap
 //    public static final int LOG_ERROR = 1;
 
     private ArrayList<LogMessage> logs = new ArrayList<>();
+    private ArrayList<LogMessage> logBuffer = new ArrayList<>();
 
     private void disposeLogMessage(LogType type, String tag, String message) {
         LogMessage logMessage = new LogMessage(LogType.NONE, tag, message);
-        logs.add(logMessage);
-        if (getController() == null) return;
-        getController().newLogMessage(logMessage);
+        logBuffer.add(logMessage);
+        if (getController() != null) {
+            logBuffer.forEach(e -> {
+                getController().newLogMessage(e);
+                logs.add(e);
+            });
+            logBuffer.clear();
+        }
     }
 
     @Override
