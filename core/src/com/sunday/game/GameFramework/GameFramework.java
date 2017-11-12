@@ -32,11 +32,11 @@ public class GameFramework extends Gdx {
     private static ToolApplication toolApplication;
 
     public GameFramework() {
+        app.setApplicationLogger(ToolApplication.gameLogger);
         GameScreenGenerator gameScreenGenerator = new GameScreenGenerator();
 
         toolApplication = new ToolApplication();
         toolApplication.runAfterInitial(() -> {
-            app.setApplicationLogger(ToolApplication.gameLogger);
             ToolApplication.screenLoader.loadGameStatusEnum(gameScreenGenerator.enumGameStatus());
         });
 
