@@ -7,8 +7,7 @@ import java.util.ArrayList;
 public class GameMonitor extends ToolExtender<GameMonitorController> {
     private float gdxTime = 0.0f;
     private float internalTime = 0.0f;
-    private long memoryUsage = 0L;
-    private int fps = 0;
+
     private class DataBundle{
         float time = 0.0f;
         long memoryUsage = 0L;
