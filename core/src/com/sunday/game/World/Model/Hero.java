@@ -1,4 +1,15 @@
 package com.sunday.game.World.Model;
 
-public abstract class Hero extends RoleModel {
+import com.sunday.game.World.Control.EventProcessor;
+import com.sunday.game.World.Model.Property.RoleLabel;
+
+public class Hero extends RoleModel {
+    public Hero(){
+        super(RoleLabel.Hero);
+    }
+
+    @Override
+    public EventProcessor getEventProcessor() {
+        return null;
+    }
 }

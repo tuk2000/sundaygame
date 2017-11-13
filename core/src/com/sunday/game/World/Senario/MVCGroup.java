@@ -15,7 +15,7 @@ public class MVCGroup {
         this.view = view;
     }
 
-    public void bind() {
+    void bind() {
         controller.useRoleModel(roleModel);
         controller.useView(view);
         roleModel.useView(view);
