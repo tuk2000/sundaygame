@@ -1,4 +1,4 @@
 package com.sunday.game.World.View;
 
-public class PhysicViewLayer {
+public class PhysicViewLayer extends ViewLayer {
 }

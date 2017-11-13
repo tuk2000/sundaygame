@@ -1,4 +1,4 @@
 package com.sunday.game.World.View;
 
-public class ScreenViewLayer {
+public class ScreenViewLayer extends ViewLayer {
 }

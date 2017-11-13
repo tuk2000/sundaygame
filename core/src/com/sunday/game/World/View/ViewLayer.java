@@ -1,4 +1,8 @@
 package com.sunday.game.World.View;
 
-public interface ViewLayer {
+import java.util.ArrayList;
+
+public abstract class ViewLayer {
+    protected boolean isVisible;
+    protected ArrayList<Object> uiNodes = new ArrayList();
 }

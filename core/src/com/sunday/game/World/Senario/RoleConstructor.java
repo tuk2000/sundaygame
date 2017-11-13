@@ -12,7 +12,8 @@ import com.sunday.game.World.View.Views.EnemyView;
 import com.sunday.game.World.View.Views.HeroView;
 
 public class RoleConstructor {
-    public static MVCGroup construct(RoleLabel roleLabel) {
+
+    public Role construct(RoleLabel roleLabel) {
         Controller controller = null;
         RoleModel roleModel = null;
         View view = null;
@@ -28,6 +29,11 @@ public class RoleConstructor {
                 view = new EnemyView();
                 break;
         }
-        return new MVCGroup(controller, roleModel, view);
+        if (controller != null & roleModel != null & view != null) {
+            controller.useRoleModel(roleModel);
+            controller.useView(view);
+            roleModel.useView(view);
+        }
+        return new Role(controller, roleModel, view);
     }
 }

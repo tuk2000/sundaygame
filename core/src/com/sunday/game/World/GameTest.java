@@ -7,11 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.sunday.game.GameFramework.FocusedScreen;
 import com.sunday.game.World.Model.Property.RoleLabel;
-import com.sunday.game.World.Senario.GameScenario;
-import com.sunday.game.World.Senario.RoleConstructor;
-import com.sunday.game.World.Senario.ScenarioConstructor;
-import com.sunday.game.World.Senario.ScenarioRenderer;
-import com.sunday.game.World.View.Animation.AnimationSetting;
+import com.sunday.game.World.Senario.*;
 
 
 public class GameTest extends FocusedScreen {
@@ -38,18 +34,19 @@ public class GameTest extends FocusedScreen {
     };
 
     private GameScenario gameScenario;
-    private ScenarioRenderer scenarioRenderer;
+    private GameScenarioEngine gameScenarioEngine;
 
     public GameTest() {
+        gameScenarioEngine = new GameScenarioEngine();
         Stage stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
-        gameScenario = new ScenarioConstructor().constructRootScenario(stage);
-        gameScenario.addMVCGroup(RoleConstructor.construct(RoleLabel.Hero));
-        gameScenario.addMVCGroup(RoleConstructor.construct(RoleLabel.Enemy));
-        gameScenario.addMVCGroup(RoleConstructor.construct(RoleLabel.Enemy));
-        gameScenario.addMVCGroup(RoleConstructor.construct(RoleLabel.Enemy));
-        gameScenario.addMVCGroup(RoleConstructor.construct(RoleLabel.Enemy));
-
-        scenarioRenderer = new ScenarioRenderer(stage, gameScenario);
+        ScenarioConstructor scenarioConstructor = new ScenarioConstructor(gameScenarioEngine);
+        RoleConstructor roleConstructor = new RoleConstructor();
+        gameScenario = scenarioConstructor.constructRootScenario(stage);
+        gameScenario.addRole(roleConstructor.construct(RoleLabel.Hero));
+        gameScenario.addRole(roleConstructor.construct(RoleLabel.Enemy));
+        gameScenario.addRole(roleConstructor.construct(RoleLabel.Enemy));
+        gameScenario.addRole(roleConstructor.construct(RoleLabel.Enemy));
+        gameScenario.addRole(roleConstructor.construct(RoleLabel.Enemy));
     }
 
     @Override
@@ -59,9 +56,7 @@ public class GameTest extends FocusedScreen {
 
     @Override
     public void render(float delta) {
-        AnimationSetting.DeltaTime += Gdx.graphics.getDeltaTime();
-        scenarioRenderer.render(delta);
-        scenarioRenderer.renderWorldStep();
+        gameScenarioEngine.render(delta);
     }
 
     @Override

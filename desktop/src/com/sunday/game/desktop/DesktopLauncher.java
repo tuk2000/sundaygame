@@ -8,7 +8,7 @@ public class DesktopLauncher {
     public static void main(String[] arg) {
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.title = "Sunday Game";
-        config.useGL30 = true;
+        config.useGL30 = false;
         config.width = 800;
         config.height = 800;
         config.resizable = false;

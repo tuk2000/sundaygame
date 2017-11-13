@@ -12,19 +12,20 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
-public class ScenarioRenderer {
+class ScenarioRenderer {
+
     private OrthogonalTiledMapRenderer mapRenderer;
     private Box2DDebugRenderer box2DDebugRenderer;
+
     private float lastWorldRenderDuration = 0.0f;
     private World world;
     private ShapeRenderer shapeRenderer;
+
     private SpriteBatch spriteBatch;
     private Stage stage;
-    private GameScenario rootGameScenario;
 
-    public ScenarioRenderer(Stage stage, GameScenario rootGameScenario) {
+    public ScenarioRenderer(Stage stage) {
         this.stage = stage;
-        this.rootGameScenario = rootGameScenario;
         spriteBatch = new SpriteBatch();
     }
 
@@ -54,18 +55,17 @@ public class ScenarioRenderer {
     }
 
     public void renderWorldStep() {
+        if (world == null) return;
         if (lastWorldRenderDuration > 1 / 60) {
             lastWorldRenderDuration -= 1 / 60;
             world.step(1 / 60, 8, 3);
         }
-
     }
 
     public void render(float delta) {
         lastWorldRenderDuration += delta;
         renderWorldStep();
         stage.draw();
-        rootGameScenario.renderViews();
     }
-    
+
 }

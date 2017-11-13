@@ -3,21 +3,25 @@ package com.sunday.game.World.Senario;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class ScenarioConstructor {
-    private boolean hasRootScenario = false;
+    private GameScenarioEngine gameScenarioEngine;
+
+    public ScenarioConstructor(GameScenarioEngine gameScenarioEngine) {
+        this.gameScenarioEngine = gameScenarioEngine;
+    }
 
     public GameScenario construct(ScenarioSetting scenarioSetting) {
-        if (!hasRootScenario) return null;
-        return new GameScenario(false, new GameScenarioScope(scenarioSetting.scopeType));
+        if (!gameScenarioEngine.HasRootScenario()) return null;
+        return new GameScenario(new GameScenarioScope(scenarioSetting.scopeType));
     }
 
     public GameScenario construct() {
-        if (!hasRootScenario) return null;
+        if (!gameScenarioEngine.HasRootScenario()) return null;
         return construct(new ScenarioSetting());
     }
 
     public GameScenario constructRootScenario(Stage stage) {
-        GameScenario rootGameScenario = new GameScenario(true, new GameScenarioScope(ScopeType.EntireLevel));
-        hasRootScenario = true;
+        GameScenario rootGameScenario = new GameScenario(new GameScenarioScope(ScopeType.EntireLevel));
+        gameScenarioEngine.setRootScenario(rootGameScenario, stage);
         return rootGameScenario;
     }
 
