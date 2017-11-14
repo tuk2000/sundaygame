@@ -33,20 +33,22 @@ public class GameTest extends FocusedScreen {
         }
     };
 
-    private GameScenario gameScenario;
+
     private GameScenarioEngine gameScenarioEngine;
+    private ScenarioRenderer scenarioRenderer;
 
     public GameTest() {
         gameScenarioEngine = new GameScenarioEngine();
         Stage stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         ScenarioConstructor scenarioConstructor = new ScenarioConstructor(gameScenarioEngine);
-        RoleConstructor roleConstructor = new RoleConstructor();
-        gameScenario = scenarioConstructor.constructRootScenario(stage);
+        RoleConstructor roleConstructor = new RoleConstructor(gameScenarioEngine);
+        scenarioRenderer = new ScenarioRenderer(stage, gameScenarioEngine);
+        GameScenario gameScenario = scenarioConstructor.constructRootScenario(stage);
+        gameScenario.addRole(roleConstructor.construct(RoleLabel.Map));
         gameScenario.addRole(roleConstructor.construct(RoleLabel.Hero));
         gameScenario.addRole(roleConstructor.construct(RoleLabel.Enemy));
-        gameScenario.addRole(roleConstructor.construct(RoleLabel.Enemy));
-        gameScenario.addRole(roleConstructor.construct(RoleLabel.Enemy));
-        gameScenario.addRole(roleConstructor.construct(RoleLabel.Enemy));
+        scenarioConstructor.dispose();
+        roleConstructor.dispose();
     }
 
     @Override
@@ -56,7 +58,7 @@ public class GameTest extends FocusedScreen {
 
     @Override
     public void render(float delta) {
-        gameScenarioEngine.render(delta);
+        scenarioRenderer.render(delta);
     }
 
     @Override
@@ -81,7 +83,8 @@ public class GameTest extends FocusedScreen {
 
     @Override
     public void dispose() {
-
+        scenarioRenderer.dispose();
+        gameScenarioEngine.dispose();
     }
 
     @Override

@@ -7,4 +7,9 @@ public class DefaultHero extends Hero {
     public EventProcessor getEventProcessor() {
         return null;
     }
+
+    @Override
+    public void dispose() {
+
+    }
 }

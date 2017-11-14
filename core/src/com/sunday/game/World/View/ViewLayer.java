@@ -1,8 +1,11 @@
 package com.sunday.game.World.View;
 
-import java.util.ArrayList;
+import com.badlogic.gdx.utils.Disposable;
 
-public abstract class ViewLayer {
-    protected boolean isVisible;
-    protected ArrayList<Object> uiNodes = new ArrayList();
+public interface ViewLayer extends Disposable {
+
+    public Class getComponentClass();
+
+    public void setVisible(boolean visible);
+
 }

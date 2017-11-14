@@ -12,4 +12,9 @@ public class Enemy extends RoleModel {
     public EventProcessor getEventProcessor() {
         return null;
     }
+
+    @Override
+    public void dispose() {
+
+    }
 }

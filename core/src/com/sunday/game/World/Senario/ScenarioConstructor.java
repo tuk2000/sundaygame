@@ -1,8 +1,9 @@
 package com.sunday.game.World.Senario;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Disposable;
 
-public class ScenarioConstructor {
+public class ScenarioConstructor implements Disposable{
     private GameScenarioEngine gameScenarioEngine;
 
     public ScenarioConstructor(GameScenarioEngine gameScenarioEngine) {
@@ -21,8 +22,12 @@ public class ScenarioConstructor {
 
     public GameScenario constructRootScenario(Stage stage) {
         GameScenario rootGameScenario = new GameScenario(new GameScenarioScope(ScopeType.EntireLevel));
-        gameScenarioEngine.setRootScenario(rootGameScenario, stage);
+        gameScenarioEngine.setRootScenario(rootGameScenario);
         return rootGameScenario;
     }
 
+    @Override
+    public void dispose() {
+
+    }
 }

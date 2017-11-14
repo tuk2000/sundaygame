@@ -1,34 +1,37 @@
 package com.sunday.game.World.Senario;
 
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.sunday.game.World.View.Animation.AnimationSetting;
+import com.badlogic.gdx.utils.Disposable;
 
-public class GameScenarioEngine {
+public class GameScenarioEngine implements Disposable {
     private GameScenario Root;
     private GameScenario screenScenario;
-    private ScenarioRenderer scenarioRenderer;
     private ScenarioEventDispatcher scenarioEventDispatcher;
-    private Stage stage;
 
     public GameScenarioEngine() {
         scenarioEventDispatcher = new ScenarioEventDispatcher();
     }
 
-    protected void setRootScenario(GameScenario gameScenario, Stage stage) {
+    protected void setRootScenario(GameScenario gameScenario) {
         Root = gameScenario;
         screenScenario = new GameScenario(new GameScenarioScope(ScopeType.FullScreen));
         Root.addKid(screenScenario);
-        this.stage = stage;
-        scenarioRenderer = new ScenarioRenderer(stage);
+    }
+
+    public GameScenario getRootScenario() {
+        return Root;
+    }
+
+    public GameScenario getScreenScenario() {
+        return screenScenario;
     }
 
     protected boolean HasRootScenario() {
         return Root != null;
     }
 
-    public void render(float delta) {
-        AnimationSetting.DeltaTime += delta;
-        scenarioRenderer.render(delta);
+    @Override
+    public void dispose() {
+        Root.dispose();
+        screenScenario.dispose();
     }
-
 }

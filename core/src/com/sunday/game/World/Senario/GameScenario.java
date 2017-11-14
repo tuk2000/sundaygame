@@ -1,8 +1,10 @@
 package com.sunday.game.World.Senario;
 
+import com.badlogic.gdx.utils.Disposable;
+
 import java.util.ArrayList;
 
-public class GameScenario {
+public class GameScenario implements Disposable {
     private GameScenarioScope scenarioScope;
     private GameScenario parent;
     private ArrayList<GameScenario> kids = new ArrayList<>();
@@ -24,7 +26,25 @@ public class GameScenario {
             kids.remove(gameScenario);
     }
 
+    public ArrayList<GameScenario> getKids() {
+        return kids;
+    }
+
     public void addRole(Role role) {
         roles.add(role);
+    }
+
+    public ArrayList<Role> getRoles() {
+        return roles;
+    }
+
+    @Override
+    public void dispose() {
+        scenarioScope=null;
+        parent=null;
+        kids.forEach(e->e.dispose());
+        kids.clear();
+        roles.forEach(e ->e.dispose() );
+        roles.clear();
     }
 }

@@ -42,6 +42,7 @@ public class GameFramework extends Gdx {
 
         app.postRunnable(() -> {
             Thread toolLauncherThread = new Thread(toolApplication);
+            toolLauncherThread.setName("ToolLaunchThread");
             toolLauncherThread.start();
         });
 
