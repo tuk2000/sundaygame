@@ -13,8 +13,8 @@ import com.sunday.tool.ToolApplication;
  * <p>
  * GameAdaptor  implements the ApplicationListener  and  it  redirect all  methods from LwjglApplication  to  a certain ApplicationListener (such as GameHub).
  * <p>
- * UserInputManager  implements the InputProcessor and it proceeds all input events to a certain InputReceiver .
- * It will be in GameFramework  appointed as default InputProcessor .
+ * UserInputManager splits the input events to Framework and a certain InputReceiver .
+ * It will be initialed in GameFramework and guarded by GameAdaptor as default InputProcessor .
  * <p>
  * GameFlowManager  conducts the statues of the game .
  * <p>
@@ -26,7 +26,7 @@ import com.sunday.tool.ToolApplication;
 public class GameFramework extends Gdx {
 
     //GameFramework basic Components
-    public static UserInputManager InputProcessor;
+    public static UserInputManager inputManager;
     public static GameFlowManager GameFlow;
     public static ResourceManager Resource;
     private static ToolApplication toolApplication;
@@ -51,8 +51,9 @@ public class GameFramework extends Gdx {
         GameFlow = new GameFlowManager(gameScreenGenerator, GameAdaptor.getInstance());
         GameFlow.setGameStatus(GameStatus.Loading);
 
-        InputProcessor = new UserInputManager();
-        input.setInputProcessor(InputProcessor);
+        inputManager = new UserInputManager();
+        input.setInputProcessor(inputManager.getInputProcessor());
+        GameAdaptor.getInstance().guardInputManager(inputManager);
     }
 
     public static void switchToolOnOrOff() {

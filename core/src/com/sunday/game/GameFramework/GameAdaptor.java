@@ -3,13 +3,17 @@ package com.sunday.game.GameFramework;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.sunday.game.GameFramework.GameFlow.GameFlowExecutor;
+import com.sunday.game.GameFramework.Input.InputReceiver;
+import com.sunday.game.GameFramework.Input.UserInputManager;
 import com.sunday.tool.ToolApplication;
 
 public class GameAdaptor extends Game implements GameFlowExecutor {
     private static GameAdaptor adaptorInstance;
     private FocusedScreen focusedScreenToSet;
+    private UserInputManager userInputManager;
 
     private GameAdaptor() {
 
@@ -50,6 +54,7 @@ public class GameAdaptor extends Game implements GameFlowExecutor {
         long memoryUsage = Gdx.app.getJavaHeap();
         int fps = Gdx.graphics.getFramesPerSecond();
         ToolApplication.gameMonitor.updateData(delta, memoryUsage, fps);
+        guardFrameworkInputProcessor();
     }
 
     @Override
@@ -63,4 +68,16 @@ public class GameAdaptor extends Game implements GameFlowExecutor {
         focusedScreenToSet = currentFocusedScreen;
     }
 
+    public void guardInputManager(UserInputManager userInputManager){
+        this.userInputManager=userInputManager;
+    }
+
+    private void guardFrameworkInputProcessor(){
+        if(userInputManager==null) return;
+        if(Gdx.input.getInputProcessor()!=userInputManager.getInputProcessor()){
+            Gdx.app.log("GameAdaptor","Warning , the default InputProcessor is changed ! ");
+            Gdx.input.setInputProcessor(userInputManager.getInputProcessor());
+            GameFramework.inputManager.setInputReceiver(getCurrentFocusedScreen());
+        }
+    }
 }

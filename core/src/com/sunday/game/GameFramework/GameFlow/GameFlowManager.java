@@ -17,7 +17,7 @@ public final class GameFlowManager {
 
     private void applyFocusedScreen(FocusedScreen focusedScreen) {
         gameFlowExecutor.setCurrentFocusedScreen(focusedScreen);
-        GameFramework.InputProcessor.setInputReceiver(focusedScreen);
+        GameFramework.inputManager.setInputReceiver(focusedScreen);
     }
 
     private void applyNewScreen(GameStatus status) {
