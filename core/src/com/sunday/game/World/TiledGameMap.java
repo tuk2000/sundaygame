@@ -3,6 +3,7 @@ package com.sunday.game.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -14,7 +15,6 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-import com.sunday.game.GameFramework.FocusedScreen;
 import com.sunday.game.GameFramework.GameFlow.GameStatus;
 import com.sunday.game.GameFramework.GameFramework;
 import com.sunday.game.World.View.Animation.AnimationSetting;
@@ -24,7 +24,7 @@ import com.sunday.game.World.View.Sprites.SawSprite;
 /**
  * IMPORTANT: each tile is of 16px
  */
-public class TiledGameMap extends FocusedScreen {
+public class TiledGameMap implements Screen {
 
     private World world;
     private Box2DDebugRenderer box2DDebugRenderer;
@@ -50,6 +50,7 @@ public class TiledGameMap extends FocusedScreen {
 
     @Override
     public void show() {
+        Gdx.input.setInputProcessor(inputAdapter);
         w = Gdx.graphics.getWidth();
         h = Gdx.graphics.getHeight();
 
@@ -129,11 +130,6 @@ public class TiledGameMap extends FocusedScreen {
         world.dispose();
         box2DDebugRenderer.dispose();
         tiledMap.dispose();
-    }
-
-    @Override
-    public InputAdapter getInputAdapter() {
-        return this.inputAdapter;
     }
 
     private InputAdapter inputAdapter = new InputAdapter() {

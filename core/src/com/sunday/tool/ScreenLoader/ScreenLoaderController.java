@@ -6,5 +6,5 @@ import com.sunday.tool.ToolExtenderController;
 import java.util.ArrayList;
 
 public interface ScreenLoaderController extends ToolExtenderController {
-    void loadGameStatusEnum( ArrayList<GameStatus> arrayList);
+    void loadGameStatusEnum(ArrayList<GameStatus> arrayList);
 }

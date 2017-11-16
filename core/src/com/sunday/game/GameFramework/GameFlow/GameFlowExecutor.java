@@ -1,11 +1,11 @@
 package com.sunday.game.GameFramework.GameFlow;
 
-import com.sunday.game.GameFramework.FocusedScreen;
+import com.badlogic.gdx.Screen;
 
 public interface GameFlowExecutor {
 
-    FocusedScreen getCurrentFocusedScreen();
+    Screen getScreen();
 
-    void setCurrentFocusedScreen(FocusedScreen focusedScreen);
+    void setScreen(Screen screen);
 
 }

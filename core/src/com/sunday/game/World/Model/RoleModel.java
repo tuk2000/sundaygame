@@ -8,7 +8,7 @@ import com.sunday.game.World.Model.Property.RoleProperty;
 import com.sunday.game.World.Model.Reaction.RoleReaction;
 import com.sunday.game.World.View.View;
 
-public abstract class RoleModel implements Disposable{
+public abstract class RoleModel implements Disposable {
     protected View view;
     private RoleLabel roleLabel;
 

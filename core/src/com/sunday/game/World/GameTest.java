@@ -3,14 +3,14 @@ package com.sunday.game.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-import com.sunday.game.GameFramework.FocusedScreen;
 import com.sunday.game.World.Model.Property.RoleLabel;
 import com.sunday.game.World.Senario.*;
 
 
-public class GameTest extends FocusedScreen {
+public class GameTest implements Screen {
 
     private InputAdapter inputAdapter = new InputAdapter() {
         @Override
@@ -87,8 +87,4 @@ public class GameTest extends FocusedScreen {
         gameScenarioEngine.dispose();
     }
 
-    @Override
-    public InputAdapter getInputAdapter() {
-        return inputAdapter;
-    }
 }

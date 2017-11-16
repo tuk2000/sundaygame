@@ -3,7 +3,7 @@ package com.sunday.game.World.Senario;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
 
-public class ScenarioConstructor implements Disposable{
+public class ScenarioConstructor implements Disposable {
     private GameScenarioEngine gameScenarioEngine;
 
     public ScenarioConstructor(GameScenarioEngine gameScenarioEngine) {

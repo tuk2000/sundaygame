@@ -1,7 +1,7 @@
 package com.sunday.game.World;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -11,12 +11,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.sunday.game.GameFramework.FocusedScreen;
 import com.sunday.game.GameFramework.GameFlow.GameStatus;
 import com.sunday.game.GameFramework.GameFramework;
 
 
-public class GameIntro extends FocusedScreen {
+public class GameIntro implements Screen {
     private Stage stage;
     private Button start;
     private Button exit;
@@ -81,8 +80,7 @@ public class GameIntro extends FocusedScreen {
 
     @Override
     public void show() {
-
-
+        Gdx.input.setInputProcessor(stage);
         float height = stage.getHeight() / 5;
         float width_mid = stage.getWidth() / 2;
         float button_height_mid = start.getHeight() / 2;
@@ -134,8 +132,4 @@ public class GameIntro extends FocusedScreen {
         stage.dispose();
     }
 
-    @Override
-    public InputAdapter getInputAdapter() {
-        return stage;
-    }
 }

@@ -1,35 +1,34 @@
 package com.sunday.game.GameFramework.GameFlow;
 
 import com.badlogic.gdx.Gdx;
-import com.sunday.game.GameFramework.FocusedScreen;
+import com.badlogic.gdx.Screen;
 import com.sunday.game.GameFramework.GameFramework;
 import com.sunday.tool.ToolApplication;
 
 
 public final class GameFlowManager {
-    private FocusedScreenGenerator focusedScreenGenerator;
+    private ScreenGenerator screenGenerator;
     private GameFlowExecutor gameFlowExecutor;
 
-    public GameFlowManager(FocusedScreenGenerator focusedScreenGenerator, GameFlowExecutor gameFlowExecutor) {
-        this.focusedScreenGenerator = focusedScreenGenerator;
+    public GameFlowManager(ScreenGenerator screenGenerator, GameFlowExecutor gameFlowExecutor) {
+        this.screenGenerator = screenGenerator;
         this.gameFlowExecutor = gameFlowExecutor;
     }
 
-    private void applyFocusedScreen(FocusedScreen focusedScreen) {
-        gameFlowExecutor.setCurrentFocusedScreen(focusedScreen);
-        GameFramework.inputManager.setInputReceiver(focusedScreen);
+    private void applyScreen(Screen Screen) {
+        gameFlowExecutor.setScreen(Screen);
     }
 
     private void applyNewScreen(GameStatus status) {
-        FocusedScreen focusedScreen = focusedScreenGenerator.generateFocusedScreen(status);
+        Screen screen = screenGenerator.generateScreen(status);
         if (status == GameStatus.Loading) {
-            GameFlow.setFirstGameFlow(status, focusedScreen);
+            GameFlow.setFirstGameFlow(status, screen);
         } else {
-            GameFlow.appendGameFlow(status, focusedScreen);
+            GameFlow.appendGameFlow(status, screen);
         }
         GameFramework.app.log("GameFlowManager", "GameStatus changed to " + status.name());
-        ToolApplication.objectMonitor.MonitorObject(focusedScreen);
-        applyFocusedScreen(focusedScreen);
+        ToolApplication.objectMonitor.MonitorObject(screen);
+        applyScreen(screen);
     }
 
     private void shiftBackPreviewScreen() {
@@ -38,9 +37,9 @@ public final class GameFlowManager {
         if (GameFlow.getCurrentGameStatus() == GameStatus.Intro) {
             replaceIntroScreen();
         } else {
-            FocusedScreen focusedScreen = GameFlow.getCurrentScreen();
+            Screen screen = GameFlow.getCurrentScreen();
             GameFramework.app.log("GameFlowManager", GameFlow.getCurrentGameStatus().name() + " closed");
-            ToolApplication.objectMonitor.StopMonitorObject(focusedScreen);
+            ToolApplication.objectMonitor.StopMonitorObject(screen);
             System.gc();
 
             GameFlow.backToPreviewGameFlow();
@@ -48,8 +47,8 @@ public final class GameFlowManager {
             if (GameFlow.getCurrentGameStatus() == GameStatus.Intro) {
                 replaceIntroScreen();
             } else {
-                focusedScreen = GameFlow.getCurrentScreen();
-                applyFocusedScreen(focusedScreen);
+                screen = GameFlow.getCurrentScreen();
+                applyScreen(screen);
             }
         }
     }
@@ -57,14 +56,14 @@ public final class GameFlowManager {
     private void replaceIntroScreen() {
         if (GameFlow.getCurrentGameStatus() != GameStatus.Intro)
             return;
-        FocusedScreen focusedScreen = GameFlow.getCurrentScreen();
-        ToolApplication.objectMonitor.StopMonitorObject(focusedScreen);
+        Screen screen = GameFlow.getCurrentScreen();
+        ToolApplication.objectMonitor.StopMonitorObject(screen);
         System.gc();
-        focusedScreen = focusedScreenGenerator.generateFocusedScreen(GameStatus.Intro);
+        screen = screenGenerator.generateScreen(GameStatus.Intro);
         GameFramework.app.log("GameFlowManager", "IntroScreen replaced");
-        ToolApplication.objectMonitor.MonitorObject(focusedScreen);
-        GameFlow.setCurrentScreen(focusedScreen);
-        applyFocusedScreen(focusedScreen);
+        ToolApplication.objectMonitor.MonitorObject(screen);
+        GameFlow.setCurrentScreen(screen);
+        applyScreen(screen);
     }
 
 
@@ -92,7 +91,7 @@ public final class GameFlowManager {
     }
 
     private void executeGameStatus(GameStatus gameStatus) {
-        FocusedScreen focusedScreen;
+        Screen screen;
         switch (gameStatus) {
             case Loading:
                 /* this will be executed at first the program runs */
@@ -152,7 +151,7 @@ public final class GameFlowManager {
 //                if less than 2 ,(which is 1) do nothing
 //                */
 //
-//                shiftToNextFocusedScreen(gameStatus);
+//                shiftToNextScreen(gameStatus);
 //
 //                break;
             case Exit:

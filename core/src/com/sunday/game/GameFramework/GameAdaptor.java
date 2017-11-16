@@ -3,16 +3,15 @@ package com.sunday.game.GameFramework;
 import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.sunday.game.GameFramework.GameFlow.GameFlowExecutor;
-import com.sunday.game.GameFramework.Input.InputReceiver;
 import com.sunday.game.GameFramework.Input.UserInputManager;
 import com.sunday.tool.ToolApplication;
 
 public class GameAdaptor extends Game implements GameFlowExecutor {
     private static GameAdaptor adaptorInstance;
-    private FocusedScreen focusedScreenToSet;
+    private Screen screenToSet;
     private UserInputManager userInputManager;
 
     private GameAdaptor() {
@@ -44,9 +43,9 @@ public class GameAdaptor extends Game implements GameFlowExecutor {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         //clear the screen before anything rendered
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        if (focusedScreenToSet != null) {
-            setScreen(focusedScreenToSet);
-            focusedScreenToSet = null;
+        if (screenToSet != null) {
+            setScreen(screenToSet);
+            screenToSet = null;
         }
 
         super.render();
@@ -57,27 +56,17 @@ public class GameAdaptor extends Game implements GameFlowExecutor {
         guardFrameworkInputProcessor();
     }
 
-    @Override
-    public FocusedScreen getCurrentFocusedScreen() {
-        return (FocusedScreen) screen;
+
+    public void guardInputManager(UserInputManager userInputManager) {
+        this.userInputManager = userInputManager;
     }
 
-    /*  setCurrentFocusedScreen should only be called by GameFlowManager , in oder to change game status and change FocusedScreen*/
-    @Override
-    public void setCurrentFocusedScreen(FocusedScreen currentFocusedScreen) {
-        focusedScreenToSet = currentFocusedScreen;
-    }
-
-    public void guardInputManager(UserInputManager userInputManager){
-        this.userInputManager=userInputManager;
-    }
-
-    private void guardFrameworkInputProcessor(){
-        if(userInputManager==null) return;
-        if(Gdx.input.getInputProcessor()!=userInputManager.getInputProcessor()){
-            Gdx.app.log("GameAdaptor","Warning , the default InputProcessor is changed ! ");
-            Gdx.input.setInputProcessor(userInputManager.getInputProcessor());
-            GameFramework.inputManager.setInputReceiver(getCurrentFocusedScreen());
+    private void guardFrameworkInputProcessor() {
+        if (userInputManager == null) return;
+        if (Gdx.input.getInputProcessor() != userInputManager.getInputMultiplexer()) {
+            Gdx.app.log("GameAdaptor", "The default InputProcessor has been changed and reversed ! ");
+            userInputManager.setUserInputProcessor(Gdx.input.getInputProcessor());
+            Gdx.input.setInputProcessor(userInputManager.getInputMultiplexer());
         }
     }
 }

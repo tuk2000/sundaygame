@@ -10,7 +10,8 @@ public class EntityPhysicDefinition implements Disposable {
     public BodyDef bodyDef;
     public Shape shape;
 
-    public EntityPhysicDefinition() { }
+    public EntityPhysicDefinition() {
+    }
 
     public EntityPhysicDefinition(FixtureDef fixtureDef, BodyDef bodyDef, Shape shape) {
         this.fixtureDef = fixtureDef;

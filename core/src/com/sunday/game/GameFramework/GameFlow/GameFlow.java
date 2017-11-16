@@ -1,17 +1,18 @@
 package com.sunday.game.GameFramework.GameFlow;
 
-import com.sunday.game.GameFramework.FocusedScreen;
+
+import com.badlogic.gdx.Screen;
 
 /*
-    class GameFlow peserves the history of GameStatus and FocusedScreen like stack
-    most useful is the getCurrentGameFlow() , it tells the presents GameStatus and FocusedScreen
+    class GameFlow preserves the history of GameStatus and Screen like stack
+    most useful is the getCurrentGameFlow() , it tells the presents GameStatus and Screen
     and after called backToPreviewGameFlow() currentGameFlow will automatic be set als its preview GameFlow.
     the next GameFlow is in this situation not necessary .
  */
 class GameFlow {
     private GameFlow preview;//the preview of firstGameFlow is null
     public GameStatus status;
-    public FocusedScreen screen;
+    public Screen screen;
 
     private static GameFlow firstGameFlow = new GameFlow();
     private static GameFlow currentGameFlow;
@@ -20,15 +21,15 @@ class GameFlow {
         return currentGameFlow.status;
     }
 
-    public static void setCurrentScreen(FocusedScreen screen) {
+    public static void setCurrentScreen(Screen screen) {
         currentGameFlow.screen = screen;
     }
 
-    public static FocusedScreen getCurrentScreen() {
+    public static Screen getCurrentScreen() {
         return currentGameFlow.screen;
     }
 
-    public static void setFirstGameFlow(GameStatus status, FocusedScreen screen) {
+    public static void setFirstGameFlow(GameStatus status, Screen screen) {
         while (currentGameFlow != null) {
             backToPreviewGameFlow();
         }
@@ -38,7 +39,7 @@ class GameFlow {
         currentGameFlow = firstGameFlow;
     }
 
-    public static void appendGameFlow(GameStatus status, FocusedScreen screen) {
+    public static void appendGameFlow(GameStatus status, Screen screen) {
         GameFlow gameFlow = new GameFlow();
         gameFlow.status = status;
         gameFlow.screen = screen;

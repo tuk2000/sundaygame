@@ -10,6 +10,7 @@ public class MapView extends View {
     private MapViewLayer mapViewLayer;
     private PhysicViewLayer physicViewLayer;
     private TiledMap map;
+
     public MapView() {
         super(true);
         map = new TmxMapLoader().load("TileMap/sTest/sTest.tmx");

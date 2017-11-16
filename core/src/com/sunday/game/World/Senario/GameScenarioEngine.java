@@ -1,14 +1,18 @@
 package com.sunday.game.World.Senario;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Disposable;
 
 public class GameScenarioEngine implements Disposable {
     private GameScenario Root;
     private GameScenario screenScenario;
     private ScenarioEventDispatcher scenarioEventDispatcher;
+    private GameInputEventTransfer gameInputEventTransfer;
 
     public GameScenarioEngine() {
-        scenarioEventDispatcher = new ScenarioEventDispatcher();
+        scenarioEventDispatcher = new ScenarioEventDispatcher(this);
+        gameInputEventTransfer = new GameInputEventTransfer(scenarioEventDispatcher);
+        Gdx.input.setInputProcessor(gameInputEventTransfer);
     }
 
     protected void setRootScenario(GameScenario gameScenario) {

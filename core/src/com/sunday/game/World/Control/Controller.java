@@ -4,10 +4,18 @@ import com.badlogic.gdx.utils.Disposable;
 import com.sunday.game.World.Model.RoleModel;
 import com.sunday.game.World.View.View;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
 public abstract class Controller implements Disposable {
     protected RoleModel roleModel;
     protected View view;
     protected EventProcessor eventProcessor;
+    protected ArrayList<EventType> acceptedEventTypes = new ArrayList<>();
+
+    public Controller(EventType... acceptedEventTypes) {
+        Collections.addAll(this.acceptedEventTypes, acceptedEventTypes);
+    }
 
     public void useRoleModel(RoleModel roleModel) {
         this.roleModel = roleModel;
@@ -19,6 +27,7 @@ public abstract class Controller implements Disposable {
     }
 
     public void notifyGameEvent(GameEvent gameEvent) {
-        eventProcessor.processEvent(gameEvent);
+        if (acceptedEventTypes.contains(gameEvent.getEventType()))
+            eventProcessor.processEvent(gameEvent);
     }
 }

@@ -4,7 +4,7 @@ import com.sunday.game.World.Control.EventProcessor;
 import com.sunday.game.World.Model.Property.RoleLabel;
 
 public abstract class Hero extends RoleModel {
-    public Hero(){
+    public Hero() {
         super(RoleLabel.Hero);
     }
 

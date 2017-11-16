@@ -1,15 +1,14 @@
 package com.sunday.game.World;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.sunday.game.GameFramework.FocusedScreen;
 import com.sunday.game.GameFramework.GameFlow.GameStatus;
 import com.sunday.game.GameFramework.GameFramework;
 import com.sunday.game.Resource.ResourceDescriptorStorage;
 
-public class GameLoading extends FocusedScreen {
+public class GameLoading implements Screen {
     private SpriteBatch batch;
     private BitmapFont font;
     private boolean finishing = false;
@@ -64,8 +63,4 @@ public class GameLoading extends FocusedScreen {
 
     }
 
-    @Override
-    public InputAdapter getInputAdapter() {
-        return new InputAdapter();
-    }
 }

@@ -1,14 +1,14 @@
 package com.sunday.game.World;
 
-import com.sunday.game.GameFramework.FocusedScreen;
-import com.sunday.game.GameFramework.GameFlow.FocusedScreenGenerator;
+import com.badlogic.gdx.Screen;
 import com.sunday.game.GameFramework.GameFlow.GameStatus;
+import com.sunday.game.GameFramework.GameFlow.ScreenGenerator;
 
 import java.util.ArrayList;
 
-public class GameScreenGenerator implements FocusedScreenGenerator {
+public class GameScreenGenerator implements ScreenGenerator {
     @Override
-    public FocusedScreen generateFocusedScreen(GameStatus gameStatus) {
+    public Screen generateScreen(GameStatus gameStatus) {
         switch (gameStatus) {
             case Loading:
                 return new GameLoading();

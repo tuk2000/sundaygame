@@ -3,6 +3,7 @@ package com.sunday.game.World;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -11,11 +12,10 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
-import com.sunday.game.GameFramework.FocusedScreen;
 import com.sunday.game.GameFramework.GameFlow.GameStatus;
 import com.sunday.game.GameFramework.GameFramework;
 
-public class GamePlay extends FocusedScreen {
+public class GamePlay implements Screen {
     private static final float TIMESTEP = 1 / 60f;
     private static final int VELOCITYITERATIONS = 8, POSITIONITERATIONS = 3;
     private InputAdapter inputAdapter;
@@ -201,8 +201,4 @@ public class GamePlay extends FocusedScreen {
 
     }
 
-    @Override
-    public InputAdapter getInputAdapter() {
-        return inputAdapter;
-    }
 }

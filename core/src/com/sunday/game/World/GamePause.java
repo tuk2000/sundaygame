@@ -1,12 +1,11 @@
 package com.sunday.game.World;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.sunday.game.GameFramework.FocusedScreen;
 
-public class GamePause extends FocusedScreen {
+public class GamePause implements Screen {
     private SpriteBatch batch;
     private BitmapFont font;
 
@@ -49,8 +48,4 @@ public class GamePause extends FocusedScreen {
 
     }
 
-    @Override
-    public InputAdapter getInputAdapter() {
-        return new InputAdapter();
-    }
 }
