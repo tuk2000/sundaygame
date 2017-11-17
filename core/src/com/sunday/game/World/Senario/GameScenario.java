@@ -41,8 +41,10 @@ public class GameScenario implements Disposable {
     }
 
     public void notifyAllRoles(GameEvent gameEvent) {
-        Gdx.app.log("GameScenario", "Receiver a GameEvent" + gameEvent.getEventType().name());
-        roles.forEach(role -> role.controller.notifyGameEvent(gameEvent));
+        Gdx.app.log("GameScenario", "Receive a GameEvent" + gameEvent.toString());
+        for (Role role : roles) {
+            role.controller.notifyGameEvent(gameEvent);
+        }
     }
 
     @Override

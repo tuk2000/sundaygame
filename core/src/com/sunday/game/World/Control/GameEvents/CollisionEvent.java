@@ -16,4 +16,9 @@ public class CollisionEvent extends GameEvent {
     public boolean isInvolved(Object object) {
         return object.equals(objectA) || object.equals(objectB);
     }
+
+    @Override
+    public String toString() {
+        return getEventType().name() + " " + getSource().toString() + " " + objectA.toString() + " " + objectB.toString();
+    }
 }

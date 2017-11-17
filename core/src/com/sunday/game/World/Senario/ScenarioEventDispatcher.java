@@ -9,30 +9,22 @@ import java.util.Vector;
 public class ScenarioEventDispatcher implements Disposable {
     private Vector<GameEvent> eventQueue = new Vector<>();
     private GameScenarioEngine gameScenarioEngine;
-    private Thread edt;
 
     public ScenarioEventDispatcher(GameScenarioEngine gameScenarioEngine) {
         this.gameScenarioEngine = gameScenarioEngine;
-        edt = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                while (true) {
-                    eventQueue.forEach(e -> {
-                                Gdx.app.log("ScenarioEventDispatcher", "Dispatch a GameEvent" + e.getEventType().name());
-                                gameScenarioEngine.getScreenScenario().notifyAllRoles(e);
-                            }
-                    );
-                    eventQueue.clear();
-                }
-            }
-        });
-        edt.setName("Game-EDT");
-        edt.setDaemon(true);
-        edt.start();
     }
 
     public void dispatchEvent(GameEvent gameEvent) {
         eventQueue.add(gameEvent);
+    }
+
+    public void dispatchEventQueue() {
+        eventQueue.forEach(e -> {
+                    Gdx.app.log("ScenarioEventDispatcher", "Dispatch a GameEvent" + e.toString());
+                    gameScenarioEngine.getRootScenario().notifyAllRoles(e);
+                }
+        );
+        eventQueue.clear();
     }
 
     @Override

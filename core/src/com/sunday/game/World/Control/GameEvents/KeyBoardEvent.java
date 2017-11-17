@@ -42,4 +42,9 @@ public class KeyBoardEvent extends InputEvent {
         return operation == Operation.KeyTyped & this.character == character;
     }
 
+    @Override
+    public String toString() {
+        return getEventType().name() + " " + getSource().toString() + " " + getOperation().name() + " " + getCharacter() + " " + getKey();
+    }
+
 }

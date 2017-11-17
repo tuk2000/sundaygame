@@ -20,7 +20,7 @@ public class ScenarioConstructor implements Disposable {
         return construct(new ScenarioSetting());
     }
 
-    public GameScenario constructRootScenario(Stage stage) {
+    public GameScenario constructRootScenario() {
         GameScenario rootGameScenario = new GameScenario(new GameScenarioScope(ScopeType.EntireLevel));
         gameScenarioEngine.setRootScenario(rootGameScenario);
         return rootGameScenario;

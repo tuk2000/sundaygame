@@ -39,11 +39,10 @@ public class GameTest implements Screen {
 
     public GameTest() {
         gameScenarioEngine = new GameScenarioEngine();
-        Stage stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight()));
         ScenarioConstructor scenarioConstructor = new ScenarioConstructor(gameScenarioEngine);
         RoleConstructor roleConstructor = new RoleConstructor(gameScenarioEngine);
-        scenarioRenderer = new ScenarioRenderer(stage, gameScenarioEngine);
-        GameScenario gameScenario = scenarioConstructor.constructRootScenario(stage);
+        scenarioRenderer = new ScenarioRenderer(gameScenarioEngine);
+        GameScenario gameScenario = scenarioConstructor.constructRootScenario();
         gameScenario.addRole(roleConstructor.construct(RoleLabel.Map));
         gameScenario.addRole(roleConstructor.construct(RoleLabel.Hero));
         gameScenario.addRole(roleConstructor.construct(RoleLabel.Enemy));

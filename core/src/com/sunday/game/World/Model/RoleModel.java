@@ -11,6 +11,11 @@ import com.sunday.game.World.View.View;
 public abstract class RoleModel implements Disposable {
     protected View view;
     private RoleLabel roleLabel;
+    protected boolean isModified=false;
+
+    public boolean isModified() {
+        return isModified;
+    }
 
     public RoleModel(RoleLabel roleLabel) {
         this.roleLabel = roleLabel;

@@ -1,5 +1,6 @@
 package com.sunday.game.World.Control;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Disposable;
 import com.sunday.game.World.Model.RoleModel;
 import com.sunday.game.World.View.View;
@@ -27,7 +28,11 @@ public abstract class Controller implements Disposable {
     }
 
     public void notifyGameEvent(GameEvent gameEvent) {
-        if (acceptedEventTypes.contains(gameEvent.getEventType()))
-            eventProcessor.processEvent(gameEvent);
+        if (acceptedEventTypes.contains(gameEvent.getEventType())) {
+            Gdx.app.log("Controller", "Receive a GameEvent" + gameEvent.toString());
+            if (eventProcessor != null)
+                eventProcessor.processEvent(gameEvent);
+        }
+
     }
 }

@@ -38,4 +38,8 @@ public class GameScenarioEngine implements Disposable {
         Root.dispose();
         screenScenario.dispose();
     }
+
+    protected void dispatchEvents() {
+        scenarioEventDispatcher.dispatchEventQueue();
+    }
 }

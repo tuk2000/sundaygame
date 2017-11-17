@@ -17,4 +17,9 @@ public class MouseEvent extends InputEvent {
     public int getScreenY() {
         return screenY;
     }
+
+    @Override
+    public String toString() {
+        return getEventType().name() + " " + getSource().toString() + " " + screenX + " " + screenY;
+    }
 }
