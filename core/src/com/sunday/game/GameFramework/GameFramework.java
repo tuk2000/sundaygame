@@ -24,7 +24,7 @@ import com.sunday.tool.ToolApplication;
  * When all the above components need at any place , it should be called through GameFramework , just like Gdx.
  * <p>
  */
-public class GameFramework extends Gdx {
+public class GameFramework {
 
     //GameFramework basic Components
     public static GameFlowManager GameFlow;
@@ -32,11 +32,11 @@ public class GameFramework extends Gdx {
     private static ToolApplication toolApplication;
 
     public GameFramework() {
-        app.setApplicationLogger(ToolApplication.gameLogger);
+        Gdx.app.setApplicationLogger(ToolApplication.gameLogger);
         GameScreenGenerator gameScreenGenerator = new GameScreenGenerator();
 
         UserInputManager inputManager = new UserInputManager();
-        input.setInputProcessor(inputManager.getInputMultiplexer());
+        Gdx.input.setInputProcessor(inputManager.getInputMultiplexer());
         GameAdaptor.getInstance().guardInputManager(inputManager);
 
         toolApplication = new ToolApplication();
@@ -44,7 +44,7 @@ public class GameFramework extends Gdx {
             ToolApplication.screenLoader.loadGameStatusEnum(gameScreenGenerator.enumGameStatus());
         });
 
-        app.postRunnable(() -> {
+        Gdx.app.postRunnable(() -> {
             Thread toolLauncherThread = new Thread(toolApplication);
             toolLauncherThread.setName("ToolLaunchThread");
             toolLauncherThread.start();

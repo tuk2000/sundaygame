@@ -34,7 +34,7 @@ public class GameAdaptor extends Game implements GameFlowExecutor {
     public void create() {
         new GameFramework();
         String name = Thread.currentThread().getStackTrace()[3].getClassName();
-        GameFramework.app.log("GameAdaptor", " GameAdaptor.create() was called by " + name);
+        Gdx.app.log("GameAdaptor", " GameAdaptor.create() was called by " + name);
     }
 
     @Override

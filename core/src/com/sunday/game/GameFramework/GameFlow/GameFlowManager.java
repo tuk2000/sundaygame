@@ -2,7 +2,6 @@ package com.sunday.game.GameFramework.GameFlow;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.sunday.game.GameFramework.GameFramework;
 import com.sunday.tool.ToolApplication;
 
 
@@ -26,7 +25,7 @@ public final class GameFlowManager {
         } else {
             GameFlow.appendGameFlow(status, screen);
         }
-        GameFramework.app.log("GameFlowManager", "GameStatus changed to " + status.name());
+        Gdx.app.log("GameFlowManager", "GameStatus changed to " + status.name());
         ToolApplication.objectMonitor.MonitorObject(screen);
         applyScreen(screen);
     }
@@ -38,12 +37,12 @@ public final class GameFlowManager {
             replaceIntroScreen();
         } else {
             Screen screen = GameFlow.getCurrentScreen();
-            GameFramework.app.log("GameFlowManager", GameFlow.getCurrentGameStatus().name() + " closed");
+            Gdx.app.log("GameFlowManager", GameFlow.getCurrentGameStatus().name() + " closed");
             ToolApplication.objectMonitor.StopMonitorObject(screen);
             System.gc();
 
             GameFlow.backToPreviewGameFlow();
-            GameFramework.app.log("GameFlowManager", GameFlow.getCurrentGameStatus().name() + " opened");
+            Gdx.app.log("GameFlowManager", GameFlow.getCurrentGameStatus().name() + " opened");
             if (GameFlow.getCurrentGameStatus() == GameStatus.Intro) {
                 replaceIntroScreen();
             } else {
@@ -60,7 +59,7 @@ public final class GameFlowManager {
         ToolApplication.objectMonitor.StopMonitorObject(screen);
         System.gc();
         screen = screenGenerator.generateScreen(GameStatus.Intro);
-        GameFramework.app.log("GameFlowManager", "IntroScreen replaced");
+        Gdx.app.log("GameFlowManager", "IntroScreen replaced");
         ToolApplication.objectMonitor.MonitorObject(screen);
         GameFlow.setCurrentScreen(screen);
         applyScreen(screen);

@@ -1,5 +1,6 @@
 package com.sunday.game.GameFramework.Input;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.sunday.game.GameFramework.GameFlow.GameStatus;
@@ -10,15 +11,15 @@ public class FrameworkInputProcessor implements InputProcessor {
     public boolean keyDown(int keycode) {
         switch (keycode) {
             case Input.Keys.ESCAPE:
-                GameFramework.app.log("FrameworkInputProcessor", "Key Esc pressed ");
+                Gdx.app.log("FrameworkInputProcessor", "Key Esc pressed ");
                 GameFramework.GameFlow.setGameStatus(GameStatus.Intro);
                 return true;
             case Input.Keys.BACKSPACE:
-                GameFramework.app.log("FrameworkInputProcessor", "Key BACKSPACE pressed ");
+                Gdx.app.log("FrameworkInputProcessor", "Key BACKSPACE pressed ");
                 GameFramework.GameFlow.backToPreviewStatus();
                 return true;
             case Input.Keys.F1:
-                GameFramework.app.log("FrameworkInputProcessor", "Key F1 pressed ");
+                Gdx.app.log("FrameworkInputProcessor", "Key F1 pressed ");
                 GameFramework.switchToolOnOrOff();
                 return false;
         }
