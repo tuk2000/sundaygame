@@ -1,10 +1,13 @@
-package com.sunday.game.World;
+package com.sunday.game.world;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
-import com.sunday.game.World.Model.Property.RoleLabel;
-import com.sunday.game.World.Senario.*;
+import com.sunday.game.engine.model.poperty.RoleLabel;
+import com.sunday.game.engine.scenario.GameScenario;
+import com.sunday.game.engine.scenario.GameScenarioEngine;
+import com.sunday.game.engine.scenario.ScenarioConstructor;
+import com.sunday.game.engine.scenario.role.RoleConstructor;
 
 
 public class GameTest implements Screen {
@@ -32,13 +35,11 @@ public class GameTest implements Screen {
 
 
     private GameScenarioEngine gameScenarioEngine;
-    private ScenarioRenderer scenarioRenderer;
 
     public GameTest() {
         gameScenarioEngine = new GameScenarioEngine();
         ScenarioConstructor scenarioConstructor = new ScenarioConstructor(gameScenarioEngine);
         RoleConstructor roleConstructor = new RoleConstructor(gameScenarioEngine);
-        scenarioRenderer = new ScenarioRenderer(gameScenarioEngine);
         GameScenario gameScenario = scenarioConstructor.constructRootScenario();
         gameScenario.addRole(roleConstructor.construct(RoleLabel.Map));
         gameScenario.addRole(roleConstructor.construct(RoleLabel.Hero));
@@ -54,7 +55,7 @@ public class GameTest implements Screen {
 
     @Override
     public void render(float delta) {
-        scenarioRenderer.render(delta);
+        gameScenarioEngine.render(delta);
     }
 
     @Override
@@ -79,7 +80,6 @@ public class GameTest implements Screen {
 
     @Override
     public void dispose() {
-        scenarioRenderer.dispose();
         gameScenarioEngine.dispose();
     }
 

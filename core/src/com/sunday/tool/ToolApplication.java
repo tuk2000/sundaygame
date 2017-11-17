@@ -1,9 +1,9 @@
 package com.sunday.tool;
 
-import com.sunday.tool.GameMonitor.GameMonitor;
-import com.sunday.tool.Logger.GameLogger;
-import com.sunday.tool.ObjectMonitor.ObjectMonitor;
-import com.sunday.tool.ScreenLoader.ScreenLoader;
+import com.sunday.tool.gamemonitor.GameMonitor;
+import com.sunday.tool.logger.GameLogger;
+import com.sunday.tool.objectmonitor.ObjectMonitor;
+import com.sunday.tool.screenloader.ScreenLoader;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;

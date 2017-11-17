@@ -1,8 +1,8 @@
-package com.sunday.game.World;
+package com.sunday.game.world;
 
 import com.badlogic.gdx.Screen;
-import com.sunday.game.GameFramework.GameFlow.GameStatus;
-import com.sunday.game.GameFramework.GameFlow.ScreenGenerator;
+import com.sunday.game.framework.gameflow.GameStatus;
+import com.sunday.game.framework.gameflow.ScreenGenerator;
 
 import java.util.ArrayList;
 
@@ -25,10 +25,10 @@ public class GameScreenGenerator implements ScreenGenerator {
             case Test:
                 return new GameTest();
             case WorldShiftStart:
-                //WorldShiftStart: clear the old Game ,shift not into intro but instead into an Animation
+                //WorldShiftStart: clear the old Game ,shift not into intro but instead into an animations
                 return null;
             case WorldShiftEnd:
-                //WorldShiftEnd: clear the Animation ,shift into new game screen
+                //WorldShiftEnd: clear the animations ,shift into new game screen
             default:
                 return null;
         }

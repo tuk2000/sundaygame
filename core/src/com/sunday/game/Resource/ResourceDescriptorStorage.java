@@ -1,10 +1,10 @@
-package com.sunday.game.Resource;
+package com.sunday.game.resource;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
 import com.badlogic.gdx.files.FileHandle;
-import com.sunday.game.GameFramework.Resouce.DescriptorStorage;
-import com.sunday.game.GameFramework.Resouce.GameResourceType;
+import com.sunday.game.framework.resource.DescriptorStorage;
+import com.sunday.game.framework.resource.GameResourceType;
 
 import java.io.File;
 import java.util.ArrayList;

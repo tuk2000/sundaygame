@@ -1,4 +1,4 @@
-package com.sunday.game.World;
+package com.sunday.game.world;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;

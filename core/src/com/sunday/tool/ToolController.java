@@ -1,13 +1,13 @@
 package com.sunday.tool;
 
-import com.sunday.game.GameFramework.GameFlow.GameStatus;
-import com.sunday.game.GameFramework.GameFramework;
-import com.sunday.tool.GameMonitor.GameMonitorController;
-import com.sunday.tool.Logger.GameLoggerController;
-import com.sunday.tool.Logger.LogMessage;
-import com.sunday.tool.ObjectMonitor.MonitoredObject;
-import com.sunday.tool.ObjectMonitor.ObjectMonitorController;
-import com.sunday.tool.ScreenLoader.ScreenLoaderController;
+import com.sunday.game.framework.GameFramework;
+import com.sunday.game.framework.gameflow.GameStatus;
+import com.sunday.tool.gamemonitor.GameMonitorController;
+import com.sunday.tool.logger.GameLoggerController;
+import com.sunday.tool.logger.LogMessage;
+import com.sunday.tool.objectmonitor.MonitoredObject;
+import com.sunday.tool.objectmonitor.ObjectMonitorController;
+import com.sunday.tool.screenloader.ScreenLoaderController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

@@ -1,6 +1,6 @@
-package com.sunday.tool.ScreenLoader;
+package com.sunday.tool.screenloader;
 
-import com.sunday.game.GameFramework.GameFlow.GameStatus;
+import com.sunday.game.framework.gameflow.GameStatus;
 import com.sunday.tool.ToolExtender;
 
 import java.util.ArrayList;

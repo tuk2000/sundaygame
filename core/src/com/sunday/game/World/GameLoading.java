@@ -1,12 +1,12 @@
-package com.sunday.game.World;
+package com.sunday.game.world;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.sunday.game.GameFramework.GameFlow.GameStatus;
-import com.sunday.game.GameFramework.GameFramework;
-import com.sunday.game.Resource.ResourceDescriptorStorage;
+import com.sunday.game.framework.GameFramework;
+import com.sunday.game.framework.gameflow.GameStatus;
+import com.sunday.game.resource.ResourceDescriptorStorage;
 
 public class GameLoading implements Screen {
     private SpriteBatch batch;

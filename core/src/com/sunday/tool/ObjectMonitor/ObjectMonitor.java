@@ -1,4 +1,4 @@
-package com.sunday.tool.ObjectMonitor;
+package com.sunday.tool.objectmonitor;
 
 import com.sunday.tool.ToolExtender;
 

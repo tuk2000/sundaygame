@@ -1,4 +1,4 @@
-package com.sunday.tool.GameMonitor;
+package com.sunday.tool.gamemonitor;
 
 import com.sunday.tool.ToolExtender;
 

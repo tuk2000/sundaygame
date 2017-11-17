@@ -1,4 +1,4 @@
-package com.sunday.tool.Logger;
+package com.sunday.tool.logger;
 
 import com.sunday.tool.ToolExtenderController;
 

@@ -1,4 +1,4 @@
-package com.sunday.game.World;
+package com.sunday.game.world;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -11,8 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.sunday.game.GameFramework.GameFlow.GameStatus;
-import com.sunday.game.GameFramework.GameFramework;
+import com.sunday.game.framework.GameFramework;
+import com.sunday.game.framework.gameflow.GameStatus;
 
 
 public class GameIntro implements Screen {

@@ -1,4 +1,4 @@
-package com.sunday.game.World;
+package com.sunday.game.world;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -15,11 +15,11 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-import com.sunday.game.GameFramework.GameFlow.GameStatus;
-import com.sunday.game.GameFramework.GameFramework;
-import com.sunday.game.World.View.Animation.AnimationSetting;
-import com.sunday.game.World.View.Sprites.HeroSprite;
-import com.sunday.game.World.View.Sprites.SawSprite;
+import com.sunday.game.engine.view.animations.AnimationSetting;
+import com.sunday.game.engine.view.sprites.HeroSprite;
+import com.sunday.game.engine.view.sprites.SawSprite;
+import com.sunday.game.framework.GameFramework;
+import com.sunday.game.framework.gameflow.GameStatus;
 
 /**
  * IMPORTANT: each tile is of 16px
