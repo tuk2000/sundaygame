@@ -1,6 +1,6 @@
 package com.sunday.game.engine.control.events;
 
-public class CollisionEvent extends GameEvent {
+public class CollisionEvent extends Event {
     private Object objectA;
     private Object objectB;
 

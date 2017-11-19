@@ -40,7 +40,7 @@ public class GameAdaptor extends Game implements GameFlowExecutor {
     @Override
     public void render() {
         //ClearColor White and it needs to be  defined only once before all render
-        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClearColor(0.745f, 0.745f, 0.745f, 1);
         //clear the screen before anything rendered
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         if (screenToSet != null) {

@@ -1,170 +1,187 @@
 package com.sunday.game.engine.scenario.render;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.sunday.game.engine.scenario.GameScenarioEngine;
-import com.sunday.game.engine.scenario.role.Role;
-import com.sunday.game.engine.view.EntityPhysicDefinition;
-import com.sunday.game.engine.view.View;
-import com.sunday.game.engine.view.animations.AnimationSetting;
-import com.sunday.game.engine.view.viewlayers.MultiComponentLayer;
-import com.sunday.game.engine.view.viewlayers.SingleComponentLayer;
-import com.sunday.game.engine.view.views.MapView;
-
-import java.util.ArrayList;
+import com.sunday.game.engine.common.AnimationSetting;
+import com.sunday.game.engine.common.EntityPhysicDefinition;
+import com.sunday.game.engine.common.Role;
+import com.sunday.game.engine.common.RoleLabel;
+import com.sunday.game.engine.model.AbstractModel;
+import com.sunday.game.engine.scenario.ScenarioEngine;
+import com.sunday.game.engine.scenario.render.independentrenders.*;
+import com.sunday.game.engine.scenario.render.managers.CameraManager;
+import com.sunday.game.engine.scenario.render.managers.ViewportManager;
+import com.sunday.game.engine.view.viewlayers.MapViewLayer;
+import com.sunday.game.engine.view.viewlayers.PhysicViewLayer;
+import com.sunday.game.engine.view.viewlayers.ScreenViewLayer;
 
 public class ScenarioRenderer implements Disposable {
-    private GameScenarioEngine gameScenarioEngine;
-
-    private OrthogonalTiledMapRenderer mapRenderer;
-
-    private Box2DDebugRenderer box2DDebugRenderer;//in Box2DDebugRenderer class there is ShapeRender
+    private ScenarioEngine scenarioEngine;
     private float lastRenderDuration = 0.0f;
-    private ArrayList<EntityPhysicDefinition> entityPhysicDefinitions = new ArrayList<>();
-    private World world;
-    private ShapeRenderer shapeRenderer;
 
-    private Stage stage;
-    private Batch batch;
-    private Camera camera;
-    private Viewport viewPort;
+    private MapRenderer mapRender;
+    private SpriteRenderer spriteRender;
+    private StageRenderer stageRender;
+    private TextureRenderer textureRender;
+    private WorldRenderer worldRender;
 
-    public ScenarioRenderer(GameScenarioEngine gameScenarioEngine) {
-        this.gameScenarioEngine = gameScenarioEngine;
-        batch = new SpriteBatch();
-        System.out.println("Gdx.graphics.getWidth():" + Gdx.graphics.getWidth());
-        System.out.println("Gdx.graphics.getHeight():" + Gdx.graphics.getHeight());
-        viewPort = new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        camera = viewPort.getCamera();
-        stage = new Stage(viewPort, batch);
+    private OrthographicCamera sharedCamera;
+    //  private FitViewport screenViewport;
+    //private ScreenViewport screenViewport;
+    private Viewport screenViewport;
+    private Batch sharedBatch;
 
-        world = new World(new Vector2(0.0f, -9.8f), true);
-        box2DDebugRenderer = new Box2DDebugRenderer();
+    private float aspectRatio;//height/width
+    private int displayWidth; // pixels
+    private int displayHeight; // pixels
+
+    private float viewportWidth; //units
+    private float viewportHeight; //units
+
+    private float worldWidth;//units
+    private float worldHeight;//units
+
+    public void resizeDisplay(int displayWidth, int displayHeight) {
+        this.displayWidth = displayHeight;
+        this.displayHeight = displayHeight;
+        screenViewport.update(displayWidth, displayHeight);
+        sharedCamera.position.set(worldWidth / 2, worldHeight / 2, 0);
     }
 
-    public void renderMap(TiledMap tiledMap) {
-        if (mapRenderer == null || mapRenderer.getMap() != tiledMap) {
-            mapRenderer = new OrthogonalTiledMapRenderer(tiledMap, batch);
 
-            MapProperties prop = tiledMap.getProperties();
+    private ViewportManager viewportManager;
+    private CameraManager cameraManager;
 
-            int mapWidth = prop.get("width", Integer.class);
-            int mapHeight = prop.get("height", Integer.class);
-            int tilePixelWidth = prop.get("tilewidth", Integer.class);
-            int tilePixelHeight = prop.get("tileheight", Integer.class);
+    public ScenarioRenderer(ScenarioEngine scenarioEngine) {
+        this.scenarioEngine = scenarioEngine;
 
-            int mapPixelWidth = mapWidth * tilePixelWidth;
-            int mapPixelHeight = mapHeight * tilePixelHeight;
-            viewPort.update(mapPixelWidth, mapPixelHeight, true);
-            mapRenderer.setView((OrthographicCamera) camera);
-        }
-        mapRenderer.render();
+        viewportManager = new ViewportManager();
+        cameraManager = new CameraManager();
+
+        // aspectRatio = (float) Gdx.graphics.getHeight() / Gdx.graphics.getWidth();
+
+        viewportHeight = 20.0f;
+        viewportWidth = 20.0f;
+
+        worldHeight = 800;
+        worldWidth = 800;
+
+        sharedBatch = new SpriteBatch();
+        sharedCamera = new OrthographicCamera(viewportWidth, viewportHeight);
+        //sharedCamera = new OrthographicCamera();
+        screenViewport = new FitViewport(worldWidth, worldHeight, sharedCamera);
+        screenViewport.apply();
+        sharedCamera.position.set(worldWidth / 2, worldHeight / 2, 0);
+        sharedCamera.update();
+        //screenViewport = new ScreenViewport(sharedCamera);
+        spriteRender = new SpriteRenderer(sharedBatch);
+//        stageRender = new StageRenderer(sharedBatch, screenViewport);
+        stageRender = new StageRenderer();
+        textureRender = new TextureRenderer(sharedBatch);
+        worldRender = new WorldRenderer(sharedCamera);
     }
 
-    private boolean shouldRender() {
-        if (lastRenderDuration > 1 / 60) {
-            lastRenderDuration -= 1 / 60;
-            return true;
-        } else
-            return false;
-    }
-
-    public void renderTexture(Texture texture) {
-        batch.begin();
-        batch.draw(texture, 10.0f, 10.0f);
-        batch.end();
-    }
-
-    public void renderSprite(Sprite sprite) {
-        batch.begin();
-        batch.draw(sprite.getTexture(), sprite.getX(), sprite.getY());
-        batch.end();
-    }
-
-    public void renderPhysicBody(BodyDef bodyDef, FixtureDef fixtureDef) {
-        world.createBody(bodyDef).createFixture(fixtureDef);
-    }
-
-    public void renderWorldStep() {
-        if (world == null) return;
-        if (shouldRender()) {
-            world.step(1 / 60, 8, 3);
-            box2DDebugRenderer.render(world, camera.combined);
-        }
-    }
-
-    private void renderComponent(Object component) {
-        if (component instanceof Texture) {
-            renderTexture((Texture) component);
-        } else if (component instanceof Sprite) {
-            renderSprite((Sprite) component);
-        } else if (component instanceof TiledMap) {
-            renderMap((TiledMap) component);
-        } else if (component instanceof EntityPhysicDefinition) {
-            EntityPhysicDefinition entityPhysicDefinition = (EntityPhysicDefinition) component;
-            if (!entityPhysicDefinitions.contains(entityPhysicDefinition)) {
-                renderPhysicBody(entityPhysicDefinition.bodyDef, entityPhysicDefinition.fixtureDef);
-                entityPhysicDefinitions.add(entityPhysicDefinition);
-            }
-
+    private void renderRole(Role role) {
+        switch (role.roleLabel) {
+            case Map:
+                renderMap(role);
+                break;
+            case Hero:
+            case Enemy:
+                renderSingleRole(role);
         }
     }
 
-    private void renderRoleView(View view) {
-        view.getViewLayers().forEach(vl -> {
-            if (vl instanceof MultiComponentLayer) {
-                ((MultiComponentLayer) vl).getViewComponents().forEach(this::renderComponent);
-            } else {
-                renderComponent(((SingleComponentLayer) vl).getViewComponent());
+    private void renderMap(Role role) {
+        if (role.roleLabel != RoleLabel.Map) return;
+        role.abstractView.getViewLayers().forEach(e -> {
+            if (e instanceof MapViewLayer) {
+                renderMapViewLayer((MapViewLayer) e);
+            } else if (e instanceof PhysicViewLayer) {
+                renderPhysicViewLayer((PhysicViewLayer) e);
             }
         });
     }
 
-    private void renderRole(Role role) {
-        if (!shouldRender()) return;
-        if (!role.view.isStatic()) {
-            role.view.updateView();
+
+    private void renderSingleRole(Role role) {
+        if (role.roleLabel == RoleLabel.Map) return;
+        role.synchronize();
+        role.abstractView.getViewLayers().forEach(e -> {
+            if (e instanceof ScreenViewLayer) {
+                renderScreenViewLayer((ScreenViewLayer) e, role.abstractModel);
+            } else if (e instanceof PhysicViewLayer) {
+                renderPhysicViewLayer((PhysicViewLayer) e);
+            }
+        });
+    }
+
+    private void renderScreenViewLayer(ScreenViewLayer e, AbstractModel model) {
+        Texture component = (Texture) e.getViewComponent();
+        if (component == null) return;
+        if (component instanceof Texture) {
+            Vector2 position = model.roleMovementStatus.position;
+            Vector2 dimension = model.rolePresent.dimension;
+            textureRender.renderLater((Texture) component, position.x, position.y, dimension.x, dimension.y);
         }
-        if (role.roleModel.isModified() || !role.view.isStatic() || role.view instanceof MapView) {
-            renderRoleView(role.view);
+//        else if (component instanceof Sprite) {
+//            spriteRender.renderLater((Sprite) component);
+//        }
+    }
+
+    private void renderPhysicViewLayer(PhysicViewLayer e) {
+        EntityPhysicDefinition entityPhysicDefinition = e.getViewComponent();
+        if (entityPhysicDefinition == null) return;
+        if (!worldRender.hasEntityPhysicDefinition(entityPhysicDefinition)) {
+            worldRender.addEntityPhysicDefinition(entityPhysicDefinition);
+        }
+    }
+
+    private void renderMapViewLayer(MapViewLayer e) {
+        Object component = e.getViewComponent();
+        if (component == null) return;
+        if (component instanceof TiledMap) {
+            if (mapRender == null) {
+                mapRender = new MapRenderer(sharedBatch, sharedCamera, (TiledMap) component);
+            }
         }
     }
 
     public void render(float delta) {
         AnimationSetting.DeltaTime += delta;
         lastRenderDuration += delta;
-        camera.update();
-        batch.setProjectionMatrix(camera.combined);
-        renderWorldStep();
-        gameScenarioEngine.getRootScenario().getRoles().forEach(this::renderRole);
-        stage.draw();
+        worldRender.worldStep();
+
+        //sharedCamera.translate(-10.0f * delta, 0);
+        //sharedCamera.rotate(10 * delta);
+        sharedCamera.update();
+        sharedBatch.setProjectionMatrix(sharedCamera.combined);
+
+        scenarioEngine.getRootScenario().getRoles().forEach(this::renderRole);
+
+        worldRender.render(delta);
+        if (mapRender != null) {
+            mapRender.updateCamera(sharedCamera);
+            mapRender.render(delta);
+        }
+        spriteRender.render(delta);
+        stageRender.render(delta);
+        textureRender.render(delta);
     }
 
     @Override
     public void dispose() {
-        mapRenderer.dispose();
-        box2DDebugRenderer.dispose();
-        world.dispose();
-        shapeRenderer.dispose();
-        stage.dispose();
-        batch.dispose();
+        mapRender.dispose();
+        spriteRender.dispose();
+        worldRender.dispose();
+        stageRender.dispose();
+        textureRender.dispose();
     }
 }

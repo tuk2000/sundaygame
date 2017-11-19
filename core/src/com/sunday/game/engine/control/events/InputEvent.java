@@ -1,7 +1,7 @@
 package com.sunday.game.engine.control.events;
 
 
-public class InputEvent extends GameEvent {
+public class InputEvent extends Event {
 
     private InputSource inputSource;
 

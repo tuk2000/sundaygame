@@ -99,6 +99,9 @@ public class GameIntro implements Screen {
         stage.addActor(exit);
         stage.addActor(setting);
         stage.addActor(test);
+//        going to test
+//        GameFramework.switchToolOnOrOff();
+//        GameFramework.GameFlow.setGameStatus(GameStatus.Test);
     }
 
     @Override

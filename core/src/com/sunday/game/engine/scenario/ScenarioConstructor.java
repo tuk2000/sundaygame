@@ -3,26 +3,26 @@ package com.sunday.game.engine.scenario;
 import com.badlogic.gdx.utils.Disposable;
 
 public class ScenarioConstructor implements Disposable {
-    private GameScenarioEngine gameScenarioEngine;
+    private ScenarioEngine scenarioEngine;
 
-    public ScenarioConstructor(GameScenarioEngine gameScenarioEngine) {
-        this.gameScenarioEngine = gameScenarioEngine;
+    public ScenarioConstructor(ScenarioEngine scenarioEngine) {
+        this.scenarioEngine = scenarioEngine;
     }
 
-    public GameScenario construct(ScenarioSetting scenarioSetting) {
-        if (!gameScenarioEngine.HasRootScenario()) return null;
-        return new GameScenario(new GameScenarioScope(scenarioSetting.scopeType));
+    public Scenario construct(ScenarioSetting scenarioSetting) {
+        if (!scenarioEngine.HasRootScenario()) return null;
+        return new Scenario(new ScenarioScope(scenarioSetting.scopeType));
     }
 
-    public GameScenario construct() {
-        if (!gameScenarioEngine.HasRootScenario()) return null;
+    public Scenario construct() {
+        if (!scenarioEngine.HasRootScenario()) return null;
         return construct(new ScenarioSetting());
     }
 
-    public GameScenario constructRootScenario() {
-        GameScenario rootGameScenario = new GameScenario(new GameScenarioScope(ScopeType.EntireLevel));
-        gameScenarioEngine.setRootScenario(rootGameScenario);
-        return rootGameScenario;
+    public Scenario constructRootScenario() {
+        Scenario rootScenario = new Scenario(new ScenarioScope(ScopeType.EntireLevel));
+        scenarioEngine.setRootScenario(rootScenario);
+        return rootScenario;
     }
 
     @Override
