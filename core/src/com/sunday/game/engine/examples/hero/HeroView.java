@@ -17,14 +17,14 @@ public class HeroView extends RoleAbstractView {
         FixtureDef fixtureDef = new FixtureDef();
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(.5f, .5f);
+        bodyDef.position.set(0, 32);
 
         PolygonShape polygonShape = new PolygonShape();
-        polygonShape.setRadius(.5f);
-        polygonShape.setAsBox(.5f, 1f);
+        polygonShape.setRadius(10.0f);
+        polygonShape.setAsBox(16f, 16f);
 
         fixtureDef.shape = polygonShape;
-        fixtureDef.friction = .75f;
+        fixtureDef.friction = .5f;
         fixtureDef.restitution = .1f;
         fixtureDef.density = 15f;
 
@@ -35,5 +35,6 @@ public class HeroView extends RoleAbstractView {
     @Override
     public void synchronizeWithRoleModel(AbstractModel abstractModel) {
         screenViewLayer.setViewComponent(heroAnimation.getKeyFrame(abstractModel.movementState));
+        abstractModel.physicDefinition = physicViewLayer.getViewComponent();
     }
 }

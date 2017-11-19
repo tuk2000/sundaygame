@@ -7,12 +7,9 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
 import com.sunday.game.engine.common.PhysicDefinition;
 
-import java.util.ArrayList;
-
 public class PhysicSimulator implements Disposable {
     protected Vector2 defaultGravity = new Vector2(0, -9.8f);
     protected World world;
-    private ArrayList<PhysicDefinition> physicDefinitions;
 
     public World getWorld() {
         return world;
@@ -20,28 +17,21 @@ public class PhysicSimulator implements Disposable {
 
     public PhysicSimulator() {
         world = new World(defaultGravity, false);
-        physicDefinitions = new ArrayList<>();
     }
 
-    public Body initBodyInWorld(PhysicDefinition physicDefinition) {
-        if (physicDefinitions.contains(physicDefinition))
-            return null;
-        else {
-            physicDefinitions.add(physicDefinition);
+    public void createBodyInWorld(PhysicDefinition physicDefinition) {
+        if (!physicDefinition.bodyCreated) {
             Body body = world.createBody(physicDefinition.bodyDef);
-            body.createFixture(physicDefinition.fixtureDef);
-            return body;
+            physicDefinition.body = body;
+            physicDefinition.fixture = body.createFixture(physicDefinition.fixtureDef);
+            physicDefinition.bodyCreated = true;
         }
     }
 
-    public void addEntityPhysicDefinition(PhysicDefinition... physicDefinitions) {
+    public void createBody(PhysicDefinition... physicDefinitions) {
         for (PhysicDefinition physicDefinition : physicDefinitions) {
-            initBodyInWorld(physicDefinition);
+            createBodyInWorld(physicDefinition);
         }
-    }
-
-    public boolean hasEntityPhysicDefinition(PhysicDefinition physicDefinition) {
-        return physicDefinitions.contains(physicDefinition);
     }
 
     public void setContactListener(ContactListener contactListener) {

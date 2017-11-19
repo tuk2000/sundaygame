@@ -1,9 +1,13 @@
 package com.sunday.game.engine.examples.hero;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.sunday.game.engine.common.enums.Action;
 import com.sunday.game.engine.control.EventProcessor;
-import com.sunday.game.engine.control.events.*;
+import com.sunday.game.engine.control.events.CollisionEvent;
+import com.sunday.game.engine.control.events.Event;
+import com.sunday.game.engine.control.events.InputEvent;
+import com.sunday.game.engine.control.events.KeyBoardEvent;
 
 public class HeroEventProcessor implements EventProcessor {
     private HeroModel heroModel;
@@ -25,9 +29,11 @@ public class HeroEventProcessor implements EventProcessor {
     }
 
     private void handleInput(InputEvent inputEvent) {
-        if (inputEvent.getSource() == InputSource.Keyboard) {
+        if (inputEvent instanceof KeyBoardEvent) {
             KeyBoardEvent keyBoardEvent = (KeyBoardEvent) inputEvent;
             Vector2 position = heroModel.movementState.position;
+            Body body = heroModel.physicDefinition.body;
+            Vector2 worldCenter = body.getWorldCenter();
 
             switch ((keyBoardEvent.getCharacter())) {
                 case '1':
@@ -49,10 +55,12 @@ public class HeroEventProcessor implements EventProcessor {
                 case 'R':
                 case 'r':
                     heroModel.movementState.action = Action.Running;
+                    body.applyLinearImpulse(10,0,worldCenter.x,worldCenter.y,true);
                     break;
                 case 'J':
                 case 'j':
                     heroModel.movementState.action = Action.Jumping;
+                    body.applyLinearImpulse(0,10,worldCenter.x,worldCenter.y,true);
                     break;
                 case 'L':
                 case 'l':

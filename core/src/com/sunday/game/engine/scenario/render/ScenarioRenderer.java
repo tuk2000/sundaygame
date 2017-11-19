@@ -12,12 +12,13 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sunday.game.engine.common.AnimationSetting;
 import com.sunday.game.engine.common.PhysicDefinition;
 import com.sunday.game.engine.common.enums.Label;
+import com.sunday.game.engine.control.EventProcessor;
 import com.sunday.game.engine.examples.Role;
 import com.sunday.game.engine.model.AbstractModel;
 import com.sunday.game.engine.scenario.physicprocess.PhysicSimulator;
 import com.sunday.game.engine.scenario.render.independentrenders.*;
 import com.sunday.game.engine.scenario.render.managers.CameraManager;
-import com.sunday.game.engine.scenario.render.managers.ViewportManager;
+import com.sunday.game.engine.scenario.render.managers.RendererManager;
 import com.sunday.game.engine.view.viewlayers.MapViewLayer;
 import com.sunday.game.engine.view.viewlayers.PhysicViewLayer;
 import com.sunday.game.engine.view.viewlayers.ScreenViewLayer;
@@ -53,16 +54,22 @@ public class ScenarioRenderer implements Disposable {
         sharedCamera.position.set(worldWidth / 2, worldHeight / 2, 0);
     }
 
+    public EventProcessor getCameraProcessor() {
+        return cameraManager;
+    }
 
-    private ViewportManager viewportManager;
+    public EventProcessor getRenderProcessor() {
+        return rendererManager;
+    }
+
+    private RendererManager rendererManager;
     private CameraManager cameraManager;
     private PhysicSimulator physicSimulator;
 
     public ScenarioRenderer(PhysicSimulator physicSimulator) {
         this.physicSimulator = physicSimulator;
 
-        viewportManager = new ViewportManager();
-        cameraManager = new CameraManager();
+        rendererManager = new RendererManager();
 
         // aspectRatio = (float) Gdx.graphics.getHeight() / Gdx.graphics.getWidth();
 
@@ -74,6 +81,7 @@ public class ScenarioRenderer implements Disposable {
 
         sharedBatch = new SpriteBatch();
         sharedCamera = new OrthographicCamera(viewportWidth, viewportHeight);
+        cameraManager = new CameraManager(sharedCamera);
         //sharedCamera = new OrthographicCamera();
         screenViewport = new FitViewport(worldWidth, worldHeight, sharedCamera);
         screenViewport.apply();
@@ -131,16 +139,13 @@ public class ScenarioRenderer implements Disposable {
             Vector2 dimension = model.outlook.dimension;
             textureRender.renderLater((Texture) component, position.x, position.y, dimension.x, dimension.y);
         }
-//        else if (component instanceof Sprite) {
-//            spriteRender.renderLater((Sprite) component);
-//        }
     }
 
     private void renderPhysicViewLayer(PhysicViewLayer e) {
         PhysicDefinition physicDefinition = e.getViewComponent();
         if (physicDefinition == null) return;
-        if (!physicSimulator.hasEntityPhysicDefinition(physicDefinition)) {
-            physicSimulator.addEntityPhysicDefinition(physicDefinition);
+        if (!physicDefinition.bodyCreated) {
+            physicSimulator.createBody(physicDefinition);
         }
     }
 
@@ -162,14 +167,18 @@ public class ScenarioRenderer implements Disposable {
         sharedCamera.update();
         sharedBatch.setProjectionMatrix(sharedCamera.combined);
 
-        worldRender.render(delta);
-        if (mapRender != null) {
+        if (rendererManager.DoRenderMap & mapRender != null) {
             mapRender.updateCamera(sharedCamera);
             mapRender.render(delta);
         }
-        spriteRender.render(delta);
-        stageRender.render(delta);
-        textureRender.render(delta);
+        if (rendererManager.DoRenderSprite)
+            spriteRender.render(delta);
+        if (rendererManager.DoRenderTexture)
+            textureRender.render(delta);
+        if (rendererManager.DoRenderStage)
+            stageRender.render(delta);
+        if (rendererManager.DoRenderWorld)
+            worldRender.render(delta);
     }
 
     @Override

@@ -20,6 +20,9 @@ public class ScenarioEngine implements Disposable {
 
     public ScenarioEngine() {
         Root = new Scenario(new ScenarioScope(ScopeType.Game));
+        screenScenario = new Scenario(new ScenarioScope(ScopeType.FullScreen));
+        Root.addKid(screenScenario);
+
         eventDispatcher = new EventDispatcher(Root);
         inputEventTransfer = new InputEventTransfer(eventDispatcher);
         collisionEventTransfer = new CollisionEventTransfer(eventDispatcher);
@@ -28,13 +31,9 @@ public class ScenarioEngine implements Disposable {
         physicSimulator = new PhysicSimulator();
         physicSimulator.setContactListener(collisionEventTransfer);
         scenarioRenderer = new ScenarioRenderer(physicSimulator);
+        eventDispatcher.addInternalEventProcessor(scenarioRenderer.getCameraProcessor());
+        eventDispatcher.addInternalEventProcessor(scenarioRenderer.getRenderProcessor());
         scenarioAnalyser = new ScenarioAnalyser(scenarioRenderer, physicSimulator);
-    }
-
-    public void setRootScenario(Scenario scenario) {
-        Root = scenario;
-        screenScenario = new Scenario(new ScenarioScope(ScopeType.FullScreen));
-        Root.addKid(screenScenario);
     }
 
     public Scenario getRootScenario() {
@@ -43,10 +42,6 @@ public class ScenarioEngine implements Disposable {
 
     public Scenario getScreenScenario() {
         return screenScenario;
-    }
-
-    public boolean HasRootScenario() {
-        return Root != null;
     }
 
     @Override

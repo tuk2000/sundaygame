@@ -16,11 +16,11 @@ public class EnemyView extends RoleAbstractView {
         screenViewLayer.setViewComponent(sawAnimation.getKeyFrame());
         FixtureDef fixtureDef = new FixtureDef();
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(.5f, .5f);
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+        bodyDef.position.set(32f, 32f);
 
         Shape circle = new CircleShape();
-        circle.setRadius(.5f);
+        circle.setRadius(10.0f);
 
         fixtureDef.shape = circle;
         fixtureDef.friction = .75f;
@@ -34,5 +34,6 @@ public class EnemyView extends RoleAbstractView {
     @Override
     public void synchronizeWithRoleModel(AbstractModel abstractModel) {
         screenViewLayer.setViewComponent(sawAnimation.getKeyFrame());
+        abstractModel.physicDefinition = physicViewLayer.getViewComponent();
     }
 }

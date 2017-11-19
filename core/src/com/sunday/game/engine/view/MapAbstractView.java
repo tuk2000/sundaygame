@@ -25,6 +25,6 @@ public class MapAbstractView extends AbstractView {
 
     @Override
     public void synchronizeWithRoleModel(AbstractModel abstractModel) {
-
+        abstractModel.physicDefinition = physicViewLayer.getViewComponent();
     }
 }
