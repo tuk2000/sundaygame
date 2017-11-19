@@ -4,7 +4,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Shape;
-import com.sunday.game.engine.common.EntityPhysicDefinition;
+import com.sunday.game.engine.common.PhysicDefinition;
 import com.sunday.game.engine.model.AbstractModel;
 import com.sunday.game.engine.view.RoleAbstractView;
 
@@ -27,8 +27,8 @@ public class EnemyView extends RoleAbstractView {
         fixtureDef.restitution = .1f;
         fixtureDef.density = 15f;
 
-        EntityPhysicDefinition entityPhysicDefinition = new EntityPhysicDefinition(fixtureDef, bodyDef, circle);
-        physicViewLayer.setViewComponent(entityPhysicDefinition);
+        PhysicDefinition physicDefinition = new PhysicDefinition(fixtureDef, bodyDef);
+        physicViewLayer.setViewComponent(physicDefinition);
     }
 
     @Override

@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.sunday.game.engine.common.enums.Action;
 import com.sunday.game.engine.common.enums.Direction;
 
-public class RoleMovementStatus {
+public class MovementState {
     public Direction direction = Direction.Right;
     public Action action = Action.StandStill;
     public Vector2 speed = new Vector2(0, 0);

@@ -2,8 +2,10 @@ package com.sunday.game.engine.scenario;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Disposable;
+import com.sunday.game.engine.scenario.eventpocess.CollisionEventTransfer;
 import com.sunday.game.engine.scenario.eventpocess.EventDispatcher;
 import com.sunday.game.engine.scenario.eventpocess.InputEventTransfer;
+import com.sunday.game.engine.scenario.physicprocess.PhysicSimulator;
 import com.sunday.game.engine.scenario.render.ScenarioRenderer;
 
 public class ScenarioEngine implements Disposable {
@@ -11,13 +13,22 @@ public class ScenarioEngine implements Disposable {
     private Scenario screenScenario;
     private EventDispatcher eventDispatcher;
     private InputEventTransfer inputEventTransfer;
+    private CollisionEventTransfer collisionEventTransfer;
     private ScenarioRenderer scenarioRenderer;
+    private PhysicSimulator physicSimulator;
+    private ScenarioAnalyser scenarioAnalyser;
 
     public ScenarioEngine() {
-        eventDispatcher = new EventDispatcher(this);
+        Root = new Scenario(new ScenarioScope(ScopeType.Game));
+        eventDispatcher = new EventDispatcher(Root);
         inputEventTransfer = new InputEventTransfer(eventDispatcher);
+        collisionEventTransfer = new CollisionEventTransfer(eventDispatcher);
         Gdx.input.setInputProcessor(inputEventTransfer);
-        scenarioRenderer = new ScenarioRenderer(this);
+
+        physicSimulator = new PhysicSimulator();
+        physicSimulator.setContactListener(collisionEventTransfer);
+        scenarioRenderer = new ScenarioRenderer(physicSimulator);
+        scenarioAnalyser = new ScenarioAnalyser(scenarioRenderer, physicSimulator);
     }
 
     public void setRootScenario(Scenario scenario) {
@@ -44,10 +55,13 @@ public class ScenarioEngine implements Disposable {
         screenScenario.dispose();
         eventDispatcher.dispose();
         scenarioRenderer.dispose();
+        physicSimulator.dispose();
     }
 
     public void render(float delta) {
         eventDispatcher.dispatchEventQueue();
+        scenarioAnalyser.analyse(Root);
+        physicSimulator.worldStep();
         scenarioRenderer.render(delta);
     }
 

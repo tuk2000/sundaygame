@@ -1,6 +1,7 @@
-package com.sunday.game.engine.common;
+package com.sunday.game.engine.examples;
 
 import com.badlogic.gdx.utils.Disposable;
+import com.sunday.game.engine.common.enums.Label;
 import com.sunday.game.engine.control.AbstractController;
 import com.sunday.game.engine.examples.enemy.EnemyController;
 import com.sunday.game.engine.examples.enemy.EnemyModel;
@@ -19,11 +20,11 @@ public class RoleConstructor implements Disposable {
     public RoleConstructor() {
     }
 
-    public Role construct(RoleLabel roleLabel) {
+    public Role construct(Label label) {
         AbstractController abstractController = null;
         AbstractModel abstractModel = null;
         AbstractView abstractView = null;
-        switch (roleLabel) {
+        switch (label) {
             case Hero:
                 abstractController = new HeroController();
                 abstractModel = new HeroModel();
@@ -44,7 +45,7 @@ public class RoleConstructor implements Disposable {
             abstractController.useView(abstractView);
             abstractView.synchronizeWithRoleModel(abstractModel);
         }
-        return new Role(roleLabel, abstractController, abstractModel, abstractView);
+        return new Role(label, abstractController, abstractModel, abstractView);
     }
 
     @Override

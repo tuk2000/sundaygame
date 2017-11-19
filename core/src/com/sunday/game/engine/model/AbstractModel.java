@@ -1,26 +1,26 @@
 package com.sunday.game.engine.model;
 
 import com.badlogic.gdx.utils.Disposable;
-import com.sunday.game.engine.common.RoleMovementStatus;
-import com.sunday.game.engine.common.RolePresent;
-import com.sunday.game.engine.common.RoleProperty;
+import com.sunday.game.engine.common.MovementState;
+import com.sunday.game.engine.common.Outlook;
+import com.sunday.game.engine.common.Property;
 import com.sunday.game.engine.control.EventProcessor;
 
 public abstract class AbstractModel implements Disposable {
 
     public boolean isModified = false;
 
-    public RoleProperty property;
+    public Property property;
     public AbstractReaction reaction;
-    public RolePresent rolePresent;
-    public RoleMovementStatus roleMovementStatus;
+    public Outlook outlook;
+    public MovementState movementState;
 
-    protected void setRolePresent(RolePresent rolePresent) {
-        this.rolePresent = rolePresent;
+    protected void setOutlook(Outlook outlook) {
+        this.outlook = outlook;
     }
 
     public AbstractModel() {
-        roleMovementStatus = new RoleMovementStatus();
+        movementState = new MovementState();
     }
 
     public abstract EventProcessor getEventProcessor();

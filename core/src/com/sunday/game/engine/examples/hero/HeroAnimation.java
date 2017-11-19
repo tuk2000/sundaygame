@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.utils.Array;
 import com.sunday.game.engine.common.AnimationSetting;
-import com.sunday.game.engine.common.RoleMovementStatus;
+import com.sunday.game.engine.common.MovementState;
 import com.sunday.game.engine.common.enums.Direction;
 import com.sunday.game.framework.GameFramework;
 
@@ -26,10 +26,10 @@ public class HeroAnimation {
         jumpingAnimation = new Animation(fps, keyFrames, Animation.PlayMode.LOOP_PINGPONG);
     }
 
-    public Texture getKeyFrame(RoleMovementStatus roleMovementStatus) {
+    public Texture getKeyFrame(MovementState movementState) {
         Texture texture = null;
         Animation currentAnimation = null;
-        switch (roleMovementStatus.action) {
+        switch (movementState.action) {
             case Running:
                 currentAnimation = runningAnimation;
                 break;
@@ -45,7 +45,7 @@ public class HeroAnimation {
         }
         if (currentAnimation != null) {
             texture = (Texture) currentAnimation.getKeyFrame(AnimationSetting.DeltaTime);
-            if (roleMovementStatus.direction == Direction.Left) {
+            if (movementState.direction == Direction.Left) {
                 //
             }
         }

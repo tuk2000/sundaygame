@@ -3,35 +3,35 @@ package com.sunday.game.engine.examples.hero;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.sunday.game.engine.common.RoleMovementStatus;
+import com.sunday.game.engine.common.MovementState;
 import com.sunday.game.engine.common.enums.Action;
 import com.sunday.game.engine.common.enums.Direction;
 
 
 public class HeroSprite extends Sprite {
-    private RoleMovementStatus roleMovementStatus;
+    private MovementState movementState;
     private HeroAnimation heroAnimation;
 
     public HeroSprite() {
-        roleMovementStatus = new RoleMovementStatus();
+        movementState = new MovementState();
         heroAnimation = new HeroAnimation();
-        roleMovementStatus.action = Action.Running;
+        movementState.action = Action.Running;
     }
 
     public void jump() {
-        roleMovementStatus.action = Action.Jumping;
+        movementState.action = Action.Jumping;
     }
 
     public void trunaround() {
-        roleMovementStatus.direction = Direction.Left;
+        movementState.direction = Direction.Left;
     }
 
     public Texture getAnimationTexture() {
-        return heroAnimation.getKeyFrame(roleMovementStatus);
+        return heroAnimation.getKeyFrame(movementState);
     }
 
     @Override
     public void draw(Batch batch) {
-        batch.draw(heroAnimation.getKeyFrame(roleMovementStatus), getX(), getY());
+        batch.draw(heroAnimation.getKeyFrame(movementState), getX(), getY());
     }
 }

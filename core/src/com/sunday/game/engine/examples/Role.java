@@ -1,18 +1,19 @@
-package com.sunday.game.engine.common;
+package com.sunday.game.engine.examples;
 
 import com.badlogic.gdx.utils.Disposable;
+import com.sunday.game.engine.common.enums.Label;
 import com.sunday.game.engine.control.AbstractController;
 import com.sunday.game.engine.model.AbstractModel;
 import com.sunday.game.engine.view.AbstractView;
 
 public class Role implements Disposable {
-    public RoleLabel roleLabel;
+    public Label label;
     public AbstractController abstractController;
     public AbstractModel abstractModel;
     public AbstractView abstractView;
 
-    public Role(RoleLabel roleLabel, AbstractController abstractController, AbstractModel abstractModel, AbstractView abstractView) {
-        this.roleLabel = roleLabel;
+    public Role(Label label, AbstractController abstractController, AbstractModel abstractModel, AbstractView abstractView) {
+        this.label = label;
         this.abstractController = abstractController;
         this.abstractModel = abstractModel;
         this.abstractView = abstractView;

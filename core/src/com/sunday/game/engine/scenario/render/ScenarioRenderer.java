@@ -10,11 +10,11 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sunday.game.engine.common.AnimationSetting;
-import com.sunday.game.engine.common.EntityPhysicDefinition;
-import com.sunday.game.engine.common.Role;
-import com.sunday.game.engine.common.RoleLabel;
+import com.sunday.game.engine.common.PhysicDefinition;
+import com.sunday.game.engine.common.enums.Label;
+import com.sunday.game.engine.examples.Role;
 import com.sunday.game.engine.model.AbstractModel;
-import com.sunday.game.engine.scenario.ScenarioEngine;
+import com.sunday.game.engine.scenario.physicprocess.PhysicSimulator;
 import com.sunday.game.engine.scenario.render.independentrenders.*;
 import com.sunday.game.engine.scenario.render.managers.CameraManager;
 import com.sunday.game.engine.scenario.render.managers.ViewportManager;
@@ -23,8 +23,6 @@ import com.sunday.game.engine.view.viewlayers.PhysicViewLayer;
 import com.sunday.game.engine.view.viewlayers.ScreenViewLayer;
 
 public class ScenarioRenderer implements Disposable {
-    private ScenarioEngine scenarioEngine;
-    private float lastRenderDuration = 0.0f;
 
     private MapRenderer mapRender;
     private SpriteRenderer spriteRender;
@@ -58,9 +56,10 @@ public class ScenarioRenderer implements Disposable {
 
     private ViewportManager viewportManager;
     private CameraManager cameraManager;
+    private PhysicSimulator physicSimulator;
 
-    public ScenarioRenderer(ScenarioEngine scenarioEngine) {
-        this.scenarioEngine = scenarioEngine;
+    public ScenarioRenderer(PhysicSimulator physicSimulator) {
+        this.physicSimulator = physicSimulator;
 
         viewportManager = new ViewportManager();
         cameraManager = new CameraManager();
@@ -86,10 +85,11 @@ public class ScenarioRenderer implements Disposable {
         stageRender = new StageRenderer();
         textureRender = new TextureRenderer(sharedBatch);
         worldRender = new WorldRenderer(sharedCamera);
+        worldRender.combineWithWorld(physicSimulator.getWorld());
     }
 
-    private void renderRole(Role role) {
-        switch (role.roleLabel) {
+    public void readyToRenderRole(Role role) {
+        switch (role.label) {
             case Map:
                 renderMap(role);
                 break;
@@ -100,7 +100,7 @@ public class ScenarioRenderer implements Disposable {
     }
 
     private void renderMap(Role role) {
-        if (role.roleLabel != RoleLabel.Map) return;
+        if (role.label != Label.Map) return;
         role.abstractView.getViewLayers().forEach(e -> {
             if (e instanceof MapViewLayer) {
                 renderMapViewLayer((MapViewLayer) e);
@@ -112,7 +112,7 @@ public class ScenarioRenderer implements Disposable {
 
 
     private void renderSingleRole(Role role) {
-        if (role.roleLabel == RoleLabel.Map) return;
+        if (role.label == Label.Map) return;
         role.synchronize();
         role.abstractView.getViewLayers().forEach(e -> {
             if (e instanceof ScreenViewLayer) {
@@ -127,8 +127,8 @@ public class ScenarioRenderer implements Disposable {
         Texture component = (Texture) e.getViewComponent();
         if (component == null) return;
         if (component instanceof Texture) {
-            Vector2 position = model.roleMovementStatus.position;
-            Vector2 dimension = model.rolePresent.dimension;
+            Vector2 position = model.movementState.position;
+            Vector2 dimension = model.outlook.dimension;
             textureRender.renderLater((Texture) component, position.x, position.y, dimension.x, dimension.y);
         }
 //        else if (component instanceof Sprite) {
@@ -137,10 +137,10 @@ public class ScenarioRenderer implements Disposable {
     }
 
     private void renderPhysicViewLayer(PhysicViewLayer e) {
-        EntityPhysicDefinition entityPhysicDefinition = e.getViewComponent();
-        if (entityPhysicDefinition == null) return;
-        if (!worldRender.hasEntityPhysicDefinition(entityPhysicDefinition)) {
-            worldRender.addEntityPhysicDefinition(entityPhysicDefinition);
+        PhysicDefinition physicDefinition = e.getViewComponent();
+        if (physicDefinition == null) return;
+        if (!physicSimulator.hasEntityPhysicDefinition(physicDefinition)) {
+            physicSimulator.addEntityPhysicDefinition(physicDefinition);
         }
     }
 
@@ -156,15 +156,11 @@ public class ScenarioRenderer implements Disposable {
 
     public void render(float delta) {
         AnimationSetting.DeltaTime += delta;
-        lastRenderDuration += delta;
-        worldRender.worldStep();
 
         //sharedCamera.translate(-10.0f * delta, 0);
         //sharedCamera.rotate(10 * delta);
         sharedCamera.update();
         sharedBatch.setProjectionMatrix(sharedCamera.combined);
-
-        scenarioEngine.getRootScenario().getRoles().forEach(this::renderRole);
 
         worldRender.render(delta);
         if (mapRender != null) {

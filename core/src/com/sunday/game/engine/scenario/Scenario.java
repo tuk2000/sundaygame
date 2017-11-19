@@ -2,8 +2,8 @@ package com.sunday.game.engine.scenario;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Disposable;
-import com.sunday.game.engine.common.Role;
 import com.sunday.game.engine.control.events.Event;
+import com.sunday.game.engine.examples.Role;
 
 import java.util.ArrayList;
 
@@ -15,6 +15,7 @@ public class Scenario implements Disposable {
 
     public Scenario(ScenarioScope scenarioScope) {
         this.scenarioScope = scenarioScope;
+        parent = null;
     }
 
     public void addKid(Scenario scenario) {
@@ -25,8 +26,10 @@ public class Scenario implements Disposable {
     }
 
     public void removeKid(Scenario scenario) {
-        if (kids.contains(scenario))
+        if (kids.contains(scenario)) {
+            scenario.parent = null;
             kids.remove(scenario);
+        }
     }
 
     public ArrayList<Scenario> getKids() {

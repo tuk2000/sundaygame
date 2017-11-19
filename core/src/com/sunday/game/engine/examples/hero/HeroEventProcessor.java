@@ -27,7 +27,7 @@ public class HeroEventProcessor implements EventProcessor {
     private void handleInput(InputEvent inputEvent) {
         if (inputEvent.getSource() == InputSource.Keyboard) {
             KeyBoardEvent keyBoardEvent = (KeyBoardEvent) inputEvent;
-            Vector2 position = heroModel.roleMovementStatus.position;
+            Vector2 position = heroModel.movementState.position;
 
             switch ((keyBoardEvent.getCharacter())) {
                 case '1':
@@ -44,23 +44,23 @@ public class HeroEventProcessor implements EventProcessor {
                     break;
                 case 'H':
                 case 'h':
-                    heroModel.roleMovementStatus.action = Action.StandStill;
+                    heroModel.movementState.action = Action.StandStill;
                     break;
                 case 'R':
                 case 'r':
-                    heroModel.roleMovementStatus.action = Action.Running;
+                    heroModel.movementState.action = Action.Running;
                     break;
                 case 'J':
                 case 'j':
-                    heroModel.roleMovementStatus.action = Action.Jumping;
+                    heroModel.movementState.action = Action.Jumping;
                     break;
                 case 'L':
                 case 'l':
-                    heroModel.rolePresent.dimension.add(16, 16);
+                    heroModel.outlook.dimension.add(16, 16);
                     break;
                 case 'S':
                 case 's':
-                    heroModel.rolePresent.dimension.add(-16, -16);
+                    heroModel.outlook.dimension.add(-16, -16);
                     break;
             }
 
@@ -79,19 +79,19 @@ public class HeroEventProcessor implements EventProcessor {
 //                    position.add(0, 10);
 //                    break;
 //                case Input.Keys.H:
-//                    heroModel.roleMovementStatus.action = Action.StandStill;
+//                    heroModel.movementState.action = Action.StandStill;
 //                    break;
 //                case Input.Keys.R:
-//                    heroModel.roleMovementStatus.action = Action.Running;
+//                    heroModel.movementState.action = Action.Running;
 //                    break;
 //                case Input.Keys.J:
-//                    heroModel.roleMovementStatus.action = Action.Jumping;
+//                    heroModel.movementState.action = Action.Jumping;
 //                    break;
 //                case Input.Keys.L:
-//                    heroModel.rolePresent.dimension.add(16, 16);
+//                    heroModel.outlook.dimension.add(16, 16);
 //                    break;
 //                case Input.Keys.S:
-//                    heroModel.rolePresent.dimension.add(-16, -16);
+//                    heroModel.outlook.dimension.add(-16, -16);
 //                    break;
 //            }
         }

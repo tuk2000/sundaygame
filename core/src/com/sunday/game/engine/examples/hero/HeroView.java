@@ -3,7 +3,7 @@ package com.sunday.game.engine.examples.hero;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.sunday.game.engine.common.EntityPhysicDefinition;
+import com.sunday.game.engine.common.PhysicDefinition;
 import com.sunday.game.engine.model.AbstractModel;
 import com.sunday.game.engine.view.RoleAbstractView;
 
@@ -28,12 +28,12 @@ public class HeroView extends RoleAbstractView {
         fixtureDef.restitution = .1f;
         fixtureDef.density = 15f;
 
-        EntityPhysicDefinition entityPhysicDefinition = new EntityPhysicDefinition(fixtureDef, bodyDef, polygonShape);
-        physicViewLayer.setViewComponent(entityPhysicDefinition);
+        PhysicDefinition physicDefinition = new PhysicDefinition(fixtureDef, bodyDef);
+        physicViewLayer.setViewComponent(physicDefinition);
     }
 
     @Override
     public void synchronizeWithRoleModel(AbstractModel abstractModel) {
-        screenViewLayer.setViewComponent(heroAnimation.getKeyFrame(abstractModel.roleMovementStatus));
+        screenViewLayer.setViewComponent(heroAnimation.getKeyFrame(abstractModel.movementState));
     }
 }
