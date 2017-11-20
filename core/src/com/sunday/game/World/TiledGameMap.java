@@ -89,7 +89,7 @@ public class TiledGameMap implements Screen {
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
         box2DDebugRenderer.render(world, camera.combined);
-        world.step(AnimationSetting.FramePerSecond / 2, 2, 2);
+        world.step(1 / 60f, 8, 3);
 
         batch.begin();
         heroSprite.draw(batch);

@@ -13,9 +13,13 @@ public class EventDispatcher implements Disposable {
     private ArrayList<EventProcessor> internalProcessors = new ArrayList<>();
     private Vector<Event> eventQueue = new Vector<>();
     private Scenario rootScenario;
+    private boolean running;
+    private boolean dispatching;
 
     public EventDispatcher(Scenario rootScenario) {
         this.rootScenario = rootScenario;
+        running = true;
+        dispatching = false;
     }
 
     public void addInternalEventProcessor(EventProcessor eventProcessor) {
@@ -27,6 +31,8 @@ public class EventDispatcher implements Disposable {
     }
 
     public void dispatchEventQueue() {
+        if (!running) return;
+        dispatching = true;
         eventQueue.forEach(e -> {
                     Gdx.app.log("EventDispatcher", "Dispatch a Event" + e.toString());
                     internalProcessors.forEach(eventProcessor -> eventProcessor.processEvent(e));
@@ -34,10 +40,12 @@ public class EventDispatcher implements Disposable {
                 }
         );
         eventQueue.clear();
+        dispatching = false;
     }
 
     @Override
     public void dispose() {
-        //
+        running = false;
+        while (dispatching) ;
     }
 }

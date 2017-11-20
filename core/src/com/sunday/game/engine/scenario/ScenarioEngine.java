@@ -18,6 +18,9 @@ public class ScenarioEngine implements Disposable {
     private PhysicSimulator physicSimulator;
     private ScenarioAnalyser scenarioAnalyser;
 
+    private boolean running;
+
+
     public ScenarioEngine() {
         Root = new Scenario(new ScenarioScope(ScopeType.Game));
         screenScenario = new Scenario(new ScenarioScope(ScopeType.FullScreen));
@@ -34,6 +37,8 @@ public class ScenarioEngine implements Disposable {
         eventDispatcher.addInternalEventProcessor(scenarioRenderer.getCameraProcessor());
         eventDispatcher.addInternalEventProcessor(scenarioRenderer.getRenderProcessor());
         scenarioAnalyser = new ScenarioAnalyser(scenarioRenderer, physicSimulator);
+
+        running = true;
     }
 
     public Scenario getRootScenario() {
@@ -46,14 +51,17 @@ public class ScenarioEngine implements Disposable {
 
     @Override
     public void dispose() {
-        Root.dispose();
-        screenScenario.dispose();
+        running=false;
         eventDispatcher.dispose();
         scenarioRenderer.dispose();
         physicSimulator.dispose();
+        scenarioAnalyser.dispose();
+        screenScenario.dispose();
+        Root.dispose();
     }
 
     public void render(float delta) {
+        if (!running) return;
         eventDispatcher.dispatchEventQueue();
         scenarioAnalyser.analyse(Root);
         physicSimulator.worldStep();

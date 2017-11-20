@@ -15,15 +15,15 @@ public class HeroAnimation {
     private Animation jumpingAnimation;
 
     public HeroAnimation() {
-        float fps = AnimationSetting.FramePerSecond;
+        float frameDuration = AnimationSetting.FrameDuration;
         Array<Texture> keyFrames = new Array<>();
         for (int i = 1; i <= 10; i++) {
             keyFrames.add(GameFramework.Resource.getAsset("hero/Hero" + i + ".png"));
         }
-        runningAnimation = new Animation(fps, keyFrames, Animation.PlayMode.LOOP);
-        fightingAnimation = new Animation(fps, keyFrames, Animation.PlayMode.LOOP_RANDOM);
-        standstillAnimation = new Animation(fps, keyFrames, Animation.PlayMode.NORMAL);
-        jumpingAnimation = new Animation(fps, keyFrames, Animation.PlayMode.LOOP_PINGPONG);
+        runningAnimation = new Animation(frameDuration, keyFrames, Animation.PlayMode.LOOP);
+        fightingAnimation = new Animation(frameDuration, keyFrames, Animation.PlayMode.LOOP_RANDOM);
+        standstillAnimation = new Animation(frameDuration, keyFrames, Animation.PlayMode.NORMAL);
+        jumpingAnimation = new Animation(frameDuration, keyFrames, Animation.PlayMode.LOOP_PINGPONG);
     }
 
     public Texture getKeyFrame(MovementState movementState) {

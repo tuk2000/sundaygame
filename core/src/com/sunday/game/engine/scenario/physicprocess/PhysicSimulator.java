@@ -6,10 +6,14 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
 import com.sunday.game.engine.common.PhysicDefinition;
+import com.sunday.game.engine.common.PhysicReflection;
+
+import java.util.ArrayList;
 
 public class PhysicSimulator implements Disposable {
     protected Vector2 defaultGravity = new Vector2(0, -9.8f);
     protected World world;
+    private ArrayList<PhysicDefinition> physicDefinitions;
 
     public World getWorld() {
         return world;
@@ -17,14 +21,18 @@ public class PhysicSimulator implements Disposable {
 
     public PhysicSimulator() {
         world = new World(defaultGravity, false);
+        physicDefinitions = new ArrayList<>();
     }
 
     public void createBodyInWorld(PhysicDefinition physicDefinition) {
-        if (!physicDefinition.bodyCreated) {
+        if (!physicDefinition.hasPhysicReflection()) {
+            PhysicReflection physicReflection = new PhysicReflection();
             Body body = world.createBody(physicDefinition.bodyDef);
-            physicDefinition.body = body;
-            physicDefinition.fixture = body.createFixture(physicDefinition.fixtureDef);
-            physicDefinition.bodyCreated = true;
+            physicReflection.body = body;
+            physicReflection.fixture = body.createFixture(physicDefinition.fixtureDef);
+            physicReflection.bodyCreated = true;
+            physicDefinition.setPhysicReflection(physicReflection);
+            physicDefinitions.add(physicDefinition);
         }
     }
 
@@ -44,6 +52,7 @@ public class PhysicSimulator implements Disposable {
 
     @Override
     public void dispose() {
+        physicDefinitions.forEach(PhysicDefinition::clearPhysicReflection);
         world.dispose();
     }
 }

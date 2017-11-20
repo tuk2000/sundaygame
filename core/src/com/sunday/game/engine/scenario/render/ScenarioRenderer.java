@@ -50,8 +50,9 @@ public class ScenarioRenderer implements Disposable {
     public void resizeDisplay(int displayWidth, int displayHeight) {
         this.displayWidth = displayHeight;
         this.displayHeight = displayHeight;
+        cameraManager.recordCameraState();
         screenViewport.update(displayWidth, displayHeight);
-        sharedCamera.position.set(worldWidth / 2, worldHeight / 2, 0);
+        cameraManager.recoverCameraState();
     }
 
     public EventProcessor getCameraProcessor() {
@@ -144,7 +145,7 @@ public class ScenarioRenderer implements Disposable {
     private void renderPhysicViewLayer(PhysicViewLayer e) {
         PhysicDefinition physicDefinition = e.getViewComponent();
         if (physicDefinition == null) return;
-        if (!physicDefinition.bodyCreated) {
+        if (!physicDefinition.hasPhysicReflection()) {
             physicSimulator.createBody(physicDefinition);
         }
     }
