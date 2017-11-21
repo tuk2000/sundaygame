@@ -53,10 +53,12 @@ public class HeroEventProcessor implements EventProcessor {
                 case 'L':
                 case 'l':
                     heroModel.outlook.dimension.add(16, 16);
+                    heroModel.outlook.sizeChanged = true;
                     break;
                 case 'S':
                 case 's':
                     heroModel.outlook.dimension.add(-16, -16);
+                    heroModel.outlook.sizeChanged = true;
                     break;
             }
 
@@ -73,13 +75,15 @@ public class HeroEventProcessor implements EventProcessor {
                 case 'R':
                 case 'r':
                     heroModel.movementState.action = Action.Running;
-                    body.applyLinearImpulse(10, 0, worldCenter.x, worldCenter.y, true);
+                    body.applyLinearImpulse(100, 0, worldCenter.x, worldCenter.y, true);
                     break;
                 case 'J':
                 case 'j':
                     heroModel.movementState.action = Action.Jumping;
-                    body.applyLinearImpulse(0, 10, worldCenter.x, worldCenter.y, true);
+                    body.applyLinearImpulse(0, 100, worldCenter.x, worldCenter.y, true);
                     break;
+                default:
+                    body.setLinearVelocity(0, 0);
             }
         }
     }

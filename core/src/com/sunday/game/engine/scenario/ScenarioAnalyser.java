@@ -14,7 +14,10 @@ public class ScenarioAnalyser implements Disposable {
     }
 
     public void analyse(Scenario scenario) {
-        scenario.getRoles().forEach(scenarioRenderer::readyToRenderRole);
+        scenario.getRoles().forEach(e -> {
+            e.synchronize();
+            scenarioRenderer.readyToRenderRole(e);
+        });
     }
 
     @Override

@@ -26,12 +26,7 @@ public class PhysicSimulator implements Disposable {
 
     public void createBodyInWorld(PhysicDefinition physicDefinition) {
         if (!physicDefinition.hasPhysicReflection()) {
-            PhysicReflection physicReflection = new PhysicReflection();
-            Body body = world.createBody(physicDefinition.bodyDef);
-            physicReflection.body = body;
-            physicReflection.fixture = body.createFixture(physicDefinition.fixtureDef);
-            physicReflection.bodyCreated = true;
-            physicDefinition.setPhysicReflection(physicReflection);
+            physicDefinition.generatePhysicReflection(world);
             physicDefinitions.add(physicDefinition);
         }
     }

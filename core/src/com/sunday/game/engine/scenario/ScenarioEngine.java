@@ -51,7 +51,7 @@ public class ScenarioEngine implements Disposable {
 
     @Override
     public void dispose() {
-        running=false;
+        running = false;
         eventDispatcher.dispose();
         scenarioRenderer.dispose();
         physicSimulator.dispose();

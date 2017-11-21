@@ -122,7 +122,6 @@ public class ScenarioRenderer implements Disposable {
 
     private void renderSingleRole(Role role) {
         if (role.label == Label.Map) return;
-        role.synchronize();
         role.abstractView.getViewLayers().forEach(e -> {
             if (e instanceof ScreenViewLayer) {
                 renderScreenViewLayer((ScreenViewLayer) e, role.abstractModel);

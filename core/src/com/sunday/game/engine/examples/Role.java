@@ -27,6 +27,6 @@ public class Role implements Disposable {
     }
 
     public void synchronize() {
-        abstractView.synchronizeWithRoleModel(abstractModel);
+        abstractController.synchronize();
     }
 }

@@ -35,6 +35,10 @@ public abstract class AbstractController implements Disposable {
             if (eventProcessor != null)
                 eventProcessor.processEvent(event);
         }
+    }
 
+    public void synchronize() {
+        abstractModel.synchronizeTextureWithPhysic();
+        abstractView.synchronizeWithRoleModel(abstractModel);
     }
 }

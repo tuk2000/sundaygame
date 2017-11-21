@@ -1,8 +1,6 @@
 package com.sunday.game.engine.control.events;
 
 
-import com.sunday.game.engine.control.events.EventType;
-
 public class Event {
     private Object source;
     private EventType eventType;
