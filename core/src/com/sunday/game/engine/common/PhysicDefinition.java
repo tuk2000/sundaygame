@@ -1,6 +1,5 @@
 package com.sunday.game.engine.common;
 
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.World;
@@ -15,22 +14,21 @@ public class PhysicDefinition implements Disposable {
     public PhysicDefinition(FixtureDef fixtureDef, BodyDef bodyDef) {
         this.fixtureDef = fixtureDef;
         this.bodyDef = bodyDef;
+        physicReflection = new PhysicReflection();
     }
 
     public boolean hasPhysicReflection() {
-        return physicReflection == null ? false : physicReflection.bodyCreated;
+        return physicReflection.bodyCreated;
+    }
+
+    public void reGeneratePhysicReflection() {
+        if (hasPhysicReflection()) {
+            generatePhysicReflection(physicReflection.world);
+        }
     }
 
     public void generatePhysicReflection(World world) {
-        if (hasPhysicReflection()) {
-            world.destroyBody(physicReflection.body);
-            clearPhysicReflection();
-        }
-        Body body = world.createBody(bodyDef);
-        physicReflection = new PhysicReflection();
-        physicReflection.bodyCreated = true;
-        physicReflection.body = world.createBody(bodyDef);
-        physicReflection.fixture = body.createFixture(fixtureDef);
+        physicReflection.configure(world, bodyDef, fixtureDef);
     }
 
     public PhysicReflection getPhysicReflection() {
@@ -38,13 +36,12 @@ public class PhysicDefinition implements Disposable {
     }
 
     public void clearPhysicReflection() {
-        physicReflection.bodyCreated = false;
-        physicReflection.body = null;
-        physicReflection.fixture = null;
+        physicReflection.clear();
     }
 
     @Override
     public void dispose() {
 
     }
+
 }

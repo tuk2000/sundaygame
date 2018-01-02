@@ -2,6 +2,7 @@ package com.sunday.game.engine.scenario;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Disposable;
+import com.sunday.game.engine.control.events.WindowResizedEvent;
 import com.sunday.game.engine.scenario.eventpocess.CollisionEventTransfer;
 import com.sunday.game.engine.scenario.eventpocess.EventDispatcher;
 import com.sunday.game.engine.scenario.eventpocess.InputEventTransfer;
@@ -34,8 +35,7 @@ public class ScenarioEngine implements Disposable {
         physicSimulator = new PhysicSimulator();
         physicSimulator.setContactListener(collisionEventTransfer);
         scenarioRenderer = new ScenarioRenderer(physicSimulator);
-        eventDispatcher.addInternalEventProcessor(scenarioRenderer.getCameraProcessor());
-        eventDispatcher.addInternalEventProcessor(scenarioRenderer.getRenderProcessor());
+        eventDispatcher.addInternalEventProcessors(scenarioRenderer.getProcessors());
         scenarioAnalyser = new ScenarioAnalyser(scenarioRenderer, physicSimulator);
 
         running = true;
@@ -69,6 +69,6 @@ public class ScenarioEngine implements Disposable {
     }
 
     public void resize(int width, int height) {
-        scenarioRenderer.resizeDisplay(width, height);
+        eventDispatcher.dispatchEvent(new WindowResizedEvent(width, height));
     }
 }

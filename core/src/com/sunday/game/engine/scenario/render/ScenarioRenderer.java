@@ -18,10 +18,14 @@ import com.sunday.game.engine.model.AbstractModel;
 import com.sunday.game.engine.scenario.physicprocess.PhysicSimulator;
 import com.sunday.game.engine.scenario.render.independentrenders.*;
 import com.sunday.game.engine.scenario.render.managers.CameraManager;
+import com.sunday.game.engine.scenario.render.managers.DisplayManager;
 import com.sunday.game.engine.scenario.render.managers.RendererManager;
 import com.sunday.game.engine.view.viewlayers.MapViewLayer;
 import com.sunday.game.engine.view.viewlayers.PhysicViewLayer;
 import com.sunday.game.engine.view.viewlayers.ScreenViewLayer;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ScenarioRenderer implements Disposable {
 
@@ -37,35 +41,24 @@ public class ScenarioRenderer implements Disposable {
     private Viewport screenViewport;
     private Batch sharedBatch;
 
-    private float aspectRatio;//height/width
-    private int displayWidth; // pixels
-    private int displayHeight; // pixels
-
     private float viewportWidth; //units
     private float viewportHeight; //units
 
     private float worldWidth;//units
     private float worldHeight;//units
 
-    public void resizeDisplay(int displayWidth, int displayHeight) {
-        this.displayWidth = displayHeight;
-        this.displayHeight = displayHeight;
-        cameraManager.recordCameraState();
-        screenViewport.update(displayWidth, displayHeight);
-        cameraManager.recoverCameraState();
-    }
-
-    public EventProcessor getCameraProcessor() {
-        return cameraManager;
-    }
-
-    public EventProcessor getRenderProcessor() {
-        return rendererManager;
-    }
-
     private RendererManager rendererManager;
     private CameraManager cameraManager;
+    private DisplayManager displayManager;
     private PhysicSimulator physicSimulator;
+
+    public List<EventProcessor> getProcessors() {
+        List<EventProcessor> eventProcessors = new ArrayList<>();
+        eventProcessors.add(cameraManager);
+        eventProcessors.add(rendererManager);
+        eventProcessors.add(displayManager);
+        return eventProcessors;
+    }
 
     public ScenarioRenderer(PhysicSimulator physicSimulator) {
         this.physicSimulator = physicSimulator;
@@ -86,6 +79,8 @@ public class ScenarioRenderer implements Disposable {
         //sharedCamera = new OrthographicCamera();
         screenViewport = new FitViewport(worldWidth, worldHeight, sharedCamera);
         screenViewport.apply();
+        displayManager = new DisplayManager(cameraManager, screenViewport);
+
         sharedCamera.position.set(worldWidth / 2, worldHeight / 2, 0);
         sharedCamera.update();
         //screenViewport = new ScreenViewport(sharedCamera);

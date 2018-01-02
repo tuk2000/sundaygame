@@ -1,34 +1,35 @@
 package com.sunday.game.engine.scenario.eventpocess;
 
 import com.badlogic.gdx.InputProcessor;
+import com.sunday.game.engine.control.EventPoster;
 import com.sunday.game.engine.control.events.KeyBoardEvent;
 
 public class InputEventTransfer implements InputProcessor {
 
-    private EventDispatcher eventDispatcher;
+    private EventPoster eventPoster;
 
-    public InputEventTransfer(EventDispatcher eventDispatcher) {
-        this.eventDispatcher = eventDispatcher;
+    public InputEventTransfer(EventPoster eventPoster) {
+        this.eventPoster = eventPoster;
     }
 
     @Override
     public boolean keyDown(int keycode) {
         KeyBoardEvent keyBoardEvent = new KeyBoardEvent(KeyBoardEvent.Operation.KeyDown, keycode);
-        eventDispatcher.dispatchEvent(keyBoardEvent);
+        eventPoster.dispatchEvent(keyBoardEvent);
         return true;
     }
 
     @Override
     public boolean keyUp(int keycode) {
         KeyBoardEvent keyBoardEvent = new KeyBoardEvent(KeyBoardEvent.Operation.KeyUp, keycode);
-        eventDispatcher.dispatchEvent(keyBoardEvent);
+        eventPoster.dispatchEvent(keyBoardEvent);
         return true;
     }
 
     @Override
     public boolean keyTyped(char character) {
         KeyBoardEvent keyBoardEvent = new KeyBoardEvent(character);
-        eventDispatcher.dispatchEvent(keyBoardEvent);
+        eventPoster.dispatchEvent(keyBoardEvent);
         return true;
     }
 

@@ -20,6 +20,6 @@ public class MouseEvent extends InputEvent {
 
     @Override
     public String toString() {
-        return getEventType().name() + " " + getSource().toString() + " " + screenX + " " + screenY;
+        return getEventType().name() + " from " + getSource().toString() + " [" + screenX + "," + screenY + "]";
     }
 }

@@ -31,7 +31,7 @@ public abstract class AbstractController implements Disposable {
 
     public void notifyGameEvent(Event event) {
         if (acceptedEventTypes.contains(event.getEventType())) {
-            Gdx.app.log("AbstractController", "Receive a Event" + event.toString());
+            Gdx.app.log("AbstractController", "Receive a Event : " + event.toString());
             if (eventProcessor != null)
                 eventProcessor.processEvent(event);
         }

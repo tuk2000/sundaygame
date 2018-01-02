@@ -71,19 +71,19 @@ public final class GameFlowManager {
      */
     public final synchronized void setGameStatus(final GameStatus gameStatus) {
         /*
-        *this should be executed asynchronous ,otherwise it may dispose the original caller (such as InGame)  and
-        * lead to program crash
-        */
+         *this should be executed asynchronous ,otherwise it may dispose the original caller (such as InGame)  and
+         * lead to program crash
+         */
         Gdx.app.postRunnable(() -> {
             executeGameStatus(gameStatus);
         });
     }
 
     public final synchronized void backToPreviewStatus() {
-          /*
-        *this should be executed asynchronous ,otherwise it may dispose the original caller (such as InGame)  and
-        * lead to program crash
-        */
+        /*
+         *this should be executed asynchronous ,otherwise it may dispose the original caller (such as InGame)  and
+         * lead to program crash
+         */
         Gdx.app.postRunnable(() -> {
             shiftBackPreviewScreen();
         });

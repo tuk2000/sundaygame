@@ -44,7 +44,7 @@ public class KeyBoardEvent extends InputEvent {
 
     @Override
     public String toString() {
-        return getEventType().name() + " " + getSource().toString() + " " + getOperation().name() + " " + getCharacter() + " " + getKey();
+        return getEventType().name() + " from " + getSource().toString() + " " + getOperation().name() + " char : " + getCharacter() + " key : " + getKey();
     }
 
 }

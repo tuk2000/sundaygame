@@ -2,14 +2,16 @@ package com.sunday.game.engine.scenario.eventpocess;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Disposable;
+import com.sunday.game.engine.control.EventPoster;
 import com.sunday.game.engine.control.EventProcessor;
 import com.sunday.game.engine.control.events.Event;
 import com.sunday.game.engine.scenario.Scenario;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
-public class EventDispatcher implements Disposable {
+public class EventDispatcher implements Disposable, EventPoster {
     private ArrayList<EventProcessor> internalProcessors = new ArrayList<>();
     private Vector<Event> eventQueue = new Vector<>();
     private Scenario rootScenario;
@@ -22,10 +24,15 @@ public class EventDispatcher implements Disposable {
         dispatching = false;
     }
 
+    public void addInternalEventProcessors(List<EventProcessor> eventProcessors) {
+        internalProcessors.addAll(eventProcessors);
+    }
+
     public void addInternalEventProcessor(EventProcessor eventProcessor) {
         internalProcessors.add(eventProcessor);
     }
 
+    @Override
     public void dispatchEvent(Event event) {
         eventQueue.add(event);
     }
@@ -34,7 +41,7 @@ public class EventDispatcher implements Disposable {
         if (!running) return;
         dispatching = true;
         eventQueue.forEach(e -> {
-                    Gdx.app.log("EventDispatcher", "Dispatch a Event" + e.toString());
+                    Gdx.app.log("EventDispatcher", "Dispatch a Event : " + e.toString());
                     internalProcessors.forEach(eventProcessor -> eventProcessor.processEvent(e));
                     rootScenario.notifyAllRoles(e);
                 }

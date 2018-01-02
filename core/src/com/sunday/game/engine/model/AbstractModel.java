@@ -1,9 +1,7 @@
 package com.sunday.game.engine.model;
 
-import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
 import com.sunday.game.engine.common.MovementState;
 import com.sunday.game.engine.common.Outlook;
@@ -42,12 +40,7 @@ public abstract class AbstractModel implements Disposable {
     private void reConstructBody() {
         if (!physicDefinition.hasPhysicReflection()) return;
 
-        Body oldBody = physicDefinition.getPhysicReflection().body;
-
-        World world = oldBody.getWorld();
-
         physicDefinition.bodyDef.position.set(movementState.position);
-
 
         switch (physicDefinition.fixtureDef.shape.getType()) {
             case Chain:
@@ -61,7 +54,7 @@ public abstract class AbstractModel implements Disposable {
             case Edge:
                 break;
         }
-        physicDefinition.generatePhysicReflection(world);
+        physicDefinition.reGeneratePhysicReflection();
     }
 
 }

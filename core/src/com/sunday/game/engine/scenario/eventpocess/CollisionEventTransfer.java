@@ -4,13 +4,14 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.sunday.game.engine.control.EventPoster;
 import com.sunday.game.engine.control.events.CollisionEvent;
 
 public class CollisionEventTransfer implements ContactListener {
-    private EventDispatcher eventDispatcher;
+    private EventPoster eventPoster;
 
-    public CollisionEventTransfer(EventDispatcher eventDispatcher) {
-        this.eventDispatcher = eventDispatcher;
+    public CollisionEventTransfer(EventPoster eventPoster) {
+        this.eventPoster = eventPoster;
     }
 
     @Override
@@ -18,7 +19,7 @@ public class CollisionEventTransfer implements ContactListener {
         if (contact.getFixtureA().getUserData() != null & contact.getFixtureA().getUserData() != null) {
             CollisionEvent collisionEvent =
                     new CollisionEvent(this, contact.getFixtureA().getUserData(), contact.getFixtureB().getUserData());
-            eventDispatcher.dispatchEvent(collisionEvent);
+            eventPoster.dispatchEvent(collisionEvent);
         }
     }
 
