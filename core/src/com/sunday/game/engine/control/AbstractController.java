@@ -38,7 +38,6 @@ public abstract class AbstractController implements Disposable {
     }
 
     public void synchronize() {
-        abstractModel.synchronizeTextureWithPhysic();
         abstractView.synchronizeWithRoleModel(abstractModel);
     }
 }

@@ -13,7 +13,7 @@ public class HeroView extends RoleAbstractView {
 
     @Override
     public void synchronizeWithRoleModel(AbstractModel abstractModel) {
-        physicViewLayer.setViewComponent(abstractModel.physicDefinition);
+        physicViewLayer.setViewComponent(abstractModel.physicReflection);
         screenViewLayer.setViewComponent(heroAnimation.getKeyFrame(abstractModel.movementState));
     }
 }

@@ -58,14 +58,17 @@ public class HeroEventProcessor implements EventProcessor {
                 case 'S':
                 case 's':
                     heroModel.outlook.dimension.add(-16, -16);
+                    if(heroModel.outlook.dimension.x<16||heroModel.outlook.dimension.y<32){
+                        heroModel.outlook.dimension.set(16,32);
+                    }
                     heroModel.outlook.sizeChanged = true;
                     break;
             }
 
             Body body;
             Vector2 worldCenter;
-            if (heroModel.physicDefinition.hasPhysicReflection()) {
-                body = heroModel.physicDefinition.getPhysicReflection().body;
+            if (heroModel.physicReflection.bodyCreated) {
+                body = heroModel.physicReflection.body;
                 worldCenter = body.getWorldCenter();
             } else {
                 return;
@@ -75,12 +78,12 @@ public class HeroEventProcessor implements EventProcessor {
                 case 'R':
                 case 'r':
                     heroModel.movementState.action = Action.Running;
-                    body.applyLinearImpulse(100, 0, worldCenter.x, worldCenter.y, true);
+                    body.applyLinearImpulse(1000, 0, worldCenter.x, worldCenter.y, true);
                     break;
                 case 'J':
                 case 'j':
                     heroModel.movementState.action = Action.Jumping;
-                    body.applyLinearImpulse(0, 100, worldCenter.x, worldCenter.y, true);
+                    body.applyLinearImpulse(0, 1000, worldCenter.x, worldCenter.y, true);
                     break;
                 default:
                     body.setLinearVelocity(0, 0);

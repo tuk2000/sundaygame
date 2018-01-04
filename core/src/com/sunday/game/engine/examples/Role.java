@@ -25,8 +25,4 @@ public class Role implements Disposable {
         abstractModel.dispose();
         abstractView.dispose();
     }
-
-    public void synchronize() {
-        abstractController.synchronize();
-    }
 }

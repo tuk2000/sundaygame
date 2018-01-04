@@ -10,7 +10,6 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sunday.game.engine.common.AnimationSetting;
-import com.sunday.game.engine.common.PhysicDefinition;
 import com.sunday.game.engine.common.enums.Label;
 import com.sunday.game.engine.control.EventProcessor;
 import com.sunday.game.engine.examples.Role;
@@ -137,11 +136,11 @@ public class ScenarioRenderer implements Disposable {
     }
 
     private void renderPhysicViewLayer(PhysicViewLayer e) {
-        PhysicDefinition physicDefinition = e.getViewComponent();
-        if (physicDefinition == null) return;
-        if (!physicDefinition.hasPhysicReflection()) {
-            physicSimulator.createBody(physicDefinition);
-        }
+//        PhysicDefinition physicDefinition = e.getViewComponent();
+//        if (physicDefinition == null) return;
+//        if (!physicDefinition.hasPhysicReflection()) {
+//            physicSimulator.createBody(physicDefinition);
+//        }
     }
 
     private void renderMapViewLayer(MapViewLayer e) {

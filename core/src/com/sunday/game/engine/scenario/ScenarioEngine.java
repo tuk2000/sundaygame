@@ -3,6 +3,8 @@ package com.sunday.game.engine.scenario;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Disposable;
 import com.sunday.game.engine.control.events.WindowResizedEvent;
+import com.sunday.game.engine.databank.DataStorage;
+import com.sunday.game.engine.databank.DataStorageImpl;
 import com.sunday.game.engine.scenario.eventpocess.CollisionEventTransfer;
 import com.sunday.game.engine.scenario.eventpocess.EventDispatcher;
 import com.sunday.game.engine.scenario.eventpocess.InputEventTransfer;
@@ -18,13 +20,15 @@ public class ScenarioEngine implements Disposable {
     private ScenarioRenderer scenarioRenderer;
     private PhysicSimulator physicSimulator;
     private ScenarioAnalyser scenarioAnalyser;
+    private DataStorage dataStorageImpl;
 
     private boolean running;
 
 
     public ScenarioEngine() {
-        Root = new Scenario(new ScenarioScope(ScopeType.Game));
-        screenScenario = new Scenario(new ScenarioScope(ScopeType.FullScreen));
+        dataStorageImpl =new DataStorageImpl();
+        Root = new Scenario(ScopeType.Game);
+        screenScenario = new Scenario(ScopeType.FullScreen);
         Root.addKid(screenScenario);
 
         eventDispatcher = new EventDispatcher(Root);

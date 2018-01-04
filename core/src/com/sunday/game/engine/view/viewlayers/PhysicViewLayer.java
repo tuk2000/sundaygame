@@ -1,12 +1,12 @@
 package com.sunday.game.engine.view.viewlayers;
 
-import com.sunday.game.engine.common.PhysicDefinition;
+import com.sunday.game.engine.common.PhysicReflection;
 
-public class PhysicViewLayer extends SingleComponentLayer<PhysicDefinition> {
+public class PhysicViewLayer extends SingleComponentLayer<PhysicReflection> {
 
     @Override
     public Class getComponentClass() {
-        return PhysicDefinition.class;
+        return PhysicReflection.class;
     }
 
 }

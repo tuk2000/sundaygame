@@ -4,14 +4,43 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
-import com.sunday.game.engine.common.PhysicDefinition;
+import com.sunday.game.engine.common.PhysicReflection;
+import com.sunday.game.engine.databank.DataEventListener;
+import com.sunday.game.engine.databank.DataUserPort;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class PhysicSimulator implements Disposable {
     protected Vector2 defaultGravity = new Vector2(0, -9.8f);
     protected World world;
-    private ArrayList<PhysicDefinition> physicDefinitions;
+    private List<PhysicReflection> physicReflections;
+
+    private DataEventListener<PhysicReflection> dataEventListener = new DataEventListener<PhysicReflection>() {
+        @Override
+        public void DataModified(List<PhysicReflection> list) {
+            list.forEach(physicReflection -> {
+                world.destroyBody(physicReflection.body);
+                physicReflection.body = world.createBody(physicReflection.bodyDef);
+            });
+        }
+
+        @Override
+        public void DataDeleted(List<PhysicReflection> list) {
+            list.forEach(physicReflection -> {
+                physicReflection.bodyCreated = false;
+                world.destroyBody(physicReflection.body);
+            });
+        }
+
+        @Override
+        public void DataAdded(List<PhysicReflection> list) {
+            list.forEach(physicReflection -> {
+                physicReflection.bodyCreated = true;
+                physicReflection.body = world.createBody(physicReflection.bodyDef);
+            });
+        }
+    };
 
     public World getWorld() {
         return world;
@@ -19,20 +48,12 @@ public class PhysicSimulator implements Disposable {
 
     public PhysicSimulator() {
         world = new World(defaultGravity, false);
-        physicDefinitions = new ArrayList<>();
+        physicReflections = new ArrayList<>();
     }
 
-    public void createBodyInWorld(PhysicDefinition physicDefinition) {
-        if (!physicDefinition.hasPhysicReflection()) {
-            physicDefinition.generatePhysicReflection(world);
-            physicDefinitions.add(physicDefinition);
-        }
-    }
-
-    public void createBody(PhysicDefinition... physicDefinitions) {
-        for (PhysicDefinition physicDefinition : physicDefinitions) {
-            createBodyInWorld(physicDefinition);
-        }
+    public void readFromDataBank(DataUserPort<PhysicReflection> dataUserPort) {
+        physicReflections = dataUserPort.getInstances(PhysicReflection.class);
+        dataUserPort.registerDataEventListener(PhysicReflection.class, dataEventListener);
     }
 
     public void setContactListener(ContactListener contactListener) {
@@ -45,7 +66,6 @@ public class PhysicSimulator implements Disposable {
 
     @Override
     public void dispose() {
-        physicDefinitions.forEach(PhysicDefinition::clearPhysicReflection);
         world.dispose();
     }
 }

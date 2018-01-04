@@ -25,7 +25,7 @@ public class MapAbstractView extends AbstractView {
 
     @Override
     public void synchronizeWithRoleModel(AbstractModel abstractModel) {
-        physicViewLayer.setViewComponent(abstractModel.physicDefinition);
+        physicViewLayer.setViewComponent(abstractModel.physicReflection);
         mapViewLayer.setViewComponent(map);
     }
 }

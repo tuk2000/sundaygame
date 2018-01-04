@@ -1,5 +1,4 @@
 package com.sunday.game.engine.common;
 
-public class Property {
-
+public interface Data {
 }

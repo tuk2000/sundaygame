@@ -8,13 +8,13 @@ import com.sunday.game.engine.examples.Role;
 import java.util.ArrayList;
 
 public class Scenario implements Disposable {
-    private ScenarioScope scenarioScope;
+    private ScopeType scopeType;
     private Scenario parent;
     private ArrayList<Scenario> kids = new ArrayList<>();
     private ArrayList<Role> roles = new ArrayList<>();
 
-    public Scenario(ScenarioScope scenarioScope) {
-        this.scenarioScope = scenarioScope;
+    public Scenario(ScopeType scopeType) {
+        this.scopeType = scopeType;
         parent = null;
     }
 
@@ -53,7 +53,7 @@ public class Scenario implements Disposable {
 
     @Override
     public void dispose() {
-        scenarioScope = null;
+        scopeType = null;
         parent = null;
         kids.forEach(e -> e.dispose());
         kids.clear();
