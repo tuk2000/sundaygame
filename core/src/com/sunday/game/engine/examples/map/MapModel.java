@@ -13,11 +13,7 @@ public class MapModel extends AbstractModel {
     public MapModel() {
         outlook.shape = Shape.Type.Chain;
         outlook.dimension.set(1000, 1000);
-        generatePhysicDefinition();
-    }
 
-    @Override
-    protected void generatePhysicDefinition() {
         BodyDef bodyDef = physicReflection.bodyDef;
         bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(0, 0);
@@ -30,8 +26,8 @@ public class MapModel extends AbstractModel {
         fixtureDef.friction = 2.0f;
         fixtureDef.restitution = 0;
         fixtureDef.density = 15f;
-
     }
+
 
     @Override
     public EventProcessor getEventProcessor() {

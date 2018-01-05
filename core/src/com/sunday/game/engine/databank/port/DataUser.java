@@ -1,4 +1,4 @@
-package com.sunday.game.engine.databank;
+package com.sunday.game.engine.databank.port;
 
 import com.sunday.game.engine.common.Data;
 

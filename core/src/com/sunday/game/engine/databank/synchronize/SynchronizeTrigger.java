@@ -1,4 +1,5 @@
-package com.sunday.game.engine.databank;
+package com.sunday.game.engine.databank.synchronize;
+
 
 public class SynchronizeTrigger {
     private SynchronizeCondition synchronizeCondition;
@@ -8,14 +9,14 @@ public class SynchronizeTrigger {
         return synchronizeCondition;
     }
 
-    protected SynchronizeTrigger(SynchronizeCondition synchronizeCondition, SynchronizeExecutor synchronizeExecutor) {
+    public SynchronizeTrigger(SynchronizeCondition synchronizeCondition, SynchronizeExecutor synchronizeExecutor) {
         this.synchronizeExecutor = synchronizeExecutor;
         this.synchronizeCondition = synchronizeCondition;
     }
 
-    public void check() {
-        if (synchronizeCondition.isTriggered()) {
-            synchronizeExecutor.run();
+    public void check(SynchronizeEvent synchronizeEvent) {
+        if (synchronizeCondition.isTriggered(synchronizeEvent)) {
+            synchronizeExecutor.execute(synchronizeEvent);
         }
     }
 }

@@ -3,19 +3,22 @@ package com.sunday.game.engine.scenario;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Disposable;
 import com.sunday.game.engine.control.events.Event;
+import com.sunday.game.engine.databank.DataBank;
 import com.sunday.game.engine.examples.Role;
 
 import java.util.ArrayList;
 
 public class Scenario implements Disposable {
+    private DataBank dataBank;
     private ScopeType scopeType;
     private Scenario parent;
     private ArrayList<Scenario> kids = new ArrayList<>();
     private ArrayList<Role> roles = new ArrayList<>();
 
-    public Scenario(ScopeType scopeType) {
+    public Scenario(ScopeType scopeType, DataBank dataBank) {
         this.scopeType = scopeType;
         parent = null;
+        this.dataBank = dataBank;
     }
 
     public void addKid(Scenario scenario) {
@@ -38,6 +41,7 @@ public class Scenario implements Disposable {
 
     public void addRole(Role role) {
         roles.add(role);
+        role.abstractModel.connectDataBank(dataBank.getHolderPort(role.abstractModel));
     }
 
     public ArrayList<Role> getRoles() {

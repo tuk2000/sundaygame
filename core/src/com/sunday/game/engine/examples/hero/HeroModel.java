@@ -16,11 +16,6 @@ public class HeroModel extends AbstractModel {
         outlook.dimension.set(16.f, 32.f);
         movementState.position.set(32, 32);
 
-        generatePhysicDefinition();
-    }
-
-    @Override
-    protected void generatePhysicDefinition() {
         BodyDef bodyDef = physicReflection.bodyDef;
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(movementState.position);

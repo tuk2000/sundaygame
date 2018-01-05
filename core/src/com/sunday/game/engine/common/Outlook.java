@@ -6,5 +6,4 @@ import com.badlogic.gdx.physics.box2d.Shape;
 public class Outlook implements Data {
     public Shape.Type shape = Shape.Type.Circle;
     public Vector2 dimension = new Vector2();
-    public boolean sizeChanged = false;
 }

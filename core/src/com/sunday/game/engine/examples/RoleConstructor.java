@@ -43,7 +43,6 @@ public class RoleConstructor implements Disposable {
         if (abstractController != null & abstractModel != null & abstractView != null) {
             abstractController.useRoleModel(abstractModel);
             abstractController.useView(abstractView);
-            abstractView.synchronizeWithRoleModel(abstractModel);
         }
         return new Role(label, abstractController, abstractModel, abstractView);
     }

@@ -3,77 +3,67 @@ package com.sunday.game.engine.model;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Disposable;
+import com.sunday.game.engine.common.DataOperation;
 import com.sunday.game.engine.common.MovementState;
 import com.sunday.game.engine.common.Outlook;
 import com.sunday.game.engine.common.PhysicReflection;
 import com.sunday.game.engine.control.EventProcessor;
-import com.sunday.game.engine.databank.DataHolderPort;
-import com.sunday.game.engine.databank.SynchronizeCondition;
-import com.sunday.game.engine.databank.SynchronizeExecutor;
+import com.sunday.game.engine.databank.port.HolderPort;
+import com.sunday.game.engine.databank.synchronize.SynchronizeCondition;
+import com.sunday.game.engine.databank.synchronize.SynchronizeEvent;
+import com.sunday.game.engine.databank.synchronize.SynchronizeExecutor;
 
 public abstract class AbstractModel implements Disposable {
 
-    public Outlook outlook;
-    public PhysicReflection physicReflection;
-    public MovementState movementState;
+    public Outlook outlook = new Outlook();
+    public PhysicReflection physicReflection = new PhysicReflection();
+    public MovementState movementState = new MovementState();
 
-    public AbstractModel() {
-        movementState = new MovementState();
+    public HolderPort holderPort;
+
+    public void connectDataBank(HolderPort holderPort) {
+        this.holderPort = holderPort;
+        holderPort.addDataInstance(outlook);
+        holderPort.addDataInstance(physicReflection);
+        holderPort.addDataInstance(movementState);
+        holderPort.addDataSynchronize(outLookChangedCond, outlookWithPhysic);
+        holderPort.addDataSynchronize(bodyCreatedCond, movementStateWithReflection);
     }
 
-    public void storeIntoDataStorage(DataHolderPort dataHolderPort) {
-        dataHolderPort.addDataInstance(outlook);
-        dataHolderPort.addDataInstance(physicReflection);
-        dataHolderPort.addDataInstance(movementState);
-        dataHolderPort.addDataSynchronize(outLookChangedCond, new SynchronizeExecutor(outlookWithPhysic));
-        dataHolderPort.addDataSynchronize(bodyCreatedCond, new SynchronizeExecutor(movementStateWithReflection));
-    }
+    private SynchronizeCondition bodyCreatedCond = new SynchronizeCondition(physicReflection, DataOperation.Modification);
 
-    private SynchronizeCondition bodyCreatedCond = new SynchronizeCondition() {
-        @Override
-        public boolean isTriggered() {
-            return physicReflection.bodyCreated;
-        }
-    };
+    private SynchronizeCondition outLookChangedCond = new SynchronizeCondition(outlook, DataOperation.Modification);
 
-    private SynchronizeCondition outLookChangedCond = new SynchronizeCondition() {
+    private SynchronizeExecutor outlookWithPhysic = new SynchronizeExecutor<Outlook>() {
         @Override
-        public boolean isTriggered() {
-            return outlook.sizeChanged;
-        }
-    };
-
-    private Runnable outlookWithPhysic = new Runnable() {
-        @Override
-        public void run() {
-            physicReflection.bodyDef.position.set(movementState.position);
-            switch (physicReflection.fixtureDef.shape.getType()) {
-                case Chain:
-                    break;
-                case Polygon:
-                    ((PolygonShape) physicReflection.fixtureDef.shape).setAsBox(outlook.dimension.x, outlook.dimension.y);
-                    break;
-                case Circle:
-                    ((CircleShape) physicReflection.fixtureDef.shape).setRadius((outlook.dimension.x + outlook.dimension.y) / 2);
-                    break;
-                case Edge:
-                    break;
+        public void execute(SynchronizeEvent<Outlook> synchronizeEvent) {
+            if (synchronizeEvent.dataOperation == DataOperation.Modification) {
+                physicReflection.bodyDef.position.set(movementState.position);
+                switch (physicReflection.fixtureDef.shape.getType()) {
+                    case Chain:
+                        break;
+                    case Polygon:
+                        ((PolygonShape) physicReflection.fixtureDef.shape).setAsBox(outlook.dimension.x, outlook.dimension.y);
+                        break;
+                    case Circle:
+                        ((CircleShape) physicReflection.fixtureDef.shape).setRadius((outlook.dimension.x + outlook.dimension.y) / 2);
+                        break;
+                    case Edge:
+                        break;
+                }
             }
-            physicReflection.reconfigure();
-            outlook.sizeChanged = false;
         }
     };
 
 
-    private Runnable movementStateWithReflection = new Runnable() {
+    private SynchronizeExecutor movementStateWithReflection = new SynchronizeExecutor<PhysicReflection>() {
         @Override
-        public void run() {
-            movementState.position.set(physicReflection.body.getPosition());
+        public void execute(SynchronizeEvent<PhysicReflection> synchronizeEvent) {
+            if (synchronizeEvent.dataOperation == DataOperation.Modification) {
+                movementState.position.set(physicReflection.body.getPosition());
+            }
         }
     };
-
-
-    protected abstract void generatePhysicDefinition();
 
     public abstract EventProcessor getEventProcessor();
 

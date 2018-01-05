@@ -1,7 +1,6 @@
 package com.sunday.game.engine.view;
 
 import com.badlogic.gdx.utils.Disposable;
-import com.sunday.game.engine.model.AbstractModel;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -22,6 +21,4 @@ public abstract class AbstractView implements Disposable {
     public void dispose() {
         viewLayers.forEach(viewLayer -> viewLayer.dispose());
     }
-
-    public abstract void synchronizeWithRoleModel(AbstractModel abstractModel);
 }

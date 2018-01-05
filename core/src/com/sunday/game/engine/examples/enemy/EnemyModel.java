@@ -13,11 +13,7 @@ public class EnemyModel extends AbstractModel {
         outlook.shape = Shape.Type.Circle;
         outlook.dimension.set(40.0f, 40.0f);
         movementState.position.set(112, 32);
-        generatePhysicDefinition();
-    }
 
-    @Override
-    protected void generatePhysicDefinition() {
         BodyDef bodyDef = physicReflection.bodyDef;
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(movementState.position);

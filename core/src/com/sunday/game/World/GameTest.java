@@ -4,7 +4,6 @@ import com.badlogic.gdx.Screen;
 import com.sunday.game.engine.common.enums.Label;
 import com.sunday.game.engine.examples.RoleConstructor;
 import com.sunday.game.engine.scenario.Scenario;
-import com.sunday.game.engine.scenario.ScenarioConstructor;
 import com.sunday.game.engine.scenario.ScenarioEngine;
 
 
@@ -15,14 +14,11 @@ public class GameTest implements Screen {
     public GameTest() {
         scenarioEngine = new ScenarioEngine();
         Scenario rootScenario = scenarioEngine.getRootScenario();
-
-        ScenarioConstructor scenarioConstructor = new ScenarioConstructor();
         RoleConstructor roleConstructor = new RoleConstructor();
 
         rootScenario.addRole(roleConstructor.construct(Label.Map));
         rootScenario.addRole(roleConstructor.construct(Label.Hero));
         rootScenario.addRole(roleConstructor.construct(Label.Enemy));
-        scenarioConstructor.dispose();
         roleConstructor.dispose();
     }
 

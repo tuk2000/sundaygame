@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sunday.game.engine.common.AnimationSetting;
 import com.sunday.game.engine.common.enums.Label;
 import com.sunday.game.engine.control.EventProcessor;
+import com.sunday.game.engine.databank.port.UserPort;
 import com.sunday.game.engine.examples.Role;
 import com.sunday.game.engine.model.AbstractModel;
 import com.sunday.game.engine.scenario.physicprocess.PhysicSimulator;
@@ -20,7 +21,6 @@ import com.sunday.game.engine.scenario.render.managers.CameraManager;
 import com.sunday.game.engine.scenario.render.managers.DisplayManager;
 import com.sunday.game.engine.scenario.render.managers.RendererManager;
 import com.sunday.game.engine.view.viewlayers.MapViewLayer;
-import com.sunday.game.engine.view.viewlayers.PhysicViewLayer;
 import com.sunday.game.engine.view.viewlayers.ScreenViewLayer;
 
 import java.util.ArrayList;
@@ -49,7 +49,6 @@ public class ScenarioRenderer implements Disposable {
     private RendererManager rendererManager;
     private CameraManager cameraManager;
     private DisplayManager displayManager;
-    private PhysicSimulator physicSimulator;
 
     public List<EventProcessor> getProcessors() {
         List<EventProcessor> eventProcessors = new ArrayList<>();
@@ -60,7 +59,6 @@ public class ScenarioRenderer implements Disposable {
     }
 
     public ScenarioRenderer(PhysicSimulator physicSimulator) {
-        this.physicSimulator = physicSimulator;
 
         rendererManager = new RendererManager();
 
@@ -91,6 +89,10 @@ public class ScenarioRenderer implements Disposable {
         worldRender.combineWithWorld(physicSimulator.getWorld());
     }
 
+    public void readFromDataBank(UserPort dataUserPort) {
+        dataUserPort.getInstances(Texture.class);
+    }
+
     public void readyToRenderRole(Role role) {
         switch (role.label) {
             case Map:
@@ -107,8 +109,6 @@ public class ScenarioRenderer implements Disposable {
         role.abstractView.getViewLayers().forEach(e -> {
             if (e instanceof MapViewLayer) {
                 renderMapViewLayer((MapViewLayer) e);
-            } else if (e instanceof PhysicViewLayer) {
-                renderPhysicViewLayer((PhysicViewLayer) e);
             }
         });
     }
@@ -119,8 +119,6 @@ public class ScenarioRenderer implements Disposable {
         role.abstractView.getViewLayers().forEach(e -> {
             if (e instanceof ScreenViewLayer) {
                 renderScreenViewLayer((ScreenViewLayer) e, role.abstractModel);
-            } else if (e instanceof PhysicViewLayer) {
-                renderPhysicViewLayer((PhysicViewLayer) e);
             }
         });
     }
@@ -133,14 +131,6 @@ public class ScenarioRenderer implements Disposable {
             Vector2 dimension = model.outlook.dimension;
             textureRender.renderLater((Texture) component, position.x, position.y, dimension.x, dimension.y);
         }
-    }
-
-    private void renderPhysicViewLayer(PhysicViewLayer e) {
-//        PhysicDefinition physicDefinition = e.getViewComponent();
-//        if (physicDefinition == null) return;
-//        if (!physicDefinition.hasPhysicReflection()) {
-//            physicSimulator.createBody(physicDefinition);
-//        }
     }
 
     private void renderMapViewLayer(MapViewLayer e) {

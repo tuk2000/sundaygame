@@ -1,13 +1,12 @@
-package com.sunday.game.engine.databank;
+package com.sunday.game.engine.databank.synchronize;
 
 import com.sunday.game.engine.common.Data;
+import com.sunday.game.engine.common.DataOperation;
 
-public interface DataHolderPort {
+public interface SynchronizeTerminal<T extends Data> {
     void addDataSynchronize(SynchronizeCondition synchronizeCondition, SynchronizeExecutor synchronizeExecutor);
 
     void deleteDataSynchronize(SynchronizeCondition synchronizeCondition);
 
-    void addDataInstance(Data data);
-
-    void deleteDataInstance(Data data);
+    void synchronize(T t, DataOperation dataOperation);
 }

@@ -3,8 +3,8 @@ package com.sunday.game.engine.scenario;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Disposable;
 import com.sunday.game.engine.control.events.WindowResizedEvent;
-import com.sunday.game.engine.databank.DataStorage;
-import com.sunday.game.engine.databank.DataStorageImpl;
+import com.sunday.game.engine.databank.DataBank;
+import com.sunday.game.engine.databank.DataBankImpl;
 import com.sunday.game.engine.scenario.eventpocess.CollisionEventTransfer;
 import com.sunday.game.engine.scenario.eventpocess.EventDispatcher;
 import com.sunday.game.engine.scenario.eventpocess.InputEventTransfer;
@@ -20,15 +20,15 @@ public class ScenarioEngine implements Disposable {
     private ScenarioRenderer scenarioRenderer;
     private PhysicSimulator physicSimulator;
     private ScenarioAnalyser scenarioAnalyser;
-    private DataStorage dataStorageImpl;
+    private DataBank dataBank;
 
     private boolean running;
 
 
     public ScenarioEngine() {
-        dataStorageImpl =new DataStorageImpl();
-        Root = new Scenario(ScopeType.Game);
-        screenScenario = new Scenario(ScopeType.FullScreen);
+        dataBank = new DataBankImpl();
+        Root = new Scenario(ScopeType.Game, dataBank);
+        screenScenario = new Scenario(ScopeType.FullScreen, dataBank);
         Root.addKid(screenScenario);
 
         eventDispatcher = new EventDispatcher(Root);
@@ -36,13 +36,17 @@ public class ScenarioEngine implements Disposable {
         collisionEventTransfer = new CollisionEventTransfer(eventDispatcher);
         Gdx.input.setInputProcessor(inputEventTransfer);
 
-        physicSimulator = new PhysicSimulator();
+        physicSimulator = new PhysicSimulator(dataBank);
         physicSimulator.setContactListener(collisionEventTransfer);
         scenarioRenderer = new ScenarioRenderer(physicSimulator);
         eventDispatcher.addInternalEventProcessors(scenarioRenderer.getProcessors());
         scenarioAnalyser = new ScenarioAnalyser(scenarioRenderer, physicSimulator);
 
         running = true;
+    }
+
+    public Scenario constructScenario(ScopeType scopeType) {
+        return new Scenario(scopeType, dataBank);
     }
 
     public Scenario getRootScenario() {

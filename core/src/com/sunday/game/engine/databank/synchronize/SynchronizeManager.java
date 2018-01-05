@@ -1,9 +1,12 @@
-package com.sunday.game.engine.databank;
+package com.sunday.game.engine.databank.synchronize;
+
+import com.sunday.game.engine.common.Data;
+import com.sunday.game.engine.common.DataOperation;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class DataSynchronize {
+public class SynchronizeManager {
     private List<SynchronizeTrigger> synchronizeTriggers = new ArrayList<>();
 
     public void addTrigger(SynchronizeTrigger synchronizeTrigger) {
@@ -28,7 +31,10 @@ public class DataSynchronize {
         }
     }
 
-    public void synchronize() {
-        synchronizeTriggers.forEach(SynchronizeTrigger::check);
+    public void synchronize(Data data, DataOperation dataOperation) {
+        SynchronizeEvent synchronizeEvent = new SynchronizeEvent(data, dataOperation);
+        for (SynchronizeTrigger trigger : synchronizeTriggers) {
+            trigger.check(synchronizeEvent);
+        }
     }
 }

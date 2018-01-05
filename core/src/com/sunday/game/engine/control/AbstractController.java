@@ -13,7 +13,7 @@ import java.util.Collections;
 public abstract class AbstractController implements Disposable {
     protected AbstractModel abstractModel;
     protected AbstractView abstractView;
-    protected EventProcessor eventProcessor;
+
     protected ArrayList<EventType> acceptedEventTypes = new ArrayList<>();
 
     public AbstractController(EventType... acceptedEventTypes) {
@@ -22,7 +22,6 @@ public abstract class AbstractController implements Disposable {
 
     public void useRoleModel(AbstractModel abstractModel) {
         this.abstractModel = abstractModel;
-        this.eventProcessor = this.abstractModel.getEventProcessor();
     }
 
     public void useView(AbstractView abstractView) {
@@ -30,14 +29,11 @@ public abstract class AbstractController implements Disposable {
     }
 
     public void notifyGameEvent(Event event) {
+        EventProcessor eventProcessor = abstractModel.getEventProcessor();
         if (acceptedEventTypes.contains(event.getEventType())) {
             Gdx.app.log("AbstractController", "Receive a Event : " + event.toString());
             if (eventProcessor != null)
                 eventProcessor.processEvent(event);
         }
-    }
-
-    public void synchronize() {
-        abstractView.synchronizeWithRoleModel(abstractModel);
     }
 }
