@@ -1,21 +1,22 @@
 package com.sunday.game.framework;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.sunday.game.framework.gameflow.GameFlowManager;
 import com.sunday.game.framework.gameflow.GameStatus;
-import com.sunday.game.framework.input.InputManager;
+import com.sunday.game.framework.input.FrameworkInputProxy;
 import com.sunday.game.framework.resource.ResourceManager;
 import com.sunday.game.world.GameScreenGenerator;
 import com.sunday.tool.ToolApplication;
 
+import java.lang.reflect.Proxy;
+
 /**
- * the framework consists of  GameAdaptor , InputManager and GameFlowManager
+ * the framework consists of  GameAdaptor , FrameworkInputProxy and GameFlowManager
  * <p>
  * GameAdaptor  implements the ApplicationListener  and  it  redirect all  methods from LwjglApplication  to  a certain ApplicationListener (such as GameHub).
  * <p>
- * InputManager splits the input events to Framework and a certain InputProcessor .
- * It will be initialed in framework and guarded by GameAdaptor as default InputProcessor .
- * Use Gdx.input.setEngineInputProcessor can be automatic checked .
+ * FrameworkInputProxy extends the function in Gdx.input , it includes a InputMultiplexer ,which has FrameworkInputProcessor and user defined InputProcessor.
  * <p>
  * GameFlowManager  conducts the statues of the game .
  * <p>
@@ -35,9 +36,10 @@ public class GameFramework {
         Gdx.app.setApplicationLogger(ToolApplication.gameLogger);
         GameScreenGenerator gameScreenGenerator = new GameScreenGenerator();
 
-        InputManager inputManager = new InputManager();
-        Gdx.input.setInputProcessor(inputManager.getInputMultiplexer());
-        GameAdaptor.getInstance().guardInputManager(inputManager);
+        FrameworkInputProxy frameworkInputProxy = new FrameworkInputProxy(Gdx.input);
+        Class clazz = Gdx.input.getClass();
+        Input input = (Input) Proxy.newProxyInstance(clazz.getClassLoader(), clazz.getInterfaces(), frameworkInputProxy);
+        Gdx.input = input;
 
         toolApplication = new ToolApplication();
         toolApplication.runAfterInitial(() -> {

@@ -6,13 +6,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.sunday.game.framework.gameflow.GameFlowExecutor;
-import com.sunday.game.framework.input.InputManager;
 import com.sunday.tool.ToolApplication;
 
 public class GameAdaptor extends Game implements GameFlowExecutor {
     private static GameAdaptor adaptorInstance;
     private Screen screenToSet;
-    private InputManager inputManager;
 
     private GameAdaptor() {
 
@@ -53,20 +51,5 @@ public class GameAdaptor extends Game implements GameFlowExecutor {
         long memoryUsage = Gdx.app.getJavaHeap();
         int fps = Gdx.graphics.getFramesPerSecond();
         ToolApplication.gameMonitor.updateData(delta, memoryUsage, fps);
-        guardFrameworkInputProcessor();
-    }
-
-
-    public void guardInputManager(InputManager inputManager) {
-        this.inputManager = inputManager;
-    }
-
-    private void guardFrameworkInputProcessor() {
-        if (inputManager == null) return;
-        if (Gdx.input.getInputProcessor() != inputManager.getInputMultiplexer()) {
-            Gdx.app.log("GameAdaptor", "The default InputProcessor has been changed and reversed ! ");
-            inputManager.setEngineInputProcessor(Gdx.input.getInputProcessor());
-            Gdx.input.setInputProcessor(inputManager.getInputMultiplexer());
-        }
     }
 }
