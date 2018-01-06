@@ -5,10 +5,10 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
-import com.sunday.game.framework.gameflow.GameFlowExecutor;
+import com.sunday.game.framework.display.ScreenDisplay;
 import com.sunday.tool.ToolApplication;
 
-public class GameAdaptor extends Game implements GameFlowExecutor {
+public class GameAdaptor extends Game implements ScreenDisplay {
     private static GameAdaptor adaptorInstance;
     private Screen screenToSet;
 

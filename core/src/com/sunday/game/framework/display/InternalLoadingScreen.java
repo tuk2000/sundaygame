@@ -1,4 +1,4 @@
-package com.sunday.game.world;
+package com.sunday.game.framework.display;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -8,7 +8,7 @@ import com.sunday.game.framework.GameFramework;
 import com.sunday.game.framework.gameflow.GameStatus;
 import com.sunday.game.framework.resource.InternalResourceDescriptorStorage;
 
-public class GameLoading implements Screen {
+public class InternalLoadingScreen implements Screen {
     private SpriteBatch batch;
     private BitmapFont font;
     private boolean finishing = false;
@@ -62,5 +62,4 @@ public class GameLoading implements Screen {
     public void dispose() {
 
     }
-
 }

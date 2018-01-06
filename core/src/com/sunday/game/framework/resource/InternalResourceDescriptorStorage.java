@@ -1,4 +1,4 @@
-package com.sunday.game.resource;
+package com.sunday.game.framework.resource;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetDescriptor;
@@ -9,10 +9,10 @@ import com.sunday.game.framework.resource.GameResourceType;
 import java.io.File;
 import java.util.ArrayList;
 
-public class ResourceDescriptorStorage implements DescriptorStorage {
+public class InternalResourceDescriptorStorage implements DescriptorStorage {
     private ArrayList<AssetDescriptor> arrayLists = new ArrayList<AssetDescriptor>();
 
-    public ResourceDescriptorStorage() {
+    public InternalResourceDescriptorStorage() {
         ArrayList<String> filepaths = findAllInternalResourceFile();
         filepaths.forEach(e -> {
             FileHandle fileHandle = Gdx.files.internal(e);

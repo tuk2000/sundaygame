@@ -1,8 +1,8 @@
-package com.sunday.game.framework.gameflow;
+package com.sunday.game.framework.display;
 
 import com.badlogic.gdx.Screen;
 
-public interface GameFlowExecutor {
+public interface ScreenDisplay {
 
     Screen getScreen();
 

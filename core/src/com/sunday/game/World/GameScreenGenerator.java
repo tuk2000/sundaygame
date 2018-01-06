@@ -2,7 +2,7 @@ package com.sunday.game.world;
 
 import com.badlogic.gdx.Screen;
 import com.sunday.game.framework.gameflow.GameStatus;
-import com.sunday.game.framework.gameflow.ScreenGenerator;
+import com.sunday.game.framework.display.ScreenGenerator;
 
 import java.util.ArrayList;
 

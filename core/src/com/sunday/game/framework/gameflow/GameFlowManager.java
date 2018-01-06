@@ -2,20 +2,26 @@ package com.sunday.game.framework.gameflow;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.sunday.game.framework.display.ScreenDisplay;
+import com.sunday.game.framework.display.ScreenGenerator;
 import com.sunday.tool.ToolApplication;
 
 
 public final class GameFlowManager {
     private ScreenGenerator screenGenerator;
-    private GameFlowExecutor gameFlowExecutor;
+    private ScreenDisplay screenDisplay;
 
-    public GameFlowManager(ScreenGenerator screenGenerator, GameFlowExecutor gameFlowExecutor) {
+    public GameFlowManager(ScreenGenerator screenGenerator, ScreenDisplay screenDisplay) {
         this.screenGenerator = screenGenerator;
-        this.gameFlowExecutor = gameFlowExecutor;
+        this.screenDisplay = screenDisplay;
+    }
+
+    public void setScreenGenerator(ScreenGenerator screenGenerator) {
+        this.screenGenerator = screenGenerator;
     }
 
     private void applyScreen(Screen Screen) {
-        gameFlowExecutor.setScreen(Screen);
+        screenDisplay.setScreen(Screen);
     }
 
     private void applyNewScreen(GameStatus status) {

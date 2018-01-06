@@ -1,6 +1,7 @@
-package com.sunday.game.framework.gameflow;
+package com.sunday.game.framework.display;
 
 import com.badlogic.gdx.Screen;
+import com.sunday.game.framework.gameflow.GameStatus;
 
 import java.util.ArrayList;
 
