@@ -3,8 +3,8 @@ package com.sunday.game.engine.scenario.render.managers;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sunday.game.engine.control.EventProcessor;
 import com.sunday.game.engine.control.events.Event;
+import com.sunday.game.engine.control.events.GamePadEvent;
 import com.sunday.game.engine.control.events.WindowEvent;
-import com.sunday.game.engine.control.events.WindowResizedEvent;
 
 public class DisplayManager implements EventProcessor {
     private float aspectRatio;//height/width
@@ -24,10 +24,9 @@ public class DisplayManager implements EventProcessor {
             WindowEvent windowEvent = (WindowEvent) event;
             switch (windowEvent.getType()) {
                 case Resized:
-                    WindowResizedEvent windowResizedEvent = (WindowResizedEvent) event;
                     cameraManager.recordCameraState();
-                    displayWidth = windowResizedEvent.getWidth();
-                    displayHeight = windowResizedEvent.getHeight();
+                    displayWidth = windowEvent.getWidth();
+                    displayHeight = windowEvent.getHeight();
                     viewport.update(displayWidth, displayHeight);
                     viewport.apply();
                     cameraManager.recoverCameraState();
@@ -37,6 +36,15 @@ public class DisplayManager implements EventProcessor {
                 case Closed:
                 case Maximum:
                 case Minimum:
+            }
+        }else if(event instanceof GamePadEvent){
+            GamePadEvent gamePadEvent=(GamePadEvent)event;
+            switch (gamePadEvent.getOperation()){
+                case ButtonDown:
+                   if(gamePadEvent.getButton()==5){
+                       //
+                   }
+                   break;
             }
         }
     }

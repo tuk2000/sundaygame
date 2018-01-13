@@ -3,7 +3,7 @@ package com.sunday.game.engine.control.events;
 
 public class InputEvent extends Event {
     public enum InputSource {
-        Keyboard, TouchScreen, Mouse
+        Keyboard, TouchScreen, Mouse, GamePad
     }
 
     private InputSource inputSource;

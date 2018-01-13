@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.sunday.game.engine.control.EventProcessor;
 import com.sunday.game.engine.control.events.Event;
+import com.sunday.game.engine.control.events.GamePadEvent;
 import com.sunday.game.engine.control.events.KeyBoardEvent;
 
 public class CameraManager implements EventProcessor {
@@ -61,6 +62,41 @@ public class CameraManager implements EventProcessor {
                     break;
             }
             camera.update();
+        } else if (event instanceof GamePadEvent) {
+            GamePadEvent gamePadEvent = (GamePadEvent) event;
+            switch (gamePadEvent.getOperation()) {
+                case ButtonDown:
+                    switch (gamePadEvent.getButton()) {
+                        case 4:
+                            camera.zoom += 0.1f;
+                            break;
+                        case 5:
+                            camera.zoom -= 0.1f;
+                            break;
+                        case 6:
+                            camera.rotate(0.2f);
+                            break;
+                        case 7:
+                            camera.rotate(-0.2f);
+                            break;
+                    }
+                    break;
+                case PovMove:
+                    switch (gamePadEvent.getPovDirection()) {
+                        case north:
+                            camera.translate(0, 10);
+                            break;
+                        case south:
+                            camera.translate(0, -10);
+                            break;
+                        case west:
+                            camera.translate(-10, 0);
+                            break;
+                        case east:
+                            camera.translate(10, 0);
+                            break;
+                    }
+            }
         }
     }
 }

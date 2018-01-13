@@ -1,6 +1,10 @@
 package com.sunday.game.engine.control.events;
 
 public class KeyBoardEvent extends InputEvent {
+    public KeyBoardEvent() {
+        super(InputSource.Keyboard);
+    }
+
     public enum Operation {
         KeyDown, KeyTyped, KeyUp
     }
@@ -9,17 +13,19 @@ public class KeyBoardEvent extends InputEvent {
     private int key;
     private char character;
 
-    public KeyBoardEvent(Operation operation, int key) {
-        super(InputSource.Keyboard);
-        this.operation = operation;
-        this.key = key;
+    public static KeyBoardEvent newKeyEvent(boolean isKeyDown, int key) {
+        KeyBoardEvent keyBoardEvent = new KeyBoardEvent();
+        keyBoardEvent.operation = isKeyDown ? Operation.KeyDown : Operation.KeyUp;
+        keyBoardEvent.key = key;
+        return keyBoardEvent;
     }
 
-    public KeyBoardEvent(char character) {
-        super(InputSource.Keyboard);
-        this.operation = Operation.KeyTyped;
-        this.key = 0;
-        this.character = character;
+    public static KeyBoardEvent newKeyEvent(char character) {
+        KeyBoardEvent keyBoardEvent = new KeyBoardEvent();
+        keyBoardEvent.operation = Operation.KeyTyped;
+        keyBoardEvent.key = 0;
+        keyBoardEvent.character = character;
+        return keyBoardEvent;
     }
 
     public Operation getOperation() {

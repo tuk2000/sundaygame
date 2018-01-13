@@ -1,8 +1,9 @@
 package com.sunday.game.engine.scenario;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.utils.Disposable;
-import com.sunday.game.engine.control.events.WindowResizedEvent;
+import com.sunday.game.engine.control.events.WindowEvent;
 import com.sunday.game.engine.databank.DataBank;
 import com.sunday.game.engine.databank.DataBankImpl;
 import com.sunday.game.engine.scenario.eventpocess.CollisionEventTransfer;
@@ -35,6 +36,7 @@ public class ScenarioEngine implements Disposable {
         inputEventTransfer = new InputEventTransfer(eventDispatcher);
         collisionEventTransfer = new CollisionEventTransfer(eventDispatcher);
         Gdx.input.setInputProcessor(inputEventTransfer);
+        Controllers.addListener(inputEventTransfer);
 
         physicSimulator = new PhysicSimulator(dataBank);
         physicSimulator.setContactListener(collisionEventTransfer);
@@ -77,6 +79,6 @@ public class ScenarioEngine implements Disposable {
     }
 
     public void resize(int width, int height) {
-        eventDispatcher.dispatchEvent(new WindowResizedEvent(width, height));
+        eventDispatcher.dispatchEvent(WindowEvent.newResizeEvent(width, height));
     }
 }
