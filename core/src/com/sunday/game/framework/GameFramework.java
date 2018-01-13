@@ -2,8 +2,10 @@ package com.sunday.game.framework;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.controllers.Controllers;
 import com.sunday.game.framework.gameflow.GameFlowManager;
 import com.sunday.game.framework.gameflow.GameStatus;
+import com.sunday.game.framework.input.ControllerProcessor;
 import com.sunday.game.framework.input.FrameworkInputProxy;
 import com.sunday.game.framework.resource.ResourceManager;
 import com.sunday.game.world.GameScreenGenerator;
@@ -57,6 +59,7 @@ public class GameFramework {
         GameFlow = new GameFlowManager(gameScreenGenerator, GameAdaptor.getInstance());
         GameFlow.setGameStatus(GameStatus.Loading);
 
+        Controllers.addListener(new ControllerProcessor());
     }
 
     public static void switchToolOnOrOff() {
