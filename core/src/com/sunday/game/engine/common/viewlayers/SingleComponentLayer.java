@@ -1,13 +1,13 @@
-package com.sunday.game.engine.view.viewlayers;
+package com.sunday.game.engine.common.viewlayers;
 
 import com.badlogic.gdx.utils.Disposable;
-import com.sunday.game.engine.view.ViewLayer;
+import com.sunday.game.engine.common.ViewLayer;
 
 public abstract class SingleComponentLayer<T extends Disposable> implements ViewLayer, Disposable {
     private boolean visible = true;
     private T viewComponent;
 
-    public void setViewComponent(T t) {
+    protected void setViewComponent(T t) {
         viewComponent = t;
     }
 

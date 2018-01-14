@@ -19,7 +19,7 @@ public class RendererManager implements EventProcessor {
         if (event instanceof KeyBoardEvent) {
             KeyBoardEvent keyBoardEvent = (KeyBoardEvent) event;
             switch (keyBoardEvent.getOperation()) {
-                case KeyTyped:
+                case KeyDown:
                     switch (keyBoardEvent.getKey()) {
                         case Input.Keys.F6:
                             DoRenderMap = !DoRenderMap;
@@ -55,7 +55,7 @@ public class RendererManager implements EventProcessor {
                         case 3:
                             DoRenderTexture = !DoRenderTexture;
                             break;
-                        case 4:
+                        case 9:
                             DoRenderWorld = !DoRenderWorld;
                             break;
                     }

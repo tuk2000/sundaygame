@@ -10,7 +10,10 @@ import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sunday.game.engine.common.AnimationSetting;
+import com.sunday.game.engine.common.AnimationTimer;
 import com.sunday.game.engine.common.enums.Label;
+import com.sunday.game.engine.common.viewlayers.MapViewLayer;
+import com.sunday.game.engine.common.viewlayers.TextureViewLayer;
 import com.sunday.game.engine.control.EventProcessor;
 import com.sunday.game.engine.databank.port.UserPort;
 import com.sunday.game.engine.examples.Role;
@@ -20,8 +23,6 @@ import com.sunday.game.engine.scenario.render.independentrenders.*;
 import com.sunday.game.engine.scenario.render.managers.CameraManager;
 import com.sunday.game.engine.scenario.render.managers.DisplayManager;
 import com.sunday.game.engine.scenario.render.managers.RendererManager;
-import com.sunday.game.engine.view.viewlayers.MapViewLayer;
-import com.sunday.game.engine.view.viewlayers.ScreenViewLayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -89,10 +90,6 @@ public class ScenarioRenderer implements Disposable {
         worldRender.combineWithWorld(physicSimulator.getWorld());
     }
 
-    public void readFromDataBank(UserPort dataUserPort) {
-        dataUserPort.getInstances(Texture.class);
-    }
-
     public void readyToRenderRole(Role role) {
         switch (role.label) {
             case Map:
@@ -106,7 +103,7 @@ public class ScenarioRenderer implements Disposable {
 
     private void renderMap(Role role) {
         if (role.label != Label.Map) return;
-        role.abstractView.getViewLayers().forEach(e -> {
+        role.abstractModel.outlook.viewLayers.forEach(e -> {
             if (e instanceof MapViewLayer) {
                 renderMapViewLayer((MapViewLayer) e);
             }
@@ -116,14 +113,14 @@ public class ScenarioRenderer implements Disposable {
 
     private void renderSingleRole(Role role) {
         if (role.label == Label.Map) return;
-        role.abstractView.getViewLayers().forEach(e -> {
-            if (e instanceof ScreenViewLayer) {
-                renderScreenViewLayer((ScreenViewLayer) e, role.abstractModel);
+        role.abstractModel.outlook.viewLayers.forEach(e -> {
+            if (e instanceof TextureViewLayer) {
+                renderScreenViewLayer((TextureViewLayer) e, role.abstractModel);
             }
         });
     }
 
-    private void renderScreenViewLayer(ScreenViewLayer e, AbstractModel model) {
+    private void renderScreenViewLayer(TextureViewLayer e, AbstractModel model) {
         Texture component = (Texture) e.getViewComponent();
         if (component == null) return;
         if (component instanceof Texture) {
@@ -145,6 +142,7 @@ public class ScenarioRenderer implements Disposable {
 
     public void render(float delta) {
         AnimationSetting.DeltaTime += delta;
+        AnimationTimer.synchronize();
 
         //sharedCamera.translate(-10.0f * delta, 0);
         //sharedCamera.rotate(10 * delta);

@@ -1,4 +1,4 @@
-package com.sunday.game.engine.view;
+package com.sunday.game.engine.common;
 
 import com.badlogic.gdx.utils.Disposable;
 

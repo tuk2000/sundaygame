@@ -1,7 +1,7 @@
-package com.sunday.game.engine.view.viewlayers;
+package com.sunday.game.engine.common.viewlayers;
 
 import com.badlogic.gdx.utils.Disposable;
-import com.sunday.game.engine.view.ViewLayer;
+import com.sunday.game.engine.common.ViewLayer;
 
 import java.util.ArrayList;
 import java.util.Collections;

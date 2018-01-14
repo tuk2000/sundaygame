@@ -3,6 +3,7 @@ package com.sunday.game.engine.scenario;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.utils.Disposable;
+import com.sunday.game.engine.common.AnimationTimer;
 import com.sunday.game.engine.control.events.WindowEvent;
 import com.sunday.game.engine.databank.DataBank;
 import com.sunday.game.engine.databank.DataBankImpl;
@@ -21,6 +22,7 @@ public class ScenarioEngine implements Disposable {
     private ScenarioRenderer scenarioRenderer;
     private PhysicSimulator physicSimulator;
     private ScenarioAnalyser scenarioAnalyser;
+
     private DataBank dataBank;
 
     private boolean running;
@@ -44,6 +46,7 @@ public class ScenarioEngine implements Disposable {
         eventDispatcher.addInternalEventProcessors(scenarioRenderer.getProcessors());
         scenarioAnalyser = new ScenarioAnalyser(scenarioRenderer, physicSimulator);
 
+        AnimationTimer.initAnimationTimer(dataBank);
         running = true;
     }
 

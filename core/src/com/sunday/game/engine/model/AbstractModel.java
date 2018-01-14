@@ -28,6 +28,7 @@ public abstract class AbstractModel implements Disposable {
         holderPort.addDataInstance(movementState);
         holderPort.addDataSynchronize(outLookChangedCond, outlookWithPhysic);
         holderPort.addDataSynchronize(bodyCreatedCond, movementStateWithReflection);
+        initDataSynchronize(holderPort);
     }
 
     private SynchronizeCondition bodyCreatedCond = new SynchronizeCondition(physicReflection, DataOperation.Modification);
@@ -66,5 +67,5 @@ public abstract class AbstractModel implements Disposable {
     };
 
     public abstract EventProcessor getEventProcessor();
-
+    protected abstract void initDataSynchronize(HolderPort holderPort);
 }

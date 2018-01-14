@@ -1,11 +1,10 @@
-package com.sunday.game.engine.view.viewlayers;
+package com.sunday.game.engine.common.viewlayers;
 
 import com.badlogic.gdx.graphics.Texture;
 
-public class ScreenViewLayer<T extends Texture> extends SingleComponentLayer<T> {
+public class AnimationViewLayer extends SingleComponentLayer{
     @Override
     public Class getComponentClass() {
         return Texture.class;
     }
-
 }
