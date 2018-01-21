@@ -1,11 +1,13 @@
-package com.sunday.game.engine.control.events;
+package com.sunday.game.engine.events.driver;
 
-public class MouseEvent extends InputEvent {
+import com.sunday.game.engine.common.enums.Driver;
+
+public class MouseEvent extends DriverEvent {
     private int screenX;
     private int screenY;
 
     public MouseEvent(int screenX, int screenY) {
-        super(InputSource.Mouse);
+        super(Driver.Mouse);
         this.screenX = screenX;
         this.screenY = screenY;
     }
@@ -20,6 +22,6 @@ public class MouseEvent extends InputEvent {
 
     @Override
     public String toString() {
-        return getEventType().name() + " from " + getSource().toString() + " [" + screenX + "," + screenY + "]";
+        return " from " + getSource().toString() + " [" + screenX + "," + screenY + "]";
     }
 }

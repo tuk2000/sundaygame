@@ -1,4 +1,6 @@
-package com.sunday.game.engine.control.events;
+package com.sunday.game.engine.events.window;
+
+import com.sunday.game.engine.events.Event;
 
 public class WindowEvent extends Event {
     public int getWidth() {
@@ -24,7 +26,7 @@ public class WindowEvent extends Event {
 
 
     public WindowEvent(Object source, Type type) {
-        super(source, EventType.Window);
+        super(source);
         this.type = type;
     }
 

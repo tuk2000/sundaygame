@@ -8,7 +8,7 @@ import com.sunday.game.engine.common.AnimationTimer;
 import com.sunday.game.engine.common.DataOperation;
 import com.sunday.game.engine.common.Outlook;
 import com.sunday.game.engine.common.viewlayers.TextureViewLayer;
-import com.sunday.game.engine.control.EventProcessor;
+import com.sunday.game.engine.events.EventProcessor;
 import com.sunday.game.engine.databank.port.HolderPort;
 import com.sunday.game.engine.databank.synchronize.SynchronizeCondition;
 import com.sunday.game.engine.databank.synchronize.SynchronizeEvent;
@@ -30,9 +30,9 @@ public class HeroModel extends AbstractModel {
     };
 
     public HeroModel() {
-        heroEventProcessor = new HeroEventProcessor(this);
+
         outlook.shape = Shape.Type.Polygon;
-        outlook.dimension.set(16.f, 32.f);
+        outlook.dimension.set(16.f, 20.f);
         outlook.viewLayers.add(textureViewLayer);
         movementState.position.set(32, 32);
 
@@ -50,11 +50,6 @@ public class HeroModel extends AbstractModel {
         fixtureDef.restitution = 0.2f;
         fixtureDef.density = 0.1f;
 
-    }
-
-    @Override
-    public EventProcessor getEventProcessor() {
-        return heroEventProcessor;
     }
 
     @Override

@@ -4,8 +4,8 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.sunday.game.engine.control.EventPoster;
-import com.sunday.game.engine.control.events.CollisionEvent;
+import com.sunday.game.engine.events.EventPoster;
+import com.sunday.game.engine.events.synchronize.CollisionEvent;
 
 public class CollisionEventTransfer implements ContactListener {
     private EventPoster eventPoster;

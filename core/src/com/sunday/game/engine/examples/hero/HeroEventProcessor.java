@@ -4,11 +4,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.sunday.game.engine.common.DataOperation;
 import com.sunday.game.engine.common.enums.Action;
-import com.sunday.game.engine.control.EventProcessor;
-import com.sunday.game.engine.control.events.CollisionEvent;
-import com.sunday.game.engine.control.events.Event;
-import com.sunday.game.engine.control.events.InputEvent;
-import com.sunday.game.engine.control.events.KeyBoardEvent;
+import com.sunday.game.engine.events.Event;
+import com.sunday.game.engine.events.EventProcessor;
+import com.sunday.game.engine.events.driver.DriverEvent;
+import com.sunday.game.engine.events.driver.KeyBoardEvent;
+import com.sunday.game.engine.events.synchronize.CollisionEvent;
 
 public class HeroEventProcessor implements EventProcessor {
     private HeroModel heroModel;
@@ -19,19 +19,17 @@ public class HeroEventProcessor implements EventProcessor {
 
     @Override
     public void processEvent(Event event) {
-        switch (event.getEventType()) {
-            case Collision:
-                handleCollision((CollisionEvent) event);
-                break;
-            case Input:
-                handleInput((InputEvent) event);
-                break;
+
+        if (event instanceof CollisionEvent) {
+            handleCollision((CollisionEvent) event);
+        } else if (event instanceof DriverEvent) {
+            handleInput((DriverEvent) event);
         }
     }
 
-    private void handleInput(InputEvent inputEvent) {
-        if (inputEvent instanceof KeyBoardEvent) {
-            KeyBoardEvent keyBoardEvent = (KeyBoardEvent) inputEvent;
+    private void handleInput(DriverEvent driverEvent) {
+        if (driverEvent instanceof KeyBoardEvent) {
+            KeyBoardEvent keyBoardEvent = (KeyBoardEvent) driverEvent;
             Vector2 position = heroModel.movementState.position;
 
             switch ((keyBoardEvent.getCharacter())) {

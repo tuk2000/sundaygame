@@ -6,7 +6,7 @@ import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.sunday.game.engine.common.viewlayers.MapViewLayer;
-import com.sunday.game.engine.control.EventProcessor;
+import com.sunday.game.engine.events.EventProcessor;
 import com.sunday.game.engine.databank.port.HolderPort;
 import com.sunday.game.engine.model.AbstractModel;
 
@@ -29,12 +29,6 @@ public class MapModel extends AbstractModel {
         fixtureDef.friction = 2.0f;
         fixtureDef.restitution = 0;
         fixtureDef.density = 15f;
-    }
-
-
-    @Override
-    public EventProcessor getEventProcessor() {
-        return null;
     }
 
     @Override

@@ -7,13 +7,28 @@ import com.sunday.game.engine.common.DataOperation;
 import com.sunday.game.engine.common.MovementState;
 import com.sunday.game.engine.common.Outlook;
 import com.sunday.game.engine.common.PhysicReflection;
-import com.sunday.game.engine.control.EventProcessor;
+import com.sunday.game.engine.events.Event;
+import com.sunday.game.engine.events.EventProcessor;
 import com.sunday.game.engine.databank.port.HolderPort;
 import com.sunday.game.engine.databank.synchronize.SynchronizeCondition;
 import com.sunday.game.engine.databank.synchronize.SynchronizeEvent;
 import com.sunday.game.engine.databank.synchronize.SynchronizeExecutor;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 public abstract class AbstractModel implements Disposable {
+
+    protected List<EventProcessor> eventProcessors=new ArrayList<>();
+
+    protected void addEventProcessors(EventProcessor... eventProcessors) {
+        Collections.addAll(this.eventProcessors, eventProcessors);
+    }
+
+    public void notifyEvent(Event event) {
+        eventProcessors.forEach(eventProcessor -> eventProcessor.processEvent(event));
+    }
 
     public Outlook outlook = new Outlook();
     public PhysicReflection physicReflection = new PhysicReflection();
@@ -65,7 +80,5 @@ public abstract class AbstractModel implements Disposable {
             }
         }
     };
-
-    public abstract EventProcessor getEventProcessor();
     protected abstract void initDataSynchronize(HolderPort holderPort);
 }

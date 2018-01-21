@@ -1,11 +1,13 @@
-package com.sunday.game.engine.control.events;
+package com.sunday.game.engine.events.synchronize;
+
+import com.sunday.game.engine.events.Event;
 
 public class CollisionEvent extends Event {
     private Object objectA;
     private Object objectB;
 
     public CollisionEvent(Object sender, Object objectA, Object objectB) {
-        super(sender, EventType.Collision);
+        super(sender);
         this.objectA = objectA;
         this.objectB = objectB;
     }
@@ -16,6 +18,6 @@ public class CollisionEvent extends Event {
 
     @Override
     public String toString() {
-        return getEventType().name() + " " + getSource().toString() + " " + objectA.toString() + " " + objectB.toString();
+        return getSource().toString() + " " + objectA.toString() + " " + objectB.toString();
     }
 }

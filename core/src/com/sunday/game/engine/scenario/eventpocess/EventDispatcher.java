@@ -2,9 +2,9 @@ package com.sunday.game.engine.scenario.eventpocess;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Disposable;
-import com.sunday.game.engine.control.EventPoster;
-import com.sunday.game.engine.control.EventProcessor;
-import com.sunday.game.engine.control.events.Event;
+import com.sunday.game.engine.events.EventPoster;
+import com.sunday.game.engine.events.EventProcessor;
+import com.sunday.game.engine.events.Event;
 import com.sunday.game.engine.scenario.Scenario;
 
 import java.util.ArrayList;
@@ -26,10 +26,6 @@ public class EventDispatcher implements Disposable, EventPoster {
 
     public void addInternalEventProcessors(List<EventProcessor> eventProcessors) {
         internalProcessors.addAll(eventProcessors);
-    }
-
-    public void addInternalEventProcessor(EventProcessor eventProcessor) {
-        internalProcessors.add(eventProcessor);
     }
 
     @Override

@@ -1,12 +1,10 @@
 package com.sunday.game.engine.examples.enemy;
 
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Shape;
-import com.sunday.game.engine.common.viewlayers.MapViewLayer;
-import com.sunday.game.engine.control.EventProcessor;
+import com.sunday.game.engine.events.EventProcessor;
 import com.sunday.game.engine.databank.port.HolderPort;
 import com.sunday.game.engine.model.AbstractModel;
 
@@ -29,11 +27,6 @@ public class EnemyModel extends AbstractModel {
         fixtureDef.friction = .75f;
         fixtureDef.restitution = 0.5f;
         fixtureDef.density = 10f;
-    }
-
-    @Override
-    public EventProcessor getEventProcessor() {
-        return null;
     }
 
     @Override

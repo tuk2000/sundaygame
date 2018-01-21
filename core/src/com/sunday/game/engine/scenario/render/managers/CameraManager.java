@@ -4,10 +4,10 @@ package com.sunday.game.engine.scenario.render.managers;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
-import com.sunday.game.engine.control.EventProcessor;
-import com.sunday.game.engine.control.events.Event;
-import com.sunday.game.engine.control.events.GamePadEvent;
-import com.sunday.game.engine.control.events.KeyBoardEvent;
+import com.sunday.game.engine.events.EventProcessor;
+import com.sunday.game.engine.events.Event;
+import com.sunday.game.engine.events.driver.GamePadEvent;
+import com.sunday.game.engine.events.driver.KeyBoardEvent;
 
 public class CameraManager implements EventProcessor {
     private OrthographicCamera camera;

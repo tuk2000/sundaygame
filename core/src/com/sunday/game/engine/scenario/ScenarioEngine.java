@@ -4,7 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.utils.Disposable;
 import com.sunday.game.engine.common.AnimationTimer;
-import com.sunday.game.engine.control.events.WindowEvent;
+import com.sunday.game.engine.events.window.WindowEvent;
 import com.sunday.game.engine.databank.DataBank;
 import com.sunday.game.engine.databank.DataBankImpl;
 import com.sunday.game.engine.scenario.eventpocess.CollisionEventTransfer;

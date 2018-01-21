@@ -5,9 +5,9 @@ import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerListener;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.math.Vector3;
-import com.sunday.game.engine.control.EventPoster;
-import com.sunday.game.engine.control.events.GamePadEvent;
-import com.sunday.game.engine.control.events.KeyBoardEvent;
+import com.sunday.game.engine.events.EventPoster;
+import com.sunday.game.engine.events.driver.GamePadEvent;
+import com.sunday.game.engine.events.driver.KeyBoardEvent;
 
 public class InputEventTransfer implements InputProcessor, ControllerListener {
 

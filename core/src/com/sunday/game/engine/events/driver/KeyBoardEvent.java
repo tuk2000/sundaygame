@@ -1,8 +1,10 @@
-package com.sunday.game.engine.control.events;
+package com.sunday.game.engine.events.driver;
 
-public class KeyBoardEvent extends InputEvent {
+import com.sunday.game.engine.common.enums.Driver;
+
+public class KeyBoardEvent extends DriverEvent {
     public KeyBoardEvent() {
-        super(InputSource.Keyboard);
+        super(Driver.Keyboard);
     }
 
     public enum Operation {
@@ -50,7 +52,7 @@ public class KeyBoardEvent extends InputEvent {
 
     @Override
     public String toString() {
-        return getEventType().name() + " from " + getSource().toString() + " " + getOperation().name() + " char : " + getCharacter() + " key : " + getKey();
+        return  " from " + getSource().toString() + " " + getOperation().name() + " char : " + getCharacter() + " key : " + getKey();
     }
 
 }

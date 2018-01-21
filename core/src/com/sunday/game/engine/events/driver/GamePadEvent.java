@@ -1,10 +1,11 @@
-package com.sunday.game.engine.control.events;
+package com.sunday.game.engine.events.driver;
 
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.math.Vector3;
+import com.sunday.game.engine.common.enums.Driver;
 
-public class GamePadEvent extends InputEvent {
+public class GamePadEvent extends DriverEvent {
     private Controller controller;
     private Operation operation;
     private int buttonCode;
@@ -94,7 +95,7 @@ public class GamePadEvent extends InputEvent {
     }
 
     public GamePadEvent(Controller controller) {
-        super(InputSource.GamePad);
+        super(Driver.GamePad);
         this.controller = controller;
     }
 }

@@ -7,8 +7,8 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.utils.Disposable;
 
 public class PhysicReflection implements Data, Disposable {
-    public FixtureDef fixtureDef = new FixtureDef();
-    public BodyDef bodyDef = new BodyDef();
+    public final FixtureDef fixtureDef = new FixtureDef();
+    public final BodyDef bodyDef = new BodyDef();
     public boolean bodyCreated = false;
 
     public Body body;

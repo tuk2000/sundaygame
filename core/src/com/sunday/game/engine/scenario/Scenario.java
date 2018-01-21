@@ -2,7 +2,7 @@ package com.sunday.game.engine.scenario;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Disposable;
-import com.sunday.game.engine.control.events.Event;
+import com.sunday.game.engine.events.Event;
 import com.sunday.game.engine.databank.DataBank;
 import com.sunday.game.engine.examples.Role;
 
@@ -51,7 +51,7 @@ public class Scenario implements Disposable {
     public void notifyAllRoles(Event event) {
         Gdx.app.log("Scenario", "Receive a Event : " + event.toString());
         for (Role role : roles) {
-            role.abstractController.notifyGameEvent(event);
+            role.abstractModel.notifyEvent(event);
         }
     }
 
