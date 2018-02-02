@@ -6,10 +6,10 @@ import com.badlogic.gdx.utils.Disposable;
 import com.sunday.engine.common.AnimationTimer;
 import com.sunday.engine.databank.DataBank;
 import com.sunday.engine.databank.DataBankImpl;
+import com.sunday.engine.events.driver.DriverEventTransfer;
+import com.sunday.engine.events.synchronize.CollisionEventTransfer;
 import com.sunday.engine.events.window.WindowEvent;
-import com.sunday.engine.scenario.eventpocess.CollisionEventTransfer;
 import com.sunday.engine.scenario.eventpocess.EventDispatcher;
-import com.sunday.engine.scenario.eventpocess.InputEventTransfer;
 import com.sunday.engine.scenario.physicprocess.PhysicSimulator;
 import com.sunday.engine.scenario.render.ScenarioRenderer;
 
@@ -17,7 +17,7 @@ public class ScenarioEngine implements Disposable {
     private Scenario Root;
     private Scenario screenScenario;
     private EventDispatcher eventDispatcher;
-    private InputEventTransfer inputEventTransfer;
+    private DriverEventTransfer driverEventTransfer;
     private CollisionEventTransfer collisionEventTransfer;
     private ScenarioRenderer scenarioRenderer;
     private PhysicSimulator physicSimulator;
@@ -35,10 +35,10 @@ public class ScenarioEngine implements Disposable {
         Root.addKid(screenScenario);
 
         eventDispatcher = new EventDispatcher(Root);
-        inputEventTransfer = new InputEventTransfer(eventDispatcher);
+        driverEventTransfer = new DriverEventTransfer(eventDispatcher);
         collisionEventTransfer = new CollisionEventTransfer(eventDispatcher);
-        Gdx.input.setInputProcessor(inputEventTransfer);
-        Controllers.addListener(inputEventTransfer);
+        Gdx.input.setInputProcessor(driverEventTransfer);
+        Controllers.addListener(driverEventTransfer);
 
         physicSimulator = new PhysicSimulator(dataBank);
         physicSimulator.setContactListener(collisionEventTransfer);

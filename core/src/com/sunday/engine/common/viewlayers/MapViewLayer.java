@@ -10,7 +10,7 @@ public class MapViewLayer extends SingleComponentLayer<TiledMap> {
     }
 
     public MapViewLayer(String mapPath) {
-        TiledMap  map = new TmxMapLoader().load(mapPath);
+        TiledMap map = new TmxMapLoader().load(mapPath);
         setViewComponent(map);
     }
 

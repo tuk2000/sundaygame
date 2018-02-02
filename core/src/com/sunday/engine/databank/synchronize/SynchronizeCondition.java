@@ -12,7 +12,7 @@ public class SynchronizeCondition<T extends Data> {
     private Class<T> clazz;
     private T source = null;
     private List<DataOperation> dataOperationList = new ArrayList<>();
-    private List<Signal> signals=new ArrayList<>();
+    private List<Signal> signals = new ArrayList<>();
 
     public SynchronizeCondition(Class<T> clazz, DataOperation... dataOperations) {
         this.clazz = clazz;
@@ -26,9 +26,9 @@ public class SynchronizeCondition<T extends Data> {
         dataOperationList.addAll(Arrays.asList(dataOperations));
     }
 
-    public SynchronizeCondition(T t,Signal signal){
+    public SynchronizeCondition(T t, Signal signal) {
         clazz = (Class<T>) t.getClass();
-        source=t;
+        source = t;
 
     }
 

@@ -20,7 +20,7 @@ import java.util.List;
 
 public abstract class AbstractModel implements Disposable {
 
-    protected List<EventProcessor> eventProcessors=new ArrayList<>();
+    protected List<EventProcessor> eventProcessors = new ArrayList<>();
 
     protected void addEventProcessors(EventProcessor... eventProcessors) {
         Collections.addAll(this.eventProcessors, eventProcessors);
@@ -80,5 +80,6 @@ public abstract class AbstractModel implements Disposable {
             }
         }
     };
+
     protected abstract void initDataSynchronize(HolderPort holderPort);
 }

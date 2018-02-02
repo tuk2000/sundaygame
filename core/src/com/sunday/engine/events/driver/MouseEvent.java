@@ -1,15 +1,15 @@
 package com.sunday.engine.events.driver;
 
-import com.sunday.engine.common.enums.Driver;
+import com.sunday.engine.driver.mouse.MouseData;
 
 public class MouseEvent extends DriverEvent {
     private int screenX;
     private int screenY;
 
-    public MouseEvent(int screenX, int screenY) {
-        super(Driver.Mouse);
-        this.screenX = screenX;
-        this.screenY = screenY;
+    public MouseEvent(MouseData mouseData) {
+        super(mouseData);
+        this.screenX = mouseData.screenX;
+        this.screenY = mouseData.screenY;
     }
 
     public int getScreenX() {

@@ -37,14 +37,14 @@ public class DisplayManager implements EventProcessor {
                 case Maximum:
                 case Minimum:
             }
-        }else if(event instanceof GamePadEvent){
-            GamePadEvent gamePadEvent=(GamePadEvent)event;
-            switch (gamePadEvent.getOperation()){
+        } else if (event instanceof GamePadEvent) {
+            GamePadEvent gamePadEvent = (GamePadEvent) event;
+            switch (gamePadEvent.getOperation()) {
                 case ButtonDown:
-                   if(gamePadEvent.getButton()==5){
-                       //
-                   }
-                   break;
+                    if (gamePadEvent.getButton() == 5) {
+                        //
+                    }
+                    break;
             }
         }
     }

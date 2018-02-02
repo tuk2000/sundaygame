@@ -1,11 +1,10 @@
-package com.sunday.engine.scenario.eventpocess;
+package com.sunday.engine.events.synchronize;
 
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.sunday.engine.events.EventPoster;
-import com.sunday.engine.events.synchronize.CollisionEvent;
 
 public class CollisionEventTransfer implements ContactListener {
     private EventPoster eventPoster;
