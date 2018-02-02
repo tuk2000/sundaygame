@@ -1,10 +1,10 @@
 package com.sunday.game.world;
 
 import com.badlogic.gdx.Screen;
-import com.sunday.game.engine.common.enums.Label;
-import com.sunday.game.engine.examples.RoleConstructor;
-import com.sunday.game.engine.scenario.Scenario;
-import com.sunday.game.engine.scenario.ScenarioEngine;
+import com.sunday.engine.common.enums.Label;
+import com.sunday.engine.examples.RoleConstructor;
+import com.sunday.engine.scenario.Scenario;
+import com.sunday.engine.scenario.ScenarioEngine;
 
 
 public class GameTest implements Screen {
