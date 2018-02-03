@@ -8,7 +8,7 @@ import com.sunday.engine.common.AnimationTimer;
 import com.sunday.engine.common.DataOperation;
 import com.sunday.engine.common.Outlook;
 import com.sunday.engine.common.viewlayers.TextureViewLayer;
-import com.sunday.engine.databank.port.HolderPort;
+import com.sunday.engine.databank.ports.UserPort;
 import com.sunday.engine.databank.synchronize.SynchronizeCondition;
 import com.sunday.engine.databank.synchronize.SynchronizeEvent;
 import com.sunday.engine.databank.synchronize.SynchronizeExecutor;
@@ -52,9 +52,9 @@ public class HeroModel extends AbstractModel {
     }
 
     @Override
-    protected void initDataSynchronize(HolderPort holderPort) {
-        holderPort.addDataSynchronize(movementWithAnimation, animationUpdater);
-        holderPort.addDataSynchronize(AnimationTimer.getCondition(), animationUpdater);
+    protected void initDataSynchronize(UserPort userPort) {
+        userPort.addDataSynchronize(movementWithAnimation, animationUpdater);
+        userPort.addDataSynchronize(AnimationTimer.getCondition(), animationUpdater);
     }
 
     @Override

@@ -5,7 +5,7 @@ import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerListener;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.math.Vector3;
-import com.sunday.engine.driver.DriverHub;
+import com.sunday.engine.driver.DriverSystem;
 import com.sunday.engine.driver.gamepad.GamePadData;
 import com.sunday.engine.driver.keyboard.KeyBoardData;
 import com.sunday.engine.driver.mouse.MouseData;
@@ -14,14 +14,14 @@ import com.sunday.engine.events.EventPoster;
 public class DriverEventTransfer implements InputProcessor, ControllerListener {
 
     private EventPoster eventPoster;
-    private DriverHub driverHub = new DriverHub();
+    private DriverSystem driverSystem = new DriverSystem();
     private KeyBoardData defaultKeyBoardData = new KeyBoardData();
     private MouseData defaultMouseData = new MouseData();
 
     public DriverEventTransfer(EventPoster eventPoster) {
         this.eventPoster = eventPoster;
-        driverHub.addDriverData(defaultKeyBoardData);
-        driverHub.addDriverData(defaultMouseData);
+        driverSystem.addDriverData(defaultKeyBoardData);
+        driverSystem.addDriverData(defaultMouseData);
     }
 
     //KeyBoard
@@ -75,56 +75,56 @@ public class DriverEventTransfer implements InputProcessor, ControllerListener {
     public void connected(Controller controller) {
         GamePadData gamePadData = new GamePadData();
         gamePadData.controller = controller;
-        driverHub.addDriverData(gamePadData);
+        driverSystem.addDriverData(gamePadData);
         eventPoster.dispatchEvent(GamePadEvent.newConnectEvent(gamePadData));
     }
 
     @Override
     public void disconnected(Controller controller) {
-        GamePadData gamePadData = driverHub.getMatchGamePadData(controller);
-        driverHub.removeDriverData(gamePadData);
+        GamePadData gamePadData = driverSystem.getMatchGamePadData(controller);
+        driverSystem.removeDriverData(gamePadData);
         eventPoster.dispatchEvent(GamePadEvent.newDisconnectEvent(gamePadData));
     }
 
     @Override
     public boolean buttonDown(Controller controller, int buttonCode) {
-        eventPoster.dispatchEvent(GamePadEvent.newButtonEvent(driverHub.getMatchGamePadData(controller), buttonCode, false));
+        eventPoster.dispatchEvent(GamePadEvent.newButtonEvent(driverSystem.getMatchGamePadData(controller), buttonCode, false));
         return true;
     }
 
     @Override
     public boolean buttonUp(Controller controller, int buttonCode) {
-        eventPoster.dispatchEvent(GamePadEvent.newButtonEvent(driverHub.getMatchGamePadData(controller), buttonCode, true));
+        eventPoster.dispatchEvent(GamePadEvent.newButtonEvent(driverSystem.getMatchGamePadData(controller), buttonCode, true));
         return true;
     }
 
     @Override
     public boolean axisMoved(Controller controller, int axisCode, float value) {
-        eventPoster.dispatchEvent(GamePadEvent.newAxisMoveEvent(driverHub.getMatchGamePadData(controller), axisCode, value));
+        eventPoster.dispatchEvent(GamePadEvent.newAxisMoveEvent(driverSystem.getMatchGamePadData(controller), axisCode, value));
         return true;
     }
 
     @Override
     public boolean povMoved(Controller controller, int povCode, PovDirection value) {
-        eventPoster.dispatchEvent(GamePadEvent.newPovMoveEvent(driverHub.getMatchGamePadData(controller), povCode, value));
+        eventPoster.dispatchEvent(GamePadEvent.newPovMoveEvent(driverSystem.getMatchGamePadData(controller), povCode, value));
         return true;
     }
 
     @Override
     public boolean xSliderMoved(Controller controller, int sliderCode, boolean value) {
-        eventPoster.dispatchEvent(GamePadEvent.newSliderMoveEvent(driverHub.getMatchGamePadData(controller), true, sliderCode, value));
+        eventPoster.dispatchEvent(GamePadEvent.newSliderMoveEvent(driverSystem.getMatchGamePadData(controller), true, sliderCode, value));
         return true;
     }
 
     @Override
     public boolean ySliderMoved(Controller controller, int sliderCode, boolean value) {
-        eventPoster.dispatchEvent(GamePadEvent.newSliderMoveEvent(driverHub.getMatchGamePadData(controller), false, sliderCode, value));
+        eventPoster.dispatchEvent(GamePadEvent.newSliderMoveEvent(driverSystem.getMatchGamePadData(controller), false, sliderCode, value));
         return true;
     }
 
     @Override
     public boolean accelerometerMoved(Controller controller, int accelerometerCode, Vector3 value) {
-        eventPoster.dispatchEvent(GamePadEvent.newAccelerometerMoveEvent(driverHub.getMatchGamePadData(controller), accelerometerCode, value));
+        eventPoster.dispatchEvent(GamePadEvent.newAccelerometerMoveEvent(driverSystem.getMatchGamePadData(controller), accelerometerCode, value));
         return true;
     }
 }

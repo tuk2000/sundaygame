@@ -41,7 +41,7 @@ public class Scenario implements Disposable {
 
     public void addRole(Role role) {
         roles.add(role);
-        role.abstractModel.connectDataBank(dataBank.getHolderPort(role.abstractModel));
+        role.abstractModel.connectToDataBank(dataBank);
     }
 
     public ArrayList<Role> getRoles() {

@@ -2,7 +2,6 @@ package com.sunday.engine.databank;
 
 import com.sunday.engine.common.Data;
 import com.sunday.engine.common.DataOperation;
-import com.sunday.engine.databank.port.DataHolder;
 import com.sunday.engine.databank.synchronize.SynchronizeManager;
 
 import java.util.ArrayList;
@@ -11,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public class DataStorage<T extends Data> {
-    private Map<DataHolder, List<T>> dataHolderListMap = new HashMap<>();
+    private Map<SynchronizePort, List<T>> portListMap = new HashMap<>();
     private Map<Class<T>, List<T>> dataClassInstancesMap = new HashMap<>();
 
     private SynchronizeManager synchronizeManager;
@@ -24,14 +23,14 @@ public class DataStorage<T extends Data> {
         return dataClassInstancesMap.get(clazz);
     }
 
-    public void addDataInstance(DataHolder holder, T t) {
+    public void addDataInstance(SynchronizePort synchronizePort, T t) {
         Class clazz = t.getClass();
         List<T> list;
-        if (dataHolderListMap.containsKey(holder)) {
-            list = dataHolderListMap.get(holder);
+        if (portListMap.containsKey(synchronizePort)) {
+            list = portListMap.get(synchronizePort);
         } else {
             list = new ArrayList<>();
-            dataHolderListMap.put(holder, list);
+            portListMap.put(synchronizePort, list);
         }
         list.add(t);
 
@@ -46,11 +45,11 @@ public class DataStorage<T extends Data> {
         synchronizeManager.synchronize(t, DataOperation.Add);
     }
 
-    public void deleteDataInstance(DataHolder holder, T t) {
+    public void deleteDataInstance(SynchronizePort synchronizePort, T t) {
         Class clazz = t.getClass();
         List<T> list;
-        if (dataHolderListMap.containsKey(holder)) {
-            list = dataHolderListMap.get(holder);
+        if (portListMap.containsKey(synchronizePort)) {
+            list = portListMap.get(synchronizePort);
             list.remove(t);
         }
 
@@ -59,14 +58,5 @@ public class DataStorage<T extends Data> {
             list.remove(t);
         }
         synchronizeManager.synchronize(t, DataOperation.Deletion);
-    }
-
-    public DataHolder getDataHolder(T t) {
-        for (DataHolder dataHolder : dataHolderListMap.keySet()) {
-            if (dataHolderListMap.get(dataHolder).contains(t)) {
-                return dataHolder;
-            }
-        }
-        return null;
     }
 }

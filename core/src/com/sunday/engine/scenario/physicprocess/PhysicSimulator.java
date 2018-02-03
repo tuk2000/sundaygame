@@ -7,12 +7,13 @@ import com.badlogic.gdx.utils.Disposable;
 import com.sunday.engine.common.DataOperation;
 import com.sunday.engine.common.PhysicReflection;
 import com.sunday.engine.databank.DataBank;
-import com.sunday.engine.databank.port.UserPort;
+import com.sunday.engine.databank.SubSystem;
+import com.sunday.engine.databank.ports.SystemPort;
 import com.sunday.engine.databank.synchronize.SynchronizeCondition;
 import com.sunday.engine.databank.synchronize.SynchronizeEvent;
 import com.sunday.engine.databank.synchronize.SynchronizeExecutor;
 
-public class PhysicSimulator implements Disposable {
+public class PhysicSimulator extends SubSystem implements Disposable {
     protected Vector2 defaultGravity = new Vector2(0, -9.8f);
     protected World world;
 
@@ -21,12 +22,10 @@ public class PhysicSimulator implements Disposable {
     }
 
     public PhysicSimulator(DataBank dataBank) {
+        super("PhysicSimulator");
         world = new World(defaultGravity, false);
-        connectDataBank(dataBank.getUserPort(this, PhysicReflection.class));
-    }
-
-    private void connectDataBank(UserPort<PhysicReflection> dataUserPort) {
-        dataUserPort.addDataSynchronize(synchronizeCondition, synchronizeExecutor);
+        SystemPort systemPort = dataBank.getSystemPort(this);
+        systemPort.addDataSynchronize(synchronizeCondition, synchronizeExecutor);
     }
 
     private SynchronizeCondition synchronizeCondition = new SynchronizeCondition(PhysicReflection.class, DataOperation.Add, DataOperation.Modification, DataOperation.Deletion);

@@ -4,7 +4,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Shape;
-import com.sunday.engine.databank.port.HolderPort;
+import com.sunday.engine.databank.ports.UserPort;
 import com.sunday.engine.model.AbstractModel;
 
 public class EnemyModel extends AbstractModel {
@@ -28,13 +28,14 @@ public class EnemyModel extends AbstractModel {
         fixtureDef.density = 10f;
     }
 
+
     @Override
-    protected void initDataSynchronize(HolderPort holderPort) {
+    public void dispose() {
 
     }
 
     @Override
-    public void dispose() {
+    protected void initDataSynchronize(UserPort userPort) {
 
     }
 }

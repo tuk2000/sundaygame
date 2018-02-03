@@ -1,4 +1,4 @@
-package com.sunday.engine.databank.port;
+package com.sunday.engine.databank.ports;
 
 import com.sunday.engine.common.Data;
 import com.sunday.engine.common.DataOperation;
@@ -8,20 +8,31 @@ import com.sunday.engine.databank.synchronize.SynchronizeExecutor;
 import com.sunday.engine.databank.synchronize.SynchronizeManager;
 import com.sunday.engine.databank.synchronize.SynchronizeTrigger;
 
+import java.util.List;
 
-public class HolderPortImpl implements HolderPort {
-
+public class SystemPortImpl<T extends Data> implements SystemPort<T> {
     private DataStorage dataStorage;
     private SynchronizeManager synchronizeManager;
-    private DataHolder holder;
 
-
-    public HolderPortImpl(DataHolder holder, DataStorage dataStorage, SynchronizeManager synchronizeManager) {
-        this.holder = holder;
+    public SystemPortImpl(DataStorage dataStorage, SynchronizeManager synchronizeManager) {
         this.dataStorage = dataStorage;
         this.synchronizeManager = synchronizeManager;
     }
 
+    @Override
+    public void addDataInstance(T t) {
+        dataStorage.addDataInstance(this, t);
+    }
+
+    @Override
+    public void deleteDataInstance(T t) {
+        dataStorage.deleteDataInstance(this, t);
+    }
+
+    @Override
+    public List<T> getDataInstances(Class<T> clazz) {
+        return dataStorage.getInstances(clazz);
+    }
 
     @Override
     public void synchronize(Data data, DataOperation dataOperation) {
@@ -39,15 +50,5 @@ public class HolderPortImpl implements HolderPort {
         if (trigger != null) {
             synchronizeManager.removeTrigger(trigger);
         }
-    }
-
-    @Override
-    public void addDataInstance(Data data) {
-        dataStorage.addDataInstance(holder, data);
-    }
-
-    @Override
-    public void deleteDataInstance(Data data) {
-        dataStorage.deleteDataInstance(holder, data);
     }
 }

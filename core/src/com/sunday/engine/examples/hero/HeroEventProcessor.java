@@ -48,12 +48,12 @@ public class HeroEventProcessor implements EventProcessor {
                 case 'H':
                 case 'h':
                     heroModel.movementState.action = Action.StandStill;
-                    heroModel.holderPort.synchronize(heroModel.movementState, DataOperation.Modification);
+                    heroModel.userPort.synchronize(heroModel.movementState, DataOperation.Modification);
                     break;
                 case 'L':
                 case 'l':
                     heroModel.outlook.dimension.add(16, 16);
-                    heroModel.holderPort.synchronize(heroModel.outlook, DataOperation.Modification);
+                    heroModel.userPort.synchronize(heroModel.outlook, DataOperation.Modification);
                     break;
                 case 'S':
                 case 's':
@@ -61,7 +61,7 @@ public class HeroEventProcessor implements EventProcessor {
                     if (heroModel.outlook.dimension.x < 16 || heroModel.outlook.dimension.y < 32) {
                         heroModel.outlook.dimension.set(16, 32);
                     }
-                    heroModel.holderPort.synchronize(heroModel.outlook, DataOperation.Modification);
+                    heroModel.userPort.synchronize(heroModel.outlook, DataOperation.Modification);
                     break;
             }
 
@@ -79,19 +79,19 @@ public class HeroEventProcessor implements EventProcessor {
                 case 'r':
                     heroModel.movementState.action = Action.Running;
                     body.applyLinearImpulse(1000, 0, worldCenter.x, worldCenter.y, true);
-                    heroModel.holderPort.synchronize(heroModel.movementState, DataOperation.Modification);
-                    heroModel.holderPort.synchronize(heroModel.physicReflection, DataOperation.Modification);
+                    heroModel.userPort.synchronize(heroModel.movementState, DataOperation.Modification);
+                    heroModel.userPort.synchronize(heroModel.physicReflection, DataOperation.Modification);
                     break;
                 case 'J':
                 case 'j':
                     heroModel.movementState.action = Action.Jumping;
                     body.applyLinearImpulse(0, 1000, worldCenter.x, worldCenter.y, true);
-                    heroModel.holderPort.synchronize(heroModel.movementState, DataOperation.Modification);
-                    heroModel.holderPort.synchronize(heroModel.physicReflection, DataOperation.Modification);
+                    heroModel.userPort.synchronize(heroModel.movementState, DataOperation.Modification);
+                    heroModel.userPort.synchronize(heroModel.physicReflection, DataOperation.Modification);
                     break;
                 default:
                     body.setLinearVelocity(0, 0);
-                    heroModel.holderPort.synchronize(heroModel.physicReflection, DataOperation.Modification);
+                    heroModel.userPort.synchronize(heroModel.physicReflection, DataOperation.Modification);
             }
         }
     }

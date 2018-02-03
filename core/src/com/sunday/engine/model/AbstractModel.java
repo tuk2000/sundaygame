@@ -7,7 +7,8 @@ import com.sunday.engine.common.DataOperation;
 import com.sunday.engine.common.MovementState;
 import com.sunday.engine.common.Outlook;
 import com.sunday.engine.common.PhysicReflection;
-import com.sunday.engine.databank.port.HolderPort;
+import com.sunday.engine.databank.DataBank;
+import com.sunday.engine.databank.ports.UserPort;
 import com.sunday.engine.databank.synchronize.SynchronizeCondition;
 import com.sunday.engine.databank.synchronize.SynchronizeEvent;
 import com.sunday.engine.databank.synchronize.SynchronizeExecutor;
@@ -21,6 +22,7 @@ import java.util.List;
 public abstract class AbstractModel implements Disposable {
 
     protected List<EventProcessor> eventProcessors = new ArrayList<>();
+    public UserPort userPort;
 
     protected void addEventProcessors(EventProcessor... eventProcessors) {
         Collections.addAll(this.eventProcessors, eventProcessors);
@@ -34,16 +36,14 @@ public abstract class AbstractModel implements Disposable {
     public PhysicReflection physicReflection = new PhysicReflection();
     public MovementState movementState = new MovementState();
 
-    public HolderPort holderPort;
-
-    public void connectDataBank(HolderPort holderPort) {
-        this.holderPort = holderPort;
-        holderPort.addDataInstance(outlook);
-        holderPort.addDataInstance(physicReflection);
-        holderPort.addDataInstance(movementState);
-        holderPort.addDataSynchronize(outLookChangedCond, outlookWithPhysic);
-        holderPort.addDataSynchronize(bodyCreatedCond, movementStateWithReflection);
-        initDataSynchronize(holderPort);
+    public void connectToDataBank(DataBank dataBank) {
+        this.userPort = dataBank.getUserPort(this);
+        userPort.addDataInstance(outlook);
+        userPort.addDataInstance(physicReflection);
+        userPort.addDataInstance(movementState);
+        userPort.addDataSynchronize(outLookChangedCond, outlookWithPhysic);
+        userPort.addDataSynchronize(bodyCreatedCond, movementStateWithReflection);
+        initDataSynchronize(userPort);
     }
 
     private SynchronizeCondition bodyCreatedCond = new SynchronizeCondition(physicReflection, DataOperation.Modification);
@@ -81,5 +81,5 @@ public abstract class AbstractModel implements Disposable {
         }
     };
 
-    protected abstract void initDataSynchronize(HolderPort holderPort);
+    protected abstract void initDataSynchronize(UserPort userPort);
 }

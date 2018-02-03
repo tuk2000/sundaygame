@@ -1,6 +1,7 @@
 package com.sunday.engine.driver;
 
 import com.badlogic.gdx.controllers.Controller;
+import com.sunday.engine.databank.SubSystem;
 import com.sunday.engine.driver.gamepad.GamePadData;
 import com.sunday.engine.driver.keyboard.KeyBoardData;
 import com.sunday.engine.driver.mouse.MouseData;
@@ -10,8 +11,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class DriverHub {
+public class DriverSystem extends SubSystem {
     private Map<DriverType, List<DriverData>> connectedDrivers = new HashMap<>();
+
+    public DriverSystem() {
+        super("DriverSystem");
+    }
+
 
     private boolean containsDriverData(DriverData driverData) {
         return connectedDrivers.containsKey(driverData.getDriverType()) ? connectedDrivers.get(driverData).contains(driverData) : false;

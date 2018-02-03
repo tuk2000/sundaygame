@@ -1,7 +1,9 @@
 package com.sunday.engine.events;
 
 
-public class Event {
+import com.sunday.engine.common.Data;
+
+public class Event implements Data {
     private Object source;
 
     public Event(Object source) {

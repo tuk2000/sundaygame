@@ -1,15 +1,14 @@
 package com.sunday.engine.databank;
 
 import com.sunday.engine.common.Data;
-import com.sunday.engine.databank.port.HolderPort;
-import com.sunday.engine.databank.port.UserPort;
+import com.sunday.engine.databank.ports.SystemPort;
+import com.sunday.engine.databank.ports.UserPort;
 
 public interface DataBank<T extends Data> {
+    SystemPort getSystemPort(SubSystem subSystem);
 
-    HolderPort getHolderPort(Object realHolder);
+    UserPort<T> getUserPort(Object user);
 
-    UserPort<T> getUserPort(Object realUser, Class<T> clazz);
-
-    void removePort(Object realRole);
+    void removePort(SynchronizePort synchronizePort);
 
 }

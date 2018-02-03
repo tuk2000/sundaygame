@@ -1,6 +1,12 @@
 package com.sunday.engine.rules;
 
-public class RuleSystem {
+import com.sunday.engine.databank.SubSystem;
+
+public class RuleSystem extends SubSystem {
+    public RuleSystem() {
+        super("RuleSystem");
+    }
+
     public void addRule(Rule rule) {
     }
 
