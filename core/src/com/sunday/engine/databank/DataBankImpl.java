@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class DataBankImpl<T extends Data> implements DataBank<T> {
-    private Map<SubSystem, SystemPort> systemPortMap = new HashMap<>();
+    private Map<Class<? extends SubSystem>, SystemPort> systemPortMap = new HashMap<>();
     private Map<Object, UserPort> userPortsMap = new HashMap<>();
     private SynchronizeManager synchronizeManager;
     private DataStorage dataStorage;
@@ -22,11 +22,13 @@ public class DataBankImpl<T extends Data> implements DataBank<T> {
     }
 
     @Override
-    public SystemPort getSystemPort(SubSystem subSystem) {
-        if (!systemPortMap.containsKey(subSystem)) {
-            systemPortMap.put(subSystem, new SystemPortImpl(dataStorage, synchronizeManager));
+    public SystemPort getSystemPort(Class<? extends SubSystem> subSystemClass) {
+        if (!systemPortMap.containsKey(subSystemClass)) {
+            systemPortMap.put(subSystemClass, new SystemPortImpl(dataStorage, synchronizeManager));
         }
-        return systemPortMap.get(subSystem);
+        SystemPort systemPort = systemPortMap.get(subSystemClass);
+        dataStorage.addPort(systemPort);
+        return systemPort;
     }
 
     @Override
@@ -34,14 +36,16 @@ public class DataBankImpl<T extends Data> implements DataBank<T> {
         if (!userPortsMap.containsKey(user)) {
             userPortsMap.put(user, new UserPortImpl(dataStorage, synchronizeManager));
         }
-        return userPortsMap.get(user);
+        UserPort userPort = userPortsMap.get(user);
+        dataStorage.addPort(userPort);
+        return userPort;
     }
 
     @Override
     public void removePort(SynchronizePort synchronizePort) {
-        for (SubSystem subSystem : systemPortMap.keySet()) {
-            if (systemPortMap.get(subSystem).equals(synchronizePort)) {
-                systemPortMap.remove(subSystem);
+        for (Class clazz : systemPortMap.keySet()) {
+            if (systemPortMap.get(clazz).equals(synchronizePort)) {
+                systemPortMap.remove(clazz);
             }
         }
         for (Object user : userPortsMap.keySet()) {
@@ -49,5 +53,6 @@ public class DataBankImpl<T extends Data> implements DataBank<T> {
                 userPortsMap.remove(user);
             }
         }
+        dataStorage.removePort(synchronizePort);
     }
 }

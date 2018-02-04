@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Map;
 
 public class DataStorage<T extends Data> {
-    private Map<SynchronizePort, List<T>> portListMap = new HashMap<>();
+    private Map<SynchronizePort, Map<Class<T>, List<T>>> portListMap = new HashMap<>();
     private Map<Class<T>, List<T>> dataClassInstancesMap = new HashMap<>();
 
     private SynchronizeManager synchronizeManager;
@@ -25,15 +25,19 @@ public class DataStorage<T extends Data> {
 
     public void addDataInstance(SynchronizePort synchronizePort, T t) {
         Class clazz = t.getClass();
-        List<T> list;
-        if (portListMap.containsKey(synchronizePort)) {
-            list = portListMap.get(synchronizePort);
-        } else {
-            list = new ArrayList<>();
-            portListMap.put(synchronizePort, list);
-        }
-        list.add(t);
+        Map<Class<T>, List<T>> classListMap;
+        addPort(synchronizePort);
+        classListMap = portListMap.get(synchronizePort);
 
+        if (classListMap.containsKey(clazz)) {
+            classListMap.get(clazz).add(t);
+        } else {
+            List<T> list = new ArrayList<>();
+            list.add(t);
+            classListMap.put(clazz, list);
+        }
+
+        List<T> list;
         if (dataClassInstancesMap.keySet().contains(clazz)) {
             list = dataClassInstancesMap.get(clazz);
         } else {
@@ -48,15 +52,60 @@ public class DataStorage<T extends Data> {
     public void deleteDataInstance(SynchronizePort synchronizePort, T t) {
         Class clazz = t.getClass();
         List<T> list;
+        Map<Class<T>, List<T>> classListMap;
         if (portListMap.containsKey(synchronizePort)) {
-            list = portListMap.get(synchronizePort);
-            list.remove(t);
+            classListMap = portListMap.get(synchronizePort);
+            if (classListMap.containsKey(clazz)) {
+                list = classListMap.get(clazz);
+                list.remove(t);
+                if (list.isEmpty()) {
+                    classListMap.remove(clazz);
+                }
+            }
         }
 
         if (dataClassInstancesMap.keySet().contains(clazz)) {
             list = dataClassInstancesMap.get(clazz);
             list.remove(t);
+            if (list.isEmpty()) {
+                dataClassInstancesMap.remove(clazz);
+            }
         }
         synchronizeManager.synchronize(t, DataOperation.Deletion);
+    }
+
+    public List<T> getDataList(SynchronizePort synchronizePort) {
+        List<T> result = new ArrayList<>();
+        portListMap.get(synchronizePort).values().forEach(list -> result.addAll(list));
+        return result;
+    }
+
+    public <T extends Data> List<Class<T>> getDataClassList(SynchronizePort synchronizePort) {
+        List<Class<T>> result = new ArrayList<>();
+        portListMap.get(synchronizePort).keySet().forEach(e -> result.add((Class<T>) e));
+        return result;
+    }
+
+    public void addPort(SynchronizePort synchronizePort) {
+        Map<Class<T>, List<T>> classListMap;
+        if (!portListMap.containsKey(synchronizePort)) {
+            classListMap = new HashMap<>();
+            portListMap.put(synchronizePort, classListMap);
+        }
+    }
+
+    public void removePort(SynchronizePort synchronizePort) {
+        Map<Class<T>, List<T>> classListMap;
+        if (portListMap.containsKey(synchronizePort)) {
+            classListMap = portListMap.get(synchronizePort);
+            classListMap.keySet().forEach(clazz -> {
+                classListMap.get(clazz).forEach(data -> {
+                    dataClassInstancesMap.get(clazz).remove(data);
+                    synchronizeManager.synchronize(data, DataOperation.Deletion);
+                });
+                classListMap.clear();
+            });
+            portListMap.remove(synchronizePort);
+        }
     }
 }

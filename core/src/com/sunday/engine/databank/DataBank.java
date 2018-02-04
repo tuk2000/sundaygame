@@ -5,7 +5,7 @@ import com.sunday.engine.databank.ports.SystemPort;
 import com.sunday.engine.databank.ports.UserPort;
 
 public interface DataBank<T extends Data> {
-    SystemPort getSystemPort(SubSystem subSystem);
+    SystemPort getSystemPort(Class<? extends SubSystem> subSystemClass);
 
     UserPort<T> getUserPort(Object user);
 

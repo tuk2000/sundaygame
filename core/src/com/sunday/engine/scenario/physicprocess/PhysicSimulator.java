@@ -6,7 +6,6 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
 import com.sunday.engine.common.DataOperation;
 import com.sunday.engine.common.PhysicReflection;
-import com.sunday.engine.databank.DataBank;
 import com.sunday.engine.databank.SubSystem;
 import com.sunday.engine.databank.ports.SystemPort;
 import com.sunday.engine.databank.synchronize.SynchronizeCondition;
@@ -21,10 +20,9 @@ public class PhysicSimulator extends SubSystem implements Disposable {
         return world;
     }
 
-    public PhysicSimulator(DataBank dataBank) {
-        super("PhysicSimulator");
+    public PhysicSimulator(SystemPort systemPort) {
+        super("PhysicSimulator", systemPort);
         world = new World(defaultGravity, false);
-        SystemPort systemPort = dataBank.getSystemPort(this);
         systemPort.addDataSynchronize(synchronizeCondition, synchronizeExecutor);
     }
 

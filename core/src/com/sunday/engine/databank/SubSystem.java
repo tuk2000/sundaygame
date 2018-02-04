@@ -6,15 +6,12 @@ public abstract class SubSystem {
     protected String name;
     protected SystemPort systemPort;
 
-    protected SubSystem(String name) {
+    protected SubSystem(String name, SystemPort systemPort) {
         this.name = name;
+        this.systemPort = systemPort;
     }
 
     public String getName() {
         return name;
-    }
-
-    public void connectToDataBank(DataBank dataBank) {
-        systemPort = dataBank.getSystemPort(this);
     }
 }

@@ -9,6 +9,8 @@ import com.sunday.engine.databank.synchronize.SynchronizeManager;
 import com.sunday.engine.databank.synchronize.SynchronizeTrigger;
 
 import java.util.List;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class SystemPortImpl<T extends Data> implements SystemPort<T> {
     private DataStorage dataStorage;
@@ -21,7 +23,13 @@ public class SystemPortImpl<T extends Data> implements SystemPort<T> {
 
     @Override
     public void addDataInstance(T t) {
-        dataStorage.addDataInstance(this, t);
+        if (!containsDataInstance(t))
+            dataStorage.addDataInstance(this, t);
+    }
+
+    @Override
+    public boolean containsDataInstance(T t) {
+        return dataStorage.getDataList(this).contains(t);
     }
 
     @Override
@@ -30,12 +38,17 @@ public class SystemPortImpl<T extends Data> implements SystemPort<T> {
     }
 
     @Override
-    public List<T> getDataInstances(Class<T> clazz) {
-        return dataStorage.getInstances(clazz);
+    public List<T> getDataList(Predicate<T> predicate) {
+        return (List<T>) dataStorage.getDataList(this).stream().filter(predicate).collect(Collectors.toList());
     }
 
     @Override
-    public void synchronize(Data data, DataOperation dataOperation) {
+    public List<Class<T>> getDataClassList() {
+        return dataStorage.getDataClassList(this);
+    }
+
+    @Override
+    public void synchronize(T data, DataOperation dataOperation) {
         synchronizeManager.synchronize(data, dataOperation);
     }
 

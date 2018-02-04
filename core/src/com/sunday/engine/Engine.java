@@ -14,11 +14,8 @@ public class Engine {
 
     public Engine() {
         dataBank = new DataBankImpl();
-        driverSystem = new DriverSystem();
-        eventSystem = new EventSystem();
-        ruleSystem = new RuleSystem();
-        driverSystem.connectToDataBank(dataBank);
-        eventSystem.connectToDataBank(dataBank);
-        ruleSystem.connectToDataBank(dataBank);
+        driverSystem = new DriverSystem(dataBank.getSystemPort(DriverSystem.class));
+        eventSystem = new EventSystem(dataBank.getSystemPort(EventSystem.class));
+        ruleSystem = new RuleSystem(dataBank.getSystemPort(RuleSystem.class));
     }
 }

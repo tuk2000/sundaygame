@@ -14,14 +14,15 @@ import com.sunday.engine.events.EventPoster;
 public class DriverEventTransfer implements InputProcessor, ControllerListener {
 
     private EventPoster eventPoster;
-    private DriverSystem driverSystem = new DriverSystem();
-    private KeyBoardData defaultKeyBoardData = new KeyBoardData();
-    private MouseData defaultMouseData = new MouseData();
+    private DriverSystem driverSystem;
+    private KeyBoardData defaultKeyBoardData;
+    private MouseData defaultMouseData;
 
-    public DriverEventTransfer(EventPoster eventPoster) {
+    public DriverEventTransfer(DriverSystem driverSystem, EventPoster eventPoster) {
         this.eventPoster = eventPoster;
-        driverSystem.addDriverData(defaultKeyBoardData);
-        driverSystem.addDriverData(defaultMouseData);
+        this.driverSystem = driverSystem;
+        defaultKeyBoardData = driverSystem.getDefaultKeyBoardData();
+        defaultMouseData = driverSystem.getDefaultMouseData();
     }
 
     //KeyBoard
