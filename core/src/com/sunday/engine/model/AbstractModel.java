@@ -12,8 +12,8 @@ import com.sunday.engine.databank.ports.UserPort;
 import com.sunday.engine.databank.synchronize.SynchronizeCondition;
 import com.sunday.engine.databank.synchronize.SynchronizeEvent;
 import com.sunday.engine.databank.synchronize.SynchronizeExecutor;
-import com.sunday.engine.events.Event;
-import com.sunday.engine.events.EventProcessor;
+import com.sunday.engine.event.Event;
+import com.sunday.engine.event.EventProcessor;
 
 import java.util.ArrayList;
 import java.util.Collections;

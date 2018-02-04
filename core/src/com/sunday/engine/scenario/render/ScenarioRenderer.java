@@ -14,7 +14,7 @@ import com.sunday.engine.common.AnimationTimer;
 import com.sunday.engine.common.enums.Label;
 import com.sunday.engine.common.viewlayers.MapViewLayer;
 import com.sunday.engine.common.viewlayers.TextureViewLayer;
-import com.sunday.engine.events.EventProcessor;
+import com.sunday.engine.event.EventProcessor;
 import com.sunday.engine.examples.Role;
 import com.sunday.engine.model.AbstractModel;
 import com.sunday.engine.scenario.physicprocess.PhysicSimulator;

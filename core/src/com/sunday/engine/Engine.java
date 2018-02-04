@@ -3,8 +3,8 @@ package com.sunday.engine;
 import com.sunday.engine.databank.DataBank;
 import com.sunday.engine.databank.DataBankImpl;
 import com.sunday.engine.driver.DriverSystem;
-import com.sunday.engine.events.EventSystem;
-import com.sunday.engine.rules.RuleSystem;
+import com.sunday.engine.event.EventSystem;
+import com.sunday.engine.rule.RuleSystem;
 
 public class Engine {
     private DataBank dataBank;

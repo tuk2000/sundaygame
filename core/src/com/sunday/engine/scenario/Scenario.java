@@ -3,7 +3,7 @@ package com.sunday.engine.scenario;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Disposable;
 import com.sunday.engine.databank.DataBank;
-import com.sunday.engine.events.Event;
+import com.sunday.engine.event.Event;
 import com.sunday.engine.examples.Role;
 
 import java.util.ArrayList;

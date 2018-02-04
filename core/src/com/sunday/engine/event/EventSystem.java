@@ -1,4 +1,4 @@
-package com.sunday.engine.events;
+package com.sunday.engine.event;
 
 import com.sunday.engine.databank.SubSystem;
 import com.sunday.engine.databank.ports.SystemPort;

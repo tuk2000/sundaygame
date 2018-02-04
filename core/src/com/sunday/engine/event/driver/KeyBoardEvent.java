@@ -1,4 +1,4 @@
-package com.sunday.engine.events.driver;
+package com.sunday.engine.event.driver;
 
 import com.sunday.engine.driver.keyboard.KeyBoardData;
 import com.sunday.engine.driver.keyboard.KeyBoardSignal;

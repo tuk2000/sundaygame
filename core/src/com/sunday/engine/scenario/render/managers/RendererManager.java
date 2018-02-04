@@ -2,10 +2,10 @@ package com.sunday.engine.scenario.render.managers;
 
 
 import com.badlogic.gdx.Input;
-import com.sunday.engine.events.Event;
-import com.sunday.engine.events.EventProcessor;
-import com.sunday.engine.events.driver.GamePadEvent;
-import com.sunday.engine.events.driver.KeyBoardEvent;
+import com.sunday.engine.event.Event;
+import com.sunday.engine.event.EventProcessor;
+import com.sunday.engine.event.driver.GamePadEvent;
+import com.sunday.engine.event.driver.KeyBoardEvent;
 
 public class RendererManager implements EventProcessor {
     public boolean DoRenderMap = true;

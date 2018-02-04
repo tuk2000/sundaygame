@@ -1,4 +1,4 @@
-package com.sunday.engine.events.driver;
+package com.sunday.engine.event.driver;
 
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.controllers.Controller;
@@ -9,7 +9,7 @@ import com.sunday.engine.driver.DriverSystem;
 import com.sunday.engine.driver.gamepad.GamePadData;
 import com.sunday.engine.driver.keyboard.KeyBoardData;
 import com.sunday.engine.driver.mouse.MouseData;
-import com.sunday.engine.events.EventPoster;
+import com.sunday.engine.event.EventPoster;
 
 public class DriverEventTransfer implements InputProcessor, ControllerListener {
 

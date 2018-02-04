@@ -1,10 +1,10 @@
 package com.sunday.engine.scenario.render.managers;
 
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.sunday.engine.events.Event;
-import com.sunday.engine.events.EventProcessor;
-import com.sunday.engine.events.driver.GamePadEvent;
-import com.sunday.engine.events.window.WindowEvent;
+import com.sunday.engine.event.Event;
+import com.sunday.engine.event.EventProcessor;
+import com.sunday.engine.event.driver.GamePadEvent;
+import com.sunday.engine.event.window.WindowEvent;
 
 public class DisplayManager implements EventProcessor {
     private float aspectRatio;//height/width

@@ -1,6 +1,6 @@
-package com.sunday.engine.events.window;
+package com.sunday.engine.event.window;
 
-import com.sunday.engine.events.Event;
+import com.sunday.engine.event.Event;
 
 public class WindowEvent extends Event {
     public int getWidth() {

@@ -4,11 +4,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.sunday.engine.common.DataOperation;
 import com.sunday.engine.common.enums.Action;
-import com.sunday.engine.events.Event;
-import com.sunday.engine.events.EventProcessor;
-import com.sunday.engine.events.driver.DriverEvent;
-import com.sunday.engine.events.driver.KeyBoardEvent;
-import com.sunday.engine.events.synchronize.CollisionEvent;
+import com.sunday.engine.event.Event;
+import com.sunday.engine.event.EventProcessor;
+import com.sunday.engine.event.driver.DriverEvent;
+import com.sunday.engine.event.driver.KeyBoardEvent;
+import com.sunday.engine.event.synchronize.CollisionEvent;
 
 public class HeroEventProcessor implements EventProcessor {
     private HeroModel heroModel;

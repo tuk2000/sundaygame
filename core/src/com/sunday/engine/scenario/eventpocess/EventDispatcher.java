@@ -2,9 +2,9 @@ package com.sunday.engine.scenario.eventpocess;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Disposable;
-import com.sunday.engine.events.Event;
-import com.sunday.engine.events.EventPoster;
-import com.sunday.engine.events.EventProcessor;
+import com.sunday.engine.event.Event;
+import com.sunday.engine.event.EventPoster;
+import com.sunday.engine.event.EventProcessor;
 import com.sunday.engine.scenario.Scenario;
 
 import java.util.ArrayList;

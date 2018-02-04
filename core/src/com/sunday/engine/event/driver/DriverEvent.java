@@ -1,9 +1,9 @@
-package com.sunday.engine.events.driver;
+package com.sunday.engine.event.driver;
 
 
 import com.sunday.engine.driver.DriverData;
 import com.sunday.engine.driver.DriverType;
-import com.sunday.engine.events.Event;
+import com.sunday.engine.event.Event;
 
 public class DriverEvent extends Event {
 

@@ -1,6 +1,6 @@
-package com.sunday.engine.events.synchronize;
+package com.sunday.engine.event.synchronize;
 
-import com.sunday.engine.events.Event;
+import com.sunday.engine.event.Event;
 
 public class CollisionEvent extends Event {
     private Object objectA;

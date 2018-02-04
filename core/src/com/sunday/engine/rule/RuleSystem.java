@@ -1,4 +1,4 @@
-package com.sunday.engine.rules;
+package com.sunday.engine.rule;
 
 import com.sunday.engine.databank.SubSystem;
 import com.sunday.engine.databank.ports.SystemPort;
