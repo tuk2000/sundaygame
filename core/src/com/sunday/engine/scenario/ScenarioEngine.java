@@ -38,8 +38,8 @@ public class ScenarioEngine implements Disposable {
 
         eventDispatcher = new EventDispatcher(Root);
         driverSystem = new DriverSystem(dataBank.getSystemPort(DriverSystem.class));
-        driverEventTransfer = new DriverEventTransfer(driverSystem, eventDispatcher);
-        collisionEventTransfer = new CollisionEventTransfer(eventDispatcher);
+        driverEventTransfer = new DriverEventTransfer(driverSystem);
+        collisionEventTransfer = new CollisionEventTransfer();
         Gdx.input.setInputProcessor(driverEventTransfer);
         Controllers.addListener(driverEventTransfer);
 

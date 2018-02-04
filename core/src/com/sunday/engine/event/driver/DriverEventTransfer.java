@@ -9,17 +9,14 @@ import com.sunday.engine.driver.DriverSystem;
 import com.sunday.engine.driver.gamepad.GamePadData;
 import com.sunday.engine.driver.keyboard.KeyBoardData;
 import com.sunday.engine.driver.mouse.MouseData;
-import com.sunday.engine.event.EventPoster;
+import com.sunday.engine.event.EventTransfer;
 
-public class DriverEventTransfer implements InputProcessor, ControllerListener {
-
-    private EventPoster eventPoster;
+public class DriverEventTransfer extends EventTransfer implements InputProcessor, ControllerListener {
     private DriverSystem driverSystem;
     private KeyBoardData defaultKeyBoardData;
     private MouseData defaultMouseData;
 
-    public DriverEventTransfer(DriverSystem driverSystem, EventPoster eventPoster) {
-        this.eventPoster = eventPoster;
+    public DriverEventTransfer(DriverSystem driverSystem) {
         this.driverSystem = driverSystem;
         defaultKeyBoardData = driverSystem.getDefaultKeyBoardData();
         defaultMouseData = driverSystem.getDefaultMouseData();

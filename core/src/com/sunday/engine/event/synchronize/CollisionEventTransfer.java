@@ -4,13 +4,11 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.sunday.engine.event.EventPoster;
+import com.sunday.engine.event.EventTransfer;
 
-public class CollisionEventTransfer implements ContactListener {
-    private EventPoster eventPoster;
+public class CollisionEventTransfer extends EventTransfer implements ContactListener {
 
-    public CollisionEventTransfer(EventPoster eventPoster) {
-        this.eventPoster = eventPoster;
+    public CollisionEventTransfer() {
     }
 
     @Override

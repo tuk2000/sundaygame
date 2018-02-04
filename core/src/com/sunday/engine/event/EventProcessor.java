@@ -1,5 +1,7 @@
 package com.sunday.engine.event;
 
-public interface EventProcessor<T extends Event> {
+import com.sunday.engine.common.Data;
+
+public interface EventProcessor<T extends Event> extends Data {
     void processEvent(T t);
 }
