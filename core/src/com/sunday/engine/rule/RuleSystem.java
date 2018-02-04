@@ -8,9 +8,25 @@ public class RuleSystem extends SubSystem {
         super("RuleSystem", systemPort);
     }
 
+    private void applyRule(Rule rule) {
+
+    }
+
+    private void mount(Rule rule) {
+
+    }
+
+    private void disMount(Rule rule) {
+
+    }
+
     public void addRule(Rule rule) {
+        systemPort.addDataInstance(rule);
+        mount(rule);
     }
 
     public void deleteRule(Rule rule) {
+        systemPort.deleteDataInstance(rule);
+        disMount(rule);
     }
 }

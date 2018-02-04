@@ -6,15 +6,15 @@ import com.badlogic.gdx.controllers.ControllerListener;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.math.Vector3;
 import com.sunday.engine.driver.DriverSystem;
-import com.sunday.engine.driver.gamepad.GamePadData;
-import com.sunday.engine.driver.keyboard.KeyBoardData;
-import com.sunday.engine.driver.mouse.MouseData;
+import com.sunday.engine.driver.gamepad.GamePad;
+import com.sunday.engine.driver.keyboard.KeyBoard;
+import com.sunday.engine.driver.mouse.Mouse;
 import com.sunday.engine.event.EventTransfer;
 
 public class DriverEventTransfer extends EventTransfer implements InputProcessor, ControllerListener {
     private DriverSystem driverSystem;
-    private KeyBoardData defaultKeyBoardData;
-    private MouseData defaultMouseData;
+    private KeyBoard defaultKeyBoardData;
+    private Mouse defaultMouseData;
 
     public DriverEventTransfer(DriverSystem driverSystem) {
         this.driverSystem = driverSystem;
@@ -71,7 +71,7 @@ public class DriverEventTransfer extends EventTransfer implements InputProcessor
     //GamePad
     @Override
     public void connected(Controller controller) {
-        GamePadData gamePadData = new GamePadData();
+        GamePad gamePadData = new GamePad();
         gamePadData.controller = controller;
         driverSystem.addDriverData(gamePadData);
         eventPoster.dispatchEvent(GamePadEvent.newConnectEvent(gamePadData));
@@ -79,7 +79,7 @@ public class DriverEventTransfer extends EventTransfer implements InputProcessor
 
     @Override
     public void disconnected(Controller controller) {
-        GamePadData gamePadData = driverSystem.getMatchGamePadData(controller);
+        GamePad gamePadData = driverSystem.getMatchGamePadData(controller);
         driverSystem.removeDriverData(gamePadData);
         eventPoster.dispatchEvent(GamePadEvent.newDisconnectEvent(gamePadData));
     }

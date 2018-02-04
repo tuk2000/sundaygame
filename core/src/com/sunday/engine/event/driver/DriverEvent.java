@@ -1,20 +1,20 @@
 package com.sunday.engine.event.driver;
 
 
-import com.sunday.engine.driver.DriverData;
+import com.sunday.engine.driver.Driver;
 import com.sunday.engine.driver.DriverType;
 import com.sunday.engine.event.Event;
 
 public class DriverEvent extends Event {
 
-    private DriverData driverData;
+    private Driver driver;
 
-    public DriverEvent(DriverData driverData) {
-        super(driverData);
-        this.driverData = driverData;
+    public DriverEvent(Driver driver) {
+        super(driver);
+        this.driver = driver;
     }
 
     public DriverType getDriverType() {
-        return driverData.getDriverType();
+        return driver.getDriverType();
     }
 }

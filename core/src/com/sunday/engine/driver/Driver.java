@@ -2,10 +2,10 @@ package com.sunday.engine.driver;
 
 import com.sunday.engine.common.Data;
 
-public abstract class DriverData implements Data {
+public abstract class Driver implements Data {
     private DriverType driverType;
 
-    public DriverData(DriverType driverType) {
+    public Driver(DriverType driverType) {
         this.driverType = driverType;
     }
 

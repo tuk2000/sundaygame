@@ -1,10 +1,10 @@
 package com.sunday.engine.event.driver;
 
-import com.sunday.engine.driver.keyboard.KeyBoardData;
+import com.sunday.engine.driver.keyboard.KeyBoard;
 import com.sunday.engine.driver.keyboard.KeyBoardSignal;
 
 public class KeyBoardEvent extends DriverEvent {
-    public KeyBoardEvent(KeyBoardData keyBoardData) {
+    public KeyBoardEvent(KeyBoard keyBoardData) {
         super(keyBoardData);
     }
 
@@ -12,14 +12,14 @@ public class KeyBoardEvent extends DriverEvent {
     private int key;
     private char character;
 
-    public static KeyBoardEvent newKeyEvent(KeyBoardData keyBoardData, boolean isKeyDown, int key) {
+    public static KeyBoardEvent newKeyEvent(KeyBoard keyBoardData, boolean isKeyDown, int key) {
         KeyBoardEvent keyBoardEvent = new KeyBoardEvent(keyBoardData);
         keyBoardEvent.operation = isKeyDown ? KeyBoardSignal.KeyDown : KeyBoardSignal.KeyUp;
         keyBoardEvent.key = key;
         return keyBoardEvent;
     }
 
-    public static KeyBoardEvent newKeyEvent(KeyBoardData keyBoardData, char character) {
+    public static KeyBoardEvent newKeyEvent(KeyBoard keyBoardData, char character) {
         KeyBoardEvent keyBoardEvent = new KeyBoardEvent(keyBoardData);
         keyBoardEvent.operation = KeyBoardSignal.KeyTyped;
         keyBoardEvent.key = 0;

@@ -1,4 +1,6 @@
 package com.sunday.engine.rule;
 
-public interface Rule {
+import com.sunday.engine.common.Data;
+
+public interface Rule extends Data{
 }

@@ -3,7 +3,7 @@ package com.sunday.engine.event.driver;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.PovDirection;
 import com.badlogic.gdx.math.Vector3;
-import com.sunday.engine.driver.gamepad.GamePadData;
+import com.sunday.engine.driver.gamepad.GamePad;
 import com.sunday.engine.driver.gamepad.GamePadSignal;
 
 public class GamePadEvent extends DriverEvent {
@@ -23,26 +23,26 @@ public class GamePadEvent extends DriverEvent {
     private int accelerometerCode;
     private Vector3 accelerometerMoveValue;
 
-    public static GamePadEvent newConnectEvent(GamePadData gamePadData) {
+    public static GamePadEvent newConnectEvent(GamePad gamePadData) {
         GamePadEvent gamePadEvent = new GamePadEvent(gamePadData);
         gamePadEvent.operation = GamePadSignal.Connect;
         return gamePadEvent;
     }
 
-    public static GamePadEvent newDisconnectEvent(GamePadData gamePadData) {
+    public static GamePadEvent newDisconnectEvent(GamePad gamePadData) {
         GamePadEvent gamePadEvent = new GamePadEvent(gamePadData);
         gamePadEvent.operation = GamePadSignal.Disconnect;
         return gamePadEvent;
     }
 
-    public static GamePadEvent newButtonEvent(GamePadData gamePadData, int buttonCode, boolean buttonDown) {
+    public static GamePadEvent newButtonEvent(GamePad gamePadData, int buttonCode, boolean buttonDown) {
         GamePadEvent gamePadEvent = new GamePadEvent(gamePadData);
         gamePadEvent.operation = buttonDown ? GamePadSignal.ButtonDown : GamePadSignal.ButtonUp;
         gamePadEvent.buttonCode = buttonCode;
         return gamePadEvent;
     }
 
-    public static GamePadEvent newAxisMoveEvent(GamePadData gamePadData, int axisCode, float value) {
+    public static GamePadEvent newAxisMoveEvent(GamePad gamePadData, int axisCode, float value) {
         GamePadEvent gamePadEvent = new GamePadEvent(gamePadData);
         gamePadEvent.operation = GamePadSignal.AxisMove;
         gamePadEvent.axisCode = axisCode;
@@ -50,7 +50,7 @@ public class GamePadEvent extends DriverEvent {
         return gamePadEvent;
     }
 
-    public static GamePadEvent newPovMoveEvent(GamePadData gamePadData, int povCode, PovDirection povDirection) {
+    public static GamePadEvent newPovMoveEvent(GamePad gamePadData, int povCode, PovDirection povDirection) {
         GamePadEvent gamePadEvent = new GamePadEvent(gamePadData);
         gamePadEvent.operation = GamePadSignal.PovMove;
         gamePadEvent.povCode = povCode;
@@ -58,7 +58,7 @@ public class GamePadEvent extends DriverEvent {
         return gamePadEvent;
     }
 
-    public static GamePadEvent newSliderMoveEvent(GamePadData gamePadData, boolean isXSliderMoved, int sliderCode, boolean value) {
+    public static GamePadEvent newSliderMoveEvent(GamePad gamePadData, boolean isXSliderMoved, int sliderCode, boolean value) {
         GamePadEvent gamePadEvent = new GamePadEvent(gamePadData);
         gamePadEvent.operation = isXSliderMoved ? GamePadSignal.XSliderMove : GamePadSignal.YSliderMove;
         gamePadEvent.isXSliderMoved = isXSliderMoved;
@@ -67,7 +67,7 @@ public class GamePadEvent extends DriverEvent {
         return gamePadEvent;
     }
 
-    public static GamePadEvent newAccelerometerMoveEvent(GamePadData gamePadData, int accelerometerCode, Vector3 value) {
+    public static GamePadEvent newAccelerometerMoveEvent(GamePad gamePadData, int accelerometerCode, Vector3 value) {
         GamePadEvent gamePadEvent = new GamePadEvent(gamePadData);
         gamePadEvent.operation = GamePadSignal.AccelerometerMove;
         gamePadEvent.accelerometerCode = accelerometerCode;
@@ -91,7 +91,7 @@ public class GamePadEvent extends DriverEvent {
         return povDirection;
     }
 
-    public GamePadEvent(GamePadData gamePadData) {
+    public GamePadEvent(GamePad gamePadData) {
         super(gamePadData);
         this.controller = gamePadData.controller;
     }

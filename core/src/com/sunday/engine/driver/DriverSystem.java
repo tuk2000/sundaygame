@@ -3,38 +3,38 @@ package com.sunday.engine.driver;
 import com.badlogic.gdx.controllers.Controller;
 import com.sunday.engine.databank.SubSystem;
 import com.sunday.engine.databank.ports.SystemPort;
-import com.sunday.engine.driver.gamepad.GamePadData;
-import com.sunday.engine.driver.keyboard.KeyBoardData;
-import com.sunday.engine.driver.mouse.MouseData;
+import com.sunday.engine.driver.gamepad.GamePad;
+import com.sunday.engine.driver.keyboard.KeyBoard;
+import com.sunday.engine.driver.mouse.Mouse;
 
 public class DriverSystem extends SubSystem {
 
     public DriverSystem(SystemPort systemPort) {
         super("DriverSystem", systemPort);
-        systemPort.addDataInstance(new KeyBoardData());
-        systemPort.addDataInstance(new MouseData());
+        systemPort.addDataInstance(new KeyBoard());
+        systemPort.addDataInstance(new Mouse());
     }
 
-    public void addDriverData(DriverData driverData) {
-        systemPort.addDataInstance(driverData);
+    public void addDriverData(Driver driver) {
+        systemPort.addDataInstance(driver);
     }
 
-    public void removeDriverData(DriverData driverData) {
-        systemPort.deleteDataInstance(driverData);
+    public void removeDriverData(Driver driver) {
+        systemPort.deleteDataInstance(driver);
     }
 
-    public KeyBoardData getDefaultKeyBoardData() {
-        return (KeyBoardData) systemPort.getDataList(e -> e.getClass().equals(KeyBoardData.class)).get(0);
+    public KeyBoard getDefaultKeyBoardData() {
+        return (KeyBoard) systemPort.getDataList(e -> e.getClass().equals(KeyBoard.class)).get(0);
     }
 
-    public MouseData getDefaultMouseData() {
-        return (MouseData) systemPort.getDataList(e -> e.getClass().equals(MouseData.class)).get(0);
+    public Mouse getDefaultMouseData() {
+        return (Mouse) systemPort.getDataList(e -> e.getClass().equals(Mouse.class)).get(0);
     }
 
-    public GamePadData getMatchGamePadData(Controller controller) {
-        return (GamePadData) systemPort.getDataList(
-                e -> e.getClass().equals(GamePadData.class)
-                        & ((GamePadData) e).controller.equals(controller))
+    public GamePad getMatchGamePadData(Controller controller) {
+        return (GamePad) systemPort.getDataList(
+                e -> e.getClass().equals(GamePad.class)
+                        & ((GamePad) e).controller.equals(controller))
                 .get(0);
     }
 }
