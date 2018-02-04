@@ -1,7 +1,7 @@
 package com.sunday.engine.databank.synchronize;
 
 import com.sunday.engine.common.Data;
-import com.sunday.engine.common.DataOperation;
+import com.sunday.engine.common.DataSignal;
 import com.sunday.engine.common.Signal;
 
 import java.util.ArrayList;
@@ -11,19 +11,19 @@ import java.util.List;
 public class SynchronizeCondition<T extends Data> {
     private Class<T> clazz;
     private T source = null;
-    private List<DataOperation> dataOperationList = new ArrayList<>();
+    private List<DataSignal> dataSignalList = new ArrayList<>();
     private List<Signal> signals = new ArrayList<>();
 
-    public SynchronizeCondition(Class<T> clazz, DataOperation... dataOperations) {
+    public SynchronizeCondition(Class<T> clazz, DataSignal... dataSignals) {
         this.clazz = clazz;
         source = null;
-        dataOperationList.addAll(Arrays.asList(dataOperations));
+        dataSignalList.addAll(Arrays.asList(dataSignals));
     }
 
-    public SynchronizeCondition(T t, DataOperation... dataOperations) {
+    public SynchronizeCondition(T t, DataSignal... dataSignals) {
         clazz = (Class<T>) t.getClass();
         source = t;
-        dataOperationList.addAll(Arrays.asList(dataOperations));
+        dataSignalList.addAll(Arrays.asList(dataSignals));
     }
 
     public SynchronizeCondition(T t, Signal signal) {
@@ -34,7 +34,7 @@ public class SynchronizeCondition<T extends Data> {
 
     boolean isTriggered(SynchronizeEvent<T> synchronizeEvent) {
         if (synchronizeEvent.source.equals(source) || synchronizeEvent.source.getClass().equals(clazz)) {
-            if (dataOperationList.contains(synchronizeEvent.dataOperation))
+            if (dataSignalList.contains(synchronizeEvent.dataSignal))
                 return true;
         }
         return false;

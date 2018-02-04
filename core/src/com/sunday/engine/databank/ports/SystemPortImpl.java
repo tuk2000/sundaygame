@@ -1,7 +1,7 @@
 package com.sunday.engine.databank.ports;
 
 import com.sunday.engine.common.Data;
-import com.sunday.engine.common.DataOperation;
+import com.sunday.engine.common.DataSignal;
 import com.sunday.engine.databank.DataStorage;
 import com.sunday.engine.databank.synchronize.SynchronizeCondition;
 import com.sunday.engine.databank.synchronize.SynchronizeExecutor;
@@ -48,8 +48,13 @@ public class SystemPortImpl<T extends Data> implements SystemPort<T> {
     }
 
     @Override
-    public void synchronize(T data, DataOperation dataOperation) {
-        synchronizeManager.synchronize(data, dataOperation);
+    public List<T> searchInDataBank(Class<T> clazz) {
+        return dataStorage.getInstances(clazz);
+    }
+
+    @Override
+    public void synchronize(T data, DataSignal dataSignal) {
+        synchronizeManager.synchronize(data, dataSignal);
     }
 
     @Override

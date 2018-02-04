@@ -5,7 +5,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.sunday.engine.common.AnimationTimer;
-import com.sunday.engine.common.DataOperation;
+import com.sunday.engine.common.DataSignal;
 import com.sunday.engine.common.Outlook;
 import com.sunday.engine.common.viewlayers.TextureViewLayer;
 import com.sunday.engine.databank.ports.UserPort;
@@ -18,11 +18,11 @@ public class HeroModel extends AbstractModel {
     private HeroEventProcessor heroEventProcessor;
     private HeroAnimation heroAnimation = new HeroAnimation();
     private TextureViewLayer textureViewLayer = new TextureViewLayer(heroAnimation.getKeyFrame(movementState));
-    private SynchronizeCondition movementWithAnimation = new SynchronizeCondition(movementState, DataOperation.Modification);
+    private SynchronizeCondition movementWithAnimation = new SynchronizeCondition(movementState, DataSignal.Modification);
     private SynchronizeExecutor<Outlook> animationUpdater = new SynchronizeExecutor<Outlook>() {
         @Override
         public void execute(SynchronizeEvent<Outlook> synchronizeEvent) {
-            if (synchronizeEvent.dataOperation == DataOperation.Modification) {
+            if (synchronizeEvent.dataSignal == DataSignal.Modification) {
                 textureViewLayer.updateTexture(heroAnimation.getKeyFrame(movementState));
             }
         }

@@ -1,14 +1,14 @@
 package com.sunday.engine.databank.synchronize;
 
 import com.sunday.engine.common.Data;
-import com.sunday.engine.common.DataOperation;
+import com.sunday.engine.common.DataSignal;
 
 public class SynchronizeEvent<T extends Data> {
     public T source;
-    public DataOperation dataOperation;
+    public DataSignal dataSignal;
 
-    public SynchronizeEvent(T t, DataOperation dataOperation) {
+    public SynchronizeEvent(T t, DataSignal dataSignal) {
         source = t;
-        this.dataOperation = dataOperation;
+        this.dataSignal = dataSignal;
     }
 }

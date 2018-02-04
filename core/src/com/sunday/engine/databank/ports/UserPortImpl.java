@@ -1,14 +1,12 @@
 package com.sunday.engine.databank.ports;
 
 import com.sunday.engine.common.Data;
-import com.sunday.engine.common.DataOperation;
+import com.sunday.engine.common.DataSignal;
 import com.sunday.engine.databank.DataStorage;
 import com.sunday.engine.databank.synchronize.SynchronizeCondition;
 import com.sunday.engine.databank.synchronize.SynchronizeExecutor;
 import com.sunday.engine.databank.synchronize.SynchronizeManager;
 import com.sunday.engine.databank.synchronize.SynchronizeTrigger;
-
-import java.util.List;
 
 public class UserPortImpl<T extends Data> implements UserPort<T> {
     private DataStorage dataStorage;
@@ -30,13 +28,8 @@ public class UserPortImpl<T extends Data> implements UserPort<T> {
     }
 
     @Override
-    public List<T> getDataInstances(Class<T> clazz) {
-        return dataStorage.getInstances(clazz);
-    }
-
-    @Override
-    public void synchronize(Data data, DataOperation dataOperation) {
-        synchronizeManager.synchronize(data, dataOperation);
+    public void synchronize(Data data, DataSignal dataSignal) {
+        synchronizeManager.synchronize(data, dataSignal);
     }
 
     @Override

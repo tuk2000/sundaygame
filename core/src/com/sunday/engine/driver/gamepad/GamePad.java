@@ -8,7 +8,7 @@ import com.sunday.engine.driver.DriverType;
 
 public class GamePad extends Driver {
     public Controller controller;
-    public GamePadSignal operation;
+    public GamePadSignal gamePadSignal;
     public int buttonCode;
 
     public int axisCode;

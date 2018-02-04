@@ -1,7 +1,7 @@
 package com.sunday.engine.databank.synchronize;
 
 import com.sunday.engine.common.Data;
-import com.sunday.engine.common.DataOperation;
+import com.sunday.engine.common.DataSignal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,8 +31,8 @@ public class SynchronizeManager {
         }
     }
 
-    public void synchronize(Data data, DataOperation dataOperation) {
-        SynchronizeEvent synchronizeEvent = new SynchronizeEvent(data, dataOperation);
+    public void synchronize(Data data, DataSignal dataSignal) {
+        SynchronizeEvent synchronizeEvent = new SynchronizeEvent(data, dataSignal);
         for (SynchronizeTrigger trigger : synchronizeTriggers) {
             trigger.check(synchronizeEvent);
         }

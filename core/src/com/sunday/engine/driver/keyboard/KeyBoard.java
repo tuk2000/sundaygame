@@ -4,7 +4,7 @@ import com.sunday.engine.driver.Driver;
 import com.sunday.engine.driver.DriverType;
 
 public class KeyBoard extends Driver {
-    public KeyBoardSignal operation;
+    public KeyBoardSignal keyBoardSignal;
     public int key;
     public char character;
 

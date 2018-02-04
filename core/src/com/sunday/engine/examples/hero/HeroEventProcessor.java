@@ -2,7 +2,7 @@ package com.sunday.engine.examples.hero;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.sunday.engine.common.DataOperation;
+import com.sunday.engine.common.DataSignal;
 import com.sunday.engine.common.enums.Action;
 import com.sunday.engine.event.Event;
 import com.sunday.engine.event.EventProcessor;
@@ -48,12 +48,12 @@ public class HeroEventProcessor implements EventProcessor {
                 case 'H':
                 case 'h':
                     heroModel.movementState.action = Action.StandStill;
-                    heroModel.userPort.synchronize(heroModel.movementState, DataOperation.Modification);
+                    heroModel.userPort.synchronize(heroModel.movementState, DataSignal.Modification);
                     break;
                 case 'L':
                 case 'l':
                     heroModel.outlook.dimension.add(16, 16);
-                    heroModel.userPort.synchronize(heroModel.outlook, DataOperation.Modification);
+                    heroModel.userPort.synchronize(heroModel.outlook, DataSignal.Modification);
                     break;
                 case 'S':
                 case 's':
@@ -61,7 +61,7 @@ public class HeroEventProcessor implements EventProcessor {
                     if (heroModel.outlook.dimension.x < 16 || heroModel.outlook.dimension.y < 32) {
                         heroModel.outlook.dimension.set(16, 32);
                     }
-                    heroModel.userPort.synchronize(heroModel.outlook, DataOperation.Modification);
+                    heroModel.userPort.synchronize(heroModel.outlook, DataSignal.Modification);
                     break;
             }
 
@@ -79,19 +79,19 @@ public class HeroEventProcessor implements EventProcessor {
                 case 'r':
                     heroModel.movementState.action = Action.Running;
                     body.applyLinearImpulse(1000, 0, worldCenter.x, worldCenter.y, true);
-                    heroModel.userPort.synchronize(heroModel.movementState, DataOperation.Modification);
-                    heroModel.userPort.synchronize(heroModel.physicReflection, DataOperation.Modification);
+                    heroModel.userPort.synchronize(heroModel.movementState, DataSignal.Modification);
+                    heroModel.userPort.synchronize(heroModel.physicReflection, DataSignal.Modification);
                     break;
                 case 'J':
                 case 'j':
                     heroModel.movementState.action = Action.Jumping;
                     body.applyLinearImpulse(0, 1000, worldCenter.x, worldCenter.y, true);
-                    heroModel.userPort.synchronize(heroModel.movementState, DataOperation.Modification);
-                    heroModel.userPort.synchronize(heroModel.physicReflection, DataOperation.Modification);
+                    heroModel.userPort.synchronize(heroModel.movementState, DataSignal.Modification);
+                    heroModel.userPort.synchronize(heroModel.physicReflection, DataSignal.Modification);
                     break;
                 default:
                     body.setLinearVelocity(0, 0);
-                    heroModel.userPort.synchronize(heroModel.physicReflection, DataOperation.Modification);
+                    heroModel.userPort.synchronize(heroModel.physicReflection, DataSignal.Modification);
             }
         }
     }

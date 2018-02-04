@@ -1,5 +1,5 @@
 package com.sunday.engine.common;
 
-public enum DataOperation implements Signal {
+public enum DataSignal implements Signal {
     Add, Deletion, Modification
 }

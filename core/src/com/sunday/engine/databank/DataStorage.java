@@ -1,7 +1,7 @@
 package com.sunday.engine.databank;
 
 import com.sunday.engine.common.Data;
-import com.sunday.engine.common.DataOperation;
+import com.sunday.engine.common.DataSignal;
 import com.sunday.engine.databank.synchronize.SynchronizeManager;
 
 import java.util.ArrayList;
@@ -17,6 +17,12 @@ public class DataStorage<T extends Data> {
 
     public DataStorage(SynchronizeManager synchronizeManager) {
         this.synchronizeManager = synchronizeManager;
+    }
+
+    public List<Class<T>> getDataClasses() {
+        List<Class<T>> result = new ArrayList<>();
+        dataClassInstancesMap.keySet().forEach(clazz -> result.add(clazz));
+        return result;
     }
 
     public List<T> getInstances(Class<T> clazz) {
@@ -46,7 +52,7 @@ public class DataStorage<T extends Data> {
         }
         list.add(t);
 
-        synchronizeManager.synchronize(t, DataOperation.Add);
+        synchronizeManager.synchronize(t, DataSignal.Add);
     }
 
     public void deleteDataInstance(SynchronizePort synchronizePort, T t) {
@@ -71,7 +77,7 @@ public class DataStorage<T extends Data> {
                 dataClassInstancesMap.remove(clazz);
             }
         }
-        synchronizeManager.synchronize(t, DataOperation.Deletion);
+        synchronizeManager.synchronize(t, DataSignal.Deletion);
     }
 
     public List<T> getDataList(SynchronizePort synchronizePort) {
@@ -101,7 +107,7 @@ public class DataStorage<T extends Data> {
             classListMap.keySet().forEach(clazz -> {
                 classListMap.get(clazz).forEach(data -> {
                     dataClassInstancesMap.get(clazz).remove(data);
-                    synchronizeManager.synchronize(data, DataOperation.Deletion);
+                    synchronizeManager.synchronize(data, DataSignal.Deletion);
                 });
                 classListMap.clear();
             });

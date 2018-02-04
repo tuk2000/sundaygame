@@ -4,7 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
-import com.sunday.engine.common.DataOperation;
+import com.sunday.engine.common.DataSignal;
 import com.sunday.engine.common.PhysicReflection;
 import com.sunday.engine.databank.SubSystem;
 import com.sunday.engine.databank.ports.SystemPort;
@@ -26,12 +26,12 @@ public class PhysicSimulator extends SubSystem implements Disposable {
         systemPort.addDataSynchronize(synchronizeCondition, synchronizeExecutor);
     }
 
-    private SynchronizeCondition synchronizeCondition = new SynchronizeCondition(PhysicReflection.class, DataOperation.Add, DataOperation.Modification, DataOperation.Deletion);
+    private SynchronizeCondition synchronizeCondition = new SynchronizeCondition(PhysicReflection.class, DataSignal.Add, DataSignal.Modification, DataSignal.Deletion);
     private SynchronizeExecutor synchronizeExecutor = new SynchronizeExecutor() {
         @Override
         public void execute(SynchronizeEvent synchronizeEvent) {
             PhysicReflection physicReflection = (PhysicReflection) synchronizeEvent.source;
-            switch (synchronizeEvent.dataOperation) {
+            switch (synchronizeEvent.dataSignal) {
                 case Add:
                     physicReflection.bodyCreated = true;
                     physicReflection.body = world.createBody(physicReflection.bodyDef);

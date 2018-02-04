@@ -3,7 +3,7 @@ package com.sunday.engine.model;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Disposable;
-import com.sunday.engine.common.DataOperation;
+import com.sunday.engine.common.DataSignal;
 import com.sunday.engine.common.MovementState;
 import com.sunday.engine.common.Outlook;
 import com.sunday.engine.common.PhysicReflection;
@@ -46,14 +46,14 @@ public abstract class AbstractModel implements Disposable {
         initDataSynchronize(userPort);
     }
 
-    private SynchronizeCondition bodyCreatedCond = new SynchronizeCondition(physicReflection, DataOperation.Modification);
+    private SynchronizeCondition bodyCreatedCond = new SynchronizeCondition(physicReflection, DataSignal.Modification);
 
-    private SynchronizeCondition outLookChangedCond = new SynchronizeCondition(outlook, DataOperation.Modification);
+    private SynchronizeCondition outLookChangedCond = new SynchronizeCondition(outlook, DataSignal.Modification);
 
     private SynchronizeExecutor outlookWithPhysic = new SynchronizeExecutor<Outlook>() {
         @Override
         public void execute(SynchronizeEvent<Outlook> synchronizeEvent) {
-            if (synchronizeEvent.dataOperation == DataOperation.Modification) {
+            if (synchronizeEvent.dataSignal == DataSignal.Modification) {
                 physicReflection.bodyDef.position.set(movementState.position);
                 switch (physicReflection.fixtureDef.shape.getType()) {
                     case Chain:
@@ -75,7 +75,7 @@ public abstract class AbstractModel implements Disposable {
     private SynchronizeExecutor movementStateWithReflection = new SynchronizeExecutor<PhysicReflection>() {
         @Override
         public void execute(SynchronizeEvent<PhysicReflection> synchronizeEvent) {
-            if (synchronizeEvent.dataOperation == DataOperation.Modification) {
+            if (synchronizeEvent.dataSignal == DataSignal.Modification) {
                 movementState.position.set(physicReflection.body.getPosition());
             }
         }

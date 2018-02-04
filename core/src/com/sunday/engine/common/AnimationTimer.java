@@ -12,11 +12,11 @@ public class AnimationTimer implements Data {
     public static void initAnimationTimer(DataBank dataBank) {
         instance = new AnimationTimer();
         userPort = dataBank.getUserPort(instance);
-        condition = new SynchronizeCondition(instance, DataOperation.Modification);
+        condition = new SynchronizeCondition(instance, DataSignal.Modification);
     }
 
     public static void synchronize() {
-        userPort.synchronize(instance, DataOperation.Modification);
+        userPort.synchronize(instance, DataSignal.Modification);
     }
 
     public static SynchronizeCondition getCondition() {

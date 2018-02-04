@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Outlook implements Data {
+    public OutlookSignal outlookSignal;
     public Shape.Type shape = Shape.Type.Circle;
     public final Vector2 dimension = new Vector2();
     public final List<ViewLayer> viewLayers = new ArrayList<>();

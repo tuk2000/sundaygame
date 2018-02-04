@@ -18,4 +18,6 @@ public interface SystemPort<T extends Data> extends SynchronizePort<T> {
     List<T> getDataList(Predicate<T> predicate);
 
     List<Class<T>> getDataClassList();
+
+    List<T> searchInDataBank(Class<T> clazz);
 }
