@@ -13,7 +13,7 @@ public class RuleSystem extends SubSystem implements RuleSolver, RuleHub {
     }
 
     public void mount(Rule rule) {
-
+        rule.setRuleHub(this);
     }
 
     public void disMount(Rule rule) {
@@ -22,13 +22,13 @@ public class RuleSystem extends SubSystem implements RuleSolver, RuleHub {
 
     public void addRule(Rule rule) {
         systemPort.addDataInstance(rule);
-        rule.setRuleHub(this);
+
         mount(rule);
     }
 
     public void deleteRule(Rule rule) {
         systemPort.deleteDataInstance(rule);
-        rule.setRuleHub(this);
+
         disMount(rule);
     }
 

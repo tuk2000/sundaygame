@@ -27,7 +27,7 @@ public class PhysicSimulator extends SubSystem implements Disposable {
         systemPort.addDataInstance(new TriggerRule(condition, reaction));
     }
 
-    private Condition condition = new DataCondition(PhysicReflection.class, DataSignal.Add, DataSignal.Modification, DataSignal.Deletion);
+    private Condition condition = DataCondition.classSignals(PhysicReflection.class, DataSignal.Add, DataSignal.Modification, DataSignal.Deletion);
     private Reaction reaction = new Reaction() {
 
         @Override

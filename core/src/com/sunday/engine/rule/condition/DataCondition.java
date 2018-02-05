@@ -4,25 +4,26 @@ import com.sunday.engine.common.Data;
 import com.sunday.engine.common.Signal;
 import com.sunday.engine.rule.Condition;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Predicate;
 
 public class DataCondition<T extends Data> extends Condition {
-    public DataCondition(T t, Signal... signals) {
-        super(new HashSet<>(), new HashSet<>());
+    public DataCondition(Map<Data, Predicate<Data>> clusters) {
+        super(clusters);
     }
 
-    public DataCondition(Class<T> clazz, Signal... signals) {
-        super(new HashSet<>(), new HashSet<>());
+    public static DataCondition dataSignals(Data t, Signal... signals) {
+        Map<Data, Predicate<Data>> clusters = new HashMap<>();
+        //Predicate<Data> dataPredicate=data ->
+        //clusters.put();
+        return new DataCondition(clusters);
     }
 
-    public DataCondition(Set<Data> dataSet, Set<Predicate<Data>> constrainSet) {
-        super(dataSet, constrainSet);
-    }
-
-    @Override
-    public boolean isSatisfied() {
-        return false;
+    public static DataCondition classSignals(Class<? extends Data> clazz, Signal... signals) {
+        Map<Data, Predicate<Data>> clusters = new HashMap<>();
+        //Predicate<Data> dataPredicate=data ->
+        //clusters.put();
+        return new DataCondition(clusters);
     }
 }

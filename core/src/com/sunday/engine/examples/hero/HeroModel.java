@@ -18,7 +18,7 @@ public class HeroModel extends AbstractModel {
     private HeroEventProcessor heroEventProcessor;
     private HeroAnimation heroAnimation = new HeroAnimation();
     private TextureViewLayer textureViewLayer = new TextureViewLayer(heroAnimation.getKeyFrame(movementState));
-    private Condition movementWithAnimation = new DataCondition(movementState, DataSignal.Modification);
+    private Condition movementWithAnimation = DataCondition.dataSignals(movementState, DataSignal.Modification);
     private Reaction animationUpdater = new Reaction() {
         @Override
         public void run() {
@@ -57,8 +57,8 @@ public class HeroModel extends AbstractModel {
 
     @Override
     protected void initDataSynchronize(Port port) {
-        port.addDataInstance(new TriggerRule(movementWithAnimation,animationUpdater));
-        port.addDataInstance(new TriggerRule(AnimationTimer.getCondition(),animationUpdater));
+        port.addDataInstance(new TriggerRule(movementWithAnimation, animationUpdater));
+        port.addDataInstance(new TriggerRule(AnimationTimer.getCondition(), animationUpdater));
     }
 
     @Override

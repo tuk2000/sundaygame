@@ -45,9 +45,9 @@ public abstract class AbstractModel implements Disposable {
         initDataSynchronize(port);
     }
 
-    private Condition bodyCreatedCond = new DataCondition(physicReflection, DataSignal.Modification);
+    private Condition bodyCreatedCond = DataCondition.dataSignals(physicReflection, DataSignal.Modification);
 
-    private Condition outLookChangedCond = new DataCondition(outlook, DataSignal.Modification);
+    private Condition outLookChangedCond = DataCondition.dataSignals(outlook, DataSignal.Modification);
 
     private Reaction outlookWithPhysic = new Reaction() {
         @Override

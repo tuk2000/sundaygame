@@ -19,7 +19,7 @@ class DataStorage<T extends Data> {
 
     protected List<Class<T>> getDataClasses() {
         List<Class<T>> result = new ArrayList<>();
-        result.addAll( dataClassInstancesMap.keySet());
+        result.addAll(dataClassInstancesMap.keySet());
         return result;
     }
 
