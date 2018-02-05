@@ -1,30 +1,23 @@
 package com.sunday.engine.databank;
 
 import com.sunday.engine.common.Data;
-import com.sunday.engine.databank.ports.SystemPort;
-import com.sunday.engine.databank.ports.SystemPortImpl;
-import com.sunday.engine.databank.ports.UserPort;
-import com.sunday.engine.databank.ports.UserPortImpl;
-import com.sunday.engine.databank.synchronize.SynchronizeManager;
 
 import java.util.HashMap;
 import java.util.Map;
 
 public class DataBankImpl<T extends Data> implements DataBank<T> {
     private Map<Class<? extends SubSystem>, SystemPort> systemPortMap = new HashMap<>();
-    private Map<Object, UserPort> userPortsMap = new HashMap<>();
-    private SynchronizeManager synchronizeManager;
+    private Map<Object, Port> userPortsMap = new HashMap<>();
     private DataStorage dataStorage;
 
     public DataBankImpl() {
-        synchronizeManager = new SynchronizeManager();
-        dataStorage = new DataStorage(synchronizeManager);
+        dataStorage = new DataStorage();
     }
 
     @Override
     public SystemPort getSystemPort(Class<? extends SubSystem> subSystemClass) {
         if (!systemPortMap.containsKey(subSystemClass)) {
-            systemPortMap.put(subSystemClass, new SystemPortImpl(dataStorage, synchronizeManager));
+            systemPortMap.put(subSystemClass, new SystemPortImpl(dataStorage));
         }
         SystemPort systemPort = systemPortMap.get(subSystemClass);
         dataStorage.addPort(systemPort);
@@ -32,27 +25,27 @@ public class DataBankImpl<T extends Data> implements DataBank<T> {
     }
 
     @Override
-    public UserPort<T> getUserPort(Object user) {
+    public Port<T> getPort(Object user) {
         if (!userPortsMap.containsKey(user)) {
-            userPortsMap.put(user, new UserPortImpl(dataStorage, synchronizeManager));
+            userPortsMap.put(user, new PortImpl(dataStorage));
         }
-        UserPort userPort = userPortsMap.get(user);
-        dataStorage.addPort(userPort);
-        return userPort;
+        Port port = userPortsMap.get(user);
+        dataStorage.addPort(port);
+        return port;
     }
 
     @Override
-    public void removePort(SynchronizePort synchronizePort) {
+    public void removePort(Port port) {
         for (Class clazz : systemPortMap.keySet()) {
-            if (systemPortMap.get(clazz).equals(synchronizePort)) {
+            if (systemPortMap.get(clazz).equals(port)) {
                 systemPortMap.remove(clazz);
             }
         }
         for (Object user : userPortsMap.keySet()) {
-            if (userPortsMap.get(user).equals(synchronizePort)) {
+            if (userPortsMap.get(user).equals(port)) {
                 userPortsMap.remove(user);
             }
         }
-        dataStorage.removePort(synchronizePort);
+        dataStorage.removePort(port);
     }
 }

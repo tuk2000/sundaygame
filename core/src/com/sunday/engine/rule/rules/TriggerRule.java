@@ -49,8 +49,13 @@ public class TriggerRule extends Rule {
         return condition;
     }
 
+    public TriggerRule(Condition condition, Reaction reaction) {
+        super(condition, reaction);
+    }
+
     public TriggerRule(Data data, Signal signal, Reaction reaction) {
         super(generateConditionFromSignal(data, signal), reaction);
-        signalTracer = new SignalTracer(data, signal);
+        signalTracer = new SignalTracer(this, data, signal);
+        tracers.add(signalTracer);
     }
 }

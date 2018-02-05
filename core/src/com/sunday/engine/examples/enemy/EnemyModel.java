@@ -4,7 +4,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Shape;
-import com.sunday.engine.databank.ports.UserPort;
+import com.sunday.engine.databank.Port;
 import com.sunday.engine.model.AbstractModel;
 
 public class EnemyModel extends AbstractModel {
@@ -35,7 +35,7 @@ public class EnemyModel extends AbstractModel {
     }
 
     @Override
-    protected void initDataSynchronize(UserPort userPort) {
+    protected void initDataSynchronize(Port userPort) {
 
     }
 }

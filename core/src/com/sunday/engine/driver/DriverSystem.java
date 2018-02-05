@@ -2,7 +2,7 @@ package com.sunday.engine.driver;
 
 import com.badlogic.gdx.controllers.Controller;
 import com.sunday.engine.databank.SubSystem;
-import com.sunday.engine.databank.ports.SystemPort;
+import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.driver.gamepad.GamePad;
 import com.sunday.engine.driver.keyboard.KeyBoard;
 import com.sunday.engine.driver.mouse.Mouse;

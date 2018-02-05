@@ -1,7 +1,5 @@
 package com.sunday.engine.databank;
 
-import com.sunday.engine.databank.ports.SystemPort;
-
 public abstract class SubSystem {
     protected String name;
     protected SystemPort systemPort;

@@ -1,25 +1,29 @@
 package com.sunday.engine.common;
 
 import com.sunday.engine.databank.DataBank;
-import com.sunday.engine.databank.ports.UserPort;
-import com.sunday.engine.databank.synchronize.SynchronizeCondition;
+import com.sunday.engine.databank.SubSystem;
+import com.sunday.engine.databank.SystemPort;
+import com.sunday.engine.rule.Condition;
+import com.sunday.engine.rule.condition.DataCondition;
 
-public class AnimationTimer implements Data {
-    private static UserPort<AnimationTimer> userPort;
+public class AnimationTimer extends SubSystem implements Data {
     private static AnimationTimer instance;
-    private static SynchronizeCondition condition;
+    private static Condition condition;
+
+    protected AnimationTimer(String name, SystemPort systemPort) {
+        super(name, systemPort);
+    }
 
     public static void initAnimationTimer(DataBank dataBank) {
-        instance = new AnimationTimer();
-        userPort = dataBank.getUserPort(instance);
-        condition = new SynchronizeCondition(instance, DataSignal.Modification);
+        instance = new AnimationTimer("AnimationTimer", dataBank.getSystemPort(AnimationTimer.class));
+        condition = new DataCondition<>(instance, DataSignal.Modification);
     }
 
     public static void synchronize() {
-        userPort.synchronize(instance, DataSignal.Modification);
+        instance.systemPort.broadcast(instance, DataSignal.Modification);
     }
 
-    public static SynchronizeCondition getCondition() {
+    public static Condition getCondition() {
         return condition;
     }
 }

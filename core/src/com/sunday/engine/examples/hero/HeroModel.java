@@ -6,26 +6,30 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.sunday.engine.common.AnimationTimer;
 import com.sunday.engine.common.DataSignal;
-import com.sunday.engine.common.Outlook;
 import com.sunday.engine.common.viewlayers.TextureViewLayer;
-import com.sunday.engine.databank.ports.UserPort;
-import com.sunday.engine.databank.synchronize.SynchronizeCondition;
-import com.sunday.engine.databank.synchronize.SynchronizeEvent;
-import com.sunday.engine.databank.synchronize.SynchronizeExecutor;
+import com.sunday.engine.databank.Port;
 import com.sunday.engine.model.AbstractModel;
+import com.sunday.engine.rule.Condition;
+import com.sunday.engine.rule.Reaction;
+import com.sunday.engine.rule.condition.DataCondition;
+import com.sunday.engine.rule.rules.TriggerRule;
 
 public class HeroModel extends AbstractModel {
     private HeroEventProcessor heroEventProcessor;
     private HeroAnimation heroAnimation = new HeroAnimation();
     private TextureViewLayer textureViewLayer = new TextureViewLayer(heroAnimation.getKeyFrame(movementState));
-    private SynchronizeCondition movementWithAnimation = new SynchronizeCondition(movementState, DataSignal.Modification);
-    private SynchronizeExecutor<Outlook> animationUpdater = new SynchronizeExecutor<Outlook>() {
+    private Condition movementWithAnimation = new DataCondition(movementState, DataSignal.Modification);
+    private Reaction animationUpdater = new Reaction() {
         @Override
-        public void execute(SynchronizeEvent<Outlook> synchronizeEvent) {
-            if (synchronizeEvent.dataSignal == DataSignal.Modification) {
-                textureViewLayer.updateTexture(heroAnimation.getKeyFrame(movementState));
-            }
+        public void run() {
+
         }
+//        @Override
+//        public void execute(SynchronizeEvent<Outlook> synchronizeEvent) {
+//            if (synchronizeEvent.dataSignal == DataSignal.Modification) {
+//                textureViewLayer.updateTexture(heroAnimation.getKeyFrame(movementState));
+//            }
+//        }
     };
 
     public HeroModel() {
@@ -52,9 +56,9 @@ public class HeroModel extends AbstractModel {
     }
 
     @Override
-    protected void initDataSynchronize(UserPort userPort) {
-        userPort.addDataSynchronize(movementWithAnimation, animationUpdater);
-        userPort.addDataSynchronize(AnimationTimer.getCondition(), animationUpdater);
+    protected void initDataSynchronize(Port port) {
+        port.addDataInstance(new TriggerRule(movementWithAnimation,animationUpdater));
+        port.addDataInstance(new TriggerRule(AnimationTimer.getCondition(),animationUpdater));
     }
 
     @Override

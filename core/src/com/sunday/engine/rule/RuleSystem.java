@@ -1,7 +1,7 @@
 package com.sunday.engine.rule;
 
 import com.sunday.engine.databank.SubSystem;
-import com.sunday.engine.databank.ports.SystemPort;
+import com.sunday.engine.databank.SystemPort;
 
 public class RuleSystem extends SubSystem implements RuleSolver, RuleHub {
     public RuleSystem(SystemPort systemPort) {

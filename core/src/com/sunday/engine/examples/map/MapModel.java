@@ -6,7 +6,7 @@ import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.sunday.engine.common.viewlayers.MapViewLayer;
-import com.sunday.engine.databank.ports.UserPort;
+import com.sunday.engine.databank.Port;
 import com.sunday.engine.model.AbstractModel;
 
 public class MapModel extends AbstractModel {
@@ -31,7 +31,7 @@ public class MapModel extends AbstractModel {
     }
 
     @Override
-    protected void initDataSynchronize(UserPort userPort) {
+    protected void initDataSynchronize(Port port) {
 
     }
 
