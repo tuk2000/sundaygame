@@ -35,6 +35,7 @@ public class KeyBoardCondition extends Condition {
         clusters.put(keyBoard, keyPressed);
         clusters.put(keyBoardState, keyCombo);
         KeyBoardCondition keyBoardCondition = new KeyBoardCondition(clusters);
+        keyBoardCondition.setInfo("keyCombination " + combination);
         return keyBoardCondition;
     }
 
@@ -43,6 +44,7 @@ public class KeyBoardCondition extends Condition {
         Map<Data, Predicate<Data>> clusters = new HashMap<>();
         clusters.put(keyBoardState, keyPressed);
         KeyBoardCondition keyBoardCondition = new KeyBoardCondition(clusters);
+        keyBoardCondition.setInfo("keyDown " + character);
         return keyBoardCondition;
     }
 
@@ -51,6 +53,7 @@ public class KeyBoardCondition extends Condition {
         Map<Data, Predicate<Data>> clusters = new HashMap<>();
         clusters.put(keyBoardState, keyPressed);
         KeyBoardCondition keyBoardCondition = new KeyBoardCondition(clusters);
+        keyBoardCondition.setInfo("keyUp " + character);
         return keyBoardCondition;
     }
 }

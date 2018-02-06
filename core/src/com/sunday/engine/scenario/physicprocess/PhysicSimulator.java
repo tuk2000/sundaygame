@@ -10,8 +10,8 @@ import com.sunday.engine.databank.SubSystem;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.rule.Condition;
 import com.sunday.engine.rule.Reaction;
+import com.sunday.engine.rule.Rule;
 import com.sunday.engine.rule.condition.DataCondition;
-import com.sunday.engine.rule.rules.TriggerRule;
 
 public class PhysicSimulator extends SubSystem implements Disposable {
     protected Vector2 defaultGravity = new Vector2(0, -9.8f);
@@ -24,37 +24,44 @@ public class PhysicSimulator extends SubSystem implements Disposable {
     public PhysicSimulator(SystemPort systemPort) {
         super("PhysicSimulator", systemPort);
         world = new World(defaultGravity, false);
-        systemPort.addDataInstance(new TriggerRule(condition, reaction));
+        systemPort.addDataInstance(new Rule(addCondition, addReaction));
+        systemPort.addDataInstance(new Rule(modificationCondition, modificationReaction));
+        systemPort.addDataInstance(new Rule(deletionCondition, deletionReaction));
     }
 
-    private Condition condition = DataCondition.classSignals(PhysicReflection.class, DataSignal.Add, DataSignal.Modification, DataSignal.Deletion);
-    private Reaction reaction = new Reaction() {
+    private Condition addCondition = DataCondition.classSignals(PhysicReflection.class, DataSignal.Add);
+    private Condition modificationCondition = DataCondition.classSignals(PhysicReflection.class, DataSignal.Modification);
+    private Condition deletionCondition = DataCondition.classSignals(PhysicReflection.class, DataSignal.Deletion);
+    private Reaction addReaction = new Reaction() {
 
         @Override
         public void run() {
-
-        }
-
-//        @Override
-//        public void execute(SynchronizeEvent synchronizeEvent) {
-//            PhysicReflection physicReflection = (PhysicReflection) synchronizeEvent.source;
-//            switch (synchronizeEvent.dataSignal) {
-//                case Add:
 //                    physicReflection.bodyCreated = true;
 //                    physicReflection.body = world.createBody(physicReflection.bodyDef);
 //                    physicReflection.createFixture();
 //                    break;
-//                case Modification:
+        }
+    };
+
+    private Reaction modificationReaction = new Reaction() {
+        @Override
+        public void run() {
 //                    world.destroyBody(physicReflection.body);
 //                    physicReflection.body = world.createBody(physicReflection.bodyDef);
 //                    physicReflection.createFixture();
 //                    break;
-//                case Deletion:
+        }
+    };
+
+    private Reaction deletionReaction = new Reaction() {
+
+        @Override
+        public void run() {
 //                    physicReflection.bodyCreated = false;
 //                    world.destroyBody(physicReflection.body);
 //                    break;
-//            }
-//        }
+        }
+
     };
 
     public void setContactListener(ContactListener contactListener) {

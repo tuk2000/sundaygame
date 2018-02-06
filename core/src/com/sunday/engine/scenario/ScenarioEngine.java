@@ -10,6 +10,7 @@ import com.sunday.engine.driver.DriverSystem;
 import com.sunday.engine.event.driver.DriverEventTransfer;
 import com.sunday.engine.event.synchronize.CollisionEventTransfer;
 import com.sunday.engine.event.window.WindowEvent;
+import com.sunday.engine.rule.RuleSystem;
 import com.sunday.engine.scenario.eventpocess.EventDispatcher;
 import com.sunday.engine.scenario.physicprocess.PhysicSimulator;
 import com.sunday.engine.scenario.render.ScenarioRenderer;
@@ -19,6 +20,7 @@ public class ScenarioEngine implements Disposable {
     private Scenario screenScenario;
     private EventDispatcher eventDispatcher;
     private DriverSystem driverSystem;
+    private RuleSystem ruleSystem;
     private DriverEventTransfer driverEventTransfer;
     private CollisionEventTransfer collisionEventTransfer;
     private ScenarioRenderer scenarioRenderer;
@@ -42,6 +44,8 @@ public class ScenarioEngine implements Disposable {
         collisionEventTransfer = new CollisionEventTransfer();
         Gdx.input.setInputProcessor(driverEventTransfer);
         Controllers.addListener(driverEventTransfer);
+
+        ruleSystem = new RuleSystem(dataBank.getSystemPort(RuleSystem.class));
 
         physicSimulator = new PhysicSimulator(dataBank.getSystemPort(PhysicSimulator.class));
         physicSimulator.setContactListener(collisionEventTransfer);

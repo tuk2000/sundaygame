@@ -4,10 +4,7 @@ import com.sunday.engine.common.Data;
 import com.sunday.engine.common.DataSignal;
 import com.sunday.engine.common.Signal;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 class DataStorage<T extends Data> {
     private Map<Port, Map<Class<T>, List<T>>> portListMap = new HashMap<>();
@@ -19,13 +16,17 @@ class DataStorage<T extends Data> {
 
     protected List<Class<T>> getDataClasses() {
         List<Class<T>> result = new ArrayList<>();
-        result.addAll(dataClassInstancesMap.keySet());
+        Set<Class<T>> classes = dataClassInstancesMap.keySet();
+        if (classes != null)
+            result.addAll(classes);
         return result;
     }
 
     protected List<T> getInstances(Class<T> clazz) {
         List<T> result = new ArrayList<>();
-        result.addAll(dataClassInstancesMap.get(clazz));
+        List<T> classInstances = dataClassInstancesMap.get(clazz);
+        if (classInstances != null)
+            result.addAll(classInstances);
         return result;
     }
 
@@ -52,14 +53,25 @@ class DataStorage<T extends Data> {
         }
         list.add(t);
 
-        if (!(t instanceof Connection)) {
-            solve(t, DataSignal.Add);
-        }
+        solve(t, DataSignal.Add);
 
     }
 
     protected void solve(T t, Signal signal) {
-        getInstances((Class<T>) Connection.class).stream().filter(c -> ((Connection) c).source.equals(t))
+        getInstances((Class<T>) Connection.class).stream().filter(c -> {
+            Connection connection = (Connection) c;
+            boolean isSensor = connection.source instanceof ClassSensor;
+            ClassSensor classSensor;
+            boolean isSensorClass = false;
+            if (isSensor) {
+                classSensor = connection.source instanceof ClassSensor ? (ClassSensor) connection.source : null;
+                isSensorClass = t.getClass().equals(classSensor.getSensedClass());
+                if(isSensorClass){
+                    classSensor.setSensedInstance(t);
+                }
+            }
+            return connection.source.equals(t) || isSensor & isSensorClass;
+        })
                 .map(c -> ((Connection) c).target)
                 .forEach(target -> target.notify(signal));
     }
@@ -86,9 +98,7 @@ class DataStorage<T extends Data> {
                 dataClassInstancesMap.remove(clazz);
             }
         }
-        if (!(t instanceof Connection)) {
-            solve(t, DataSignal.Deletion);
-        }
+        solve(t, DataSignal.Deletion);
     }
 
     protected List<T> getDataList(Port port) {
@@ -118,9 +128,7 @@ class DataStorage<T extends Data> {
             classListMap.keySet().forEach(clazz -> {
                 classListMap.get(clazz).forEach(data -> {
                     dataClassInstancesMap.get(clazz).remove(data);
-                    if (!(data instanceof Connection)) {
-                        solve(data, DataSignal.Deletion);
-                    }
+                    solve(data, DataSignal.Deletion);
                 });
                 classListMap.clear();
             });

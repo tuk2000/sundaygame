@@ -11,25 +11,19 @@ import com.sunday.engine.databank.Port;
 import com.sunday.engine.model.AbstractModel;
 import com.sunday.engine.rule.Condition;
 import com.sunday.engine.rule.Reaction;
+import com.sunday.engine.rule.Rule;
 import com.sunday.engine.rule.condition.DataCondition;
-import com.sunday.engine.rule.rules.TriggerRule;
+import com.sunday.engine.rule.condition.KeyBoardCondition;
 
 public class HeroModel extends AbstractModel {
-    private HeroEventProcessor heroEventProcessor;
     private HeroAnimation heroAnimation = new HeroAnimation();
     private TextureViewLayer textureViewLayer = new TextureViewLayer(heroAnimation.getKeyFrame(movementState));
-    private Condition movementWithAnimation = DataCondition.dataSignals(movementState, DataSignal.Modification);
-    private Reaction animationUpdater = new Reaction() {
+    private Condition movementStateModifiedCondition = DataCondition.dataSignals(movementState, DataSignal.Modification);
+    private Reaction outlookUpdate = new Reaction() {
         @Override
         public void run() {
-
+            textureViewLayer.updateTexture(heroAnimation.getKeyFrame(movementState));
         }
-//        @Override
-//        public void execute(SynchronizeEvent<Outlook> synchronizeEvent) {
-//            if (synchronizeEvent.dataSignal == DataSignal.Modification) {
-//                textureViewLayer.updateTexture(heroAnimation.getKeyFrame(movementState));
-//            }
-//        }
     };
 
     public HeroModel() {
@@ -52,13 +46,25 @@ public class HeroModel extends AbstractModel {
         fixtureDef.friction = .1f;
         fixtureDef.restitution = 0.2f;
         fixtureDef.density = 0.1f;
-
     }
 
     @Override
-    protected void initDataSynchronize(Port port) {
-        port.addDataInstance(new TriggerRule(movementWithAnimation, animationUpdater));
-        port.addDataInstance(new TriggerRule(AnimationTimer.getCondition(), animationUpdater));
+    protected void initialPort(Port port) {
+        port.addDataInstance(new Rule(movementStateModifiedCondition, outlookUpdate));
+        port.addDataInstance(new Rule(AnimationTimer.getCondition(), outlookUpdate));
+        port.addDataInstance(new Rule(KeyBoardCondition.keyDown('1'), new Reaction() {
+            @Override
+            public void run() {
+                movementState.position.add(-10, 0);
+            }
+        }));
+
+        port.addDataInstance(new Rule(KeyBoardCondition.keyDown('2'), new Reaction() {
+            @Override
+            public void run() {
+                movementState.position.add(10, 0);
+            }
+        }));
     }
 
     @Override

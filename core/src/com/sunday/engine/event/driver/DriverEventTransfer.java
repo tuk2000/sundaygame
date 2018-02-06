@@ -18,8 +18,8 @@ public class DriverEventTransfer extends EventTransfer implements InputProcessor
 
     public DriverEventTransfer(DriverSystem driverSystem) {
         this.driverSystem = driverSystem;
-        defaultKeyBoardData = driverSystem.getDefaultKeyBoardData();
-        defaultMouseData = driverSystem.getDefaultMouseData();
+        defaultKeyBoardData = driverSystem.getDefaultKeyBoard();
+        defaultMouseData = driverSystem.getDefaultMouse();
     }
 
     //KeyBoard
@@ -73,56 +73,56 @@ public class DriverEventTransfer extends EventTransfer implements InputProcessor
     public void connected(Controller controller) {
         GamePad gamePadData = new GamePad();
         gamePadData.controller = controller;
-        driverSystem.addDriverData(gamePadData);
+        driverSystem.addDriver(gamePadData);
         eventPoster.dispatchEvent(GamePadEvent.newConnectEvent(gamePadData));
     }
 
     @Override
     public void disconnected(Controller controller) {
-        GamePad gamePadData = driverSystem.getMatchGamePadData(controller);
-        driverSystem.removeDriverData(gamePadData);
+        GamePad gamePadData = driverSystem.getMatchGamePad(controller);
+        driverSystem.removeDriver(gamePadData);
         eventPoster.dispatchEvent(GamePadEvent.newDisconnectEvent(gamePadData));
     }
 
     @Override
     public boolean buttonDown(Controller controller, int buttonCode) {
-        eventPoster.dispatchEvent(GamePadEvent.newButtonEvent(driverSystem.getMatchGamePadData(controller), buttonCode, false));
+        eventPoster.dispatchEvent(GamePadEvent.newButtonEvent(driverSystem.getMatchGamePad(controller), buttonCode, false));
         return true;
     }
 
     @Override
     public boolean buttonUp(Controller controller, int buttonCode) {
-        eventPoster.dispatchEvent(GamePadEvent.newButtonEvent(driverSystem.getMatchGamePadData(controller), buttonCode, true));
+        eventPoster.dispatchEvent(GamePadEvent.newButtonEvent(driverSystem.getMatchGamePad(controller), buttonCode, true));
         return true;
     }
 
     @Override
     public boolean axisMoved(Controller controller, int axisCode, float value) {
-        eventPoster.dispatchEvent(GamePadEvent.newAxisMoveEvent(driverSystem.getMatchGamePadData(controller), axisCode, value));
+        eventPoster.dispatchEvent(GamePadEvent.newAxisMoveEvent(driverSystem.getMatchGamePad(controller), axisCode, value));
         return true;
     }
 
     @Override
     public boolean povMoved(Controller controller, int povCode, PovDirection value) {
-        eventPoster.dispatchEvent(GamePadEvent.newPovMoveEvent(driverSystem.getMatchGamePadData(controller), povCode, value));
+        eventPoster.dispatchEvent(GamePadEvent.newPovMoveEvent(driverSystem.getMatchGamePad(controller), povCode, value));
         return true;
     }
 
     @Override
     public boolean xSliderMoved(Controller controller, int sliderCode, boolean value) {
-        eventPoster.dispatchEvent(GamePadEvent.newSliderMoveEvent(driverSystem.getMatchGamePadData(controller), true, sliderCode, value));
+        eventPoster.dispatchEvent(GamePadEvent.newSliderMoveEvent(driverSystem.getMatchGamePad(controller), true, sliderCode, value));
         return true;
     }
 
     @Override
     public boolean ySliderMoved(Controller controller, int sliderCode, boolean value) {
-        eventPoster.dispatchEvent(GamePadEvent.newSliderMoveEvent(driverSystem.getMatchGamePadData(controller), false, sliderCode, value));
+        eventPoster.dispatchEvent(GamePadEvent.newSliderMoveEvent(driverSystem.getMatchGamePad(controller), false, sliderCode, value));
         return true;
     }
 
     @Override
     public boolean accelerometerMoved(Controller controller, int accelerometerCode, Vector3 value) {
-        eventPoster.dispatchEvent(GamePadEvent.newAccelerometerMoveEvent(driverSystem.getMatchGamePadData(controller), accelerometerCode, value));
+        eventPoster.dispatchEvent(GamePadEvent.newAccelerometerMoveEvent(driverSystem.getMatchGamePad(controller), accelerometerCode, value));
         return true;
     }
 }

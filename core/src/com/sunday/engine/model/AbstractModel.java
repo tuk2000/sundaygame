@@ -1,5 +1,7 @@
 package com.sunday.engine.model;
 
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Disposable;
 import com.sunday.engine.common.DataSignal;
 import com.sunday.engine.common.MovementState;
@@ -11,8 +13,8 @@ import com.sunday.engine.event.Event;
 import com.sunday.engine.event.EventProcessor;
 import com.sunday.engine.rule.Condition;
 import com.sunday.engine.rule.Reaction;
+import com.sunday.engine.rule.Rule;
 import com.sunday.engine.rule.condition.DataCondition;
-import com.sunday.engine.rule.rules.TriggerRule;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,54 +42,41 @@ public abstract class AbstractModel implements Disposable {
         port.addDataInstance(outlook);
         port.addDataInstance(physicReflection);
         port.addDataInstance(movementState);
-        port.addDataInstance(new TriggerRule(outLookChangedCond, outlookWithPhysic));
-        port.addDataInstance(new TriggerRule(bodyCreatedCond, movementStateWithReflection));
-        initDataSynchronize(port);
+        port.addDataInstance(new Rule(outlookModifiedCondition, outlookModifiedReaction));
+        port.addDataInstance(new Rule(physicReflectionModifiedCondition, physicReflectionModifiedReaction));
+        initialPort(port);
     }
 
-    private Condition bodyCreatedCond = DataCondition.dataSignals(physicReflection, DataSignal.Modification);
+    private Condition physicReflectionModifiedCondition = DataCondition.dataSignals(physicReflection, DataSignal.Modification);
 
-    private Condition outLookChangedCond = DataCondition.dataSignals(outlook, DataSignal.Modification);
+    private Condition outlookModifiedCondition = DataCondition.dataSignals(outlook, DataSignal.Modification);
 
-    private Reaction outlookWithPhysic = new Reaction() {
+    private Reaction outlookModifiedReaction = new Reaction() {
         @Override
         public void run() {
-
+            physicReflection.bodyDef.position.set(movementState.position);
+            switch (physicReflection.fixtureDef.shape.getType()) {
+                case Chain:
+                    break;
+                case Polygon:
+                    ((PolygonShape) physicReflection.fixtureDef.shape).setAsBox(outlook.dimension.x, outlook.dimension.y);
+                    break;
+                case Circle:
+                    ((CircleShape) physicReflection.fixtureDef.shape).setRadius((outlook.dimension.x + outlook.dimension.y) / 2);
+                    break;
+                case Edge:
+                    break;
+            }
         }
-//        @Override
-//        public void execute(SynchronizeEvent<Outlook> synchronizeEvent) {
-//            if (synchronizeEvent.dataSignal == DataSignal.Modification) {
-//                physicReflection.bodyDef.position.set(movementState.position);
-//                switch (physicReflection.fixtureDef.shape.getType()) {
-//                    case Chain:
-//                        break;
-//                    case Polygon:
-//                        ((PolygonShape) physicReflection.fixtureDef.shape).setAsBox(outlook.dimension.x, outlook.dimension.y);
-//                        break;
-//                    case Circle:
-//                        ((CircleShape) physicReflection.fixtureDef.shape).setRadius((outlook.dimension.x + outlook.dimension.y) / 2);
-//                        break;
-//                    case Edge:
-//                        break;
-//                }
-//            }
-//        }
     };
 
 
-    private Reaction movementStateWithReflection = new Reaction() {
+    private Reaction physicReflectionModifiedReaction = new Reaction() {
         @Override
         public void run() {
-
+            movementState.position.set(physicReflection.body.getPosition());
         }
-
-//        @Override
-//        public void execute(SynchronizeEvent<PhysicReflection> synchronizeEvent) {
-//            if (synchronizeEvent.dataSignal == DataSignal.Modification) {
-//                movementState.position.set(physicReflection.body.getPosition());
-//            }
-//        }
     };
 
-    protected abstract void initDataSynchronize(Port port);
+    protected abstract void initialPort(Port port);
 }

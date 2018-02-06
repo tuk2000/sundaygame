@@ -7,6 +7,7 @@ import com.sunday.engine.rule.Tracer;
 
 public class SignalTracer extends Tracer {
     private Signal signal;
+    private Signal lastSignal=null;
 
     public SignalTracer(Condition condition, Data data, Signal signal) {
         super(condition, data);
@@ -17,9 +18,14 @@ public class SignalTracer extends Tracer {
         return signal;
     }
 
+    public boolean isTracedSignal() {
+        return signal.equals(lastSignal);
+    }
+
     @Override
     public void notify(Signal signal) {
-        if (this.signal.equals(signal)) {
+        lastSignal=signal;
+        if (isTracedSignal()) {
             condition.check();
         }
     }

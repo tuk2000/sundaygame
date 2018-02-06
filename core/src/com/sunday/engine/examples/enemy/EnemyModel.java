@@ -35,7 +35,7 @@ public class EnemyModel extends AbstractModel {
     }
 
     @Override
-    protected void initDataSynchronize(Port userPort) {
+    protected void initialPort(Port userPort) {
 
     }
 }

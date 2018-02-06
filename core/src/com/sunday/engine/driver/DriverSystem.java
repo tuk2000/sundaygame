@@ -1,6 +1,7 @@
 package com.sunday.engine.driver;
 
 import com.badlogic.gdx.controllers.Controller;
+import com.sunday.engine.databank.Connection;
 import com.sunday.engine.databank.SubSystem;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.driver.gamepad.GamePad;
@@ -15,23 +16,23 @@ public class DriverSystem extends SubSystem {
         systemPort.addDataInstance(new Mouse());
     }
 
-    public void addDriverData(Driver driver) {
+    public void addDriver(Driver driver) {
         systemPort.addDataInstance(driver);
     }
 
-    public void removeDriverData(Driver driver) {
+    public void removeDriver(Driver driver) {
         systemPort.deleteDataInstance(driver);
     }
 
-    public KeyBoard getDefaultKeyBoardData() {
+    public KeyBoard getDefaultKeyBoard() {
         return (KeyBoard) systemPort.getDataList(e -> e.getClass().equals(KeyBoard.class)).get(0);
     }
 
-    public Mouse getDefaultMouseData() {
+    public Mouse getDefaultMouse() {
         return (Mouse) systemPort.getDataList(e -> e.getClass().equals(Mouse.class)).get(0);
     }
 
-    public GamePad getMatchGamePadData(Controller controller) {
+    public GamePad getMatchGamePad(Controller controller) {
         return (GamePad) systemPort.getDataList(
                 e -> e.getClass().equals(GamePad.class)
                         & ((GamePad) e).controller.equals(controller))

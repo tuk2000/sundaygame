@@ -31,7 +31,7 @@ public class MapModel extends AbstractModel {
     }
 
     @Override
-    protected void initDataSynchronize(Port port) {
+    protected void initialPort(Port port) {
 
     }
 
