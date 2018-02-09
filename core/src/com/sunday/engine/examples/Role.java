@@ -1,8 +1,8 @@
 package com.sunday.engine.examples;
 
 import com.badlogic.gdx.utils.Disposable;
-import com.sunday.engine.common.enums.Label;
 import com.sunday.engine.model.AbstractModel;
+import com.sunday.engine.model.state.Label;
 
 public class Role implements Disposable {
     public Label label;

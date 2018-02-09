@@ -3,9 +3,9 @@ package com.sunday.engine.examples.hero;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.sunday.engine.common.MovementState;
-import com.sunday.engine.common.enums.Action;
-import com.sunday.engine.common.enums.Direction;
+import com.sunday.engine.model.property.MovementState;
+import com.sunday.engine.model.state.Action;
+import com.sunday.engine.model.state.Direction;
 
 
 public class HeroSprite extends Sprite {

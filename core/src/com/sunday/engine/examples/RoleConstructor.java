@@ -1,11 +1,11 @@
 package com.sunday.engine.examples;
 
 import com.badlogic.gdx.utils.Disposable;
-import com.sunday.engine.common.enums.Label;
 import com.sunday.engine.examples.enemy.EnemyModel;
 import com.sunday.engine.examples.hero.HeroModel;
 import com.sunday.engine.examples.map.MapModel;
 import com.sunday.engine.model.AbstractModel;
+import com.sunday.engine.model.state.Label;
 
 public class RoleConstructor implements Disposable {
 

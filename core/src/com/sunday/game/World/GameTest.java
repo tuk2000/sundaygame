@@ -1,8 +1,8 @@
 package com.sunday.game.world;
 
 import com.badlogic.gdx.Screen;
-import com.sunday.engine.common.enums.Label;
 import com.sunday.engine.examples.RoleConstructor;
+import com.sunday.engine.model.state.Label;
 import com.sunday.engine.scenario.Scenario;
 import com.sunday.engine.scenario.ScenarioEngine;
 

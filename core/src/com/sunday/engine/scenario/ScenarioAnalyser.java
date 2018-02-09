@@ -1,8 +1,8 @@
 package com.sunday.engine.scenario;
 
 import com.badlogic.gdx.utils.Disposable;
-import com.sunday.engine.scenario.physicprocess.PhysicSimulator;
-import com.sunday.engine.scenario.render.ScenarioRenderer;
+import com.sunday.engine.physic.PhysicSimulator;
+import com.sunday.engine.render.ScenarioRenderer;
 
 public class ScenarioAnalyser implements Disposable {
     private ScenarioRenderer scenarioRenderer;

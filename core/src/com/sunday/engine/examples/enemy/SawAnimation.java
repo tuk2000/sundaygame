@@ -3,7 +3,7 @@ package com.sunday.engine.examples.enemy;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.utils.Array;
-import com.sunday.engine.common.AnimationSetting;
+import com.sunday.engine.render.AnimationSetting;
 import com.sunday.game.framework.GameFramework;
 
 public class SawAnimation {

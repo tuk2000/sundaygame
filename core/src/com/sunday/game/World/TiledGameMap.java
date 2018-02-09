@@ -15,9 +15,9 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-import com.sunday.engine.common.AnimationSetting;
 import com.sunday.engine.examples.enemy.SawSprite;
 import com.sunday.engine.examples.hero.HeroSprite;
+import com.sunday.engine.render.AnimationSetting;
 import com.sunday.game.framework.GameFramework;
 
 /**

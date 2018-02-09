@@ -3,9 +3,9 @@ package com.sunday.engine.examples.hero;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.utils.Array;
-import com.sunday.engine.common.AnimationSetting;
-import com.sunday.engine.common.MovementState;
-import com.sunday.engine.common.enums.Direction;
+import com.sunday.engine.model.property.MovementState;
+import com.sunday.engine.model.state.Direction;
+import com.sunday.engine.render.AnimationSetting;
 import com.sunday.game.framework.GameFramework;
 
 public class HeroAnimation {

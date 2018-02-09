@@ -3,12 +3,12 @@ package com.sunday.engine.examples.hero;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.sunday.engine.common.DataSignal;
-import com.sunday.engine.common.enums.Action;
 import com.sunday.engine.event.Event;
 import com.sunday.engine.event.EventProcessor;
 import com.sunday.engine.event.driver.DriverEvent;
 import com.sunday.engine.event.driver.KeyBoardEvent;
 import com.sunday.engine.event.synchronize.CollisionEvent;
+import com.sunday.engine.model.state.Action;
 
 public class HeroEventProcessor implements EventProcessor {
     private HeroModel heroModel;

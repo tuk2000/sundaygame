@@ -5,9 +5,9 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.ChainShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.Shape;
-import com.sunday.engine.common.viewlayers.MapViewLayer;
 import com.sunday.engine.databank.Port;
 import com.sunday.engine.model.AbstractModel;
+import com.sunday.engine.model.property.viewlayers.MapViewLayer;
 
 public class MapModel extends AbstractModel {
 
