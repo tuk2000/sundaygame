@@ -1,23 +1,27 @@
 package com.sunday.game.framework;
 
 import com.badlogic.gdx.Gdx;
-import com.sunday.game.framework.gameflow.GameFlowManager;
-import com.sunday.game.framework.gameflow.GameStatus;
-import com.sunday.game.framework.input.InputManager;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.controllers.Controllers;
+import com.sunday.game.framework.display.ScreenManager;
+import com.sunday.game.framework.input.FrameworkControllerProcessor;
+import com.sunday.game.framework.input.FrameworkInputProxy;
 import com.sunday.game.framework.resource.ResourceManager;
 import com.sunday.game.world.GameScreenGenerator;
 import com.sunday.tool.ToolApplication;
 
+import java.lang.reflect.Proxy;
+import java.util.List;
+import java.util.stream.Collectors;
+
 /**
- * the framework consists of  GameAdaptor , InputManager and GameFlowManager
+ * the framework consists of  GameAdaptor , FrameworkInputProxy and ScreenManager
  * <p>
  * GameAdaptor  implements the ApplicationListener  and  it  redirect all  methods from LwjglApplication  to  a certain ApplicationListener (such as GameHub).
  * <p>
- * InputManager splits the input events to Framework and a certain InputProcessor .
- * It will be initialed in framework and guarded by GameAdaptor as default InputProcessor .
- * Use Gdx.input.setEngineInputProcessor can be automatic checked .
+ * FrameworkInputProxy extends the function in Gdx.input , it includes a InputMultiplexer ,which has FrameworkInputProcessor and user defined InputProcessor.
  * <p>
- * GameFlowManager  conducts the statues of the game .
+ * ScreenManager  conducts the statues of the game .
  * <p>
  * TestTool contains basic information while the game is running and provides some shortcuts in oder to control the game.
  * <p>
@@ -27,7 +31,7 @@ import com.sunday.tool.ToolApplication;
 public class GameFramework {
 
     //framework basic Components
-    public static GameFlowManager GameFlow;
+    public static ScreenManager Screen;
     public static ResourceManager Resource;
     private static ToolApplication toolApplication;
 
@@ -35,13 +39,15 @@ public class GameFramework {
         Gdx.app.setApplicationLogger(ToolApplication.gameLogger);
         GameScreenGenerator gameScreenGenerator = new GameScreenGenerator();
 
-        InputManager inputManager = new InputManager();
-        Gdx.input.setInputProcessor(inputManager.getInputMultiplexer());
-        GameAdaptor.getInstance().guardInputManager(inputManager);
+        FrameworkInputProxy frameworkInputProxy = new FrameworkInputProxy(Gdx.input);
+        Class clazz = Gdx.input.getClass();
+        Input input = (Input) Proxy.newProxyInstance(clazz.getClassLoader(), clazz.getInterfaces(), frameworkInputProxy);
+        Gdx.input = input;
 
         toolApplication = new ToolApplication();
         toolApplication.runAfterInitial(() -> {
-            ToolApplication.screenLoader.loadGameStatusEnum(gameScreenGenerator.enumGameStatus());
+            List<String> classNames = gameScreenGenerator.getScreenClasses().stream().map(screenClazz -> screenClazz.getCanonicalName()).collect(Collectors.toList());
+            ToolApplication.screenLoader.setScreenNameList(classNames);
         });
 
         Gdx.app.postRunnable(() -> {
@@ -52,9 +58,10 @@ public class GameFramework {
 
 
         Resource = new ResourceManager();
-        GameFlow = new GameFlowManager(gameScreenGenerator, GameAdaptor.getInstance());
-        GameFlow.setGameStatus(GameStatus.Loading);
+        Screen = new ScreenManager(gameScreenGenerator, GameAdaptor.getInstance());
+        Screen.gotoLoadingScreen();
 
+        Controllers.addListener(new FrameworkControllerProcessor());
     }
 
     public static void switchToolOnOrOff() {

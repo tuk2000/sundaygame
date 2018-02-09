@@ -15,11 +15,10 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
-import com.sunday.game.engine.common.AnimationSetting;
-import com.sunday.game.engine.examples.enemy.SawSprite;
-import com.sunday.game.engine.examples.hero.HeroSprite;
+import com.sunday.engine.common.AnimationSetting;
+import com.sunday.engine.examples.enemy.SawSprite;
+import com.sunday.engine.examples.hero.HeroSprite;
 import com.sunday.game.framework.GameFramework;
-import com.sunday.game.framework.gameflow.GameStatus;
 
 /**
  * IMPORTANT: each tile is of 16px
@@ -89,7 +88,7 @@ public class TiledGameMap implements Screen {
         tiledMapRenderer.setView(camera);
         tiledMapRenderer.render();
         box2DDebugRenderer.render(world, camera.combined);
-        world.step(AnimationSetting.FramePerSecond / 2, 2, 2);
+        world.step(1 / 60f, 8, 3);
 
         batch.begin();
         heroSprite.draw(batch);
@@ -149,7 +148,7 @@ public class TiledGameMap implements Screen {
                     heroSprite.translateX(20);
                     break;
                 case Input.Keys.P:
-                    GameFramework.GameFlow.setGameStatus(GameStatus.GamePause);
+                    GameFramework.Screen.setCurrentScreen("GamePause");
                     break;
             }
             return true;
