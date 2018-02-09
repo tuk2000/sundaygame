@@ -5,7 +5,7 @@
 <?import javafx.scene.effect.Blend?>
 <?import javafx.scene.layout.*?>
 <AnchorPane prefHeight="558.0" prefWidth="1063.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.sunday.tool.ToolController">
+            fx:controller="com.sunday.tool.ToolApplicationUIController">
     <children>
         <TabPane prefHeight="558.0" prefWidth="1063.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0"
                  AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -45,7 +45,7 @@
                             <items>
                                 <SplitPane dividerPositions="0.7" orientation="VERTICAL">
                                     <items>
-                                        <ListView fx:id="gameStatusList" prefHeight="529.0" prefWidth="210.0"
+                                        <ListView fx:id="screens" prefHeight="529.0" prefWidth="210.0"
                                                   AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
                                                   AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
                                         <Button fx:id="btLoad" contentDisplay="TOP" mnemonicParsing="false"

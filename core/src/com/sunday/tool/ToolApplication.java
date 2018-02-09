@@ -1,8 +1,8 @@
 package com.sunday.tool;
 
-import com.sunday.tool.gamemonitor.GameMonitor;
+import com.sunday.tool.datamonitor.DataMonitor;
 import com.sunday.tool.logger.GameLogger;
-import com.sunday.tool.objectmonitor.ObjectMonitor;
+import com.sunday.tool.perfermancemonitor.PerformanceMonitor;
 import com.sunday.tool.screenloader.ScreenLoader;
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -15,11 +15,11 @@ import javafx.stage.Stage;
 public class ToolApplication extends Application implements Runnable {
     public static GameLogger gameLogger = new GameLogger();
     public static ScreenLoader screenLoader = new ScreenLoader();
-    public static ObjectMonitor objectMonitor = new ObjectMonitor();
-    public static GameMonitor gameMonitor = new GameMonitor();
+    public static DataMonitor dataMonitor = new DataMonitor();
+    public static PerformanceMonitor performanceMonitor = new PerformanceMonitor();
 
     private static Stage wnd;
-    private static ToolController toolController;
+    private static ToolApplicationUIController toolApplicationUIController;
     private static Runnable afterInitialRunnable;
 
     public void runAfterInitial(Runnable runnable) {
@@ -41,12 +41,12 @@ public class ToolApplication extends Application implements Runnable {
         primaryStage.setY(0);
         primaryStage.show();
 
-        toolController = loader.getController();
-        toolController.initial();
-        gameLogger.setToolExtenderController(toolController);
-        screenLoader.setToolExtenderController(toolController);
-        objectMonitor.setToolExtenderController(toolController);
-        gameMonitor.setToolExtenderController(toolController);
+        toolApplicationUIController = loader.getController();
+        toolApplicationUIController.initial();
+        gameLogger.setToolExtenderController(toolApplicationUIController);
+        screenLoader.setToolExtenderController(toolApplicationUIController);
+        dataMonitor.setToolExtenderController(toolApplicationUIController);
+        performanceMonitor.setToolExtenderController(toolApplicationUIController);
 
         Platform.runLater(afterInitialRunnable);
     }
