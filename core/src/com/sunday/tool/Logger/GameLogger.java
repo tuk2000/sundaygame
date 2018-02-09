@@ -5,7 +5,7 @@ import com.sunday.tool.ToolExtender;
 
 import java.util.ArrayList;
 
-public class GameLogger extends ToolExtender<GameLoggerController> implements ApplicationLogger {
+public class GameLogger extends ToolExtender<GameLoggerUIController> implements ApplicationLogger {
     //    public static final int LOG_NONE = 0;
 //    public static final int LOG_DEBUG = 3;
 //    public static final int LOG_INFO = 2;

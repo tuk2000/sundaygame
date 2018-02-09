@@ -1,26 +1,26 @@
-package com.sunday.tool.objectmonitor;
+package com.sunday.tool.datamonitor;
 
 import com.sunday.tool.ToolExtender;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class ObjectMonitor extends ToolExtender<ObjectMonitorController> {
+public class DataMonitor extends ToolExtender<DataMonitorUIController> {
 
-    private HashMap<Class, ArrayList<MonitoredObject>> clsToObjMap = new HashMap<>();
-    private ArrayList<MonitoredObject> objectsBuffer = new ArrayList<>();
+    private HashMap<Class, ArrayList<MonitoredData>> clsToObjMap = new HashMap<>();
+    private ArrayList<MonitoredData> objectsBuffer = new ArrayList<>();
 
-    private MonitoredObject constructMonitoredObject(Object object) {
-        return new MonitoredObject(object.getClass().getName(), object.toString());
+    private MonitoredData constructMonitoredObject(Object object) {
+        return new MonitoredData(object.getClass().getName(), object.toString());
     }
 
     public void MonitorObject(Object object) {
-        MonitoredObject monitoredObject = constructMonitoredObject(object);
+        MonitoredData monitoredObject = constructMonitoredObject(object);
         Class clazz = object.getClass();
         if (clsToObjMap.containsKey(clazz)) {
             clsToObjMap.get(clazz).add(monitoredObject);
         } else {
-            ArrayList<MonitoredObject> arrayList = new ArrayList<>();
+            ArrayList<MonitoredData> arrayList = new ArrayList<>();
             arrayList.add(monitoredObject);
             clsToObjMap.put(clazz, arrayList);
         }
@@ -36,7 +36,7 @@ public class ObjectMonitor extends ToolExtender<ObjectMonitorController> {
 
     public void StopMonitorObject(Object object) {
         Class clazz = object.getClass();
-        for (MonitoredObject monitoredObject : clsToObjMap.get(clazz)) {
+        for (MonitoredData monitoredObject : clsToObjMap.get(clazz)) {
             if (monitoredObject.getObjectName().equals(object.toString())) {
                 getController().removeMonitoredObject(monitoredObject);
                 break;

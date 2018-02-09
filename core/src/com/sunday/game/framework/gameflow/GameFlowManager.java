@@ -32,7 +32,7 @@ public final class GameFlowManager {
             GameFlow.appendGameFlow(status, screen);
         }
         Gdx.app.log("GameFlowManager", "GameStatus changed to " + status.name());
-        ToolApplication.objectMonitor.MonitorObject(screen);
+        ToolApplication.dataMonitor.MonitorObject(screen);
         applyScreen(screen);
     }
 
@@ -44,7 +44,7 @@ public final class GameFlowManager {
         } else {
             Screen screen = GameFlow.getCurrentScreen();
             Gdx.app.log("GameFlowManager", GameFlow.getCurrentGameStatus().name() + " closed");
-            ToolApplication.objectMonitor.StopMonitorObject(screen);
+            ToolApplication.dataMonitor.StopMonitorObject(screen);
             System.gc();
 
             GameFlow.backToPreviewGameFlow();
@@ -62,11 +62,11 @@ public final class GameFlowManager {
         if (GameFlow.getCurrentGameStatus() != GameStatus.Intro)
             return;
         Screen screen = GameFlow.getCurrentScreen();
-        ToolApplication.objectMonitor.StopMonitorObject(screen);
+        ToolApplication.dataMonitor.StopMonitorObject(screen);
         System.gc();
         screen = screenGenerator.generateScreen(GameStatus.Intro);
         Gdx.app.log("GameFlowManager", "IntroScreen replaced");
-        ToolApplication.objectMonitor.MonitorObject(screen);
+        ToolApplication.dataMonitor.MonitorObject(screen);
         GameFlow.setCurrentScreen(screen);
         applyScreen(screen);
     }

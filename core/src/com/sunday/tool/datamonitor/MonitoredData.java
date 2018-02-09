@@ -1,13 +1,13 @@
-package com.sunday.tool.objectmonitor;
+package com.sunday.tool.datamonitor;
 
 import javafx.beans.property.SimpleStringProperty;
 
-public class MonitoredObject {
+public class MonitoredData {
 
     private SimpleStringProperty className;
     private SimpleStringProperty objectShortName;
 
-    public MonitoredObject(String className, String objectShortName) {
+    public MonitoredData(String className, String objectShortName) {
         this.className = new SimpleStringProperty(className);
         this.objectShortName = new SimpleStringProperty(objectShortName);
     }

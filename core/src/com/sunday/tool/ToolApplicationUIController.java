@@ -2,12 +2,12 @@ package com.sunday.tool;
 
 import com.sunday.game.framework.GameFramework;
 import com.sunday.game.framework.gameflow.GameStatus;
-import com.sunday.tool.gamemonitor.GameMonitorController;
-import com.sunday.tool.logger.GameLoggerController;
+import com.sunday.tool.perfermancemonitor.PerformanceMonitorUIController;
+import com.sunday.tool.logger.GameLoggerUIController;
 import com.sunday.tool.logger.LogMessage;
-import com.sunday.tool.objectmonitor.MonitoredObject;
-import com.sunday.tool.objectmonitor.ObjectMonitorController;
-import com.sunday.tool.screenloader.ScreenLoaderController;
+import com.sunday.tool.datamonitor.MonitoredData;
+import com.sunday.tool.datamonitor.DataMonitorUIController;
+import com.sunday.tool.screenloader.ScreenLoaderUIController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,7 +21,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.util.ArrayList;
 
-public class ToolController implements GameMonitorController, GameLoggerController, ObjectMonitorController, ScreenLoaderController {
+public class ToolApplicationUIController implements PerformanceMonitorUIController, GameLoggerUIController, DataMonitorUIController, ScreenLoaderUIController {
     XYChart.Series memoryUsages = new XYChart.Series();
     XYChart.Series fpsSeries = new XYChart.Series();
     @FXML
@@ -33,7 +33,7 @@ public class ToolController implements GameMonitorController, GameLoggerControll
     private ListView<GameStatus> gameStatusList;
 
     @FXML
-    private TableView<MonitoredObject> screenTable;
+    private TableView<MonitoredData> screenTable;
 
     @FXML
     private TableView<LogMessage> logTable;
@@ -64,10 +64,10 @@ public class ToolController implements GameMonitorController, GameLoggerControll
 
         TableColumn classCol = screenTable.getColumns().get(0);
         classCol.setMinWidth(400);
-        classCol.setCellValueFactory(new PropertyValueFactory<MonitoredObject, String>("ClassName"));
+        classCol.setCellValueFactory(new PropertyValueFactory<MonitoredData, String>("ClassName"));
         TableColumn objectCol = screenTable.getColumns().get(1);
         objectCol.setMinWidth(400);
-        objectCol.setCellValueFactory(new PropertyValueFactory<MonitoredObject, String>("ObjectName"));
+        objectCol.setCellValueFactory(new PropertyValueFactory<MonitoredData, String>("ObjectName"));
 
 
         TableColumn typeCol = logTable.getColumns().get(0);
@@ -100,14 +100,14 @@ public class ToolController implements GameMonitorController, GameLoggerControll
     }
 
     @Override
-    public void addMonitoredObject(MonitoredObject monitoredObject) {
+    public void addMonitoredObject(MonitoredData monitoredObject) {
         Platform.runLater(() -> {
             screenTable.getItems().add(monitoredObject);
         });
     }
 
     @Override
-    public void removeMonitoredObject(MonitoredObject monitoredObject) {
+    public void removeMonitoredObject(MonitoredData monitoredObject) {
         Platform.runLater(() -> {
             screenTable.getItems().remove(monitoredObject);
         });

@@ -1,10 +1,10 @@
-package com.sunday.tool.gamemonitor;
+package com.sunday.tool.perfermancemonitor;
 
 import com.sunday.tool.ToolExtender;
 
 import java.util.ArrayList;
 
-public class GameMonitor extends ToolExtender<GameMonitorController> {
+public class PerformanceMonitor extends ToolExtender<PerformanceMonitorUIController> {
     private float gdxTime = 0.0f;
     private float internalTime = 0.0f;
 

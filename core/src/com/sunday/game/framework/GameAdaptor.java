@@ -50,6 +50,6 @@ public class GameAdaptor extends Game implements ScreenDisplay {
         float delta = Gdx.graphics.getDeltaTime();
         long memoryUsage = Gdx.app.getJavaHeap();
         int fps = Gdx.graphics.getFramesPerSecond();
-        ToolApplication.gameMonitor.updateData(delta, memoryUsage, fps);
+        ToolApplication.performanceMonitor.updateData(delta, memoryUsage, fps);
     }
 }

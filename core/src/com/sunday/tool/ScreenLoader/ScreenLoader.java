@@ -5,7 +5,7 @@ import com.sunday.tool.ToolExtender;
 
 import java.util.ArrayList;
 
-public class ScreenLoader extends ToolExtender<ScreenLoaderController> {
+public class ScreenLoader extends ToolExtender<ScreenLoaderUIController> {
     private ArrayList<GameStatus> arrayList = new ArrayList<>();
 
     public void loadGameStatusEnum(ArrayList<GameStatus> arrayList) {
