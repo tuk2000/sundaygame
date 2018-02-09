@@ -1,12 +1,11 @@
 package com.sunday.tool;
 
 import com.sunday.game.framework.GameFramework;
-import com.sunday.game.framework.gameflow.GameStatus;
-import com.sunday.tool.perfermancemonitor.PerformanceMonitorUIController;
+import com.sunday.tool.datamonitor.DataMonitorUIController;
+import com.sunday.tool.datamonitor.MonitoredData;
 import com.sunday.tool.logger.GameLoggerUIController;
 import com.sunday.tool.logger.LogMessage;
-import com.sunday.tool.datamonitor.MonitoredData;
-import com.sunday.tool.datamonitor.DataMonitorUIController;
+import com.sunday.tool.perfermancemonitor.PerformanceMonitorUIController;
 import com.sunday.tool.screenloader.ScreenLoaderUIController;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -19,7 +18,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public class ToolApplicationUIController implements PerformanceMonitorUIController, GameLoggerUIController, DataMonitorUIController, ScreenLoaderUIController {
     XYChart.Series memoryUsages = new XYChart.Series();
@@ -30,7 +29,7 @@ public class ToolApplicationUIController implements PerformanceMonitorUIControll
     private StackedAreaChart<Number, Number> memoryChart;
 
     @FXML
-    private ListView<GameStatus> gameStatusList;
+    private ListView<String> screens;
 
     @FXML
     private TableView<MonitoredData> screenTable;
@@ -45,9 +44,9 @@ public class ToolApplicationUIController implements PerformanceMonitorUIControll
     @FXML
     void loadScreen(ActionEvent event) {
         if (event.getSource().equals(btLoad)) {
-            GameStatus gameStatus = gameStatusList.getSelectionModel().getSelectedItem();
-            if (gameStatus != null) {
-                GameFramework.GameFlow.setGameStatus(gameStatus);
+            String screen = screens.getSelectionModel().getSelectedItem();
+            if (screen != null) {
+                GameFramework.GameFlow.setCurrentScreen(screen);
             }
         }
     }
@@ -114,11 +113,10 @@ public class ToolApplicationUIController implements PerformanceMonitorUIControll
     }
 
     @Override
-    public void loadGameStatusEnum(ArrayList<GameStatus> arrayList) {
+    public void loadScreenList(List<String> list) {
         Platform.runLater(() -> {
-            arrayList.forEach(e -> {
-                gameStatusList.getItems().add(e);
-            });
+            screens.getItems().clear();
+            screens.getItems().addAll(list);
         });
     }
 

@@ -1,13 +1,16 @@
 package com.sunday.game.framework.display;
 
 import com.badlogic.gdx.Screen;
-import com.sunday.game.framework.gameflow.GameStatus;
 
-import java.util.ArrayList;
+import java.util.List;
 
 public interface ScreenGenerator {
-    /*  generateScreen should only be called by GameFlowManager */
-    Screen generateScreen(GameStatus gameStatus);
 
-    ArrayList<GameStatus> enumGameStatus();
+    Screen generateIntroScreen();
+
+    Screen generateLoadingScreen();
+
+    <T extends Screen> T generateScreen(Class<T> screenClass);
+
+    List<Class<? extends Screen>> getScreenClasses();
 }

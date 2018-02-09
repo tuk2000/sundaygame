@@ -2,7 +2,10 @@ package com.sunday.engine.rule;
 
 import com.sunday.engine.common.Data;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.Predicate;
 
 public abstract class Condition implements Data {
@@ -55,6 +58,6 @@ public abstract class Condition implements Data {
     }
 
     protected void setInfo(String info) {
-        this.info = getClass().getSimpleName()+": "+info;
+        this.info = getClass().getSimpleName() + ": " + info;
     }
 }

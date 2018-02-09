@@ -1,7 +1,6 @@
 package com.sunday.engine.driver;
 
 import com.badlogic.gdx.controllers.Controller;
-import com.sunday.engine.databank.Connection;
 import com.sunday.engine.databank.SubSystem;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.driver.gamepad.GamePad;

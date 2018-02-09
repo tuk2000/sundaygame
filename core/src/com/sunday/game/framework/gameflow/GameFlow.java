@@ -3,62 +3,58 @@ package com.sunday.game.framework.gameflow;
 
 import com.badlogic.gdx.Screen;
 
-/*
-    class gameflow preserves the history of GameStatus and Screen like stack
-    most useful is the getCurrentGameFlow() , it tells the presents GameStatus and Screen
-    and after called backToPreviewGameFlow() currentGameFlow will automatic be set als its preview gameflow.
-    the next gameflow is in this situation not necessary .
- */
-class GameFlow {
-    private GameFlow preview;//the preview of firstGameFlow is null
-    public GameStatus status;
-    public Screen screen;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
-    private static GameFlow firstGameFlow = new GameFlow();
-    private static GameFlow currentGameFlow;
+class GameFlow<T extends Screen> {
+    private ArrayList<T> flow = new ArrayList<>();
+    private Map<String, Class<T>> classMap = new HashMap<>();
+    private Screen loadingScreen = null;
+    private Screen introScreen = null;
 
-    public static GameStatus getCurrentGameStatus() {
-        return currentGameFlow.status;
+    GameFlow(List<Class<T>> list) {
+        list.forEach(screenClass -> classMap.put(screenClass.getCanonicalName(), screenClass));
     }
 
-    public static void setCurrentScreen(Screen screen) {
-        currentGameFlow.screen = screen;
+    public Class<T> getScreenClass(String className) {
+        return classMap.get(className);
     }
 
-    public static Screen getCurrentScreen() {
-        return currentGameFlow.screen;
+    public T current() {
+        return flow.get(flow.size() - 1);
     }
 
-    public static void setFirstGameFlow(GameStatus status, Screen screen) {
-        while (currentGameFlow != null) {
-            backToPreviewGameFlow();
-        }
-        firstGameFlow.preview = null;
-        firstGameFlow.status = status;
-        firstGameFlow.screen = screen;
-        currentGameFlow = firstGameFlow;
+    public void appendScreen(T t) {
+        flow.add(t);
     }
 
-    public static void appendGameFlow(GameStatus status, Screen screen) {
-        GameFlow gameFlow = new GameFlow();
-        gameFlow.status = status;
-        gameFlow.screen = screen;
-        gameFlow.preview = currentGameFlow;
-        currentGameFlow = gameFlow;
+    public T popCurrentScreen() {
+        T t = current();
+        flow.remove(flow.size() - 1);
+        return t;
     }
 
-    public static void backToPreviewGameFlow() {
-        if (currentGameFlow == firstGameFlow) {
-            firstGameFlow.preview = null;
-            firstGameFlow.status = null;
-            firstGameFlow.screen = null;
-            currentGameFlow = null;
-        } else {
-            GameFlow previewFlow = currentGameFlow.preview;
-            currentGameFlow.preview = null;
-            currentGameFlow.status = null;
-            currentGameFlow.screen = null;
-            currentGameFlow = previewFlow;
-        }
+
+    public Screen getLoadingScreen() {
+        return loadingScreen;
     }
+
+    public void setLoadingScreen(Screen loadingScreen) {
+        this.loadingScreen = loadingScreen;
+    }
+
+    public Screen getIntroScreen() {
+        return introScreen;
+    }
+
+    public void setIntroScreen(Screen introScreen) {
+        this.introScreen = introScreen;
+    }
+
+    public int normalScreenAmount() {
+        return flow.size();
+    }
+
 }

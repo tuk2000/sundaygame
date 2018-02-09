@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.controllers.Controllers;
 import com.sunday.game.framework.gameflow.GameFlowManager;
-import com.sunday.game.framework.gameflow.GameStatus;
 import com.sunday.game.framework.input.FrameworkControllerProcessor;
 import com.sunday.game.framework.input.FrameworkInputProxy;
 import com.sunday.game.framework.resource.ResourceManager;
@@ -12,6 +11,8 @@ import com.sunday.game.world.GameScreenGenerator;
 import com.sunday.tool.ToolApplication;
 
 import java.lang.reflect.Proxy;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * the framework consists of  GameAdaptor , FrameworkInputProxy and GameFlowManager
@@ -45,7 +46,8 @@ public class GameFramework {
 
         toolApplication = new ToolApplication();
         toolApplication.runAfterInitial(() -> {
-            ToolApplication.screenLoader.loadGameStatusEnum(gameScreenGenerator.enumGameStatus());
+            List<String> classNames = gameScreenGenerator.getScreenClasses().stream().map(screenClazz -> screenClazz.getCanonicalName()).collect(Collectors.toList());
+            ToolApplication.screenLoader.setScreenNameList(classNames);
         });
 
         Gdx.app.postRunnable(() -> {
@@ -57,7 +59,7 @@ public class GameFramework {
 
         Resource = new ResourceManager();
         GameFlow = new GameFlowManager(gameScreenGenerator, GameAdaptor.getInstance());
-        GameFlow.setGameStatus(GameStatus.Loading);
+        GameFlow.gotoLoadingScreen();
 
         Controllers.addListener(new FrameworkControllerProcessor());
     }

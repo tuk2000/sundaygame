@@ -19,7 +19,6 @@ import com.sunday.engine.common.AnimationSetting;
 import com.sunday.engine.examples.enemy.SawSprite;
 import com.sunday.engine.examples.hero.HeroSprite;
 import com.sunday.game.framework.GameFramework;
-import com.sunday.game.framework.gameflow.GameStatus;
 
 /**
  * IMPORTANT: each tile is of 16px
@@ -149,7 +148,7 @@ public class TiledGameMap implements Screen {
                     heroSprite.translateX(20);
                     break;
                 case Input.Keys.P:
-                    GameFramework.GameFlow.setGameStatus(GameStatus.GamePause);
+                    GameFramework.GameFlow.setCurrentScreen("GamePause");
                     break;
             }
             return true;

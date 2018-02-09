@@ -5,7 +5,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.sunday.game.framework.GameFramework;
-import com.sunday.game.framework.gameflow.GameStatus;
 import com.sunday.game.framework.resource.InternalResourceDescriptorStorage;
 
 public class InternalLoadingScreen implements Screen {
@@ -30,7 +29,7 @@ public class InternalLoadingScreen implements Screen {
         if (finishing) {
             font.draw(batch, "LOADING GAME 100%", Gdx.graphics.getWidth() / 2 - 80, Gdx.graphics.getHeight() / 2);
             GameFramework.Resource.makeSureFinishLoading();
-            GameFramework.GameFlow.setGameStatus(GameStatus.Intro);
+            GameFramework.GameFlow.gotoIntoScreen();
         } else {
             font.draw(batch, "LOADING GAME " + (int) (100 * GameFramework.Resource.getLoadingProgress()) + "%", Gdx.graphics.getWidth() / 2 - 80, Gdx.graphics.getHeight() / 2);
         }

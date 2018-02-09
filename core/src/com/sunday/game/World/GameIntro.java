@@ -12,7 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.sunday.game.framework.GameFramework;
-import com.sunday.game.framework.gameflow.GameStatus;
 
 
 public class GameIntro implements Screen {
@@ -43,7 +42,7 @@ public class GameIntro implements Screen {
         start.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                GameFramework.GameFlow.setGameStatus(GameStatus.InGame);
+                GameFramework.GameFlow.setCurrentScreen(GamePlay.class);
             }
         });
         exit = new TextButton("EXIT", textButtonStyle);
@@ -58,21 +57,21 @@ public class GameIntro implements Screen {
         setting.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                GameFramework.GameFlow.setGameStatus(GameStatus.Setting);
+                GameFramework.GameFlow.setCurrentScreen(GameSetting.class);
             }
         });
         /*test = new TextButton("TEST", textButtonStyle);
         test.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-               GameFlowManager.getInstance().setGameStatus(GameStatus.Test);
+               GameFlowManager.getInstance().setCurrentScreen(GameStatus.Test);
             }
         });*/
         test = new TextButton("Tiled Map", textButtonStyle);
         test.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                GameFramework.GameFlow.setGameStatus(GameStatus.MapOfGame);
+                GameFramework.GameFlow.setCurrentScreen(TiledGameMap.class);
             }
         });
 
@@ -101,7 +100,7 @@ public class GameIntro implements Screen {
         stage.addActor(test);
 //        going to test
 //        GameFramework.switchToolOnOrOff();
-//        GameFramework.GameFlow.setGameStatus(GameStatus.Test);
+//        GameFramework.GameFlow.setCurrentScreen(GameStatus.Test);
     }
 
     @Override

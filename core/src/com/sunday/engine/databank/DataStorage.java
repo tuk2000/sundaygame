@@ -66,7 +66,7 @@ class DataStorage<T extends Data> {
             if (isSensor) {
                 classSensor = connection.source instanceof ClassSensor ? (ClassSensor) connection.source : null;
                 isSensorClass = t.getClass().equals(classSensor.getSensedClass());
-                if(isSensorClass){
+                if (isSensorClass) {
                     classSensor.setSensedInstance(t);
                 }
             }

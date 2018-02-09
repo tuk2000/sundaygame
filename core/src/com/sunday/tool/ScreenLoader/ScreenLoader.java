@@ -1,20 +1,17 @@
 package com.sunday.tool.screenloader;
 
-import com.sunday.game.framework.gameflow.GameStatus;
 import com.sunday.tool.ToolExtender;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ScreenLoader extends ToolExtender<ScreenLoaderUIController> {
-    private ArrayList<GameStatus> arrayList = new ArrayList<>();
+    private List<String> arrayList = new ArrayList<>();
 
-    public void loadGameStatusEnum(ArrayList<GameStatus> arrayList) {
+    public void setScreenNameList(List<String> list) {
         this.arrayList.clear();
-        arrayList.forEach(e -> {
-            this.arrayList.add(e);
-        });
-
-        getController().loadGameStatusEnum(arrayList);
+        this.arrayList.addAll(list);
+        getController().loadScreenList(arrayList);
     }
 
 }

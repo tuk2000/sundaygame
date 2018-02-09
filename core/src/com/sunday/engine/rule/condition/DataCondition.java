@@ -29,9 +29,9 @@ public class DataCondition<T extends Data> extends Condition {
     public static DataCondition dataSignals(Data t, Signal... signals) {
         Map<Data, Predicate<Data>> clusters = new HashMap<>();
         DataCondition dataCondition = new DataCondition(clusters);
-        String names="";
+        String names = "";
         for (Signal signal : signals) {
-            names=names+signal.name()+" ";
+            names = names + signal.name() + " ";
             clusters.put(t, null);
             Tracer tracer = new SignalTracer(dataCondition, t, signal);
             dataCondition.tracers.put(t, tracer);
@@ -43,10 +43,10 @@ public class DataCondition<T extends Data> extends Condition {
     public static DataCondition classSignals(Class<? extends Data> clazz, Signal... signals) {
         Map<Data, Predicate<Data>> clusters = new HashMap<>();
         DataCondition dataCondition = new DataCondition(clusters);
-        String names="";
+        String names = "";
         ClassSensor classSensor = ClassSensor.getClassSensor(clazz);
         for (Signal signal : signals) {
-            names=names+signal.name()+" ";
+            names = names + signal.name() + " ";
             clusters.put(classSensor, null);
             dataCondition.tracers.put(classSensor, new SignalTracer(dataCondition, classSensor, signal));
         }
