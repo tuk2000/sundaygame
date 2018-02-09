@@ -1,4 +1,4 @@
-package com.sunday.game.framework.gameflow;
+package com.sunday.game.framework.display;
 
 
 import com.badlogic.gdx.Screen;
@@ -8,13 +8,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-class GameFlow<T extends Screen> {
+class ScreenHistory<T extends Screen> {
     private ArrayList<T> flow = new ArrayList<>();
     private Map<String, Class<T>> classMap = new HashMap<>();
     private Screen loadingScreen = null;
     private Screen introScreen = null;
 
-    GameFlow(List<Class<T>> list) {
+    ScreenHistory(List<Class<T>> list) {
         list.forEach(screenClass -> classMap.put(screenClass.getCanonicalName(), screenClass));
     }
 

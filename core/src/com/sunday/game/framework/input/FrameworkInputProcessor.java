@@ -11,11 +11,11 @@ public class FrameworkInputProcessor extends InputAdapter {
         switch (keycode) {
             case Input.Keys.ESCAPE:
                 Gdx.app.log("FrameworkInputProcessor", "Key Esc pressed ");
-                GameFramework.GameFlow.gotoIntoScreen();
+                GameFramework.Screen.gotoIntoScreen();
                 return true;
             case Input.Keys.BACKSPACE:
                 Gdx.app.log("FrameworkInputProcessor", "Key BACKSPACE pressed ");
-                GameFramework.GameFlow.backToPreviewScreen();
+                GameFramework.Screen.backToPreviewScreen();
                 return true;
             case Input.Keys.F1:
                 Gdx.app.log("FrameworkInputProcessor", "Key F1 pressed ");

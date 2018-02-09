@@ -47,7 +47,7 @@ public class GamePlay implements Screen {
                         movement.x = speed;
                         break;
                     case Input.Keys.P:
-                        GameFramework.GameFlow.setCurrentScreen(GamePause.class);
+                        GameFramework.Screen.setCurrentScreen(GamePause.class);
                         break;
                 }
                 return true;

@@ -148,7 +148,7 @@ public class TiledGameMap implements Screen {
                     heroSprite.translateX(20);
                     break;
                 case Input.Keys.P:
-                    GameFramework.GameFlow.setCurrentScreen("GamePause");
+                    GameFramework.Screen.setCurrentScreen("GamePause");
                     break;
             }
             return true;

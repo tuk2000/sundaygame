@@ -42,7 +42,7 @@ public class GameIntro implements Screen {
         start.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                GameFramework.GameFlow.setCurrentScreen(GamePlay.class);
+                GameFramework.Screen.setCurrentScreen(GamePlay.class);
             }
         });
         exit = new TextButton("EXIT", textButtonStyle);
@@ -57,21 +57,21 @@ public class GameIntro implements Screen {
         setting.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                GameFramework.GameFlow.setCurrentScreen(GameSetting.class);
+                GameFramework.Screen.setCurrentScreen(GameSetting.class);
             }
         });
         /*test = new TextButton("TEST", textButtonStyle);
         test.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-               GameFlowManager.getInstance().setCurrentScreen(GameStatus.Test);
+               ScreenManager.getInstance().setCurrentScreen(GameStatus.Test);
             }
         });*/
         test = new TextButton("Tiled Map", textButtonStyle);
         test.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                GameFramework.GameFlow.setCurrentScreen(TiledGameMap.class);
+                GameFramework.Screen.setCurrentScreen(TiledGameMap.class);
             }
         });
 
@@ -100,7 +100,7 @@ public class GameIntro implements Screen {
         stage.addActor(test);
 //        going to test
 //        GameFramework.switchToolOnOrOff();
-//        GameFramework.GameFlow.setCurrentScreen(GameStatus.Test);
+//        GameFramework.Screen.setCurrentScreen(GameStatus.Test);
     }
 
     @Override

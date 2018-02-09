@@ -3,7 +3,7 @@ package com.sunday.game.framework;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.controllers.Controllers;
-import com.sunday.game.framework.gameflow.GameFlowManager;
+import com.sunday.game.framework.display.ScreenManager;
 import com.sunday.game.framework.input.FrameworkControllerProcessor;
 import com.sunday.game.framework.input.FrameworkInputProxy;
 import com.sunday.game.framework.resource.ResourceManager;
@@ -15,13 +15,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * the framework consists of  GameAdaptor , FrameworkInputProxy and GameFlowManager
+ * the framework consists of  GameAdaptor , FrameworkInputProxy and ScreenManager
  * <p>
  * GameAdaptor  implements the ApplicationListener  and  it  redirect all  methods from LwjglApplication  to  a certain ApplicationListener (such as GameHub).
  * <p>
  * FrameworkInputProxy extends the function in Gdx.input , it includes a InputMultiplexer ,which has FrameworkInputProcessor and user defined InputProcessor.
  * <p>
- * GameFlowManager  conducts the statues of the game .
+ * ScreenManager  conducts the statues of the game .
  * <p>
  * TestTool contains basic information while the game is running and provides some shortcuts in oder to control the game.
  * <p>
@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 public class GameFramework {
 
     //framework basic Components
-    public static GameFlowManager GameFlow;
+    public static ScreenManager Screen;
     public static ResourceManager Resource;
     private static ToolApplication toolApplication;
 
@@ -58,8 +58,8 @@ public class GameFramework {
 
 
         Resource = new ResourceManager();
-        GameFlow = new GameFlowManager(gameScreenGenerator, GameAdaptor.getInstance());
-        GameFlow.gotoLoadingScreen();
+        Screen = new ScreenManager(gameScreenGenerator, GameAdaptor.getInstance());
+        Screen.gotoLoadingScreen();
 
         Controllers.addListener(new FrameworkControllerProcessor());
     }

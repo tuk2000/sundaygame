@@ -29,7 +29,7 @@ public class GameLoading implements Screen {
         if (finishing) {
             font.draw(batch, "LOADING GAME 100%", Gdx.graphics.getWidth() / 2 - 80, Gdx.graphics.getHeight() / 2);
             GameFramework.Resource.makeSureFinishLoading();
-            GameFramework.GameFlow.gotoIntoScreen();
+            GameFramework.Screen.gotoIntoScreen();
         } else {
             font.draw(batch, "LOADING GAME " + (int) (100 * GameFramework.Resource.getLoadingProgress()) + "%", Gdx.graphics.getWidth() / 2 - 80, Gdx.graphics.getHeight() / 2);
         }

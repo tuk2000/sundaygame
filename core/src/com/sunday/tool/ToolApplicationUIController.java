@@ -46,7 +46,7 @@ public class ToolApplicationUIController implements PerformanceMonitorUIControll
         if (event.getSource().equals(btLoad)) {
             String screen = screens.getSelectionModel().getSelectedItem();
             if (screen != null) {
-                GameFramework.GameFlow.setCurrentScreen(screen);
+                GameFramework.Screen.setCurrentScreen(screen);
             }
         }
     }
