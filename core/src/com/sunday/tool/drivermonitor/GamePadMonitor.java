@@ -1,4 +1,7 @@
 package com.sunday.tool.drivermonitor;
 
-public class GamePadMonitor {
+import com.sunday.tool.ToolExtender;
+
+public class GamePadMonitor extends ToolExtender<GamePadMonitorUIController> {
+
 }

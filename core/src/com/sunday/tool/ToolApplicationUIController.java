@@ -3,6 +3,8 @@ package com.sunday.tool;
 import com.sunday.game.framework.GameFramework;
 import com.sunday.tool.datamonitor.DataMonitorUIController;
 import com.sunday.tool.datamonitor.MonitoredData;
+import com.sunday.tool.drivermonitor.KeyBoardMonitorUIController;
+import com.sunday.tool.drivermonitor.MouseMonitorUIController;
 import com.sunday.tool.logger.GameLoggerUIController;
 import com.sunday.tool.logger.LogMessage;
 import com.sunday.tool.perfermancemonitor.PerformanceMonitorUIController;
@@ -12,15 +14,12 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.StackedAreaChart;
 import javafx.scene.chart.XYChart;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
 import java.util.List;
 
-public class ToolApplicationUIController implements PerformanceMonitorUIController, GameLoggerUIController, DataMonitorUIController, ScreenLoaderUIController {
+public class ToolApplicationUIController implements PerformanceMonitorUIController, GameLoggerUIController, DataMonitorUIController, ScreenLoaderUIController, KeyBoardMonitorUIController, MouseMonitorUIController {
     XYChart.Series memoryUsages = new XYChart.Series();
     XYChart.Series fpsSeries = new XYChart.Series();
     @FXML
@@ -39,6 +38,36 @@ public class ToolApplicationUIController implements PerformanceMonitorUIControll
 
     @FXML
     private Button btLoad;
+
+    @FXML
+    private TextArea keyBoardHistory;
+
+    @FXML
+    private Label keyboardSignal;
+
+    @FXML
+    private Label keyboardKey;
+
+    @FXML
+    private Label keyBoardStatus;
+
+    @FXML
+    private Label mouseSignal;
+
+    @FXML
+    private Label mouseKey;
+
+    @FXML
+    private Label mouseStatus;
+
+    @FXML
+    private Label gamePadSignal;
+
+    @FXML
+    private Label gamePadKey;
+
+    @FXML
+    private Label gamePadStatus;
 
 
     @FXML
@@ -124,6 +153,49 @@ public class ToolApplicationUIController implements PerformanceMonitorUIControll
     public void newLogMessage(LogMessage logMessage) {
         Platform.runLater(() -> {
             logTable.getItems().add(logMessage);
+        });
+    }
+
+    @Override
+    public void setKeyBoardSignal(String signal) {
+        Platform.runLater(() -> {
+            keyboardSignal.setText(signal);
+        });
+    }
+
+    @Override
+    public void setKeyBoardKey(String key) {
+        Platform.runLater(() -> {
+            keyboardKey.setText(key);
+        });
+    }
+
+    @Override
+    public void setKeyBoardStatus(String status) {
+        Platform.runLater(() -> {
+            keyBoardStatus.setText(status);
+            keyBoardHistory.appendText(keyboardKey.getText() + "-" + keyboardSignal.getText() + "\n");
+        });
+    }
+
+    @Override
+    public void setMouseSignal(String signal) {
+        Platform.runLater(() -> {
+            mouseSignal.setText(signal);
+        });
+    }
+
+    @Override
+    public void setMouseLocation(int screenX, int screenY) {
+        Platform.runLater(() -> {
+            mouseStatus.setText("[" + screenX + "," + screenY + "]");
+        });
+    }
+
+    @Override
+    public void setMouseKey(String key) {
+        Platform.runLater(() -> {
+            mouseKey.setText(key);
         });
     }
 }

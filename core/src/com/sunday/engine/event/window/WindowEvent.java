@@ -1,5 +1,6 @@
 package com.sunday.engine.event.window;
 
+import com.sunday.engine.common.Data;
 import com.sunday.engine.event.Event;
 
 public class WindowEvent extends Event {
@@ -15,8 +16,8 @@ public class WindowEvent extends Event {
         Resized, Closed, Maximum, Minimum, Hide, Show
     }
 
-    public enum WindowEventSource {
-        Game
+    public enum WindowEventSource implements Data {
+        Window
     }
 
     private Type type;
@@ -25,7 +26,7 @@ public class WindowEvent extends Event {
     private int height;
 
 
-    public WindowEvent(Object source, Type type) {
+    public WindowEvent(Data source, Type type) {
         super(source);
         this.type = type;
     }
@@ -35,7 +36,7 @@ public class WindowEvent extends Event {
     }
 
     public static WindowEvent newResizeEvent(int width, int height) {
-        WindowEvent windowEvent = new WindowEvent(WindowEventSource.Game, Type.Resized);
+        WindowEvent windowEvent = new WindowEvent(WindowEventSource.Window, Type.Resized);
         windowEvent.width = width;
         windowEvent.height = height;
         return windowEvent;

@@ -1,6 +1,8 @@
 package com.sunday.tool;
 
 import com.sunday.tool.datamonitor.DataMonitor;
+import com.sunday.tool.drivermonitor.KeyBoardMonitor;
+import com.sunday.tool.drivermonitor.MouseMonitor;
 import com.sunday.tool.logger.GameLogger;
 import com.sunday.tool.perfermancemonitor.PerformanceMonitor;
 import com.sunday.tool.screenloader.ScreenLoader;
@@ -17,6 +19,8 @@ public class ToolApplication extends Application implements Runnable {
     public static ScreenLoader screenLoader = new ScreenLoader();
     public static DataMonitor dataMonitor = new DataMonitor();
     public static PerformanceMonitor performanceMonitor = new PerformanceMonitor();
+    public static KeyBoardMonitor keyBoardMonitor = new KeyBoardMonitor();
+    public static MouseMonitor mouseMonitor = new MouseMonitor();
 
     private static Stage wnd;
     private static ToolApplicationUIController toolApplicationUIController;
@@ -35,7 +39,7 @@ public class ToolApplication extends Application implements Runnable {
         loader.setLocation(getClass().getResource("/Tool.fxml"));
         Parent root = loader.load();
         Scene scene = new Scene(root);
-        primaryStage.setTitle("TestTool");
+        primaryStage.setTitle("Tool");
         primaryStage.setScene(scene);
         primaryStage.setX(0);
         primaryStage.setY(0);
@@ -47,6 +51,8 @@ public class ToolApplication extends Application implements Runnable {
         screenLoader.setToolExtenderController(toolApplicationUIController);
         dataMonitor.setToolExtenderController(toolApplicationUIController);
         performanceMonitor.setToolExtenderController(toolApplicationUIController);
+        keyBoardMonitor.setToolExtenderController(toolApplicationUIController);
+        mouseMonitor.setToolExtenderController(toolApplicationUIController);
 
         Platform.runLater(afterInitialRunnable);
     }

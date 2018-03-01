@@ -4,8 +4,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.effect.Blend?>
 <?import javafx.scene.layout.*?>
-<AnchorPane prefHeight="558.0" prefWidth="1063.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.sunday.tool.ToolApplicationUIController">
+<AnchorPane prefHeight="558.0" prefWidth="1063.0" xmlns="http://javafx.com/javafx/9.0.1"
+            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sunday.tool.ToolApplicationUIController">
     <children>
         <TabPane prefHeight="558.0" prefWidth="1063.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0"
                  AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
@@ -17,22 +17,28 @@
                                 <StackedAreaChart fx:id="memoryChart" animated="false" prefHeight="400.0"
                                                   prefWidth="385.0" title="MemoryUsage">
                                     <xAxis>
-                                        <NumberAxis label="Time(S)" minorTickCount="1" side="BOTTOM">
+                                        <NumberAxis label="Time(S)" minorTickCount="10" side="BOTTOM">
                                             <effect>
                                                 <Blend/>
                                             </effect>
                                         </NumberAxis>
                                     </xAxis>
                                     <yAxis>
-                                        <NumberAxis label="KB" minorTickCount="16" side="LEFT" upperBound="102400.0"/>
+                                        <NumberAxis label="KB" minorTickCount="16" prefHeight="167.0" prefWidth="40.0"
+                                                    side="LEFT" upperBound="102400.0"/>
                                     </yAxis>
                                 </StackedAreaChart>
                                 <StackedAreaChart fx:id="fpsChart" animated="false" title="FPS">
                                     <xAxis>
-                                        <NumberAxis label="Time(S)" side="BOTTOM"/>
+                                        <NumberAxis label="Time(S)" minorTickCount="10" side="BOTTOM">
+                                            <effect>
+                                                <Blend/>
+                                            </effect>
+                                        </NumberAxis>
                                     </xAxis>
                                     <yAxis>
-                                        <NumberAxis label="FPS" side="LEFT" tickLabelGap="1.0" upperBound="80.0"/>
+                                        <NumberAxis label="FPS" prefHeight="166.0" prefWidth="40.0" side="LEFT"
+                                                    tickLabelGap="1.0" upperBound="80.0"/>
                                     </yAxis>
                                 </StackedAreaChart>
                             </items>
@@ -54,8 +60,8 @@
                                 </SplitPane>
                                 <TableView fx:id="screenTable" prefHeight="529.0" prefWidth="570.0">
                                     <columns>
-                                        <TableColumn prefWidth="75.0" text="C1"/>
-                                        <TableColumn prefWidth="75.0" text="C2"/>
+                                        <TableColumn prefWidth="75.0" text="Class"/>
+                                        <TableColumn prefWidth="75.0" text="Instances"/>
                                     </columns>
                                 </TableView>
                             </items>
@@ -77,6 +83,105 @@
                                 </TableView>
                             </children>
                         </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab text="Driver">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                            <children>
+                                <SplitPane dividerPositions="0.33, 0.66" layoutX="172.0" layoutY="105.0"
+                                           prefHeight="529.0" prefWidth="1063.0" AnchorPane.bottomAnchor="0.0"
+                                           AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
+                                           AnchorPane.topAnchor="0.0">
+                                    <items>
+                                        <AnchorPane prefHeight="527.0" prefWidth="268.0">
+                                            <children>
+                                                <TitledPane animated="false" layoutX="14.0" layoutY="60.0"
+                                                            prefHeight="527.0" prefWidth="347.0" text="Keyboard"
+                                                            AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                                                            AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                    <content>
+                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0"
+                                                                    prefWidth="200.0">
+                                                            <children>
+                                                                <TextArea fx:id="keyBoardHistory" layoutX="28.0"
+                                                                          layoutY="265.0" prefHeight="200.0"
+                                                                          prefWidth="276.0"/>
+                                                                <Label layoutX="47.0" layoutY="47.0" text="Signal"/>
+                                                                <Label fx:id="keyboardSignal" layoutX="113.0"
+                                                                       layoutY="47.0" text="None"/>
+                                                                <Label layoutX="47.0" layoutY="95.0" text="Key"/>
+                                                                <Label fx:id="keyboardKey" layoutX="119.0"
+                                                                       layoutY="95.0" text="......."/>
+                                                                <Label layoutX="29.0" layoutY="237.0" text="History"/>
+                                                                <Label layoutX="47.0" layoutY="151.0" text="Status"/>
+                                                                <Label fx:id="keyBoardStatus" layoutX="120.0"
+                                                                       layoutY="151.0" text="......"/>
+                                                            </children>
+                                                        </AnchorPane>
+                                                    </content>
+                                                </TitledPane>
+                                            </children>
+                                        </AnchorPane>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+                                            <children>
+                                                <TitledPane animated="false" layoutX="23.0" layoutY="131.0"
+                                                            prefHeight="527.0" prefWidth="344.0" text="Mouse"
+                                                            AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                                                            AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                    <content>
+                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0"
+                                                                    prefWidth="200.0">
+                                                            <children>
+                                                                <Label layoutX="48.0" layoutY="50.0" text="Signal"/>
+                                                                <Label layoutX="48.0" layoutY="103.0" text="Key"/>
+                                                                <Label fx:id="mouseSignal" layoutX="134.0"
+                                                                       layoutY="50.0" text="None"/>
+                                                                <Label fx:id="mouseKey" layoutX="141.0" layoutY="103.0"
+                                                                       text="......"/>
+                                                                <Label layoutX="48.0" layoutY="151.0" text="Status"/>
+                                                                <Label fx:id="mouseStatus" layoutX="141.0"
+                                                                       layoutY="151.0" text="......"/>
+                                                            </children>
+                                                        </AnchorPane>
+                                                    </content>
+                                                </TitledPane>
+                                            </children>
+                                        </AnchorPane>
+                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="527.0" prefWidth="789.0">
+                                            <children>
+                                                <TitledPane animated="false" layoutX="26.0" layoutY="98.0"
+                                                            prefHeight="527.0" prefWidth="358.0" text="GamePad"
+                                                            AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
+                                                            AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                    <content>
+                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0"
+                                                                    prefWidth="200.0">
+                                                            <children>
+                                                                <Label layoutX="53.0" layoutY="48.0" text="Signal"/>
+                                                                <Label layoutX="53.0" layoutY="101.0" text="Key"/>
+                                                                <Label layoutX="46.0" layoutY="150.0" text="Status"/>
+                                                                <Label fx:id="gamePadSignal" layoutX="139.0"
+                                                                       layoutY="48.0" text="None"/>
+                                                                <Label fx:id="gamePadKey" layoutX="146.0"
+                                                                       layoutY="101.0" text="......"/>
+                                                                <Label fx:id="gamePadStatus" layoutX="146.0"
+                                                                       layoutY="150.0" text="......"/>
+                                                            </children>
+                                                        </AnchorPane>
+                                                    </content>
+                                                </TitledPane>
+                                            </children>
+                                        </AnchorPane>
+                                    </items>
+                                </SplitPane>
+                            </children>
+                        </AnchorPane>
+                    </content>
+                </Tab>
+                <Tab text="Data">
+                    <content>
+                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0"/>
                     </content>
                 </Tab>
             </tabs>

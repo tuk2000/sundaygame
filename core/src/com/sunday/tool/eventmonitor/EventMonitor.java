@@ -1,4 +1,7 @@
 package com.sunday.tool.eventmonitor;
 
-public class EventMonitor {
+import com.sunday.tool.ToolExtender;
+import com.sunday.tool.drivermonitor.MouseMonitorUIController;
+
+public class EventMonitor extends ToolExtender<MouseMonitorUIController> {
 }

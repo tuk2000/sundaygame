@@ -1,6 +1,7 @@
 package com.sunday.engine.render.managers;
 
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.sunday.engine.driver.gamepad.GamePad;
 import com.sunday.engine.event.Event;
 import com.sunday.engine.event.EventProcessor;
 import com.sunday.engine.event.driver.GamePadEvent;
@@ -38,10 +39,10 @@ public class DisplayManager implements EventProcessor {
                 case Minimum:
             }
         } else if (event instanceof GamePadEvent) {
-            GamePadEvent gamePadEvent = (GamePadEvent) event;
-            switch (gamePadEvent.getOperation()) {
+            GamePad gamePad = (GamePad) event.getSource();
+            switch (gamePad.gamePadSignal) {
                 case ButtonDown:
-                    if (gamePadEvent.getButton() == 5) {
+                    if (gamePad.buttonCode == 5) {
                         //
                     }
                     break;

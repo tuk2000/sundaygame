@@ -4,7 +4,6 @@ import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Disposable;
 import com.sunday.engine.common.DataSignal;
-import com.sunday.engine.databank.DataBank;
 import com.sunday.engine.databank.Port;
 import com.sunday.engine.event.Event;
 import com.sunday.engine.event.EventProcessor;
@@ -37,8 +36,7 @@ public abstract class AbstractModel implements Disposable {
     public PhysicReflection physicReflection = new PhysicReflection();
     public MovementState movementState = new MovementState();
 
-    public void connectToDataBank(DataBank dataBank) {
-        this.port = dataBank.getPort(this);
+    public void connectToDataBank(Port port) {
         port.addDataInstance(outlook);
         port.addDataInstance(physicReflection);
         port.addDataInstance(movementState);

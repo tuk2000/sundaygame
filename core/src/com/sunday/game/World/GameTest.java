@@ -1,25 +1,33 @@
 package com.sunday.game.world;
 
 import com.badlogic.gdx.Screen;
+import com.sunday.engine.Engine;
 import com.sunday.engine.examples.RoleConstructor;
 import com.sunday.engine.model.state.Label;
 import com.sunday.engine.scenario.Scenario;
-import com.sunday.engine.scenario.ScenarioEngine;
+import com.sunday.engine.scenario.ScenarioSystem;
+import com.sunday.engine.scenario.ScopeType;
 
 
 public class GameTest implements Screen {
 
-    private ScenarioEngine scenarioEngine;
+    private Engine engine;
+
+    private ScenarioSystem scenarioSystem;
 
     public GameTest() {
-        scenarioEngine = new ScenarioEngine();
-        Scenario rootScenario = scenarioEngine.getRootScenario();
-        RoleConstructor roleConstructor = new RoleConstructor();
+        engine = new Engine();
+        scenarioSystem = engine.getScenarioSystem();
 
-        rootScenario.addRole(roleConstructor.construct(Label.Map));
-        rootScenario.addRole(roleConstructor.construct(Label.Hero));
-        rootScenario.addRole(roleConstructor.construct(Label.Enemy));
+        Scenario testScenario = new Scenario(ScopeType.EntireLevel);
+
+        RoleConstructor roleConstructor = new RoleConstructor();
+        testScenario.addRole(roleConstructor.construct(Label.Map));
+        testScenario.addRole(roleConstructor.construct(Label.Hero));
+        testScenario.addRole(roleConstructor.construct(Label.Enemy));
         roleConstructor.dispose();
+
+        scenarioSystem.setRoot(testScenario);
     }
 
     @Override
@@ -29,12 +37,12 @@ public class GameTest implements Screen {
 
     @Override
     public void render(float delta) {
-        scenarioEngine.render(delta);
+        engine.render(delta);
     }
 
     @Override
     public void resize(int width, int height) {
-        scenarioEngine.resize(width, height);
+        engine.resize(width, height);
     }
 
     @Override
@@ -54,7 +62,7 @@ public class GameTest implements Screen {
 
     @Override
     public void dispose() {
-        scenarioEngine.dispose();
+        scenarioSystem.dispose();
     }
 
 }

@@ -12,4 +12,6 @@ public abstract class Driver implements Data {
     public DriverType getDriverType() {
         return driverType;
     }
+
+    public abstract void reset();
 }

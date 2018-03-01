@@ -29,7 +29,7 @@ public class KeyBoardCondition extends Condition {
 
     public static KeyBoardCondition keyCombination(String combination) {
         String[] combo = combination.split("-");
-        Predicate<Data> keyPressed = keyBoard -> ((KeyBoard) keyBoard).keyBoardSignal == KeyBoardSignal.KeyDown;
+        Predicate<Data> keyPressed = keyBoard -> ((KeyBoard) keyBoard).keyBoardSignal == KeyBoardSignal.Pressed;
         Predicate<Data> keyCombo = keyBoardState -> ((KeyBoardState) keyBoardState).currentTyped.toString().equals(combo.toString());
         Map<Data, Predicate<Data>> clusters = new HashMap<>();
         clusters.put(keyBoard, keyPressed);
@@ -40,7 +40,7 @@ public class KeyBoardCondition extends Condition {
     }
 
     public static KeyBoardCondition keyDown(char character) {
-        Predicate<Data> keyPressed = keyBoard -> ((KeyBoard) keyBoard).keyBoardSignal == KeyBoardSignal.KeyDown & ((KeyBoard) keyBoard).character == character;
+        Predicate<Data> keyPressed = keyBoard -> ((KeyBoard) keyBoard).keyBoardSignal == KeyBoardSignal.Pressed & ((KeyBoard) keyBoard).character == character;
         Map<Data, Predicate<Data>> clusters = new HashMap<>();
         clusters.put(keyBoardState, keyPressed);
         KeyBoardCondition keyBoardCondition = new KeyBoardCondition(clusters);
@@ -49,7 +49,7 @@ public class KeyBoardCondition extends Condition {
     }
 
     public static KeyBoardCondition keyUp(char character) {
-        Predicate<Data> keyPressed = keyBoard -> ((KeyBoard) keyBoard).keyBoardSignal == KeyBoardSignal.KeyUp & ((KeyBoard) keyBoard).character == character;
+        Predicate<Data> keyPressed = keyBoard -> ((KeyBoard) keyBoard).keyBoardSignal == KeyBoardSignal.Released & ((KeyBoard) keyBoard).character == character;
         Map<Data, Predicate<Data>> clusters = new HashMap<>();
         clusters.put(keyBoardState, keyPressed);
         KeyBoardCondition keyBoardCondition = new KeyBoardCondition(clusters);

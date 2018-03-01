@@ -10,5 +10,13 @@ public class KeyBoard extends Driver {
 
     public KeyBoard() {
         super(DriverType.Keyboard);
+        reset();
+    }
+
+    @Override
+    public void reset() {
+        keyBoardSignal = KeyBoardSignal.None;
+        key = 0;
+        character = ' ';
     }
 }

@@ -7,9 +7,11 @@ public class EventSystem extends SubSystem implements EventPoster {
     private EventProcessor eventProcessor = new EventProcessor() {
         @Override
         public void processEvent(Event event) {
-            systemPort.getDataList(data -> data.getClass().equals(EventProcessor.class))
-                    .forEach(e -> ((EventProcessor) e)
-                            .processEvent(event));
+            //  Gdx.app.log("EventSystem", event.toString());
+            systemPort.broadcast(event.getSource(), event.getSignal());
+//            systemPort.getDataList(data -> data.getClass().equals(EventProcessor.class))
+//                    .forEach(e -> ((EventProcessor) e)
+//                            .processEvent(event));
         }
     };
 
