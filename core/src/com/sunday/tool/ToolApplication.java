@@ -5,7 +5,7 @@ import com.sunday.tool.drivermonitor.KeyBoardMonitor;
 import com.sunday.tool.drivermonitor.MouseMonitor;
 import com.sunday.tool.logger.GameLogger;
 import com.sunday.tool.perfermancemonitor.PerformanceMonitor;
-import com.sunday.tool.screenloader.ScreenLoader;
+import com.sunday.tool.screenloader.ScreenMonitor;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -16,7 +16,7 @@ import javafx.stage.Stage;
 
 public class ToolApplication extends Application implements Runnable {
     public static GameLogger gameLogger = new GameLogger();
-    public static ScreenLoader screenLoader = new ScreenLoader();
+    public static ScreenMonitor screenMonitor = new ScreenMonitor();
     public static DataMonitor dataMonitor = new DataMonitor();
     public static PerformanceMonitor performanceMonitor = new PerformanceMonitor();
     public static KeyBoardMonitor keyBoardMonitor = new KeyBoardMonitor();
@@ -47,12 +47,12 @@ public class ToolApplication extends Application implements Runnable {
 
         toolApplicationUIController = loader.getController();
         toolApplicationUIController.initial();
-        gameLogger.setToolExtenderController(toolApplicationUIController);
-        screenLoader.setToolExtenderController(toolApplicationUIController);
-        dataMonitor.setToolExtenderController(toolApplicationUIController);
-        performanceMonitor.setToolExtenderController(toolApplicationUIController);
-        keyBoardMonitor.setToolExtenderController(toolApplicationUIController);
-        mouseMonitor.setToolExtenderController(toolApplicationUIController);
+        gameLogger.setUIController(toolApplicationUIController);
+        screenMonitor.setUIController(toolApplicationUIController);
+        dataMonitor.setUIController(toolApplicationUIController);
+        performanceMonitor.setUIController(toolApplicationUIController);
+        keyBoardMonitor.setUIController(toolApplicationUIController);
+        mouseMonitor.setUIController(toolApplicationUIController);
 
         Platform.runLater(afterInitialRunnable);
     }

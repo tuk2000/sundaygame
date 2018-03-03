@@ -6,10 +6,14 @@ import com.sunday.tool.datamonitor.MonitoredData;
 import com.sunday.tool.drivermonitor.KeyBoardMonitorUIController;
 import com.sunday.tool.drivermonitor.MouseMonitorUIController;
 import com.sunday.tool.logger.GameLoggerUIController;
-import com.sunday.tool.logger.LogMessage;
+import com.sunday.tool.logger.LogRecord;
 import com.sunday.tool.perfermancemonitor.PerformanceMonitorUIController;
-import com.sunday.tool.screenloader.ScreenLoaderUIController;
+import com.sunday.tool.perfermancemonitor.PerformanceRecord;
+import com.sunday.tool.screenloader.ScreenMonitorUIController;
+import com.sunday.tool.screenloader.ScreenRecord;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.chart.StackedAreaChart;
@@ -17,11 +21,9 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-import java.util.List;
-
-public class ToolApplicationUIController implements PerformanceMonitorUIController, GameLoggerUIController, DataMonitorUIController, ScreenLoaderUIController, KeyBoardMonitorUIController, MouseMonitorUIController {
-    XYChart.Series memoryUsages = new XYChart.Series();
-    XYChart.Series fpsSeries = new XYChart.Series();
+public class ToolApplicationUIController implements PerformanceMonitorUIController, GameLoggerUIController, DataMonitorUIController, ScreenMonitorUIController, KeyBoardMonitorUIController, MouseMonitorUIController {
+    private XYChart.Series memoryUsages = new XYChart.Series();
+    private XYChart.Series fpsSeries = new XYChart.Series();
     @FXML
     private StackedAreaChart<Number, Number> fpsChart;
     @FXML
@@ -31,10 +33,10 @@ public class ToolApplicationUIController implements PerformanceMonitorUIControll
     private ListView<String> screens;
 
     @FXML
-    private TableView<MonitoredData> screenTable;
+    private TableView<ScreenRecord> screenTable;
 
     @FXML
-    private TableView<LogMessage> logTable;
+    private TableView<LogRecord> logTable;
 
     @FXML
     private Button btLoad;
@@ -69,6 +71,17 @@ public class ToolApplicationUIController implements PerformanceMonitorUIControll
     @FXML
     private Label gamePadStatus;
 
+    @FXML
+    private TreeTableView<?> treeTableView;
+
+    @FXML
+    private RadioButton radixOptSystem;
+
+    @FXML
+    private ToggleGroup dataOptionGroup;
+
+    @FXML
+    private RadioButton radixOptType;
 
     @FXML
     void loadScreen(ActionEvent event) {
@@ -90,69 +103,86 @@ public class ToolApplicationUIController implements PerformanceMonitorUIControll
         fpsChart.getData().add(fpsSeries);
 
 
-        TableColumn classCol = screenTable.getColumns().get(0);
-        classCol.setMinWidth(400);
-        classCol.setCellValueFactory(new PropertyValueFactory<MonitoredData, String>("ClassName"));
-        TableColumn objectCol = screenTable.getColumns().get(1);
-        objectCol.setMinWidth(400);
-        objectCol.setCellValueFactory(new PropertyValueFactory<MonitoredData, String>("ObjectName"));
+        TableColumn screenClassCol = screenTable.getColumns().get(0);
+        screenClassCol.setMinWidth(400);
+        screenClassCol.setCellValueFactory(new PropertyValueFactory<ScreenRecord, String>("ClassName"));
+        TableColumn screenInstanceCol = screenTable.getColumns().get(1);
+        screenInstanceCol.setMinWidth(400);
+        screenInstanceCol.setCellValueFactory(new PropertyValueFactory<ScreenRecord, String>("InstanceName"));
 
 
         TableColumn typeCol = logTable.getColumns().get(0);
         typeCol.setMinWidth(100);
-        typeCol.setCellValueFactory(new PropertyValueFactory<LogMessage, String>("Type"));
+        typeCol.setCellValueFactory(new PropertyValueFactory<LogRecord, String>("Type"));
 
         TableColumn tagCol = logTable.getColumns().get(1);
         tagCol.setMinWidth(200);
-        tagCol.setCellValueFactory(new PropertyValueFactory<LogMessage, String>("Tag"));
+        tagCol.setCellValueFactory(new PropertyValueFactory<LogRecord, String>("Tag"));
 
         TableColumn contentCol = logTable.getColumns().get(2);
         contentCol.setMinWidth(800);
-        contentCol.setCellValueFactory(new PropertyValueFactory<LogMessage, String>("Content"));
+        contentCol.setCellValueFactory(new PropertyValueFactory<LogRecord, String>("Content"));
 
+        dataOptionGroup.selectedToggleProperty().addListener(new ChangeListener<Toggle>() {
+            @Override
+            public void changed(ObservableValue<? extends Toggle> observable, Toggle oldValue, Toggle newValue) {
+                if (dataOptionGroup.getSelectedToggle() == radixOptSystem) {
 
-    }
+                } else if (dataOptionGroup.getSelectedToggle() == radixOptType) {
 
-    @Override
-    public void newMemoryUsage(float time, long memoryUsage) {
-        Platform.runLater(() -> {
-            memoryChart.getData().get(0).getData().add(new XYChart.Data(time, memoryUsage));
+                }
+            }
         });
+
     }
 
     @Override
-    public void newFPS(float time, int fps) {
+    public void newPerformanceRecord(PerformanceRecord performanceRecord) {
         Platform.runLater(() -> {
-            fpsChart.getData().get(0).getData().add(new XYChart.Data(time, fps));
+            memoryChart.getData().get(0).getData().add(new XYChart.Data(performanceRecord.time, performanceRecord.memoryUsage));
+            fpsChart.getData().get(0).getData().add(new XYChart.Data(performanceRecord.time, performanceRecord.fps));
         });
     }
 
     @Override
     public void addMonitoredObject(MonitoredData monitoredObject) {
         Platform.runLater(() -> {
-            screenTable.getItems().add(monitoredObject);
+            // screenTable.getItems().add(monitoredObject);
         });
     }
 
     @Override
     public void removeMonitoredObject(MonitoredData monitoredObject) {
         Platform.runLater(() -> {
-            screenTable.getItems().remove(monitoredObject);
+            //screenTable.getItems().remove(monitoredObject);
         });
     }
 
     @Override
-    public void loadScreenList(List<String> list) {
+    public void loadScreenClass(String screenClassName) {
         Platform.runLater(() -> {
-            screens.getItems().clear();
-            screens.getItems().addAll(list);
+            screens.getItems().add(screenClassName);
         });
     }
 
     @Override
-    public void newLogMessage(LogMessage logMessage) {
+    public void addScreenRecord(ScreenRecord screenRecord) {
         Platform.runLater(() -> {
-            logTable.getItems().add(logMessage);
+            screenTable.getItems().add(screenRecord);
+        });
+    }
+
+    @Override
+    public void removeScreenRecord(ScreenRecord screenRecord) {
+        Platform.runLater(() -> {
+            screenTable.getItems().remove(screenRecord);
+        });
+    }
+
+    @Override
+    public void newLogRecord(LogRecord logRecord) {
+        Platform.runLater(() -> {
+            logTable.getItems().add(logRecord);
         });
     }
 

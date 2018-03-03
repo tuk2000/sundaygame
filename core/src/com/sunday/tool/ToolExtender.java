@@ -1,13 +1,24 @@
 package com.sunday.tool;
 
 public class ToolExtender<T extends ToolExtenderUIController> {
-    private T controller;
+    protected T UIController;
+    protected UIControllerBuffer uiControllerBuffer;
 
-    public void setToolExtenderController(T controller) {
-        this.controller = controller;
+    protected ToolExtender() {
+        uiControllerBuffer = new UIControllerBuffer();
     }
 
-    public T getController() {
-        return controller;
+    public void setUIController(T UIController) {
+        this.UIController = UIController;
+        flushBuffer();
+    }
+
+    public T getUIController() {
+        return UIController;
+    }
+
+    protected void flushBuffer() {
+        if (UIController != null)
+            uiControllerBuffer.flush(UIController);
     }
 }

@@ -47,7 +47,7 @@ public class GameFramework {
         toolApplication = new ToolApplication();
         toolApplication.runAfterInitial(() -> {
             List<String> classNames = gameScreenGenerator.getScreenClasses().stream().map(screenClazz -> screenClazz.getCanonicalName()).collect(Collectors.toList());
-            ToolApplication.screenLoader.setScreenNameList(classNames);
+            ToolApplication.screenMonitor.setScreenNameList(classNames);
         });
 
         Gdx.app.postRunnable(() -> {

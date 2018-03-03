@@ -3,12 +3,12 @@ package com.sunday.tool.logger;
 
 import javafx.beans.property.SimpleStringProperty;
 
-public class LogMessage {
+public class LogRecord {
     SimpleStringProperty type;
     SimpleStringProperty tag;
     SimpleStringProperty content;
 
-    public LogMessage(LogType type, String tag, String content) {
+    public LogRecord(LogType type, String tag, String content) {
         this.type = new SimpleStringProperty(type.name());
         this.tag = new SimpleStringProperty(tag);
         this.content = new SimpleStringProperty(content);

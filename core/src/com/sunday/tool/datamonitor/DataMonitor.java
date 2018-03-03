@@ -26,9 +26,9 @@ public class DataMonitor extends ToolExtender<DataMonitorUIController> {
         }
 
         objectsBuffer.add(monitoredObject);
-        if (getController() != null) {
+        if (getUIController() != null) {
             objectsBuffer.forEach(e -> {
-                getController().addMonitoredObject(e);
+                getUIController().addMonitoredObject(e);
             });
             objectsBuffer.clear();
         }
@@ -38,7 +38,7 @@ public class DataMonitor extends ToolExtender<DataMonitorUIController> {
         Class clazz = object.getClass();
         for (MonitoredData monitoredObject : clsToObjMap.get(clazz)) {
             if (monitoredObject.getObjectName().equals(object.toString())) {
-                getController().removeMonitoredObject(monitoredObject);
+                getUIController().removeMonitoredObject(monitoredObject);
                 break;
             }
         }

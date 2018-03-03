@@ -3,27 +3,27 @@ package com.sunday.tool.logger;
 import com.badlogic.gdx.ApplicationLogger;
 import com.sunday.tool.ToolExtender;
 
-import java.util.ArrayList;
+import java.util.function.BiConsumer;
 
 public class GameLogger extends ToolExtender<GameLoggerUIController> implements ApplicationLogger {
-    //    public static final int LOG_NONE = 0;
+//    public static final int LOG_NONE = 0;
 //    public static final int LOG_DEBUG = 3;
 //    public static final int LOG_INFO = 2;
 //    public static final int LOG_ERROR = 1;
 
-    private ArrayList<LogMessage> logs = new ArrayList<>();
-    private ArrayList<LogMessage> logBuffer = new ArrayList<>();
+    public GameLogger() {
+        uiControllerBuffer.addBuffer(LogRecord.class, true, new BiConsumer<GameLoggerUIController, LogRecord>() {
+            @Override
+            public void accept(GameLoggerUIController gameLoggerUIController, LogRecord logRecord) {
+                gameLoggerUIController.newLogRecord(logRecord);
+            }
+        });
+    }
 
     private void disposeLogMessage(LogType type, String tag, String message) {
-        LogMessage logMessage = new LogMessage(LogType.NONE, tag, message);
-        logBuffer.add(logMessage);
-        if (getController() != null) {
-            logBuffer.forEach(e -> {
-                getController().newLogMessage(e);
-                logs.add(e);
-            });
-            logBuffer.clear();
-        }
+        LogRecord logRecord = new LogRecord(LogType.NONE, tag, message);
+        uiControllerBuffer.addInstance(logRecord);
+        flushBuffer();
     }
 
     @Override

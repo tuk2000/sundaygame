@@ -20,7 +20,7 @@ public class ClassSensor<T extends Data> implements Data {
         }
     }
 
-    public Data getSensoredInstance() {
+    public Data getSensedInstance() {
         return sensedInstance;
     }
 

@@ -51,7 +51,7 @@ public final class ScreenManager {
         screenDisplay.setScreen(screen);
 
         Gdx.app.log("ScreenManager", screen.getClass().getCanonicalName() + " opened");
-        ToolApplication.dataMonitor.MonitorObject(screen);
+        ToolApplication.screenMonitor.monitorInstance(screen);
     }
 
     public final synchronized void backToPreviewScreen() {
@@ -76,7 +76,7 @@ public final class ScreenManager {
         screenDisplay.setScreen(screenHistory.current());
 
         Gdx.app.log("ScreenManager", screen.getClass().getCanonicalName() + " closed");
-        ToolApplication.dataMonitor.StopMonitorObject(screen);
+        ToolApplication.screenMonitor.forgetInstance(screen);
         System.gc();
     }
 
@@ -85,7 +85,7 @@ public final class ScreenManager {
             screenHistory.setLoadingScreen(screenGenerator.generateLoadingScreen());
             screenDisplay.setScreen(screenHistory.getLoadingScreen());
             Gdx.app.log("ScreenManager", screenHistory.getLoadingScreen().getClass().getCanonicalName() + " opened");
-            ToolApplication.dataMonitor.MonitorObject(screenHistory.getLoadingScreen());
+            ToolApplication.screenMonitor.monitorInstance(screenHistory.getLoadingScreen());
         }
     }
 
@@ -93,12 +93,12 @@ public final class ScreenManager {
         if (screenHistory.getIntroScreen() == null) {
             screenHistory.setIntroScreen(screenGenerator.generateIntroScreen());
             Gdx.app.log("ScreenManager", screenHistory.getIntroScreen().getClass().getCanonicalName() + " opened");
-            ToolApplication.dataMonitor.MonitorObject(screenHistory.getIntroScreen());
+            ToolApplication.screenMonitor.monitorInstance(screenHistory.getIntroScreen());
         } else {
             while (screenHistory.normalScreenAmount() != 0) {
                 Screen screen = screenHistory.popCurrentScreen();
                 Gdx.app.log("ScreenManager", screen.getClass().getCanonicalName() + " closed");
-                ToolApplication.dataMonitor.StopMonitorObject(screen);
+                ToolApplication.screenMonitor.forgetInstance(screen);
             }
             System.gc();
         }

@@ -22,7 +22,7 @@ public class RuleSystem extends SubSystem implements RuleSolver, RuleHub {
             @Override
             public void run() {
                 System.out.println("New Rule added!");
-                System.out.println(((Rule) (classSensor.getSensoredInstance())).condition.getInfo());
+                System.out.println(((Rule) (classSensor.getSensedInstance())).condition.getInfo());
             }
         };
         Condition ruleModificationCondition = DataCondition.classSignals(Rule.class, DataSignal.Modification);
@@ -30,7 +30,7 @@ public class RuleSystem extends SubSystem implements RuleSolver, RuleHub {
             @Override
             public void run() {
                 System.out.println("Rule modified!");
-                System.out.println(((Rule) (classSensor.getSensoredInstance())).condition.getInfo());
+                System.out.println(((Rule) (classSensor.getSensedInstance())).condition.getInfo());
             }
         };
         Condition ruleDeletionCondition = DataCondition.classSignals(Rule.class, DataSignal.Deletion);
@@ -38,7 +38,7 @@ public class RuleSystem extends SubSystem implements RuleSolver, RuleHub {
             @Override
             public void run() {
                 System.out.println("Rule removed!");
-                System.out.println(((Rule) (classSensor.getSensoredInstance())).condition.getInfo());
+                System.out.println(((Rule) (classSensor.getSensedInstance())).condition.getInfo());
             }
         };
         mount(new Rule(ruleAddCondition, ruleAddReaction));

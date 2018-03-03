@@ -2,43 +2,31 @@ package com.sunday.tool.perfermancemonitor;
 
 import com.sunday.tool.ToolExtender;
 
-import java.util.ArrayList;
+import java.util.function.BiConsumer;
 
 public class PerformanceMonitor extends ToolExtender<PerformanceMonitorUIController> {
     private float gdxTime = 0.0f;
     private float internalTime = 0.0f;
 
-    private class DataBundle {
-        float time = 0.0f;
-        long memoryUsage = 0L;
-        int fps = 0;
 
-        DataBundle(float time, long memoryUsage, int fps) {
-            this.time = time;
-            this.memoryUsage = memoryUsage;
-            this.fps = fps;
-        }
+    public PerformanceMonitor() {
+        uiControllerBuffer.addBuffer(PerformanceRecord.class, true, new BiConsumer<PerformanceMonitorUIController, PerformanceRecord>() {
+            @Override
+            public void accept(PerformanceMonitorUIController performanceMonitorUIController, PerformanceRecord performanceRecord) {
+                performanceMonitorUIController.newPerformanceRecord(performanceRecord);
+            }
+        });
     }
 
-    private ArrayList<DataBundle> dataBuffer = new ArrayList<>();
-
-    private void updateView() {
-        if (getController() != null) {
-            dataBuffer.forEach(e -> {
-                getController().newMemoryUsage(e.time, e.memoryUsage / 1024);
-                getController().newFPS(e.time, e.fps);
-            });
-            dataBuffer.clear();
-        }
-    }
 
     //those should be called in Thread with GLContent
     public void updateData(float duration, long memoryUsage, int fps) {
         this.gdxTime += duration;
-        if (gdxTime - internalTime > 1.0f) {
+        float timeEscaped = gdxTime - internalTime;
+        if (timeEscaped > 0.9f & timeEscaped < 1.1f) {
             internalTime = gdxTime;
-            dataBuffer.add(new DataBundle(gdxTime, memoryUsage, fps));
-            updateView();
+            uiControllerBuffer.addInstance(new PerformanceRecord(gdxTime, memoryUsage, fps));
+            flushBuffer();
         }
     }
 }
