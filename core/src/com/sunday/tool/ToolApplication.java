@@ -3,9 +3,9 @@ package com.sunday.tool;
 import com.sunday.tool.datamonitor.DataMonitor;
 import com.sunday.tool.drivermonitor.KeyBoardMonitor;
 import com.sunday.tool.drivermonitor.MouseMonitor;
-import com.sunday.tool.logger.GameLogger;
+import com.sunday.tool.logger.Logger;
 import com.sunday.tool.perfermancemonitor.PerformanceMonitor;
-import com.sunday.tool.screenloader.ScreenMonitor;
+import com.sunday.tool.screenmonitor.ScreenMonitor;
 import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -15,7 +15,7 @@ import javafx.stage.Stage;
 
 
 public class ToolApplication extends Application implements Runnable {
-    public static GameLogger gameLogger = new GameLogger();
+    public static Logger logger = new Logger();
     public static ScreenMonitor screenMonitor = new ScreenMonitor();
     public static DataMonitor dataMonitor = new DataMonitor();
     public static PerformanceMonitor performanceMonitor = new PerformanceMonitor();
@@ -47,7 +47,7 @@ public class ToolApplication extends Application implements Runnable {
 
         toolApplicationUIController = loader.getController();
         toolApplicationUIController.initial();
-        gameLogger.setUIController(toolApplicationUIController);
+        logger.setUIController(toolApplicationUIController);
         screenMonitor.setUIController(toolApplicationUIController);
         dataMonitor.setUIController(toolApplicationUIController);
         performanceMonitor.setUIController(toolApplicationUIController);

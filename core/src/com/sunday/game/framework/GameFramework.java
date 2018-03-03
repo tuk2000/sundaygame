@@ -36,7 +36,7 @@ public class GameFramework {
     private static ToolApplication toolApplication;
 
     public GameFramework() {
-        Gdx.app.setApplicationLogger(ToolApplication.gameLogger);
+        Gdx.app.setApplicationLogger(ToolApplication.logger);
         GameScreenGenerator gameScreenGenerator = new GameScreenGenerator();
 
         FrameworkInputProxy frameworkInputProxy = new FrameworkInputProxy(Gdx.input);

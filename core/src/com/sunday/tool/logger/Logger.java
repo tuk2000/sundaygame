@@ -5,17 +5,17 @@ import com.sunday.tool.ToolExtender;
 
 import java.util.function.BiConsumer;
 
-public class GameLogger extends ToolExtender<GameLoggerUIController> implements ApplicationLogger {
+public class Logger extends ToolExtender<LoggerUIController> implements ApplicationLogger {
 //    public static final int LOG_NONE = 0;
 //    public static final int LOG_DEBUG = 3;
 //    public static final int LOG_INFO = 2;
 //    public static final int LOG_ERROR = 1;
 
-    public GameLogger() {
-        uiControllerBuffer.addBuffer(LogRecord.class, true, new BiConsumer<GameLoggerUIController, LogRecord>() {
+    public Logger() {
+        uiControllerBuffer.addBuffer(LogRecord.class, true, new BiConsumer<LoggerUIController, LogRecord>() {
             @Override
-            public void accept(GameLoggerUIController gameLoggerUIController, LogRecord logRecord) {
-                gameLoggerUIController.newLogRecord(logRecord);
+            public void accept(LoggerUIController loggerUIController, LogRecord logRecord) {
+                loggerUIController.newLogRecord(logRecord);
             }
         });
     }

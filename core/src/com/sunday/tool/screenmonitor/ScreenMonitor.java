@@ -1,4 +1,4 @@
-package com.sunday.tool.screenloader;
+package com.sunday.tool.screenmonitor;
 
 import com.badlogic.gdx.Screen;
 import com.sunday.tool.ToolExtender;

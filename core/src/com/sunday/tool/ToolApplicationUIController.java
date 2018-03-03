@@ -5,12 +5,12 @@ import com.sunday.tool.datamonitor.DataMonitorUIController;
 import com.sunday.tool.datamonitor.MonitoredData;
 import com.sunday.tool.drivermonitor.KeyBoardMonitorUIController;
 import com.sunday.tool.drivermonitor.MouseMonitorUIController;
-import com.sunday.tool.logger.GameLoggerUIController;
+import com.sunday.tool.logger.LoggerUIController;
 import com.sunday.tool.logger.LogRecord;
 import com.sunday.tool.perfermancemonitor.PerformanceMonitorUIController;
 import com.sunday.tool.perfermancemonitor.PerformanceRecord;
-import com.sunday.tool.screenloader.ScreenMonitorUIController;
-import com.sunday.tool.screenloader.ScreenRecord;
+import com.sunday.tool.screenmonitor.ScreenMonitorUIController;
+import com.sunday.tool.screenmonitor.ScreenRecord;
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -21,7 +21,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 
-public class ToolApplicationUIController implements PerformanceMonitorUIController, GameLoggerUIController, DataMonitorUIController, ScreenMonitorUIController, KeyBoardMonitorUIController, MouseMonitorUIController {
+public class ToolApplicationUIController implements PerformanceMonitorUIController, LoggerUIController, DataMonitorUIController, ScreenMonitorUIController, KeyBoardMonitorUIController, MouseMonitorUIController {
     private XYChart.Series memoryUsages = new XYChart.Series();
     private XYChart.Series fpsSeries = new XYChart.Series();
     @FXML
@@ -139,7 +139,7 @@ public class ToolApplicationUIController implements PerformanceMonitorUIControll
     @Override
     public void newPerformanceRecord(PerformanceRecord performanceRecord) {
         Platform.runLater(() -> {
-            memoryChart.getData().get(0).getData().add(new XYChart.Data(performanceRecord.time, performanceRecord.memoryUsage));
+            memoryChart.getData().get(0).getData().add(new XYChart.Data(performanceRecord.time, performanceRecord.memoryUsage / 1024));
             fpsChart.getData().get(0).getData().add(new XYChart.Data(performanceRecord.time, performanceRecord.fps));
         });
     }

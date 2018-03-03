@@ -1,4 +1,4 @@
-package com.sunday.tool.screenloader;
+package com.sunday.tool.screenmonitor;
 
 import javafx.beans.property.SimpleStringProperty;
 

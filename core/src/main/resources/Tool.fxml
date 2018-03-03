@@ -1,45 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.chart.*?>
-<?import javafx.scene.control.*?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.chart.StackedAreaChart?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.SplitPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.control.TreeTableColumn?>
+<?import javafx.scene.control.TreeTableView?>
 <?import javafx.scene.effect.Blend?>
-<?import javafx.scene.layout.*?>
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
-            prefWidth="1120.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1"
-            fx:controller="com.sunday.tool.ToolApplicationUIController">
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1120.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sunday.tool.ToolApplicationUIController">
     <children>
-        <TabPane prefHeight="558.0" prefWidth="1063.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0"
-                 AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <TabPane prefHeight="558.0" prefWidth="1063.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <tabs>
                 <Tab text="GameMonitor">
                     <content>
                         <SplitPane dividerPositions="0.5" orientation="VERTICAL">
                             <items>
-                                <StackedAreaChart fx:id="memoryChart" animated="false" prefHeight="400.0"
-                                                  prefWidth="385.0" title="MemoryUsage">
+                                <StackedAreaChart fx:id="memoryChart" animated="false" prefHeight="400.0" prefWidth="385.0" title="MemoryUsage">
                                     <xAxis>
                                         <NumberAxis label="Time(S)" minorTickCount="10" side="BOTTOM">
                                             <effect>
-                                                <Blend/>
+                                                <Blend />
                                             </effect>
                                         </NumberAxis>
                                     </xAxis>
                                     <yAxis>
-                                        <NumberAxis label="KB" minorTickCount="16" prefHeight="188.0" prefWidth="60.0"
-                                                    side="LEFT" upperBound="102400.0"/>
+                                        <NumberAxis label="KB" minorTickCount="16" prefHeight="188.0" prefWidth="60.0" side="LEFT" upperBound="102400.0" />
                                     </yAxis>
                                 </StackedAreaChart>
                                 <StackedAreaChart fx:id="fpsChart" animated="false" title="FPS">
                                     <xAxis>
                                         <NumberAxis label="Time(S)" minorTickCount="10" side="BOTTOM">
                                             <effect>
-                                                <Blend/>
+                                                <Blend />
                                             </effect>
                                         </NumberAxis>
                                     </xAxis>
                                     <yAxis>
-                                        <NumberAxis label="FPS" prefHeight="187.0" prefWidth="60.0" side="LEFT"
-                                                    tickLabelGap="1.0" upperBound="80.0"/>
+                                        <NumberAxis label="FPS" prefHeight="187.0" prefWidth="60.0" side="LEFT" tickLabelGap="1.0" upperBound="80.0" />
                                     </yAxis>
                                 </StackedAreaChart>
                             </items>
@@ -50,20 +61,16 @@
                     <content>
                         <SplitPane dividerPositions="0.25" nodeOrientation="LEFT_TO_RIGHT">
                             <items>
-                                <SplitPane dividerPositions="0.7" orientation="VERTICAL" prefHeight="529.0"
-                                           prefWidth="227.0">
+                                <SplitPane dividerPositions="0.7" orientation="VERTICAL" prefHeight="529.0" prefWidth="227.0">
                                     <items>
-                                        <ListView fx:id="screens" prefHeight="529.0" prefWidth="210.0"
-                                                  AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                                                  AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0"/>
-                                        <Button fx:id="btLoad" alignment="CENTER" contentDisplay="TOP"
-                                                mnemonicParsing="false" onAction="#loadScreen" text="Load"/>
+                                        <ListView fx:id="screens" prefHeight="529.0" prefWidth="210.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                                        <Button fx:id="btLoad" alignment="CENTER" contentDisplay="TOP" mnemonicParsing="false" onAction="#loadScreen" text="Load" />
                                     </items>
                                 </SplitPane>
                                 <TableView fx:id="screenTable" prefHeight="529.0" prefWidth="570.0">
                                     <columns>
-                                        <TableColumn prefWidth="75.0" text="Class"/>
-                                        <TableColumn prefWidth="75.0" text="Instances"/>
+                                        <TableColumn prefWidth="75.0" text="Class" />
+                                        <TableColumn prefWidth="75.0" text="Instances" />
                                     </columns>
                                 </TableView>
                             </items>
@@ -74,13 +81,11 @@
                     <content>
                         <AnchorPane>
                             <children>
-                                <TableView fx:id="logTable" layoutX="14.0" layoutY="14.0" prefHeight="529.0"
-                                           prefWidth="1063.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                                           AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <TableView fx:id="logTable" layoutX="14.0" layoutY="14.0" prefHeight="529.0" prefWidth="1063.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <columns>
-                                        <TableColumn prefWidth="84.0" sortable="false" text="Type"/>
-                                        <TableColumn prefWidth="79.5" sortable="false" text="Tag"/>
-                                        <TableColumn prefWidth="209.0" sortable="false" text="Content"/>
+                                        <TableColumn prefWidth="84.0" sortable="false" text="Type" />
+                                        <TableColumn prefWidth="79.5" sortable="false" text="Tag" />
+                                        <TableColumn prefWidth="209.0" sortable="false" text="Content" />
                                     </columns>
                                 </TableView>
                             </children>
@@ -91,34 +96,22 @@
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
-                                <SplitPane dividerPositions="0.33, 0.66" layoutX="172.0" layoutY="105.0"
-                                           prefHeight="529.0" prefWidth="1063.0" AnchorPane.bottomAnchor="0.0"
-                                           AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
-                                           AnchorPane.topAnchor="0.0">
+                                <SplitPane dividerPositions="0.33, 0.66" layoutX="172.0" layoutY="105.0" prefHeight="529.0" prefWidth="1063.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <items>
                                         <AnchorPane prefHeight="527.0" prefWidth="268.0">
                                             <children>
-                                                <TitledPane animated="false" layoutX="14.0" layoutY="60.0"
-                                                            prefHeight="527.0" prefWidth="347.0" text="Keyboard"
-                                                            AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                                                            AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                <TitledPane animated="false" layoutX="14.0" layoutY="60.0" prefHeight="527.0" prefWidth="347.0" text="Keyboard" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                     <content>
-                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0"
-                                                                    prefWidth="200.0">
+                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                             <children>
-                                                                <TextArea fx:id="keyBoardHistory" layoutX="14.0"
-                                                                          layoutY="265.0" prefHeight="200.0"
-                                                                          prefWidth="305.0"/>
-                                                                <Label layoutX="47.0" layoutY="47.0" text="Signal"/>
-                                                                <Label fx:id="keyboardSignal" layoutX="113.0"
-                                                                       layoutY="47.0" text="None"/>
-                                                                <Label layoutX="47.0" layoutY="95.0" text="Key"/>
-                                                                <Label fx:id="keyboardKey" layoutX="119.0"
-                                                                       layoutY="95.0" text="......."/>
-                                                                <Label layoutX="14.0" layoutY="237.0" text="History"/>
-                                                                <Label layoutX="47.0" layoutY="151.0" text="Status"/>
-                                                                <Label fx:id="keyBoardStatus" layoutX="120.0"
-                                                                       layoutY="151.0" text="......"/>
+                                                                <TextArea fx:id="keyBoardHistory" layoutX="14.0" layoutY="265.0" prefHeight="200.0" prefWidth="305.0" />
+                                                                <Label layoutX="47.0" layoutY="47.0" text="Signal" />
+                                                                <Label fx:id="keyboardSignal" layoutX="113.0" layoutY="47.0" text="None" />
+                                                                <Label layoutX="47.0" layoutY="95.0" text="Key" />
+                                                                <Label fx:id="keyboardKey" layoutX="119.0" layoutY="95.0" text="......." />
+                                                                <Label layoutX="14.0" layoutY="237.0" text="History" />
+                                                                <Label layoutX="47.0" layoutY="151.0" text="Status" />
+                                                                <Label fx:id="keyBoardStatus" layoutX="120.0" layoutY="151.0" text="......" />
                                                             </children>
                                                         </AnchorPane>
                                                     </content>
@@ -127,23 +120,16 @@
                                         </AnchorPane>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                                             <children>
-                                                <TitledPane animated="false" layoutX="23.0" layoutY="131.0"
-                                                            prefHeight="527.0" prefWidth="344.0" text="Mouse"
-                                                            AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                                                            AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                <TitledPane animated="false" layoutX="23.0" layoutY="131.0" prefHeight="527.0" prefWidth="344.0" text="Mouse" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                     <content>
-                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0"
-                                                                    prefWidth="200.0">
+                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                             <children>
-                                                                <Label layoutX="48.0" layoutY="50.0" text="Signal"/>
-                                                                <Label layoutX="48.0" layoutY="103.0" text="Key"/>
-                                                                <Label fx:id="mouseSignal" layoutX="134.0"
-                                                                       layoutY="50.0" text="None"/>
-                                                                <Label fx:id="mouseKey" layoutX="141.0" layoutY="103.0"
-                                                                       text="......"/>
-                                                                <Label layoutX="48.0" layoutY="151.0" text="Status"/>
-                                                                <Label fx:id="mouseStatus" layoutX="141.0"
-                                                                       layoutY="151.0" text="......"/>
+                                                                <Label layoutX="48.0" layoutY="50.0" text="Signal" />
+                                                                <Label layoutX="48.0" layoutY="103.0" text="Key" />
+                                                                <Label fx:id="mouseSignal" layoutX="134.0" layoutY="50.0" text="None" />
+                                                                <Label fx:id="mouseKey" layoutX="141.0" layoutY="103.0" text="......" />
+                                                                <Label layoutX="48.0" layoutY="151.0" text="Status" />
+                                                                <Label fx:id="mouseStatus" layoutX="141.0" layoutY="151.0" text="......" />
                                                             </children>
                                                         </AnchorPane>
                                                     </content>
@@ -152,23 +138,16 @@
                                         </AnchorPane>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="527.0" prefWidth="789.0">
                                             <children>
-                                                <TitledPane animated="false" layoutX="26.0" layoutY="98.0"
-                                                            prefHeight="527.0" prefWidth="358.0" text="GamePad"
-                                                            AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                                                            AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                <TitledPane animated="false" layoutX="26.0" layoutY="98.0" prefHeight="527.0" prefWidth="358.0" text="GamePad" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                     <content>
-                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0"
-                                                                    prefWidth="200.0">
+                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                             <children>
-                                                                <Label layoutX="53.0" layoutY="48.0" text="Signal"/>
-                                                                <Label layoutX="53.0" layoutY="101.0" text="Key"/>
-                                                                <Label layoutX="53.0" layoutY="150.0" text="Status"/>
-                                                                <Label fx:id="gamePadSignal" layoutX="139.0"
-                                                                       layoutY="48.0" text="None"/>
-                                                                <Label fx:id="gamePadKey" layoutX="146.0"
-                                                                       layoutY="101.0" text="......"/>
-                                                                <Label fx:id="gamePadStatus" layoutX="146.0"
-                                                                       layoutY="150.0" text="......"/>
+                                                                <Label layoutX="53.0" layoutY="48.0" text="Signal" />
+                                                                <Label layoutX="53.0" layoutY="101.0" text="Key" />
+                                                                <Label layoutX="53.0" layoutY="150.0" text="Status" />
+                                                                <Label fx:id="gamePadSignal" layoutX="139.0" layoutY="48.0" text="None" />
+                                                                <Label fx:id="gamePadKey" layoutX="146.0" layoutY="101.0" text="......" />
+                                                                <Label fx:id="gamePadStatus" layoutX="146.0" layoutY="150.0" text="......" />
                                                             </children>
                                                         </AnchorPane>
                                                     </content>
@@ -185,27 +164,22 @@
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
-                                <VBox layoutX="93.0" layoutY="14.0" prefHeight="529.0" prefWidth="1063.0"
-                                      AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0"
-                                      AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <VBox layoutX="93.0" layoutY="14.0" prefHeight="529.0" prefWidth="1063.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <children>
                                         <TreeTableView fx:id="treeTableView">
                                             <columns>
-                                                <TreeTableColumn prefWidth="299.0" text="Group"/>
-                                                <TreeTableColumn minWidth="0.0" prefWidth="763.0" text="Instance"/>
+                                                <TreeTableColumn prefWidth="299.0" text="Group" />
+                                                <TreeTableColumn minWidth="0.0" prefWidth="763.0" text="Instance" />
                                             </columns>
                                         </TreeTableView>
                                         <HBox>
                                             <children>
-                                                <RadioButton fx:id="radixOptSystem" alignment="CENTER_LEFT"
-                                                             mnemonicParsing="false" selected="true" text="System">
+                                                <RadioButton fx:id="radixOptSystem" alignment="CENTER_LEFT" mnemonicParsing="false" selected="true" text="System">
                                                     <toggleGroup>
-                                                        <ToggleGroup fx:id="dataOptionGroup"/>
+                                                        <ToggleGroup fx:id="dataOptionGroup" />
                                                     </toggleGroup>
                                                 </RadioButton>
-                                                <RadioButton fx:id="radixOptType" alignment="CENTER_RIGHT"
-                                                             mnemonicParsing="false" text="DataType"
-                                                             toggleGroup="$dataOptionGroup"/>
+                                                <RadioButton fx:id="radixOptType" alignment="CENTER_RIGHT" mnemonicParsing="false" text="DataType" toggleGroup="$dataOptionGroup" />
                                             </children>
                                         </HBox>
                                     </children>
