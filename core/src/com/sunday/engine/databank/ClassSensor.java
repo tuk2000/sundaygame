@@ -11,7 +11,7 @@ public class ClassSensor<T extends Data> implements Data {
     private Data sensedInstance;
 
     public static ClassSensor getClassSensor(Class<? extends Data> clazz) {
-        if (map.keySet().contains(clazz)) {
+        if (map.containsKey(clazz)) {
             return map.get(clazz);
         } else {
             ClassSensor classSensor = new ClassSensor(clazz);

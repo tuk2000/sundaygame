@@ -1,4 +1,6 @@
-package com.sunday.engine.databank;
+package com.sunday.engine.common;
+
+import com.sunday.engine.databank.SystemPort;
 
 public abstract class SubSystem {
     protected String name;

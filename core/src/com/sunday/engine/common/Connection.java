@@ -1,6 +1,4 @@
-package com.sunday.engine.databank;
-
-import com.sunday.engine.common.Data;
+package com.sunday.engine.common;
 
 public class Connection implements Data {
     public Data source;

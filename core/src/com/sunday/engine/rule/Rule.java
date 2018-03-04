@@ -1,7 +1,7 @@
 package com.sunday.engine.rule;
 
+import com.sunday.engine.common.Connection;
 import com.sunday.engine.common.Data;
-import com.sunday.engine.databank.Connection;
 
 public class Rule implements Data {
     protected Condition condition;

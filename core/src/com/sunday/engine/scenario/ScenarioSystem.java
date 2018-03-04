@@ -1,7 +1,7 @@
 package com.sunday.engine.scenario;
 
 import com.badlogic.gdx.utils.Disposable;
-import com.sunday.engine.databank.SubSystem;
+import com.sunday.engine.common.SubSystem;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.render.ScenarioRenderer;
 

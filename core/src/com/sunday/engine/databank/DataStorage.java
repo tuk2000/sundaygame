@@ -1,138 +1,93 @@
 package com.sunday.engine.databank;
 
+import com.sunday.engine.common.Connection;
 import com.sunday.engine.common.Data;
 import com.sunday.engine.common.DataSignal;
 import com.sunday.engine.common.Signal;
+import com.sunday.engine.databank.storage.ConnectionRegister;
+import com.sunday.engine.databank.storage.DataClassRegister;
+import com.sunday.engine.databank.storage.PortDataRegister;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.BiConsumer;
+import java.util.stream.Collectors;
 
 class DataStorage<T extends Data> {
-    private Map<Port, Map<Class<T>, List<T>>> portListMap = new HashMap<>();
-    private Map<Class<T>, List<T>> dataClassInstancesMap = new HashMap<>();
+
+    private PortDataRegister portDataRegister = new PortDataRegister();
+    private DataClassRegister<T> dataClassRegister = new DataClassRegister();
+    private ConnectionRegister<T, Connection> connectionRegister = new ConnectionRegister();
 
     protected DataStorage() {
 
     }
 
     protected List<Class<T>> getDataClasses() {
-        List<Class<T>> result = new ArrayList<>();
-        Set<Class<T>> classes = dataClassInstancesMap.keySet();
-        if (classes != null)
-            result.addAll(classes);
-        return result;
+        return dataClassRegister.getKeys();
     }
 
     protected List<T> getInstances(Class<T> clazz) {
         List<T> result = new ArrayList<>();
-        List<T> classInstances = dataClassInstancesMap.get(clazz);
-        if (classInstances != null)
-            result.addAll(classInstances);
+        dataClassRegister.foreachPaar(new BiConsumer<Class<T>, T>() {
+            @Override
+            public void accept(Class<T> clazz, T t) {
+                result.add(t);
+            }
+        });
         return result;
     }
 
     protected void addDataInstance(Port port, T t) {
-        Class clazz = t.getClass();
-        Map<Class<T>, List<T>> classListMap;
-        addPort(port);
-        classListMap = portListMap.get(port);
-
-        if (classListMap.containsKey(clazz)) {
-            classListMap.get(clazz).add(t);
-        } else {
-            List<T> list = new ArrayList<>();
-            list.add(t);
-            classListMap.put(clazz, list);
+        if (t instanceof Connection) {
+            connectionRegister.register((Connection) t);
         }
-
-        List<T> list;
-        if (dataClassInstancesMap.keySet().contains(clazz)) {
-            list = dataClassInstancesMap.get(clazz);
-        } else {
-            list = new ArrayList<>();
-            dataClassInstancesMap.put(clazz, list);
-        }
-        list.add(t);
-
+        portDataRegister.register(port, t);
+        dataClassRegister.register(t);
         solve(t, DataSignal.Add);
-
     }
 
     protected void solve(T t, Signal signal) {
-        getInstances((Class<T>) Connection.class).stream().filter(c -> {
-            Connection connection = (Connection) c;
-            boolean isSensor = connection.source instanceof ClassSensor;
-            ClassSensor classSensor;
-            boolean isSensorClass = false;
-            if (isSensor) {
-                classSensor = connection.source instanceof ClassSensor ? (ClassSensor) connection.source : null;
-                isSensorClass = t.getClass().equals(classSensor.getSensedClass());
-                if (isSensorClass) {
-                    classSensor.setSensedInstance(t);
+        connectionRegister.getValues(t).stream().filter(
+                connection -> {
+                    boolean isSensor = connection.source instanceof ClassSensor;
+                    boolean isSensorClass = false;
+                    ClassSensor classSensor;
+                    if (isSensor) {
+                        classSensor = (ClassSensor) connection.source;
+                        isSensorClass = t.getClass().equals(classSensor.getSensedClass());
+                        if (isSensorClass) {
+                            classSensor.setSensedInstance(t);
+                        }
+                    }
+                    return connection.source.equals(t) || isSensor & isSensorClass;
                 }
-            }
-            return connection.source.equals(t) || isSensor & isSensorClass;
-        })
-                .map(c -> ((Connection) c).target)
+        ).map(c -> c.target)
                 .forEach(target -> target.notify(signal));
     }
 
     protected void deleteDataInstance(Port port, T t) {
-        Class clazz = t.getClass();
-        List<T> list;
-        Map<Class<T>, List<T>> classListMap;
-        if (portListMap.containsKey(port)) {
-            classListMap = portListMap.get(port);
-            if (classListMap.containsKey(clazz)) {
-                list = classListMap.get(clazz);
-                list.remove(t);
-                if (list.isEmpty()) {
-                    classListMap.remove(clazz);
-                }
-            }
+        if (t instanceof Connection) {
+            connectionRegister.deregister((Connection) t);
         }
-
-        if (dataClassInstancesMap.keySet().contains(clazz)) {
-            list = dataClassInstancesMap.get(clazz);
-            list.remove(t);
-            if (list.isEmpty()) {
-                dataClassInstancesMap.remove(clazz);
-            }
-        }
+        portDataRegister.deregister(port, t);
+        dataClassRegister.deregister(t);
         solve(t, DataSignal.Deletion);
     }
 
     protected List<T> getDataList(Port port) {
-        List<T> result = new ArrayList<>();
-        portListMap.get(port).values().forEach(list -> result.addAll(list));
-        return result;
+        return (List<T>) portDataRegister.getValues(port);
     }
 
     protected <T extends Data> List<Class<T>> getDataClassList(Port port) {
         List<Class<T>> result = new ArrayList<>();
-        portListMap.get(port).keySet().forEach(e -> result.add((Class<T>) e));
+        getDataList(port).stream().collect(Collectors.groupingBy(data -> data.getClass())).keySet().forEach(clazz->result.add((Class<T>) clazz));
         return result;
     }
 
-    protected void addPort(Port port) {
-        Map<Class<T>, List<T>> classListMap;
-        if (!portListMap.containsKey(port)) {
-            classListMap = new HashMap<>();
-            portListMap.put(port, classListMap);
-        }
-    }
-
-    protected void removePort(Port port) {
-        Map<Class<T>, List<T>> classListMap;
-        if (portListMap.containsKey(port)) {
-            classListMap = portListMap.get(port);
-            classListMap.keySet().forEach(clazz -> {
-                classListMap.get(clazz).forEach(data -> {
-                    dataClassInstancesMap.get(clazz).remove(data);
-                    solve(data, DataSignal.Deletion);
-                });
-                classListMap.clear();
-            });
-            portListMap.remove(port);
-        }
+    protected void destroyPort(Port port) {
+        getDataList(port).forEach(data -> {
+            deleteDataInstance(port, data);
+        });
     }
 }

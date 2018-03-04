@@ -1,7 +1,7 @@
 package com.sunday.engine.rule;
 
 import com.sunday.engine.common.Data;
-import com.sunday.engine.databank.Target;
+import com.sunday.engine.common.Target;
 
 public abstract class Tracer implements Target {
     protected Condition condition;

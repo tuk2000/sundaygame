@@ -2,7 +2,7 @@ package com.sunday.tool.drivermonitor;
 
 import com.badlogic.gdx.Input;
 import com.sunday.engine.common.Signal;
-import com.sunday.engine.databank.Target;
+import com.sunday.engine.common.Target;
 import com.sunday.engine.driver.keyboard.KeyBoard;
 import com.sunday.tool.ToolExtender;
 
@@ -25,23 +25,21 @@ public class KeyBoardMonitor extends ToolExtender<KeyBoardMonitorUIController> i
             uiControllerBuffer.removeBuffer(this.keyBoard);
         }
         this.keyBoard = keyBoard;
-        uiControllerBuffer.addBuffer(keyBoard, new BiConsumer<KeyBoardMonitorUIController, KeyBoard>() {
-            @Override
-            public void accept(KeyBoardMonitorUIController keyBoardMonitorUIController, KeyBoard keyBoard) {
-                keyBoardMonitorUIController.setKeyBoardSignal(keyBoard.keyBoardSignal.name());
-                switch (keyBoard.keyBoardSignal) {
-                    case Pressed:
-                    case Released:
-                        keyBoardMonitorUIController.setKeyBoardKey(Input.Keys.toString(keyBoard.key) + '[' + keyBoard.key + ']');
-                        keyBoardMonitorUIController.setKeyBoardStatus(Input.Keys.toString(keyBoard.key) + '[' + keyBoard.key + ']' + "-" + keyBoard.keyBoardSignal.name());
-                        break;
-                    case Typed:
-                        keyBoardMonitorUIController.setKeyBoardKey(String.valueOf(keyBoard.character));
-                        keyBoardMonitorUIController.setKeyBoardStatus(String.valueOf(keyBoard.character) + "-" + keyBoard.keyBoardSignal.name());
-                        break;
-                    case None:
-                }
-            }
-        });
+        uiControllerBuffer.addBuffer(keyBoard,
+                (BiConsumer<KeyBoardMonitorUIController, KeyBoard>) (keyBoardMonitorUIController, keyBoard1) -> {
+                    keyBoardMonitorUIController.setKeyBoardSignal(keyBoard1.keyBoardSignal.name());
+                    switch (keyBoard1.keyBoardSignal) {
+                        case Pressed:
+                        case Released:
+                            keyBoardMonitorUIController.setKeyBoardKey(Input.Keys.toString(keyBoard1.key) + '[' + keyBoard1.key + ']');
+                            keyBoardMonitorUIController.setKeyBoardStatus(Input.Keys.toString(keyBoard1.key) + '[' + keyBoard1.key + ']' + "-" + keyBoard1.keyBoardSignal.name());
+                            break;
+                        case Typed:
+                            keyBoardMonitorUIController.setKeyBoardKey(String.valueOf(keyBoard1.character));
+                            keyBoardMonitorUIController.setKeyBoardStatus(String.valueOf(keyBoard1.character) + "-" + keyBoard1.keyBoardSignal.name());
+                            break;
+                        case None:
+                    }
+                });
     }
 }

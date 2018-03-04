@@ -1,6 +1,6 @@
 package com.sunday.engine.event;
 
-import com.sunday.engine.databank.SubSystem;
+import com.sunday.engine.common.SubSystem;
 import com.sunday.engine.databank.SystemPort;
 
 public class EventSystem extends SubSystem implements EventPoster {

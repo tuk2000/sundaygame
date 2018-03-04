@@ -11,19 +11,10 @@ public class DataMonitor extends ToolExtender<DataMonitorUIController> {
     private List<DataRecord> dataRecords = new ArrayList<>();
 
     public DataMonitor() {
-        uiControllerBuffer.addBuffer(DataRecord.class, true, new BiConsumer<DataMonitorUIController, DataRecord>() {
-
-            @Override
-            public void accept(DataMonitorUIController dataMonitorUIController, DataRecord dataRecord) {
-                dataMonitorUIController.addDataRecord(dataRecord);
-            }
-        });
-        uiControllerBuffer.addBuffer(DataRecord.class, false, new BiConsumer<DataMonitorUIController, DataRecord>() {
-            @Override
-            public void accept(DataMonitorUIController dataMonitorUIController, DataRecord dataRecord) {
-                dataMonitorUIController.removeDataRecord(dataRecord);
-            }
-        });
+        uiControllerBuffer.addBuffer(DataRecord.class, true,
+                (BiConsumer<DataMonitorUIController, DataRecord>) (dataMonitorUIController, dataRecord) -> dataMonitorUIController.addDataRecord(dataRecord));
+        uiControllerBuffer.addBuffer(DataRecord.class, false,
+                (BiConsumer<DataMonitorUIController, DataRecord>) (dataMonitorUIController, dataRecord) -> dataMonitorUIController.removeDataRecord(dataRecord));
     }
 
     public void newData(Data data, String systemName) {
@@ -36,6 +27,7 @@ public class DataMonitor extends ToolExtender<DataMonitorUIController> {
     public void deleteData(Data data) {
         for (DataRecord record : dataRecords) {
             if (record.data.equals(data)) {
+                dataRecords.remove(record);
                 uiControllerBuffer.removeInstance(record);
                 break;
             }

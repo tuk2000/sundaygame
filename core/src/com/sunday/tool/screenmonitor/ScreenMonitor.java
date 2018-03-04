@@ -11,24 +11,12 @@ public class ScreenMonitor extends ToolExtender<ScreenMonitorUIController> {
     private ArrayList<ScreenRecord> screenRecords = new ArrayList<>();
 
     public ScreenMonitor() {
-        uiControllerBuffer.addBuffer(ScreenRecord.class, true, new BiConsumer<ScreenMonitorUIController, ScreenRecord>() {
-            @Override
-            public void accept(ScreenMonitorUIController screenMonitorUIController, ScreenRecord screenRecord) {
-                screenMonitorUIController.addScreenRecord(screenRecord);
-            }
-        });
-        uiControllerBuffer.addBuffer(ScreenRecord.class, false, new BiConsumer<ScreenMonitorUIController, ScreenRecord>() {
-            @Override
-            public void accept(ScreenMonitorUIController screenMonitorUIController, ScreenRecord screenRecord) {
-                screenMonitorUIController.removeScreenRecord(screenRecord);
-            }
-        });
-        uiControllerBuffer.addBuffer(String.class, true, new BiConsumer<ScreenMonitorUIController, String>() {
-            @Override
-            public void accept(ScreenMonitorUIController screenMonitorUIController, String s) {
-                screenMonitorUIController.loadScreenClass(s);
-            }
-        });
+        uiControllerBuffer.addBuffer(ScreenRecord.class, true,
+                (BiConsumer<ScreenMonitorUIController, ScreenRecord>) (screenMonitorUIController, screenRecord) -> screenMonitorUIController.addScreenRecord(screenRecord));
+        uiControllerBuffer.addBuffer(ScreenRecord.class, false,
+                (BiConsumer<ScreenMonitorUIController, ScreenRecord>) (screenMonitorUIController, screenRecord) -> screenMonitorUIController.removeScreenRecord(screenRecord));
+        uiControllerBuffer.addBuffer(String.class, true,
+                (BiConsumer<ScreenMonitorUIController, String>) (screenMonitorUIController, s) -> screenMonitorUIController.loadScreenClass(s));
     }
 
     public void setScreenNameList(List<String> list) {

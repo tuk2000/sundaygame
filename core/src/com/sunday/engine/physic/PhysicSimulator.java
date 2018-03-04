@@ -5,7 +5,7 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
 import com.sunday.engine.common.DataSignal;
-import com.sunday.engine.databank.SubSystem;
+import com.sunday.engine.common.SubSystem;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.model.property.PhysicReflection;
 import com.sunday.engine.rule.Condition;

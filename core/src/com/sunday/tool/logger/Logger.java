@@ -12,12 +12,8 @@ public class Logger extends ToolExtender<LoggerUIController> implements Applicat
 //    public static final int LOG_ERROR = 1;
 
     public Logger() {
-        uiControllerBuffer.addBuffer(LogRecord.class, true, new BiConsumer<LoggerUIController, LogRecord>() {
-            @Override
-            public void accept(LoggerUIController loggerUIController, LogRecord logRecord) {
-                loggerUIController.newLogRecord(logRecord);
-            }
-        });
+        uiControllerBuffer.addBuffer(LogRecord.class, true,
+                (BiConsumer<LoggerUIController, LogRecord>) (loggerUIController, logRecord) -> loggerUIController.newLogRecord(logRecord));
     }
 
     private void disposeLogMessage(LogType type, String tag, String message) {

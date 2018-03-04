@@ -1,13 +1,13 @@
 package com.sunday.engine.databank;
 
 import com.sunday.engine.common.Data;
-
-import java.util.HashMap;
-import java.util.Map;
+import com.sunday.engine.common.SubSystem;
+import com.sunday.engine.databank.storage.PortRegister;
+import com.sunday.engine.databank.storage.SystemPortRegister;
 
 public class DataBankImpl<T extends Data> implements DataBank<T> {
-    private Map<Class<? extends SubSystem>, SystemPort> systemPortMap = new HashMap<>();
-    private Map<Object, Port> userPortsMap = new HashMap<>();
+    private PortRegister portRegister = new PortRegister();
+    private SystemPortRegister systemPortRegister = new SystemPortRegister();
     private DataStorage dataStorage;
 
     public DataBankImpl() {
@@ -16,36 +16,35 @@ public class DataBankImpl<T extends Data> implements DataBank<T> {
 
     @Override
     public SystemPort getSystemPort(Class<? extends SubSystem> subSystemClass) {
-        if (!systemPortMap.containsKey(subSystemClass)) {
-            systemPortMap.put(subSystemClass, new SystemPortImpl(subSystemClass, dataStorage));
+        SystemPort systemPort;
+        if (systemPortRegister.hasKey(subSystemClass)) {
+            systemPort = systemPortRegister.getValue(subSystemClass);
+        } else {
+            systemPort = new SystemPortImpl(subSystemClass, dataStorage);
+            systemPortRegister.register(systemPort);
         }
-        SystemPort systemPort = systemPortMap.get(subSystemClass);
-        dataStorage.addPort(systemPort);
         return systemPort;
     }
 
     @Override
-    public Port<T> getPort(Object user) {
-        if (!userPortsMap.containsKey(user)) {
-            userPortsMap.put(user, new PortImpl(user, dataStorage));
+    public Port<T> getPort(Object owner) {
+        Port<T> port;
+        if (portRegister.hasKey(owner)) {
+            port = portRegister.getValue(owner);
+        } else {
+            port = new PortImpl<>(owner, dataStorage);
+            portRegister.register(port);
         }
-        Port port = userPortsMap.get(user);
-        dataStorage.addPort(port);
         return port;
     }
 
     @Override
     public void removePort(Port port) {
-        for (Class clazz : systemPortMap.keySet()) {
-            if (systemPortMap.get(clazz).equals(port)) {
-                systemPortMap.remove(clazz);
-            }
+        if (port instanceof SystemPort) {
+            systemPortRegister.deregister((SystemPort) port);
+        } else {
+            portRegister.deregister(port);
         }
-        for (Object user : userPortsMap.keySet()) {
-            if (userPortsMap.get(user).equals(port)) {
-                userPortsMap.remove(user);
-            }
-        }
-        dataStorage.removePort(port);
+        dataStorage.destroyPort(port);
     }
 }

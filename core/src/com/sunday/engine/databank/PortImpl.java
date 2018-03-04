@@ -14,13 +14,17 @@ public class PortImpl<T extends Data> implements Port<T> {
     }
 
     @Override
+    public Object getOwner() {
+        return owner;
+    }
+
+    @Override
     public void addDataInstance(T t) {
         if (owner instanceof Class) {
             ToolApplication.dataMonitor.newData(t, ((Class) owner).getSimpleName());
         } else {
             ToolApplication.dataMonitor.newData(t, owner.getClass().getSimpleName());
         }
-
         dataStorage.addDataInstance(this, t);
     }
 
