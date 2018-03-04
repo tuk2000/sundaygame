@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Predicate;
 
-public class DataCondition<T extends Data> extends Condition {
+public class DataCondition extends Condition {
     public DataCondition(Map<Data, Predicate<Data>> clusters) {
         super(clusters);
     }
@@ -26,7 +26,7 @@ public class DataCondition<T extends Data> extends Condition {
         return result.stream().reduce(((aBoolean, aBoolean2) -> aBoolean || aBoolean2)).get();
     }
 
-    public static DataCondition dataSignals(Data t, Signal... signals) {
+    public static <T extends Data, S extends Signal> DataCondition dataSignals(T t, S... signals) {
         Map<Data, Predicate<Data>> clusters = new HashMap<>();
         DataCondition dataCondition = new DataCondition(clusters);
         String names = "";
@@ -40,7 +40,7 @@ public class DataCondition<T extends Data> extends Condition {
         return new DataCondition(clusters);
     }
 
-    public static DataCondition classSignals(Class<? extends Data> clazz, Signal... signals) {
+    public static <T extends Data, S extends Signal> DataCondition classSignals(Class<T> clazz, S... signals) {
         Map<Data, Predicate<Data>> clusters = new HashMap<>();
         DataCondition dataCondition = new DataCondition(clusters);
         String names = "";

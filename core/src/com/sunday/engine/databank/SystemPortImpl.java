@@ -7,11 +7,9 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class SystemPortImpl<T extends Data> extends PortImpl<T> implements SystemPort<T> {
-    private DataStorage dataStorage;
 
-    public SystemPortImpl(DataStorage dataStorage) {
-        super(dataStorage);
-        this.dataStorage = dataStorage;
+    public SystemPortImpl(Object owner, DataStorage dataStorage) {
+        super(owner, dataStorage);
     }
 
     @Override

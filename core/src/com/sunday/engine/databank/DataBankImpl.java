@@ -17,7 +17,7 @@ public class DataBankImpl<T extends Data> implements DataBank<T> {
     @Override
     public SystemPort getSystemPort(Class<? extends SubSystem> subSystemClass) {
         if (!systemPortMap.containsKey(subSystemClass)) {
-            systemPortMap.put(subSystemClass, new SystemPortImpl(dataStorage));
+            systemPortMap.put(subSystemClass, new SystemPortImpl(subSystemClass, dataStorage));
         }
         SystemPort systemPort = systemPortMap.get(subSystemClass);
         dataStorage.addPort(systemPort);
@@ -27,7 +27,7 @@ public class DataBankImpl<T extends Data> implements DataBank<T> {
     @Override
     public Port<T> getPort(Object user) {
         if (!userPortsMap.containsKey(user)) {
-            userPortsMap.put(user, new PortImpl(dataStorage));
+            userPortsMap.put(user, new PortImpl(user, dataStorage));
         }
         Port port = userPortsMap.get(user);
         dataStorage.addPort(port);

@@ -3,7 +3,7 @@ package com.sunday.tool.datamonitor;
 import com.sunday.tool.ToolExtenderUIController;
 
 public interface DataMonitorUIController extends ToolExtenderUIController {
-    void addMonitoredObject(MonitoredData monitoredObject);
+    void addDataRecord(DataRecord dataRecord);
 
-    void removeMonitoredObject(MonitoredData monitoredObject);
+    void removeDataRecord(DataRecord dataRecord);
 }

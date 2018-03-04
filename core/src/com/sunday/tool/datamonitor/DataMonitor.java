@@ -1,50 +1,44 @@
 package com.sunday.tool.datamonitor;
 
+import com.sunday.engine.common.Data;
 import com.sunday.tool.ToolExtender;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.List;
+import java.util.function.BiConsumer;
 
 public class DataMonitor extends ToolExtender<DataMonitorUIController> {
+    private List<DataRecord> dataRecords = new ArrayList<>();
 
-    private HashMap<Class, ArrayList<MonitoredData>> clsToObjMap = new HashMap<>();
-    private ArrayList<MonitoredData> objectsBuffer = new ArrayList<>();
+    public DataMonitor() {
+        uiControllerBuffer.addBuffer(DataRecord.class, true, new BiConsumer<DataMonitorUIController, DataRecord>() {
 
-    private MonitoredData constructMonitoredObject(Object object) {
-        return new MonitoredData(object.getClass().getName(), object.toString());
+            @Override
+            public void accept(DataMonitorUIController dataMonitorUIController, DataRecord dataRecord) {
+                dataMonitorUIController.addDataRecord(dataRecord);
+            }
+        });
+        uiControllerBuffer.addBuffer(DataRecord.class, false, new BiConsumer<DataMonitorUIController, DataRecord>() {
+            @Override
+            public void accept(DataMonitorUIController dataMonitorUIController, DataRecord dataRecord) {
+                dataMonitorUIController.removeDataRecord(dataRecord);
+            }
+        });
     }
 
-    public void MonitorObject(Object object) {
-        MonitoredData monitoredObject = constructMonitoredObject(object);
-        Class clazz = object.getClass();
-        if (clsToObjMap.containsKey(clazz)) {
-            clsToObjMap.get(clazz).add(monitoredObject);
-        } else {
-            ArrayList<MonitoredData> arrayList = new ArrayList<>();
-            arrayList.add(monitoredObject);
-            clsToObjMap.put(clazz, arrayList);
-        }
-
-        objectsBuffer.add(monitoredObject);
-        if (getUIController() != null) {
-            objectsBuffer.forEach(e -> {
-                getUIController().addMonitoredObject(e);
-            });
-            objectsBuffer.clear();
-        }
+    public void newData(Data data, String systemName) {
+        DataRecord dataRecord = new DataRecord(data, systemName);
+        dataRecords.add(dataRecord);
+        uiControllerBuffer.addInstance(dataRecord);
+        flushBuffer();
     }
 
-    public void StopMonitorObject(Object object) {
-        Class clazz = object.getClass();
-        for (MonitoredData monitoredObject : clsToObjMap.get(clazz)) {
-            if (monitoredObject.getObjectName().equals(object.toString())) {
-                getUIController().removeMonitoredObject(monitoredObject);
+    public void deleteData(Data data) {
+        for (DataRecord record : dataRecords) {
+            if (record.data.equals(data)) {
+                uiControllerBuffer.removeInstance(record);
                 break;
             }
         }
-        if (clsToObjMap.get(clazz).size() == 0) {
-            clsToObjMap.remove(clazz);
-        }
     }
-
 }

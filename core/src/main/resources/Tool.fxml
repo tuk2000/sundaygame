@@ -6,6 +6,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.ScrollPane?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.Tab?>
 <?import javafx.scene.control.TabPane?>
@@ -18,7 +19,7 @@
 <?import javafx.scene.control.TreeTableView?>
 <?import javafx.scene.effect.Blend?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.VBox?>
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1120.0" xmlns="http://javafx.com/javafx/9.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.sunday.tool.ToolApplicationUIController">
@@ -69,9 +70,12 @@
                                 </SplitPane>
                                 <TableView fx:id="screenTable" prefHeight="529.0" prefWidth="570.0">
                                     <columns>
-                                        <TableColumn prefWidth="75.0" text="Class" />
-                                        <TableColumn prefWidth="75.0" text="Instances" />
+                                        <TableColumn prefWidth="258.0" text="Class" />
+                                        <TableColumn prefWidth="579.0" text="Instances" />
                                     </columns>
+                                    <columnResizePolicy>
+                                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                    </columnResizePolicy>
                                 </TableView>
                             </items>
                         </SplitPane>
@@ -83,10 +87,13 @@
                             <children>
                                 <TableView fx:id="logTable" layoutX="14.0" layoutY="14.0" prefHeight="529.0" prefWidth="1063.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <columns>
-                                        <TableColumn prefWidth="84.0" sortable="false" text="Type" />
-                                        <TableColumn prefWidth="79.5" sortable="false" text="Tag" />
+                                        <TableColumn prefWidth="167.0" sortable="false" text="Type" />
+                                        <TableColumn prefWidth="579.0" sortable="false" text="Tag" />
                                         <TableColumn prefWidth="209.0" sortable="false" text="Content" />
                                     </columns>
+                                    <columnResizePolicy>
+                                        <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                    </columnResizePolicy>
                                 </TableView>
                             </children>
                         </AnchorPane>
@@ -166,13 +173,7 @@
                             <children>
                                 <VBox layoutX="93.0" layoutY="14.0" prefHeight="529.0" prefWidth="1063.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <children>
-                                        <TreeTableView fx:id="treeTableView">
-                                            <columns>
-                                                <TreeTableColumn prefWidth="299.0" text="Group" />
-                                                <TreeTableColumn minWidth="0.0" prefWidth="763.0" text="Instance" />
-                                            </columns>
-                                        </TreeTableView>
-                                        <HBox>
+                                        <FlowPane>
                                             <children>
                                                 <RadioButton fx:id="radixOptSystem" alignment="CENTER_LEFT" mnemonicParsing="false" selected="true" text="System">
                                                     <toggleGroup>
@@ -181,7 +182,25 @@
                                                 </RadioButton>
                                                 <RadioButton fx:id="radixOptType" alignment="CENTER_RIGHT" mnemonicParsing="false" text="DataType" toggleGroup="$dataOptionGroup" />
                                             </children>
-                                        </HBox>
+                                        </FlowPane>
+                                        <ScrollPane hbarPolicy="NEVER">
+                                            <content>
+                                                <TreeTableView fx:id="treeTableView" prefHeight="508.0" prefWidth="1120.0">
+                                                    <columns>
+                                                        <TreeTableColumn fx:id="groupColumn" prefWidth="363.0" text="Group" />
+                                                        <TreeTableColumn fx:id="instanceColumn" minWidth="0.0" prefWidth="755.0" text="Instance" />
+                                                    </columns>
+                                                    <columnResizePolicy>
+                                                        <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                    </columnResizePolicy>
+                                                </TreeTableView>
+                                            </content>
+                                        </ScrollPane>
+                                        <FlowPane prefHeight="157.0" prefWidth="1120.0">
+                                            <children>
+                                                <Label fx:id="description" text="......" />
+                                            </children>
+                                        </FlowPane>
                                     </children>
                                 </VBox>
                             </children>

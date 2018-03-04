@@ -23,7 +23,7 @@ public class PerformanceMonitor extends ToolExtender<PerformanceMonitorUIControl
     public void updateData(float duration, long memoryUsage, int fps) {
         this.gdxTime += duration;
         float timeEscaped = gdxTime - internalTime;
-        if (timeEscaped > 0.9f & timeEscaped < 1.1f) {
+        if (timeEscaped > 0.95f) {
             internalTime = gdxTime;
             uiControllerBuffer.addInstance(new PerformanceRecord(gdxTime, memoryUsage, fps));
             flushBuffer();
