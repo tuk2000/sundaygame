@@ -20,6 +20,7 @@ public class ScenarioSystem extends SubSystem implements Disposable {
     }
 
     public void setRoot(Scenario root) {
+        systemPort.deleteDataInstance(this.root);
         this.root = root;
         init(root);
     }

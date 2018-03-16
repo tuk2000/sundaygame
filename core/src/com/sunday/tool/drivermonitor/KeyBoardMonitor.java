@@ -31,8 +31,8 @@ public class KeyBoardMonitor extends ToolExtender<KeyBoardMonitorUIController> i
                     switch (keyBoard1.keyBoardSignal) {
                         case Pressed:
                         case Released:
-                            keyBoardMonitorUIController.setKeyBoardKey(Input.Keys.toString(keyBoard1.key) + '[' + keyBoard1.key + ']');
-                            keyBoardMonitorUIController.setKeyBoardStatus(Input.Keys.toString(keyBoard1.key) + '[' + keyBoard1.key + ']' + "-" + keyBoard1.keyBoardSignal.name());
+                            keyBoardMonitorUIController.setKeyBoardKey(Input.Keys.toString(keyBoard1.keyCode) + '[' + keyBoard1.keyCode + ']');
+                            keyBoardMonitorUIController.setKeyBoardStatus(Input.Keys.toString(keyBoard1.keyCode) + '[' + keyBoard1.keyCode + ']' + "-" + keyBoard1.keyBoardSignal.name());
                             break;
                         case Typed:
                             keyBoardMonitorUIController.setKeyBoardKey(String.valueOf(keyBoard1.character));

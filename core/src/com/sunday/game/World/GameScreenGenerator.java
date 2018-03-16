@@ -17,6 +17,7 @@ public class GameScreenGenerator implements ScreenGenerator {
         classes.add(GamePause.class);
         classes.add(GameTest.class);
         classes.add(TiledGameMap.class);
+        classes.add(DemoBallRolling.class);
     }
 
     @Override

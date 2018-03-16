@@ -1,14 +1,16 @@
 package com.sunday.engine.rule.condition;
 
-import com.sunday.engine.common.Data;
+import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.rule.Condition;
 
-import java.util.Map;
-import java.util.function.Predicate;
-
 public class CollisionCondition extends Condition {
+    @Override
+    protected boolean isSatisfied() {
+        return false;
+    }
 
-    public CollisionCondition(Map<Data, Predicate<Data>> clusters) {
-        super(clusters);
+    @Override
+    protected void bindWith(SystemPort systemPort) {
+
     }
 }

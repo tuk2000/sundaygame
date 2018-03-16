@@ -2,14 +2,8 @@ package com.sunday.engine.rule;
 
 import com.sunday.engine.common.Data;
 
-public abstract class Reaction implements Runnable, Data {
-    private Condition condition;
+import java.util.function.Consumer;
 
-    protected void bind(Condition condition) {
-        this.condition = condition;
-    }
+public interface Reaction<T extends Data> extends Consumer<T> {
 
-    protected Condition getCondition() {
-        return condition;
-    }
 }

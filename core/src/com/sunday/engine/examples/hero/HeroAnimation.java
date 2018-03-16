@@ -3,7 +3,7 @@ package com.sunday.engine.examples.hero;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.utils.Array;
-import com.sunday.engine.model.property.MovementState;
+import com.sunday.engine.model.property.Movement;
 import com.sunday.engine.model.state.Direction;
 import com.sunday.engine.render.AnimationSetting;
 import com.sunday.game.framework.GameFramework;
@@ -26,10 +26,10 @@ public class HeroAnimation {
         jumpingAnimation = new Animation(frameDuration, keyFrames, Animation.PlayMode.LOOP_PINGPONG);
     }
 
-    public Texture getKeyFrame(MovementState movementState) {
+    public Texture getKeyFrame(Movement movement) {
         Texture texture = null;
         Animation currentAnimation = null;
-        switch (movementState.action) {
+        switch (movement.action) {
             case Running:
                 currentAnimation = runningAnimation;
                 break;
@@ -45,7 +45,7 @@ public class HeroAnimation {
         }
         if (currentAnimation != null) {
             texture = (Texture) currentAnimation.getKeyFrame(AnimationSetting.DeltaTime);
-            if (movementState.direction == Direction.Left) {
+            if (movement.direction == Direction.Left) {
                 //
             }
         }

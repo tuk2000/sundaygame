@@ -48,7 +48,7 @@ public class Scenario implements Data, Disposable {
     public void notifyAllRoles(Event event) {
         Gdx.app.log("Scenario", "Receive a Event : " + event.toString());
         for (Role role : roles) {
-            role.abstractModel.notifyEvent(event);
+//            role.abstractModel.notifyEvent(event);
         }
     }
 

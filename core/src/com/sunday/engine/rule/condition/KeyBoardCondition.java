@@ -1,59 +1,54 @@
 package com.sunday.engine.rule.condition;
 
-import com.sunday.engine.common.Data;
+import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.driver.keyboard.KeyBoard;
 import com.sunday.engine.driver.keyboard.KeyBoardSignal;
-import com.sunday.engine.rule.Condition;
-import com.sunday.engine.rule.State;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.function.Predicate;
 
-public class KeyBoardCondition extends Condition {
-    public KeyBoardCondition(Map<Data, Predicate<Data>> clusters) {
-        super(clusters);
+public class KeyBoardCondition extends DataCondition<KeyBoard> {
+    private static Predicate<KeyBoard> getKeyPredicate(String keyName) {
+        String newKeyName = keyName.length() == 1 ? keyName.toUpperCase() : keyName;
+        return keyBoard -> keyBoard.character.equals(newKeyName);
     }
 
-    private static class KeyBoardState implements State {
-        public String[] currentTyped;
-    }
-
-    private static KeyBoard keyBoard;
-
-    public static void setKeyBoard(KeyBoard keyBoard) {
-        KeyBoardCondition.keyBoard = keyBoard;
-    }
-
-    private static KeyBoardState keyBoardState = new KeyBoardState();
-
-    public static KeyBoardCondition keyCombination(String combination) {
-        String[] combo = combination.split("-");
-        Predicate<Data> keyPressed = keyBoard -> ((KeyBoard) keyBoard).keyBoardSignal == KeyBoardSignal.Pressed;
-        Predicate<Data> keyCombo = keyBoardState -> ((KeyBoardState) keyBoardState).currentTyped.toString().equals(combo.toString());
-        Map<Data, Predicate<Data>> clusters = new HashMap<>();
-        clusters.put(keyBoard, keyPressed);
-        clusters.put(keyBoardState, keyCombo);
-        KeyBoardCondition keyBoardCondition = new KeyBoardCondition(clusters);
-        keyBoardCondition.setInfo("keyCombination " + combination);
+    public static KeyBoardCondition keyPressed(String keyName) {
+        KeyBoardCondition keyBoardCondition = new KeyBoardCondition();
+        keyBoardCondition.setSignals(KeyBoardSignal.Pressed);
+        keyBoardCondition.addPredicate(getKeyPredicate(keyName));
+        keyBoardCondition.setExtraInfo("Key=[" + keyName + "]");
         return keyBoardCondition;
     }
 
-    public static KeyBoardCondition keyDown(char character) {
-        Predicate<Data> keyPressed = keyBoard -> ((KeyBoard) keyBoard).keyBoardSignal == KeyBoardSignal.Pressed & ((KeyBoard) keyBoard).character == character;
-        Map<Data, Predicate<Data>> clusters = new HashMap<>();
-        clusters.put(keyBoardState, keyPressed);
-        KeyBoardCondition keyBoardCondition = new KeyBoardCondition(clusters);
-        keyBoardCondition.setInfo("keyDown " + character);
+//    public static KeyBoardCondition keyCombination(String combination) {
+//        KeyBoardCondition keyBoardCondition = new KeyBoardCondition();
+//        String[] combo = combination.split("-");
+//        Predicate<Data> keyPressed = keyBoard -> ((KeyBoard) keyBoard).keyBoardSignal == KeyBoardSignal.Pressed;
+//        Predicate<Data> keyCombo = keyBoardState -> ((KeyBoardState) keyBoardState).currentTyped.getInfo().equals(combo.getInfo());
+//        Map<Data, Predicate<Data>> clusters = keyBoardCondition.clusters;
+//        clusters.put(keyBoard, keyPressed);
+//        clusters.put(keyBoardState, keyCombo);
+//        keyBoardCondition.setMainInfo("keyCombination " + combination);
+//        return keyBoardCondition;
+//    }
+
+    public static KeyBoardCondition keyReleased(String keyName) {
+        KeyBoardCondition keyBoardCondition = new KeyBoardCondition();
+        keyBoardCondition.setSignals(KeyBoardSignal.Released);
+        keyBoardCondition.addPredicate(getKeyPredicate(keyName));
+        keyBoardCondition.setExtraInfo("Key=[" + keyName + "]");
         return keyBoardCondition;
     }
 
-    public static KeyBoardCondition keyUp(char character) {
-        Predicate<Data> keyPressed = keyBoard -> ((KeyBoard) keyBoard).keyBoardSignal == KeyBoardSignal.Released & ((KeyBoard) keyBoard).character == character;
-        Map<Data, Predicate<Data>> clusters = new HashMap<>();
-        clusters.put(keyBoardState, keyPressed);
-        KeyBoardCondition keyBoardCondition = new KeyBoardCondition(clusters);
-        keyBoardCondition.setInfo("keyUp " + character);
-        return keyBoardCondition;
+    @Override
+    protected void bindWith(SystemPort systemPort) {
+        setData((KeyBoard) systemPort.searchInDataBank(KeyBoard.class).get(0));
+        super.bindWith(systemPort);
+    }
+
+    @Override
+    protected void setExtraInfo(String info) {
+        String tmp = "Type=[KeyBoardCondition]\n";
+        super.setExtraInfo(tmp + info);
     }
 }

@@ -38,6 +38,29 @@ public class TiledGameMap implements Screen {
     private float w;
     private float h;
     private float pWidth = 64, pHeight = 64;
+    private InputAdapter inputAdapter = new InputAdapter() {
+        @Override
+        public boolean keyDown(int keycode) {
+            switch (keycode) {
+                case Input.Keys.SPACE:
+                    heroSprite.jump();
+                    break;
+                case Input.Keys.DOWN:
+                    heroSprite.trunaround();
+                    break;
+                case Input.Keys.LEFT:
+                    heroSprite.translateX(-20);
+                    break;
+                case Input.Keys.RIGHT:
+                    heroSprite.translateX(20);
+                    break;
+                case Input.Keys.P:
+                    GameFramework.Screen.setCurrentScreen("GamePause");
+                    break;
+            }
+            return true;
+        }
+    };
 
     public TiledGameMap() {
         batch = new SpriteBatch();
@@ -130,28 +153,4 @@ public class TiledGameMap implements Screen {
         box2DDebugRenderer.dispose();
         tiledMap.dispose();
     }
-
-    private InputAdapter inputAdapter = new InputAdapter() {
-        @Override
-        public boolean keyDown(int keycode) {
-            switch (keycode) {
-                case Input.Keys.SPACE:
-                    heroSprite.jump();
-                    break;
-                case Input.Keys.DOWN:
-                    heroSprite.trunaround();
-                    break;
-                case Input.Keys.LEFT:
-                    heroSprite.translateX(-20);
-                    break;
-                case Input.Keys.RIGHT:
-                    heroSprite.translateX(20);
-                    break;
-                case Input.Keys.P:
-                    GameFramework.Screen.setCurrentScreen("GamePause");
-                    break;
-            }
-            return true;
-        }
-    };
 }

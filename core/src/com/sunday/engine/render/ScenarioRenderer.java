@@ -48,14 +48,6 @@ public class ScenarioRenderer implements Disposable {
     private CameraManager cameraManager;
     private DisplayManager displayManager;
 
-    public List<EventProcessor> getProcessors() {
-        List<EventProcessor> eventProcessors = new ArrayList<>();
-        eventProcessors.add(cameraManager);
-        eventProcessors.add(rendererManager);
-        eventProcessors.add(displayManager);
-        return eventProcessors;
-    }
-
     public ScenarioRenderer(PhysicSimulator physicSimulator) {
 
         rendererManager = new RendererManager();
@@ -85,6 +77,14 @@ public class ScenarioRenderer implements Disposable {
         textureRender = new TextureRenderer(sharedBatch);
         worldRender = new WorldRenderer(sharedCamera);
         worldRender.combineWithWorld(physicSimulator.getWorld());
+    }
+
+    public List<EventProcessor> getProcessors() {
+        List<EventProcessor> eventProcessors = new ArrayList<>();
+        eventProcessors.add(cameraManager);
+        eventProcessors.add(rendererManager);
+        eventProcessors.add(displayManager);
+        return eventProcessors;
     }
 
     public void readyToRenderRole(Role role) {
@@ -121,7 +121,7 @@ public class ScenarioRenderer implements Disposable {
         Texture component = (Texture) e.getViewComponent();
         if (component == null) return;
         if (component instanceof Texture) {
-            Vector2 position = model.movementState.position;
+            Vector2 position = model.movement.position;
             Vector2 dimension = model.outlook.dimension;
             textureRender.renderLater((Texture) component, position.x, position.y, dimension.x, dimension.y);
         }

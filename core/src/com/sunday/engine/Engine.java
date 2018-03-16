@@ -11,6 +11,7 @@ import com.sunday.engine.event.collision.CollisionEventTransfer;
 import com.sunday.engine.event.driver.DriverEventTransfer;
 import com.sunday.engine.event.window.WindowEvent;
 import com.sunday.engine.physic.PhysicSimulator;
+import com.sunday.engine.render.AnimationSetting;
 import com.sunday.engine.render.AnimationTimer;
 import com.sunday.engine.render.ScenarioRenderer;
 import com.sunday.engine.rule.RuleSystem;
@@ -23,11 +24,6 @@ public class Engine implements Disposable {
     private EventSystem eventSystem;
     private RuleSystem ruleSystem;
     private ScenarioSystem scenarioSystem;
-
-    public ScenarioSystem getScenarioSystem() {
-        return scenarioSystem;
-    }
-
     private ScenarioRenderer scenarioRenderer;
     private PhysicSimulator physicSimulator;
 
@@ -54,8 +50,22 @@ public class Engine implements Disposable {
         running = true;
     }
 
+    public ScenarioSystem getScenarioSystem() {
+        return scenarioSystem;
+    }
+
+    public RuleSystem getRuleSystem() {
+        return ruleSystem;
+    }
+
+    public DataBank getDataBank() {
+        return dataBank;
+    }
+
     public void render(float delta) {
         if (!running) return;
+        AnimationSetting.DeltaTime += delta;
+        AnimationTimer.synchronize();
         scenarioSystem.analyse();
         physicSimulator.worldStep();
         scenarioRenderer.render(delta);

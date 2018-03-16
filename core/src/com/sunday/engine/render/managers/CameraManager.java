@@ -37,7 +37,7 @@ public class CameraManager implements EventProcessor {
     public void processEvent(Event event) {
         if (event instanceof KeyBoardEvent) {
             KeyBoard keyBoard = (KeyBoard) event.getSource();
-            switch (keyBoard.key) {
+            switch (keyBoard.keyCode) {
                 case Input.Keys.UP:
                     camera.translate(0, 10);
                     break;

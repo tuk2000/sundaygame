@@ -5,8 +5,8 @@ import com.sunday.engine.driver.DriverType;
 
 public class KeyBoard extends Driver {
     public KeyBoardSignal keyBoardSignal;
-    public int key;
-    public char character;
+    public int keyCode;
+    public String character;
 
     public KeyBoard() {
         super(DriverType.Keyboard);
@@ -16,7 +16,7 @@ public class KeyBoard extends Driver {
     @Override
     public void reset() {
         keyBoardSignal = KeyBoardSignal.None;
-        key = 0;
-        character = ' ';
+        keyCode = 0;
+        character = " ";
     }
 }

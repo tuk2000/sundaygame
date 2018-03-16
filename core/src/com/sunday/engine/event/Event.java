@@ -12,16 +12,16 @@ public class Event implements Data {
         this.source = source;
     }
 
-    protected void setSignal(Signal signal) {
-        this.signal = signal;
-    }
-
     public Data getSource() {
         return source;
     }
 
     public Signal getSignal() {
         return signal;
+    }
+
+    protected void setSignal(Signal signal) {
+        this.signal = signal;
     }
 
     @Override

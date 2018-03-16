@@ -1,5 +1,5 @@
 package com.sunday.engine.common;
 
-public interface Target extends Data {
+public interface Target {
     void notify(Signal signal);
 }

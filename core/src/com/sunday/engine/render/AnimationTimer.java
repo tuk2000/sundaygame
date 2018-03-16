@@ -18,7 +18,7 @@ public class AnimationTimer extends SubSystem implements Data {
 
     public static void initAnimationTimer(DataBank dataBank) {
         instance = new AnimationTimer("AnimationTimer", dataBank.getSystemPort(AnimationTimer.class));
-        condition = DataCondition.dataSignals(instance, DataSignal.Modification);
+        condition = new DataCondition(instance, DataSignal.Modification);
     }
 
     public static void synchronize() {

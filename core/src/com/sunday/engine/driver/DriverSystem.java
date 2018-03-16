@@ -1,7 +1,6 @@
 package com.sunday.engine.driver;
 
 import com.badlogic.gdx.controllers.Controller;
-import com.sunday.engine.common.Connection;
 import com.sunday.engine.common.SubSystem;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.driver.gamepad.GamePad;
@@ -18,9 +17,9 @@ public class DriverSystem extends SubSystem {
         systemPort.addDataInstance(keyBoard);
         systemPort.addDataInstance(mouse);
         ToolApplication.keyBoardMonitor.setKeyBoard(keyBoard);
-        systemPort.addDataInstance(new Connection(keyBoard, ToolApplication.keyBoardMonitor));
+        systemPort.addConnection(keyBoard, ToolApplication.keyBoardMonitor);
         ToolApplication.mouseMonitor.setMouse(mouse);
-        systemPort.addDataInstance(new Connection(mouse, ToolApplication.mouseMonitor));
+        systemPort.addConnection(mouse, ToolApplication.mouseMonitor);
     }
 
     public void addDriver(Driver driver) {

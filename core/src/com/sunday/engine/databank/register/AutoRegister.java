@@ -33,6 +33,11 @@ public class AutoRegister<K, V, R extends Register> implements Register<K, V> {
     }
 
     @Override
+    public K keyOf(V v) {
+        return keyCalculateFunc.apply(v);
+    }
+
+    @Override
     public boolean hasKey(K k) {
         return originalRegister.hasKey(k);
     }

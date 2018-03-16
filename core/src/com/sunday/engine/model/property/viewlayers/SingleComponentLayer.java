@@ -7,14 +7,14 @@ public abstract class SingleComponentLayer<T extends Disposable> implements View
     private boolean visible = true;
     private T viewComponent;
 
-    protected void setViewComponent(T t) {
-        viewComponent = t;
-    }
-
     public T getViewComponent() {
         if (visible)
             return viewComponent;
         else return null;
+    }
+
+    protected void setViewComponent(T t) {
+        viewComponent = t;
     }
 
     @Override

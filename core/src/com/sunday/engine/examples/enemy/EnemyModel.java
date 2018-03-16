@@ -12,11 +12,11 @@ public class EnemyModel extends AbstractModel {
     public EnemyModel() {
         outlook.shape = Shape.Type.Circle;
         outlook.dimension.set(40.0f, 40.0f);
-        movementState.position.set(112, 32);
+        movement.position.set(112, 32);
 
         BodyDef bodyDef = physicReflection.bodyDef;
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(movementState.position);
+        bodyDef.position.set(movement.position);
 
         CircleShape circle = new CircleShape();
         circle.setRadius(20.0f);

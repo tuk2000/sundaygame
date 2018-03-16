@@ -5,7 +5,7 @@ import com.sunday.engine.common.Data;
 import com.sunday.engine.model.state.Action;
 import com.sunday.engine.model.state.Direction;
 
-public class MovementState implements Data {
+public class Movement implements Data {
     public Direction direction = Direction.Right;
     public Action action = Action.StandStill;
     public Vector2 speed = new Vector2(0, 0);

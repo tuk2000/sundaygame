@@ -7,35 +7,28 @@ import com.badlogic.gdx.physics.box2d.Shape;
 import com.sunday.engine.common.DataSignal;
 import com.sunday.engine.databank.Port;
 import com.sunday.engine.model.AbstractModel;
+import com.sunday.engine.model.property.Outlook;
 import com.sunday.engine.model.property.viewlayers.TextureViewLayer;
+import com.sunday.engine.model.state.Direction;
 import com.sunday.engine.render.AnimationTimer;
-import com.sunday.engine.rule.Condition;
-import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
 import com.sunday.engine.rule.condition.DataCondition;
 import com.sunday.engine.rule.condition.KeyBoardCondition;
 
 public class HeroModel extends AbstractModel {
     private HeroAnimation heroAnimation = new HeroAnimation();
-    private TextureViewLayer textureViewLayer = new TextureViewLayer(heroAnimation.getKeyFrame(movementState));
-    private Condition movementStateModifiedCondition = DataCondition.dataSignals(movementState, DataSignal.Modification);
-    private Reaction outlookUpdate = new Reaction() {
-        @Override
-        public void run() {
-            textureViewLayer.updateTexture(heroAnimation.getKeyFrame(movementState));
-        }
-    };
+    private TextureViewLayer textureViewLayer = new TextureViewLayer(heroAnimation.getKeyFrame(movement));
 
     public HeroModel() {
 
         outlook.shape = Shape.Type.Polygon;
         outlook.dimension.set(16.f, 20.f);
         outlook.viewLayers.add(textureViewLayer);
-        movementState.position.set(32, 32);
+        movement.position.set(32, 32);
 
         BodyDef bodyDef = physicReflection.bodyDef;
         bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(movementState.position);
+        bodyDef.position.set(movement.position);
 
         PolygonShape polygonShape = new PolygonShape();
         polygonShape.setRadius(1.0f);
@@ -50,21 +43,33 @@ public class HeroModel extends AbstractModel {
 
     @Override
     protected void initialPort(Port port) {
-        port.addDataInstance(new Rule(movementStateModifiedCondition, outlookUpdate));
-        port.addDataInstance(new Rule(AnimationTimer.getCondition(), outlookUpdate));
-        port.addDataInstance(new Rule(KeyBoardCondition.keyDown('1'), new Reaction() {
-            @Override
-            public void run() {
-                movementState.position.add(-10, 0);
-            }
+
+        port.addDataInstance(new Rule(new DataCondition<Outlook>(outlook, DataSignal.Modification), outlook1 -> {
+            textureViewLayer.updateTexture(heroAnimation.getKeyFrame(movement));
         }));
 
-        port.addDataInstance(new Rule(KeyBoardCondition.keyDown('2'), new Reaction() {
-            @Override
-            public void run() {
-                movementState.position.add(10, 0);
-            }
+        port.addDataInstance(new Rule(AnimationTimer.getCondition(), animationTimer -> {
+            textureViewLayer.updateTexture(heroAnimation.getKeyFrame(movement));
         }));
+
+        port.addDataInstance(new Rule(KeyBoardCondition.keyPressed("1"), keyBoard -> {
+            System.out.println("keyPressed('1')");
+            movement.position.add(-10, 0);
+            port.broadcast(movement, DataSignal.Modification);
+        }));
+
+        port.addDataInstance(new Rule(KeyBoardCondition.keyPressed("2"), keyBoard -> {
+            System.out.println("keyPressed('2')");
+            movement.position.add(10, 0);
+            port.broadcast(movement, DataSignal.Modification);
+        }));
+
+        port.addDataInstance(new Rule(KeyBoardCondition.keyPressed("3"), keyBoard -> {
+            System.out.println("keyPressed('3')");
+            movement.direction = Direction.Left;
+            port.broadcast(movement, DataSignal.Modification);
+        }));
+
     }
 
     @Override

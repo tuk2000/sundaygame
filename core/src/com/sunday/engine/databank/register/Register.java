@@ -6,6 +6,8 @@ import java.util.function.BiConsumer;
 public interface Register<K, V> {
     List<K> getKeys();
 
+    K keyOf(V v);
+
     boolean hasKey(K k);
 
     boolean hasValue(V v);

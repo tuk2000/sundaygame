@@ -1,5 +1,6 @@
 package com.sunday.engine.event.driver;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.ControllerListener;
@@ -30,7 +31,8 @@ public class DriverEventTransfer extends EventTransfer implements InputProcessor
     public boolean keyDown(int keycode) {
         defaultKeyBoard.reset();
         defaultKeyBoard.keyBoardSignal = KeyBoardSignal.Pressed;
-        defaultKeyBoard.key = keycode;
+        defaultKeyBoard.keyCode = keycode;
+        defaultKeyBoard.character = Input.Keys.toString(keycode);
         eventPoster.dispatchEvent(new KeyBoardEvent(defaultKeyBoard));
         return true;
     }
@@ -39,7 +41,8 @@ public class DriverEventTransfer extends EventTransfer implements InputProcessor
     public boolean keyUp(int keycode) {
         defaultKeyBoard.reset();
         defaultKeyBoard.keyBoardSignal = KeyBoardSignal.Released;
-        defaultKeyBoard.key = keycode;
+        defaultKeyBoard.keyCode = keycode;
+        defaultKeyBoard.character = Input.Keys.toString(keycode);
         eventPoster.dispatchEvent(new KeyBoardEvent(defaultKeyBoard));
         return true;
     }
@@ -48,7 +51,8 @@ public class DriverEventTransfer extends EventTransfer implements InputProcessor
     public boolean keyTyped(char character) {
         defaultKeyBoard.reset();
         defaultKeyBoard.keyBoardSignal = KeyBoardSignal.Typed;
-        defaultKeyBoard.character = character;
+        defaultKeyBoard.keyCode = Input.Keys.valueOf(String.valueOf(character).toUpperCase());
+        defaultKeyBoard.character = String.valueOf(character);
         eventPoster.dispatchEvent(new KeyBoardEvent(defaultKeyBoard));
         return true;
     }

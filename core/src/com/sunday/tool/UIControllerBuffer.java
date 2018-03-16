@@ -10,6 +10,11 @@ public class UIControllerBuffer<T extends ToolExtenderUIController, C extends Ob
     private Map<BufferHead<C>, BufferBody<T, C>> bufferMap;
     private Map<C, BiConsumer<T, C>> singleObjectMap;
 
+    public UIControllerBuffer() {
+        bufferMap = new HashMap<>();
+        singleObjectMap = new HashMap<>();
+    }
+
     public void addBuffer(C object, BiConsumer<T, C> flushFunction) {
         singleObjectMap.put(object, flushFunction);
     }
@@ -41,11 +46,6 @@ public class UIControllerBuffer<T extends ToolExtenderUIController, C extends Ob
 
     public void removeInstance(Object object) {
         correspondList(object, false).add(object);
-    }
-
-    public UIControllerBuffer() {
-        bufferMap = new HashMap<>();
-        singleObjectMap = new HashMap<>();
     }
 
     public void flush(T toolExtenderUIController) {

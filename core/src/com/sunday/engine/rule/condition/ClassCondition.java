@@ -2,40 +2,31 @@ package com.sunday.engine.rule.condition;
 
 import com.sunday.engine.common.Data;
 import com.sunday.engine.common.Signal;
+import com.sunday.engine.common.SourceClass;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.rule.Condition;
 import com.sunday.engine.rule.Tracer;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Predicate;
 
-public class DataCondition<T extends Data> extends Condition<T> {
+public class ClassCondition<T extends Data> extends Condition<SourceClass<T>> {
 
-    protected List<Predicate<T>> predicates = new ArrayList<>();
+    private Class<T> sensedSourceClass;
 
-    public DataCondition(T t, Signal... signals) {
-        setData(t);
+    public ClassCondition(Class<T> clazz, Signal... signals) {
+        sensedSourceClass = clazz;
         setSignals(signals);
-    }
-
-    protected DataCondition() {
-    }
-
-    protected void addPredicate(Predicate<T> predicate) {
-        predicates.add(predicate);
+        setExtraInfo("Type = [ClassCondition]\n" +
+                "SensedSourceClass=[" + clazz.getSimpleName() + "]");
     }
 
     @Override
     protected boolean isSatisfied() {
-        List<Boolean> result = new ArrayList<>();
-        result.add(true);
-        predicates.forEach(predicate -> result.add(predicate.test(getData())));
-        return result.stream().reduce(((aBoolean, aBoolean2) -> aBoolean & aBoolean2)).get();
+        return true;
     }
 
     @Override
     protected void bindWith(SystemPort systemPort) {
+        setData(systemPort.getSourceClass(sensedSourceClass));
         getTracers().clear();
         getSignals().forEach(signal -> {
             Tracer tracer = new Tracer(this, getData(), signal);
@@ -46,4 +37,5 @@ public class DataCondition<T extends Data> extends Condition<T> {
         });
         generateMainInfo();
     }
+
 }

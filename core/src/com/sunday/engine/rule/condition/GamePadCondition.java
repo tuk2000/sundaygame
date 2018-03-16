@@ -1,14 +1,16 @@
 package com.sunday.engine.rule.condition;
 
-import com.sunday.engine.common.Data;
-import com.sunday.engine.rule.Condition;
+import com.sunday.engine.databank.SystemPort;
+import com.sunday.engine.driver.gamepad.GamePad;
 
-import java.util.Map;
-import java.util.function.Predicate;
+public class GamePadCondition extends DataCondition<GamePad> {
+    @Override
+    protected boolean isSatisfied() {
+        return false;
+    }
 
-public class GamePadCondition extends Condition {
+    @Override
+    protected void bindWith(SystemPort systemPort) {
 
-    public GamePadCondition(Map<Data, Predicate<Data>> clusters) {
-        super(clusters);
     }
 }

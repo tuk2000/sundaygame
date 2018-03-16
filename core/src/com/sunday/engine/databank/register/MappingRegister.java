@@ -18,6 +18,11 @@ public class MappingRegister<K, V> implements Register<K, V>, UsingSingleValue<K
     }
 
     @Override
+    public K keyOf(V v) {
+        return getKeys().stream().filter(key -> map.get(key).equals(v)).findFirst().orElse(null);
+    }
+
+    @Override
     public boolean hasKey(K k) {
         return map.containsKey(k);
     }

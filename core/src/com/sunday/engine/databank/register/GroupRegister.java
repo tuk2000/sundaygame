@@ -47,6 +47,13 @@ public class GroupRegister<K, V> implements Register<K, V>, UsingMultiValue<K, V
     }
 
     @Override
+    public void deregisterKey(K k) {
+        if (hasKey(k)) {
+            map.remove(k);
+        }
+    }
+
+    @Override
     public void foreachPaar(BiConsumer<K, V> biConsumer) {
         map.forEach((key, set) -> {
             set.forEach(value -> biConsumer.accept(key, value));
@@ -58,6 +65,16 @@ public class GroupRegister<K, V> implements Register<K, V>, UsingMultiValue<K, V
         List<K> list = new ArrayList<>();
         map.keySet().forEach(list::add);
         return list;
+    }
+
+    @Override
+    public K keyOf(V v) {
+        for (K key : getKeys()) {
+            if (getValues(key).contains(v)) {
+                return key;
+            }
+        }
+        return null;
     }
 
     @Override

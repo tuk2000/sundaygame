@@ -22,7 +22,7 @@ public class RendererManager implements EventProcessor {
             KeyBoard keyBoard = (KeyBoard) event.getSource();
             switch (keyBoard.keyBoardSignal) {
                 case Pressed:
-                    switch (keyBoard.key) {
+                    switch (keyBoard.keyCode) {
                         case Input.Keys.F6:
                             DoRenderMap = !DoRenderMap;
                             break;

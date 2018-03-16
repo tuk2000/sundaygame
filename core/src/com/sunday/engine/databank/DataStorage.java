@@ -1,93 +1,103 @@
 package com.sunday.engine.databank;
 
-import com.sunday.engine.common.Connection;
-import com.sunday.engine.common.Data;
-import com.sunday.engine.common.DataSignal;
-import com.sunday.engine.common.Signal;
-import com.sunday.engine.databank.storage.ConnectionRegister;
-import com.sunday.engine.databank.storage.DataClassRegister;
-import com.sunday.engine.databank.storage.PortDataRegister;
+import com.sunday.engine.common.*;
+import com.sunday.engine.databank.storage.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 class DataStorage<T extends Data> {
+    private DataInstanceRegister<T> dataInstanceRegister = new DataInstanceRegister();
+    private DataConnectionRegister<T> dataConnectionRegister = new DataConnectionRegister<>();
+    private SourceClassRegister<T> sourceClassRegister = new SourceClassRegister<>();
+    private SourceClassConnectionRegister sourceClassConnectionRegister = new SourceClassConnectionRegister();
+    private PortContentRegisters portContentRegisters = new PortContentRegisters();
 
-    private PortDataRegister portDataRegister = new PortDataRegister();
-    private DataClassRegister<T> dataClassRegister = new DataClassRegister();
-    private ConnectionRegister<T, Connection> connectionRegister = new ConnectionRegister();
 
     protected DataStorage() {
 
     }
 
+
     protected List<Class<T>> getDataClasses() {
-        return dataClassRegister.getKeys();
+        return dataInstanceRegister.getKeys();
     }
 
-    protected List<T> getInstances(Class<T> clazz) {
-        List<T> result = new ArrayList<>();
-        dataClassRegister.foreachPaar(new BiConsumer<Class<T>, T>() {
-            @Override
-            public void accept(Class<T> clazz, T t) {
-                result.add(t);
-            }
-        });
-        return result;
+    protected List<T> getDataInstances(Class<T> clazz) {
+        return dataInstanceRegister.getValues(clazz);
     }
 
     protected void addDataInstance(Port port, T t) {
-        if (t instanceof Connection) {
-            connectionRegister.register((Connection) t);
-        }
-        portDataRegister.register(port, t);
-        dataClassRegister.register(t);
+        dataInstanceRegister.register(t);
+        portContentRegisters.registerData(port, t);
         solve(t, DataSignal.Add);
     }
 
-    protected void solve(T t, Signal signal) {
-        connectionRegister.getValues(t).stream().filter(
-                connection -> {
-                    boolean isSensor = connection.source instanceof ClassSensor;
-                    boolean isSensorClass = false;
-                    ClassSensor classSensor;
-                    if (isSensor) {
-                        classSensor = (ClassSensor) connection.source;
-                        isSensorClass = t.getClass().equals(classSensor.getSensedClass());
-                        if (isSensorClass) {
-                            classSensor.setSensedInstance(t);
-                        }
-                    }
-                    return connection.source.equals(t) || isSensor & isSensorClass;
-                }
-        ).map(c -> c.target)
-                .forEach(target -> target.notify(signal));
-    }
-
     protected void deleteDataInstance(Port port, T t) {
-        if (t instanceof Connection) {
-            connectionRegister.deregister((Connection) t);
-        }
-        portDataRegister.deregister(port, t);
-        dataClassRegister.deregister(t);
+        portContentRegisters.deregisterData(port, t);
+        dataInstanceRegister.deregister(t);
+        dataConnectionRegister.deregisterKey(t);
         solve(t, DataSignal.Deletion);
     }
 
     protected List<T> getDataList(Port port) {
-        return (List<T>) portDataRegister.getValues(port);
+        return (List<T>) portContentRegisters.getPortDataRegister().getValues(port);
     }
 
     protected <T extends Data> List<Class<T>> getDataClassList(Port port) {
         List<Class<T>> result = new ArrayList<>();
-        getDataList(port).stream().collect(Collectors.groupingBy(data -> data.getClass())).keySet().forEach(clazz->result.add((Class<T>) clazz));
+        getDataList(port).stream().collect(Collectors.groupingBy(data -> data.getClass())).keySet().forEach(clazz -> result.add((Class<T>) clazz));
         return result;
     }
 
     protected void destroyPort(Port port) {
-        getDataList(port).forEach(data -> {
-            deleteDataInstance(port, data);
+        portContentRegisters.destroy(port);
+    }
+
+    protected void solve(T t, Signal signal) {
+        Class<T> clazz = (Class<T>) t.getClass();
+        SourceClass sourceClass = sourceClassRegister.getSourceClass(clazz);
+        sourceClass.setSensedData(t);
+        sourceClassConnectionRegister.getValues(sourceClass).forEach(connection -> {
+            connection.target.notify(signal);
         });
+        dataConnectionRegister.getValues(t).forEach(connection -> connection.target.notify(signal));
+    }
+
+    public void addDataConnection(Port port, T source, Target target) {
+        Connection connection = new Connection<>(source, target);
+        dataConnectionRegister.register(connection);
+        portContentRegisters.registerConnection(port, connection);
+    }
+
+    public void removeDataConnection(Port port, T source, Target target) {
+        if (dataConnectionRegister.hasKey(source)) {
+            dataConnectionRegister.getValues(source).forEach(connection -> {
+                if (connection.target.equals(target)) {
+                    dataConnectionRegister.deregister(source, connection);
+                    portContentRegisters.deregisterConnection(port, connection);
+                }
+            });
+        }
+    }
+
+    public void addClassConnection(Port port, SourceClass sourceClass, Target target) {
+        ClassConnection classConnection = new ClassConnection(sourceClass, target);
+        sourceClassConnectionRegister.register(classConnection);
+        portContentRegisters.registerConnection(port, classConnection);
+    }
+
+    public void removeClassConnection(Port port, SourceClass sourceClass, Target target) {
+        sourceClassConnectionRegister.getValues(sourceClass).forEach(classConnection -> {
+            if (classConnection.target.equals(target)) {
+                sourceClassConnectionRegister.deregister(sourceClass, classConnection);
+                portContentRegisters.deregisterConnection(port, classConnection);
+            }
+        });
+    }
+
+    public SourceClass<T> getSourceClass(Class<T> clazz) {
+        return sourceClassRegister.getSourceClass(clazz);
     }
 }

@@ -1,63 +1,89 @@
 package com.sunday.engine.rule;
 
 import com.sunday.engine.common.Data;
+import com.sunday.engine.common.Signal;
+import com.sunday.engine.databank.SystemPort;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
-import java.util.function.Predicate;
 
-public abstract class Condition implements Data {
-    protected Map<Data, Predicate<Data>> clusters;
-    protected Map<Data, Tracer> tracers = new HashMap<>();
+public abstract class Condition<T extends Data> {
+    private T data;
+    private List<Signal> signals = new ArrayList<>();
+    private List<Tracer> tracers = new ArrayList<>();
     private Reaction reaction;
-    private String info;
+    private String mainInfo = "MainInfo:\nn/a";
+    private String extraInfo = "ExtractInfo:\nn/a";
 
-    public Condition(Map<Data, Predicate<Data>> clusters) {
-        this.clusters = clusters;
-    }
-
-    public List<Data> getLiterals() {
-        List<Data> result = new ArrayList<>();
-        result.addAll(clusters.keySet());
-        return result;
-    }
-
-    public List<Predicate<Data>> getClusters() {
-        List<Predicate<Data>> result = new ArrayList<>();
-        result.addAll(clusters.values());
-        return result;
-    }
-
-    protected boolean isSatisfied() {
-        List<Boolean> result = new ArrayList<>();
-        result.add(true);
-        clusters.forEach((data, predicate) -> {
-            result.add(predicate.test(data));
-        });
-        return result.stream().reduce(((aBoolean, aBoolean2) -> aBoolean & aBoolean2)).get();
-    }
-
-    public Map<Data, Tracer> getTracers() {
-        return tracers;
-    }
+    protected abstract boolean isSatisfied();
 
     public void check() {
         if (isSatisfied() & reaction != null) {
-            reaction.run();
+            reaction.accept(data);
         }
     }
 
-    public void bind(Reaction reaction) {
+    public T getData() {
+        return data;
+    }
+
+    protected void setData(T t) {
+        data = t;
+    }
+
+    public List<Signal> getSignals() {
+        return signals;
+    }
+
+    protected void setSignals(Signal... signals) {
+        this.signals.clear();
+        this.signals.addAll(Arrays.asList(signals));
+    }
+
+    protected List<Tracer> getTracers() {
+        return tracers;
+    }
+
+    protected void setTracers(Tracer... tracers) {
+        this.tracers.clear();
+        this.tracers.addAll(Arrays.asList(tracers));
+    }
+
+    protected void generateMainInfo() {
+        String names = "";
+        for (Signal signal : signals) {
+            names += signal.name();
+        }
+        mainInfo =
+                "MainInfo:\n" +
+                        "Source = [" + data + "]\n" +
+                        "SourceClass = [" + data.getClass().getSimpleName() + "]\n" +
+                        "Signals = [" + names + "]";
+    }
+
+    protected void setExtraInfo(String extraInfo) {
+        this.extraInfo = "ExtractInfo:\n" + extraInfo;
+    }
+
+    protected abstract void bindWith(SystemPort systemPort);
+
+    protected void unbindWith(SystemPort systemPort) {
+        tracers.forEach(tracer -> {
+            systemPort.removeConnection(data, tracer);
+        });
+    }
+
+    public Reaction getReaction() {
+        return reaction;
+    }
+
+    protected void setReaction(Reaction reaction) {
         this.reaction = reaction;
     }
 
     public String getInfo() {
-        return info;
+        return toString() + "\n" + mainInfo + "\n" + extraInfo;
     }
 
-    protected void setInfo(String info) {
-        this.info = getClass().getSimpleName() + ": " + info;
-    }
 }

@@ -11,15 +11,58 @@ import com.sunday.engine.model.property.PhysicReflection;
 import com.sunday.engine.rule.Condition;
 import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
-import com.sunday.engine.rule.condition.DataCondition;
+import com.sunday.engine.rule.condition.ClassCondition;
 
 public class PhysicSimulator extends SubSystem implements Disposable {
     protected Vector2 defaultGravity = new Vector2(0, -9.8f);
     protected World world;
+    private Condition<PhysicReflection> addCondition = new ClassCondition(PhysicReflection.class, DataSignal.Add);
+    private Condition modificationCondition = new ClassCondition(PhysicReflection.class, DataSignal.Modification);
+    private Condition deletionCondition = new ClassCondition(PhysicReflection.class, DataSignal.Deletion);
+    private Reaction<PhysicReflection> addReaction = new Reaction() {
 
-    public World getWorld() {
-        return world;
-    }
+        @Override
+        public void accept(Object object) {
+
+        }
+
+//        @Override
+//        public void run() {
+////                    physicReflection.bodyCreated = true;
+////                    physicReflection.body = world.createBody(physicReflection.bodyDef);
+////                    physicReflection.createFixture();
+////                    break;
+//        }
+    };
+    private Reaction<PhysicReflection> modificationReaction = new Reaction() {
+        @Override
+        public void accept(Object object) {
+
+        }
+
+//        @Override
+//        public void run() {
+////                    world.destroyBody(physicReflection.body);
+////                    physicReflection.body = world.createBody(physicReflection.bodyDef);
+////                    physicReflection.createFixture();
+////                    break;
+//        }
+    };
+    private Reaction<PhysicReflection> deletionReaction = new Reaction() {
+
+        @Override
+        public void accept(Object object) {
+
+        }
+//
+//        @Override
+//        public void run() {
+////                    physicReflection.bodyCreated = false;
+////                    world.destroyBody(physicReflection.body);
+////                    break;
+//        }
+
+    };
 
     public PhysicSimulator(SystemPort systemPort) {
         super("PhysicSimulator", systemPort);
@@ -29,40 +72,9 @@ public class PhysicSimulator extends SubSystem implements Disposable {
         systemPort.addDataInstance(new Rule(deletionCondition, deletionReaction));
     }
 
-    private Condition addCondition = DataCondition.classSignals(PhysicReflection.class, DataSignal.Add);
-    private Condition modificationCondition = DataCondition.classSignals(PhysicReflection.class, DataSignal.Modification);
-    private Condition deletionCondition = DataCondition.classSignals(PhysicReflection.class, DataSignal.Deletion);
-    private Reaction addReaction = new Reaction() {
-
-        @Override
-        public void run() {
-//                    physicReflection.bodyCreated = true;
-//                    physicReflection.body = world.createBody(physicReflection.bodyDef);
-//                    physicReflection.createFixture();
-//                    break;
-        }
-    };
-
-    private Reaction modificationReaction = new Reaction() {
-        @Override
-        public void run() {
-//                    world.destroyBody(physicReflection.body);
-//                    physicReflection.body = world.createBody(physicReflection.bodyDef);
-//                    physicReflection.createFixture();
-//                    break;
-        }
-    };
-
-    private Reaction deletionReaction = new Reaction() {
-
-        @Override
-        public void run() {
-//                    physicReflection.bodyCreated = false;
-//                    world.destroyBody(physicReflection.body);
-//                    break;
-        }
-
-    };
+    public World getWorld() {
+        return world;
+    }
 
     public void setContactListener(ContactListener contactListener) {
         world.setContactListener(contactListener);

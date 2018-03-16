@@ -8,13 +8,13 @@ public class ToolExtender<T extends ToolExtenderUIController> {
         uiControllerBuffer = new UIControllerBuffer();
     }
 
+    public T getUIController() {
+        return UIController;
+    }
+
     public void setUIController(T UIController) {
         this.UIController = UIController;
         flushBuffer();
-    }
-
-    public T getUIController() {
-        return UIController;
     }
 
     protected void flushBuffer() {

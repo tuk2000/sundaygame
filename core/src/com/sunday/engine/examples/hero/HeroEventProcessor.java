@@ -31,9 +31,9 @@ public class HeroEventProcessor implements EventProcessor {
     private void handleInput(DriverEvent driverEvent) {
         if (driverEvent instanceof KeyBoardEvent) {
             KeyBoardEvent keyBoardEvent = (KeyBoardEvent) driverEvent;
-            Vector2 position = heroModel.movementState.position;
+            Vector2 position = heroModel.movement.position;
 
-            switch (((KeyBoard) (keyBoardEvent.getSource())).key) {
+            switch (((KeyBoard) (keyBoardEvent.getSource())).keyCode) {
                 case '1':
                     position.add(-10, 0);
                     break;
@@ -48,8 +48,8 @@ public class HeroEventProcessor implements EventProcessor {
                     break;
                 case 'H':
                 case 'h':
-                    heroModel.movementState.action = Action.StandStill;
-                    heroModel.port.broadcast(heroModel.movementState, DataSignal.Modification);
+                    heroModel.movement.action = Action.StandStill;
+                    heroModel.port.broadcast(heroModel.movement, DataSignal.Modification);
                     break;
                 case 'L':
                 case 'l':
@@ -75,19 +75,19 @@ public class HeroEventProcessor implements EventProcessor {
                 return;
             }
 
-            switch (((KeyBoard) (keyBoardEvent.getSource())).key) {
+            switch (((KeyBoard) (keyBoardEvent.getSource())).keyCode) {
                 case 'R':
                 case 'r':
-                    heroModel.movementState.action = Action.Running;
+                    heroModel.movement.action = Action.Running;
                     body.applyLinearImpulse(1000, 0, worldCenter.x, worldCenter.y, true);
-                    heroModel.port.broadcast(heroModel.movementState, DataSignal.Modification);
+                    heroModel.port.broadcast(heroModel.movement, DataSignal.Modification);
                     heroModel.port.broadcast(heroModel.physicReflection, DataSignal.Modification);
                     break;
                 case 'J':
                 case 'j':
-                    heroModel.movementState.action = Action.Jumping;
+                    heroModel.movement.action = Action.Jumping;
                     body.applyLinearImpulse(0, 1000, worldCenter.x, worldCenter.y, true);
-                    heroModel.port.broadcast(heroModel.movementState, DataSignal.Modification);
+                    heroModel.port.broadcast(heroModel.movement, DataSignal.Modification);
                     heroModel.port.broadcast(heroModel.physicReflection, DataSignal.Modification);
                     break;
                 default:
