@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.sunday.engine.driver.gamepad.GamePad;
+import com.sunday.engine.driver.gamepad.GamePadSignal;
 import com.sunday.engine.driver.keyboard.KeyBoard;
 import com.sunday.engine.event.Event;
 import com.sunday.engine.event.EventProcessor;
@@ -66,7 +67,8 @@ public class CameraManager implements EventProcessor {
             camera.update();
         } else if (event instanceof GamePadEvent) {
             GamePad gamePad = (GamePad) event.getSource();
-            switch (gamePad.gamePadSignal) {
+            GamePadSignal gamePadSignal = (GamePadSignal) event.getSignal();
+            switch (gamePadSignal) {
                 case ButtonDown:
                     switch (gamePad.buttonCode) {
                         case 4:

@@ -1,12 +1,12 @@
 package com.sunday.engine.event.driver;
 
+import com.sunday.engine.common.Signal;
 import com.sunday.engine.driver.mouse.Mouse;
 
 public class MouseEvent extends DriverEvent {
 
-    public MouseEvent(Mouse mouse) {
-        super(mouse);
-        setSignal(mouse.mouseSignal);
+    public MouseEvent(Mouse mouse, Signal signal) {
+        super(mouse, signal);
     }
 
     @Override

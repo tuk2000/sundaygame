@@ -3,7 +3,9 @@ package com.sunday.engine.render.managers;
 
 import com.badlogic.gdx.Input;
 import com.sunday.engine.driver.gamepad.GamePad;
+import com.sunday.engine.driver.gamepad.GamePadSignal;
 import com.sunday.engine.driver.keyboard.KeyBoard;
+import com.sunday.engine.driver.keyboard.KeyBoardSignal;
 import com.sunday.engine.event.Event;
 import com.sunday.engine.event.EventProcessor;
 import com.sunday.engine.event.driver.GamePadEvent;
@@ -20,7 +22,8 @@ public class RendererManager implements EventProcessor {
     public void processEvent(Event event) {
         if (event instanceof KeyBoardEvent) {
             KeyBoard keyBoard = (KeyBoard) event.getSource();
-            switch (keyBoard.keyBoardSignal) {
+            KeyBoardSignal signal = (KeyBoardSignal) event.getSignal();
+            switch (signal) {
                 case Pressed:
                     switch (keyBoard.keyCode) {
                         case Input.Keys.F6:
@@ -42,7 +45,8 @@ public class RendererManager implements EventProcessor {
             }
         } else if (event instanceof GamePadEvent) {
             GamePad gamePad = (GamePad) event.getSource();
-            switch (gamePad.gamePadSignal) {
+            GamePadSignal gamePadSignal = (GamePadSignal) event.getSignal();
+            switch (gamePadSignal) {
                 case ButtonDown:
                     switch (gamePad.buttonCode) {
                         case 0:

@@ -8,7 +8,6 @@ import com.sunday.engine.driver.DriverType;
 
 public class GamePad extends Driver {
     public Controller controller;
-    public GamePadSignal gamePadSignal;
     public int buttonCode;
 
     public int axisCode;
@@ -29,7 +28,6 @@ public class GamePad extends Driver {
 
     @Override
     public void reset() {
-        gamePadSignal = GamePadSignal.None;
         buttonCode = 0;
         axisCode = 0;
         axisMoveValue = 0.0f;

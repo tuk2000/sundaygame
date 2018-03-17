@@ -8,8 +8,9 @@ public class Event implements Data {
     private Data source;
     private Signal signal;
 
-    public Event(Data source) {
+    public Event(Data source, Signal signal) {
         this.source = source;
+        this.signal = signal;
     }
 
     public Data getSource() {
@@ -18,10 +19,6 @@ public class Event implements Data {
 
     public Signal getSignal() {
         return signal;
-    }
-
-    protected void setSignal(Signal signal) {
-        this.signal = signal;
     }
 
     @Override

@@ -8,7 +8,7 @@ public class CollisionEvent extends Event {
     private Data objectB;
 
     public CollisionEvent(Data sender, Data objectA, Data objectB) {
-        super(sender);
+        super(sender, CollisionSignal.Collision);
         this.objectA = objectA;
         this.objectB = objectB;
     }

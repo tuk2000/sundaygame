@@ -5,10 +5,10 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
 import com.sunday.engine.common.DataSignal;
+import com.sunday.engine.common.SourceClass;
 import com.sunday.engine.common.SubSystem;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.model.property.PhysicReflection;
-import com.sunday.engine.rule.Condition;
 import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
 import com.sunday.engine.rule.condition.ClassCondition;
@@ -16,60 +16,43 @@ import com.sunday.engine.rule.condition.ClassCondition;
 public class PhysicSimulator extends SubSystem implements Disposable {
     protected Vector2 defaultGravity = new Vector2(0, -9.8f);
     protected World world;
-    private Condition<PhysicReflection> addCondition = new ClassCondition(PhysicReflection.class, DataSignal.Add);
-    private Condition modificationCondition = new ClassCondition(PhysicReflection.class, DataSignal.Modification);
-    private Condition deletionCondition = new ClassCondition(PhysicReflection.class, DataSignal.Deletion);
-    private Reaction<PhysicReflection> addReaction = new Reaction() {
 
+    private Rule physicReflectionAddRule = new Rule(new ClassCondition<>(PhysicReflection.class, DataSignal.Modification), new Reaction<SourceClass<PhysicReflection>>() {
         @Override
-        public void accept(Object object) {
-
+        public void accept(SourceClass<PhysicReflection> physicReflectionSourceClass) {
+            PhysicReflection physicReflection = physicReflectionSourceClass.getSensedData();
+            world.destroyBody(physicReflection.body);
+            physicReflection.bodyCreated = true;
+            physicReflection.body = world.createBody(physicReflection.bodyDef);
+            physicReflection.createFixture();
         }
+    });
 
-//        @Override
-//        public void run() {
-////                    physicReflection.bodyCreated = true;
-////                    physicReflection.body = world.createBody(physicReflection.bodyDef);
-////                    physicReflection.createFixture();
-////                    break;
-//        }
-    };
-    private Reaction<PhysicReflection> modificationReaction = new Reaction() {
+    private Rule physicReflectionModificationRule = new Rule(new ClassCondition<>(PhysicReflection.class, DataSignal.Modification), new Reaction<SourceClass<PhysicReflection>>() {
         @Override
-        public void accept(Object object) {
-
+        public void accept(SourceClass<PhysicReflection> physicReflectionSourceClass) {
+            PhysicReflection physicReflection = physicReflectionSourceClass.getSensedData();
+            world.destroyBody(physicReflection.body);
+            physicReflection.body = world.createBody(physicReflection.bodyDef);
+            physicReflection.createFixture();
         }
+    });
 
-//        @Override
-//        public void run() {
-////                    world.destroyBody(physicReflection.body);
-////                    physicReflection.body = world.createBody(physicReflection.bodyDef);
-////                    physicReflection.createFixture();
-////                    break;
-//        }
-    };
-    private Reaction<PhysicReflection> deletionReaction = new Reaction() {
-
+    private Rule physicReflectionDeletionRule = new Rule(new ClassCondition<>(PhysicReflection.class, DataSignal.Deletion), new Reaction<SourceClass<PhysicReflection>>() {
         @Override
-        public void accept(Object object) {
-
+        public void accept(SourceClass<PhysicReflection> physicReflectionSourceClass) {
+            PhysicReflection physicReflection = physicReflectionSourceClass.getSensedData();
+            physicReflection.bodyCreated = false;
+            world.destroyBody(physicReflection.body);
         }
-//
-//        @Override
-//        public void run() {
-////                    physicReflection.bodyCreated = false;
-////                    world.destroyBody(physicReflection.body);
-////                    break;
-//        }
-
-    };
+    });
 
     public PhysicSimulator(SystemPort systemPort) {
         super("PhysicSimulator", systemPort);
         world = new World(defaultGravity, false);
-        systemPort.addDataInstance(new Rule(addCondition, addReaction));
-        systemPort.addDataInstance(new Rule(modificationCondition, modificationReaction));
-        systemPort.addDataInstance(new Rule(deletionCondition, deletionReaction));
+        systemPort.addDataInstance(physicReflectionAddRule);
+        systemPort.addDataInstance(physicReflectionModificationRule);
+        systemPort.addDataInstance(physicReflectionDeletionRule);
     }
 
     public World getWorld() {
