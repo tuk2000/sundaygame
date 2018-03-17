@@ -3,11 +3,11 @@ package com.sunday.engine.scenario;
 import com.badlogic.gdx.utils.Disposable;
 import com.sunday.engine.common.SubSystem;
 import com.sunday.engine.databank.SystemPort;
-import com.sunday.engine.render.ScenarioRenderer;
+import com.sunday.engine.render.RenderSystem;
 
 public class ScenarioSystem extends SubSystem implements Disposable {
     private Scenario root;
-    private ScenarioRenderer render;
+    private RenderSystem render;
 
     public ScenarioSystem(SystemPort systemPort) {
         super("ScenarioSystem", systemPort);
@@ -44,7 +44,7 @@ public class ScenarioSystem extends SubSystem implements Disposable {
 
     }
 
-    public void setRender(ScenarioRenderer render) {
+    public void setRender(RenderSystem render) {
         this.render = render;
     }
 }

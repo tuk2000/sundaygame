@@ -10,10 +10,10 @@ import com.sunday.engine.event.EventSystem;
 import com.sunday.engine.event.collision.CollisionEventTransfer;
 import com.sunday.engine.event.driver.DriverEventTransfer;
 import com.sunday.engine.event.window.WindowEvent;
-import com.sunday.engine.physic.PhysicSimulator;
+import com.sunday.engine.physic.PhysicSystem;
 import com.sunday.engine.render.AnimationSetting;
 import com.sunday.engine.render.AnimationTimer;
-import com.sunday.engine.render.ScenarioRenderer;
+import com.sunday.engine.render.RenderSystem;
 import com.sunday.engine.rule.RuleSystem;
 import com.sunday.engine.scenario.ScenarioSystem;
 
@@ -24,8 +24,8 @@ public class Engine implements Disposable {
     private EventSystem eventSystem;
     private RuleSystem ruleSystem;
     private ScenarioSystem scenarioSystem;
-    private ScenarioRenderer scenarioRenderer;
-    private PhysicSimulator physicSimulator;
+    private RenderSystem renderSystem;
+    private PhysicSystem physicSystem;
 
     public Engine() {
         dataBank = new DataBankImpl();
@@ -33,8 +33,8 @@ public class Engine implements Disposable {
         eventSystem = new EventSystem(dataBank.getSystemPort(EventSystem.class));
         ruleSystem = new RuleSystem(dataBank.getSystemPort(RuleSystem.class));
         scenarioSystem = new ScenarioSystem(dataBank.getSystemPort(ScenarioSystem.class));
-        physicSimulator = new PhysicSimulator(dataBank.getSystemPort(PhysicSimulator.class));
-        scenarioRenderer = new ScenarioRenderer(physicSimulator);
+        physicSystem = new PhysicSystem(dataBank.getSystemPort(PhysicSystem.class));
+        renderSystem = new RenderSystem(physicSystem);
 
         DriverEventTransfer driverEventTransfer = new DriverEventTransfer(driverSystem);
         Gdx.input.setInputProcessor(driverEventTransfer);
@@ -44,7 +44,7 @@ public class Engine implements Disposable {
         eventSystem.addEventTransfer(driverEventTransfer);
         eventSystem.addEventTransfer(collisionEventTransfer);
 
-        scenarioSystem.setRender(scenarioRenderer);
+        scenarioSystem.setRender(renderSystem);
 
         AnimationTimer.initAnimationTimer(dataBank);
         running = true;
@@ -67,8 +67,8 @@ public class Engine implements Disposable {
         AnimationSetting.DeltaTime += delta;
         AnimationTimer.synchronize();
         scenarioSystem.analyse();
-        physicSimulator.worldStep();
-        scenarioRenderer.render(delta);
+        physicSystem.worldStep();
+        renderSystem.render(delta);
     }
 
     public void resize(int width, int height) {
@@ -78,8 +78,8 @@ public class Engine implements Disposable {
     @Override
     public void dispose() {
         running = false;
-        scenarioRenderer.dispose();
-        physicSimulator.dispose();
+        renderSystem.dispose();
+        physicSystem.dispose();
         scenarioSystem.dispose();
     }
 }

@@ -13,7 +13,7 @@ import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
 import com.sunday.engine.rule.condition.ClassCondition;
 
-public class PhysicSimulator extends SubSystem implements Disposable {
+public class PhysicSystem extends SubSystem implements Disposable {
     protected Vector2 defaultGravity = new Vector2(0, -9.8f);
     protected World world;
 
@@ -47,8 +47,8 @@ public class PhysicSimulator extends SubSystem implements Disposable {
         }
     });
 
-    public PhysicSimulator(SystemPort systemPort) {
-        super("PhysicSimulator", systemPort);
+    public PhysicSystem(SystemPort systemPort) {
+        super("PhysicSystem", systemPort);
         world = new World(defaultGravity, false);
         systemPort.addDataInstance(physicReflectionAddRule);
         systemPort.addDataInstance(physicReflectionModificationRule);

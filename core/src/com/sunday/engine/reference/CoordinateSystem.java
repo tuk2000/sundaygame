@@ -1,4 +1,4 @@
-package com.sunday.engine.model;
+package com.sunday.engine.reference;
 
 public class CoordinateSystem {
     public static int PPU = 16;

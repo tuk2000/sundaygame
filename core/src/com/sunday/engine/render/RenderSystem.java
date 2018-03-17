@@ -15,7 +15,7 @@ import com.sunday.engine.model.AbstractModel;
 import com.sunday.engine.model.property.viewlayers.MapViewLayer;
 import com.sunday.engine.model.property.viewlayers.TextureViewLayer;
 import com.sunday.engine.model.state.Label;
-import com.sunday.engine.physic.PhysicSimulator;
+import com.sunday.engine.physic.PhysicSystem;
 import com.sunday.engine.render.independentrenders.*;
 import com.sunday.engine.render.managers.CameraManager;
 import com.sunday.engine.render.managers.DisplayManager;
@@ -24,7 +24,7 @@ import com.sunday.engine.render.managers.RendererManager;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ScenarioRenderer implements Disposable {
+public class RenderSystem implements Disposable {
 
     private MapRenderer mapRender;
     private SpriteRenderer spriteRender;
@@ -48,7 +48,7 @@ public class ScenarioRenderer implements Disposable {
     private CameraManager cameraManager;
     private DisplayManager displayManager;
 
-    public ScenarioRenderer(PhysicSimulator physicSimulator) {
+    public RenderSystem(PhysicSystem physicSystem) {
 
         rendererManager = new RendererManager();
 
@@ -76,7 +76,7 @@ public class ScenarioRenderer implements Disposable {
         stageRender = new StageRenderer();
         textureRender = new TextureRenderer(sharedBatch);
         worldRender = new WorldRenderer(sharedCamera);
-        worldRender.combineWithWorld(physicSimulator.getWorld());
+        worldRender.combineWithWorld(physicSystem.getWorld());
     }
 
     public List<EventProcessor> getProcessors() {

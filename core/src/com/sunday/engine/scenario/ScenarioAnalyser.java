@@ -1,21 +1,21 @@
 package com.sunday.engine.scenario;
 
 import com.badlogic.gdx.utils.Disposable;
-import com.sunday.engine.physic.PhysicSimulator;
-import com.sunday.engine.render.ScenarioRenderer;
+import com.sunday.engine.physic.PhysicSystem;
+import com.sunday.engine.render.RenderSystem;
 
 public class ScenarioAnalyser implements Disposable {
-    private ScenarioRenderer scenarioRenderer;
-    private PhysicSimulator physicSimulator;
+    private RenderSystem renderSystem;
+    private PhysicSystem physicSystem;
 
-    public ScenarioAnalyser(ScenarioRenderer scenarioRenderer, PhysicSimulator physicSimulator) {
-        this.scenarioRenderer = scenarioRenderer;
-        this.physicSimulator = physicSimulator;
+    public ScenarioAnalyser(RenderSystem renderSystem, PhysicSystem physicSystem) {
+        this.renderSystem = renderSystem;
+        this.physicSystem = physicSystem;
     }
 
     public void analyse(Scenario scenario) {
         scenario.getRoles().forEach(e -> {
-            scenarioRenderer.readyToRenderRole(e);
+            renderSystem.readyToRenderRole(e);
         });
     }
 
