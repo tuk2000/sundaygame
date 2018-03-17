@@ -1,5 +1,6 @@
 package com.sunday.game.world;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.sunday.engine.Engine;
@@ -10,7 +11,7 @@ import com.sunday.engine.driver.mouse.Mouse;
 import com.sunday.engine.examples.Role;
 import com.sunday.engine.model.AbstractModel;
 import com.sunday.engine.model.property.viewlayers.TextureViewLayer;
-import com.sunday.engine.model.state.Label;
+import com.sunday.engine.examples.Label;
 import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
 import com.sunday.engine.rule.condition.KeyBoardCondition;
@@ -57,7 +58,7 @@ public class DemoBallRolling implements Screen {
                 @Override
                 public void accept(Mouse mouse) {
                     System.out.println("MouseDragged");
-                    movement.position.set(mouse.screenX, mouse.screenY);
+                    movement.position.set(mouse.screenX, Gdx.graphics.getHeight() - mouse.screenY);
                     port.broadcast(movement, DataSignal.Modification);
                 }
             });

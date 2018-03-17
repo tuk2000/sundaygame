@@ -1,5 +1,6 @@
 package com.sunday.engine.render;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -14,7 +15,7 @@ import com.sunday.engine.examples.Role;
 import com.sunday.engine.model.AbstractModel;
 import com.sunday.engine.model.property.viewlayers.MapViewLayer;
 import com.sunday.engine.model.property.viewlayers.TextureViewLayer;
-import com.sunday.engine.model.state.Label;
+import com.sunday.engine.examples.Label;
 import com.sunday.engine.physic.PhysicSystem;
 import com.sunday.engine.render.independentrenders.*;
 import com.sunday.engine.render.managers.CameraManager;
@@ -54,11 +55,11 @@ public class RenderSystem implements Disposable {
 
         // aspectRatio = (float) Gdx.graphics.getHeight() / Gdx.graphics.getWidth();
 
-        viewportHeight = 20.0f;
-        viewportWidth = 20.0f;
+        viewportHeight = Gdx.graphics.getHeight();
+        viewportWidth = Gdx.graphics.getWidth();
 
-        worldHeight = 800;
-        worldWidth = 800;
+        worldHeight = viewportHeight;
+        worldWidth = viewportWidth;
 
         sharedBatch = new SpriteBatch();
         sharedCamera = new OrthographicCamera(viewportWidth, viewportHeight);

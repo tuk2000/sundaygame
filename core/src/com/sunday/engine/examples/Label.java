@@ -1,4 +1,4 @@
-package com.sunday.engine.model.state;
+package com.sunday.engine.examples;
 
 public enum Label {
     Hero, Enemy, Map
