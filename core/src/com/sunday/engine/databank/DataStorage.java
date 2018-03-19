@@ -1,5 +1,6 @@
 package com.sunday.engine.databank;
 
+import com.badlogic.gdx.utils.Disposable;
 import com.sunday.engine.common.*;
 import com.sunday.engine.databank.storage.*;
 
@@ -7,7 +8,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class DataStorage<T extends Data> {
+class DataStorage<T extends Data> implements Disposable {
     private DataInstanceRegister<T> dataInstanceRegister = new DataInstanceRegister();
     private DataConnectionRegister<T> dataConnectionRegister = new DataConnectionRegister<>();
     private SourceClassRegister<T> sourceClassRegister = new SourceClassRegister<>();
@@ -99,5 +100,14 @@ class DataStorage<T extends Data> {
 
     public SourceClass<T> getSourceClass(Class<T> clazz) {
         return sourceClassRegister.getSourceClass(clazz);
+    }
+
+    @Override
+    public void dispose() {
+        dataInstanceRegister.getKeys().stream().forEach(key -> dataInstanceRegister.deregisterKey(key));
+        dataConnectionRegister.getKeys().stream().forEach(key -> dataConnectionRegister.deregisterKey(key));
+        sourceClassRegister.getKeys().stream().forEach(key -> sourceClassRegister.deregisterKey(key));
+        sourceClassConnectionRegister.getKeys().stream().forEach(key -> sourceClassConnectionRegister.deregisterKey(key));
+        portContentRegisters.dispose();
     }
 }

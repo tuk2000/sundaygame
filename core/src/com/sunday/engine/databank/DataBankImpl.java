@@ -20,7 +20,7 @@ public class DataBankImpl<T extends Data> implements DataBank<T> {
         if (systemPortRegister.hasKey(subSystemClass)) {
             systemPort = systemPortRegister.getValue(subSystemClass);
         } else {
-            systemPort = new SystemPortImpl(subSystemClass, dataStorage);
+            systemPort = new SystemPortImpl(subSystemClass, this, dataStorage);
             systemPortRegister.register(systemPort);
         }
         return systemPort;
@@ -46,5 +46,12 @@ public class DataBankImpl<T extends Data> implements DataBank<T> {
             portRegister.deregister(port);
         }
         dataStorage.destroyPort(port);
+    }
+
+    @Override
+    public void dispose() {
+        portRegister.foreachPaar((object, port) -> removePort(port));
+        systemPortRegister.foreachPaar(((aClass, systemPort) -> removePort(systemPort)));
+        dataStorage.dispose();
     }
 }

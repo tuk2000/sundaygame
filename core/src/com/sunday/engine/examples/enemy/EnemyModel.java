@@ -30,12 +30,17 @@ public class EnemyModel extends AbstractModel {
 
 
     @Override
-    public void dispose() {
+    protected void connectWithInternal(Port userPort) {
 
     }
 
     @Override
-    protected void initialPort(Port userPort) {
+    protected void disconnectWithInternal(Port port) {
+
+    }
+
+    @Override
+    public void dispose() {
 
     }
 }

@@ -20,10 +20,9 @@ public class UIControllerBuffer<T extends ToolExtenderUIController, C extends Ob
     }
 
     public void removeBuffer(Object object) {
-        singleObjectMap.keySet().forEach(o -> {
-            if (o.equals(object))
-                singleObjectMap.remove(o);
-        });
+        if (singleObjectMap.containsKey(object)) {
+            singleObjectMap.remove(object);
+        }
     }
 
     public void addBuffer(Class<C> clazz, boolean isAddition, BiConsumer<T, C> flushFunction) {

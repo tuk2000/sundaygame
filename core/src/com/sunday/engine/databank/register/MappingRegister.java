@@ -44,6 +44,11 @@ public class MappingRegister<K, V> implements Register<K, V>, UsingSingleValue<K
     }
 
     @Override
+    public void deregisterKey(K k) {
+        map.remove(k);
+    }
+
+    @Override
     public void foreachPaar(BiConsumer<K, V> biConsumer) {
         map.forEach(biConsumer::accept);
     }

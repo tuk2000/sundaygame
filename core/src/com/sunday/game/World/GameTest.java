@@ -2,8 +2,8 @@ package com.sunday.game.world;
 
 import com.badlogic.gdx.Screen;
 import com.sunday.engine.Engine;
-import com.sunday.engine.examples.RoleConstructor;
 import com.sunday.engine.examples.Label;
+import com.sunday.engine.examples.RoleConstructor;
 import com.sunday.engine.scenario.Scenario;
 import com.sunday.engine.scenario.ScenarioSystem;
 import com.sunday.engine.scenario.ScopeType;
@@ -62,7 +62,7 @@ public class GameTest implements Screen {
 
     @Override
     public void dispose() {
-        scenarioSystem.dispose();
+        engine.dispose();
     }
 
 }

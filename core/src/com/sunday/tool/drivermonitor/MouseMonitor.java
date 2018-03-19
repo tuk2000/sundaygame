@@ -24,7 +24,7 @@ public class MouseMonitor extends ToolExtender<MouseMonitorUIController> impleme
     }
 
     public void setMouse(Mouse mouse) {
-        if (this.mouse != null) {
+        if (this.mouse != mouse) {
             uiControllerBuffer.removeBuffer(this.mouse);
         }
         this.mouse = mouse;

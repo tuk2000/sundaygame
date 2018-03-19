@@ -16,5 +16,7 @@ public interface Register<K, V> {
 
     void deregister(K k, V v);
 
+    void deregisterKey(K k);
+
     void foreachPaar(BiConsumer<K, V> biConsumer);
 }

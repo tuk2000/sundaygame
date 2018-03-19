@@ -9,6 +9,7 @@ import com.sunday.engine.databank.Port;
 import com.sunday.engine.model.AbstractModel;
 import com.sunday.engine.model.property.Outlook;
 import com.sunday.engine.model.property.viewlayers.TextureViewLayer;
+import com.sunday.engine.model.state.Action;
 import com.sunday.engine.model.state.Direction;
 import com.sunday.engine.render.AnimationTimer;
 import com.sunday.engine.rule.Rule;
@@ -42,7 +43,12 @@ public class HeroModel extends AbstractModel {
     }
 
     @Override
-    protected void initialPort(Port port) {
+    protected void disconnectWithInternal(Port port) {
+
+    }
+
+    @Override
+    protected void connectWithInternal(Port port) {
 
         port.addDataInstance(new Rule(new DataCondition<Outlook>(outlook, DataSignal.Modification), outlook1 -> {
             textureViewLayer.updateTexture(heroAnimation.getKeyFrame(movement));
@@ -52,21 +58,22 @@ public class HeroModel extends AbstractModel {
             textureViewLayer.updateTexture(heroAnimation.getKeyFrame(movement));
         }));
 
-        port.addDataInstance(new Rule(KeyBoardCondition.keyPressed("1"), keyBoard -> {
-            System.out.println("keyPressed('1')");
+        port.addDataInstance(new Rule(KeyBoardCondition.keyTyped("1"), keyBoard -> {
+            System.out.println("keyTyped('1')");
             movement.position.add(-10, 0);
             port.broadcast(movement, DataSignal.Modification);
         }));
 
-        port.addDataInstance(new Rule(KeyBoardCondition.keyPressed("2"), keyBoard -> {
-            System.out.println("keyPressed('2')");
+        port.addDataInstance(new Rule(KeyBoardCondition.keyTyped("2"), keyBoard -> {
+            System.out.println("keyTyped('2')");
             movement.position.add(10, 0);
             port.broadcast(movement, DataSignal.Modification);
         }));
 
         port.addDataInstance(new Rule(KeyBoardCondition.keyPressed("3"), keyBoard -> {
-            System.out.println("keyPressed('3')");
-            movement.direction = Direction.Left;
+            System.out.println("keyTyped('3')");
+            movement.direction = movement.direction == Direction.Left ? Direction.Right : Direction.Left;
+            movement.action = Action.Fighting;
             port.broadcast(movement, DataSignal.Modification);
         }));
 

@@ -9,9 +9,11 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class SystemPortImpl<T extends Data> extends PortImpl<T> implements SystemPort<T> {
+    private DataBank dataBank;
 
-    public SystemPortImpl(Object owner, DataStorage dataStorage) {
+    public SystemPortImpl(Object owner, DataBank dataBank, DataStorage dataStorage) {
         super(owner, dataStorage);
+        this.dataBank = dataBank;
     }
 
     @Override
@@ -52,6 +54,11 @@ public class SystemPortImpl<T extends Data> extends PortImpl<T> implements Syste
     @Override
     public List<T> searchInDataBank(Class<T> clazz) {
         return dataStorage.getDataInstances(clazz);
+    }
+
+    @Override
+    public Port requestPort(Object owner) {
+        return dataBank.getPort(owner);
     }
 
 }

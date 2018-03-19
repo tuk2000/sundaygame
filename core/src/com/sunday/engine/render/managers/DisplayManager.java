@@ -1,18 +1,16 @@
 package com.sunday.engine.render.managers;
 
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.sunday.engine.databank.SystemPort;
+import com.sunday.engine.databank.SystemPortSharing;
 import com.sunday.engine.driver.gamepad.GamePad;
-import com.sunday.engine.driver.gamepad.GamePadSignal;
-import com.sunday.engine.event.Event;
-import com.sunday.engine.event.EventProcessor;
-import com.sunday.engine.event.driver.GamePadEvent;
-import com.sunday.engine.event.window.WindowEvent;
-import com.sunday.engine.event.window.WindowSignal;
+import com.sunday.engine.event.window.Window;
+import com.sunday.engine.rule.Reaction;
+import com.sunday.engine.rule.Rule;
+import com.sunday.engine.rule.condition.GamePadCondition;
+import com.sunday.engine.rule.condition.WindowCondition;
 
-public class DisplayManager implements EventProcessor {
-    private float aspectRatio;//height/width
-    private int displayWidth; // pixels
-    private int displayHeight; // pixels
+public class DisplayManager implements SystemPortSharing {
     private CameraManager cameraManager;
     private Viewport viewport;
 
@@ -22,35 +20,30 @@ public class DisplayManager implements EventProcessor {
     }
 
     @Override
-    public void processEvent(Event event) {
-        if (event instanceof WindowEvent) {
-            WindowEvent windowEvent = (WindowEvent) event;
-            WindowSignal windowSignal = (WindowSignal) event.getSignal();
-            switch (windowSignal) {
-                case Resized:
-                    cameraManager.recordCameraState();
-                    displayWidth = windowEvent.getWidth();
-                    displayHeight = windowEvent.getHeight();
-                    viewport.update(displayWidth, displayHeight);
-                    viewport.apply();
-                    cameraManager.recoverCameraState();
-                    break;
-                case Hide:
-                case Show:
-                case Closed:
-                case Maximum:
-                case Minimum:
+    public void connectWith(SystemPort systemPort) {
+        systemPort.addDataInstance(new Rule(WindowCondition.resized(), new Reaction<Window>() {
+            @Override
+            public void accept(Window window) {
+                System.out.println("window---RenderManager---[" + window.width + "," + window.height + "]");
+                cameraManager.recordCameraState();
+                viewport.update(window.width, window.height);
+                viewport.apply();
+                cameraManager.recoverCameraState();
             }
-        } else if (event instanceof GamePadEvent) {
-            GamePad gamePad = (GamePad) event.getSource();
-            GamePadSignal gamePadSignal = (GamePadSignal) event.getSignal();
-            switch (gamePadSignal) {
-                case ButtonDown:
-                    if (gamePad.buttonCode == 5) {
-                        //
-                    }
-                    break;
+
+        }));
+        systemPort.addDataInstance(new Rule(GamePadCondition.buttonDown(5), new Reaction<GamePad>() {
+            @Override
+            public void accept(GamePad gamePad) {
+                System.out.println("gamePad---RenderManager---" + gamePad.buttonCode);
+                //
             }
-        }
+        }));
+
+    }
+
+    @Override
+    public void disconnectWith(SystemPort systemPort) {
+
     }
 }

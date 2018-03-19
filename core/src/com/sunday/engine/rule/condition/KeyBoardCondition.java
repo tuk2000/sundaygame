@@ -12,11 +12,35 @@ public class KeyBoardCondition extends DataCondition<KeyBoard> {
         return keyBoard -> keyBoard.character.equals(newKeyName);
     }
 
+    private static Predicate<KeyBoard> getKeyPredicate(int keyCode) {
+        return keyBoard -> keyBoard.keyCode == keyCode;
+    }
+
+    public static KeyBoardCondition keyPressed() {
+        KeyBoardCondition keyBoardCondition = new KeyBoardCondition();
+        keyBoardCondition.setSignals(KeyBoardSignal.Pressed);
+        keyBoardCondition.setExtraInfo("Key=[AnyKey]");
+        return keyBoardCondition;
+    }
+
     public static KeyBoardCondition keyPressed(String keyName) {
         KeyBoardCondition keyBoardCondition = new KeyBoardCondition();
         keyBoardCondition.setSignals(KeyBoardSignal.Pressed);
         keyBoardCondition.addPredicate(getKeyPredicate(keyName));
         keyBoardCondition.setExtraInfo("Key=[" + keyName + "]");
+        return keyBoardCondition;
+    }
+
+    public static KeyBoardCondition keyPressed(String... keyNames) {
+        KeyBoardCondition keyBoardCondition = new KeyBoardCondition();
+        keyBoardCondition.setSignals(KeyBoardSignal.Pressed);
+        String extraInfo = "Key=[";
+        for (String keyName : keyNames) {
+            keyBoardCondition.addPredicate(getKeyPredicate(keyName));
+            extraInfo += keyName + "  ";
+        }
+        keyBoardCondition.setExtraInfo(extraInfo + "]");
+        keyBoardCondition.setAndOperation(false);
         return keyBoardCondition;
     }
 
@@ -40,10 +64,44 @@ public class KeyBoardCondition extends DataCondition<KeyBoard> {
         return keyBoardCondition;
     }
 
+    public static KeyBoardCondition keyReleased(String... keyNames) {
+        KeyBoardCondition keyBoardCondition = new KeyBoardCondition();
+        keyBoardCondition.setSignals(KeyBoardSignal.Released);
+        String extraInfo = "Key=[";
+        for (String keyName : keyNames) {
+            keyBoardCondition.addPredicate(getKeyPredicate(keyName));
+            extraInfo += keyName + "  ";
+        }
+        keyBoardCondition.setExtraInfo(extraInfo + "]");
+        keyBoardCondition.setAndOperation(false);
+        return keyBoardCondition;
+    }
+
+    public static KeyBoardCondition keyTyped(String keyName) {
+        KeyBoardCondition keyBoardCondition = new KeyBoardCondition();
+        keyBoardCondition.setSignals(KeyBoardSignal.Typed);
+        keyBoardCondition.addPredicate(getKeyPredicate(keyName));
+        keyBoardCondition.setExtraInfo("Key=[" + keyName + "]");
+        return keyBoardCondition;
+    }
+
+    public static KeyBoardCondition keyTyped(String... keyNames) {
+        KeyBoardCondition keyBoardCondition = new KeyBoardCondition();
+        keyBoardCondition.setSignals(KeyBoardSignal.Typed);
+        String extraInfo = "Key=[";
+        for (String keyName : keyNames) {
+            keyBoardCondition.addPredicate(getKeyPredicate(keyName));
+            extraInfo += keyName + "  ";
+        }
+        keyBoardCondition.setExtraInfo(extraInfo + "]");
+        keyBoardCondition.setAndOperation(false);
+        return keyBoardCondition;
+    }
+
     @Override
-    protected void bindWith(SystemPort systemPort) {
+    public void connectWith(SystemPort systemPort) {
         setData((KeyBoard) systemPort.searchInDataBank(KeyBoard.class).get(0));
-        super.bindWith(systemPort);
+        super.connectWith(systemPort);
     }
 
     @Override

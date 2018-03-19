@@ -8,10 +8,10 @@ import com.sunday.engine.common.DataSignal;
 import com.sunday.engine.databank.Port;
 import com.sunday.engine.driver.keyboard.KeyBoard;
 import com.sunday.engine.driver.mouse.Mouse;
+import com.sunday.engine.examples.Label;
 import com.sunday.engine.examples.Role;
 import com.sunday.engine.model.AbstractModel;
 import com.sunday.engine.model.property.viewlayers.TextureViewLayer;
-import com.sunday.engine.examples.Label;
 import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
 import com.sunday.engine.rule.condition.KeyBoardCondition;
@@ -30,7 +30,12 @@ public class DemoBallRolling implements Screen {
         engine = new Engine();
         AbstractModel backGroundModel = new AbstractModel() {
             @Override
-            protected void initialPort(Port port) {
+            protected void disconnectWithInternal(Port port) {
+
+            }
+
+            @Override
+            protected void connectWithInternal(Port port) {
                 outlook.dimension.set(1000, 1000);
                 outlook.shape = Shape.Type.Edge;
                 outlook.viewLayers.add(new TextureViewLayer<>(GameFramework.Resource.getAsset("buttons/buttons.png")));
@@ -64,7 +69,12 @@ public class DemoBallRolling implements Screen {
             });
 
             @Override
-            protected void initialPort(Port port) {
+            protected void disconnectWithInternal(Port port) {
+
+            }
+
+            @Override
+            protected void connectWithInternal(Port port) {
                 outlook.dimension.set(20, 20);
                 outlook.shape = Shape.Type.Edge;
                 outlook.viewLayers.add(new TextureViewLayer<>(GameFramework.Resource.getAsset("buttons/button.png")));
@@ -121,6 +131,6 @@ public class DemoBallRolling implements Screen {
 
     @Override
     public void dispose() {
-
+        engine.dispose();
     }
 }

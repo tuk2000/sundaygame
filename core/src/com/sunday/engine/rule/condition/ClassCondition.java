@@ -25,7 +25,7 @@ public class ClassCondition<T extends Data> extends Condition<SourceClass<T>> {
     }
 
     @Override
-    protected void bindWith(SystemPort systemPort) {
+    public void connectWith(SystemPort systemPort) {
         setData(systemPort.getSourceClass(sensedSourceClass));
         getTracers().clear();
         getSignals().forEach(signal -> {

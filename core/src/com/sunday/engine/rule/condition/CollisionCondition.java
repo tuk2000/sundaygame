@@ -10,7 +10,7 @@ public class CollisionCondition extends Condition {
     }
 
     @Override
-    protected void bindWith(SystemPort systemPort) {
+    public void connectWith(SystemPort systemPort) {
 
     }
 }

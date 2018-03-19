@@ -10,12 +10,12 @@ public class TimerCondition extends Condition {
     }
 
     @Override
-    protected void bindWith(SystemPort systemPort) {
+    public void connectWith(SystemPort systemPort) {
 
     }
 
     @Override
-    public void unbindWith(SystemPort systemPort) {
+    public void disconnectWith(SystemPort systemPort) {
 
     }
 }

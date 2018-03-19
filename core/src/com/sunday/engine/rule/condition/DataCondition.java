@@ -13,6 +13,7 @@ import java.util.function.Predicate;
 public class DataCondition<T extends Data> extends Condition<T> {
 
     protected List<Predicate<T>> predicates = new ArrayList<>();
+    private boolean isAndOperation = true;
 
     public DataCondition(T t, Signal... signals) {
         setData(t);
@@ -22,6 +23,10 @@ public class DataCondition<T extends Data> extends Condition<T> {
     protected DataCondition() {
     }
 
+    protected void setAndOperation(boolean isAndOperation) {
+        this.isAndOperation = isAndOperation;
+    }
+
     protected void addPredicate(Predicate<T> predicate) {
         predicates.add(predicate);
     }
@@ -29,13 +34,19 @@ public class DataCondition<T extends Data> extends Condition<T> {
     @Override
     protected boolean isSatisfied() {
         List<Boolean> result = new ArrayList<>();
-        result.add(true);
         predicates.forEach(predicate -> result.add(predicate.test(getData())));
-        return result.stream().reduce(((aBoolean, aBoolean2) -> aBoolean & aBoolean2)).get();
+        if (isAndOperation) {
+            result.add(true);
+            return result.stream().reduce(((aBoolean, aBoolean2) -> aBoolean & aBoolean2)).get();
+        } else {
+            result.add(false);
+            return result.stream().reduce(((aBoolean, aBoolean2) -> aBoolean || aBoolean2)).get();
+        }
     }
 
     @Override
-    protected void bindWith(SystemPort systemPort) {
+    public void connectWith(SystemPort systemPort) {
+        if (getData() == null) return;
         getTracers().clear();
         getSignals().forEach(signal -> {
             Tracer tracer = new Tracer(this, getData(), signal);

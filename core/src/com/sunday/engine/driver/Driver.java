@@ -1,8 +1,8 @@
 package com.sunday.engine.driver;
 
-import com.sunday.engine.common.Data;
+import com.sunday.engine.common.MetaData;
 
-public abstract class Driver implements Data {
+public abstract class Driver implements MetaData {
     private DriverType driverType;
 
     public Driver(DriverType driverType) {
@@ -12,6 +12,4 @@ public abstract class Driver implements Data {
     public DriverType getDriverType() {
         return driverType;
     }
-
-    public abstract void reset();
 }

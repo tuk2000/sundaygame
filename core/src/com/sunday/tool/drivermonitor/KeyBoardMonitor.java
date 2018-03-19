@@ -25,7 +25,7 @@ public class KeyBoardMonitor extends ToolExtender<KeyBoardMonitorUIController> i
     }
 
     public void setKeyBoard(KeyBoard keyBoard) {
-        if (this.keyBoard != null) {
+        if (this.keyBoard != keyBoard) {
             uiControllerBuffer.removeBuffer(this.keyBoard);
         }
         this.keyBoard = keyBoard;

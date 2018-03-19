@@ -1,6 +1,5 @@
 package com.sunday.engine.render;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -10,23 +9,22 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.sunday.engine.event.EventProcessor;
+import com.sunday.engine.common.SubSystem;
+import com.sunday.engine.databank.SystemPort;
+import com.sunday.engine.examples.Label;
 import com.sunday.engine.examples.Role;
 import com.sunday.engine.model.AbstractModel;
 import com.sunday.engine.model.property.viewlayers.MapViewLayer;
 import com.sunday.engine.model.property.viewlayers.TextureViewLayer;
-import com.sunday.engine.examples.Label;
 import com.sunday.engine.physic.PhysicSystem;
 import com.sunday.engine.render.independentrenders.*;
 import com.sunday.engine.render.managers.CameraManager;
 import com.sunday.engine.render.managers.DisplayManager;
 import com.sunday.engine.render.managers.RendererManager;
 
-import java.util.ArrayList;
-import java.util.List;
 
-public class RenderSystem implements Disposable {
-
+public class RenderSystem extends SubSystem implements Disposable {
+    private DebugRenderer debugRenderer;
     private MapRenderer mapRender;
     private SpriteRenderer spriteRender;
     private StageRenderer stageRender;
@@ -34,8 +32,8 @@ public class RenderSystem implements Disposable {
     private WorldRenderer worldRender;
 
     private OrthographicCamera sharedCamera;
-    //  private FitViewport screenViewport;
-    //private ScreenViewport screenViewport;
+    //    private FitViewport screenViewport;
+//    private ScreenViewport screenViewport;
     private Viewport screenViewport;
     private Batch sharedBatch;
 
@@ -49,43 +47,48 @@ public class RenderSystem implements Disposable {
     private CameraManager cameraManager;
     private DisplayManager displayManager;
 
-    public RenderSystem(PhysicSystem physicSystem) {
+    public RenderSystem(SystemPort systemPort) {
+        super("RenderSystem", systemPort);
 
         rendererManager = new RendererManager();
+        rendererManager.connectWith(systemPort);
 
-        // aspectRatio = (float) Gdx.graphics.getHeight() / Gdx.graphics.getWidth();
+//         aspectRatio = (float) Gdx.graphics.getHeight() / Gdx.graphics.getWidth();
 
-        viewportHeight = Gdx.graphics.getHeight();
-        viewportWidth = Gdx.graphics.getWidth();
+        viewportHeight = 100;
+        viewportWidth = 100;
 
-        worldHeight = viewportHeight;
-        worldWidth = viewportWidth;
+        worldHeight = 1000;
+        worldWidth = 1000;
 
         sharedBatch = new SpriteBatch();
         sharedCamera = new OrthographicCamera(viewportWidth, viewportHeight);
         cameraManager = new CameraManager(sharedCamera);
-        //sharedCamera = new OrthographicCamera();
+        cameraManager.connectWith(systemPort);
+//        sharedCamera = new OrthographicCamera();
         screenViewport = new FitViewport(worldWidth, worldHeight, sharedCamera);
-        screenViewport.apply();
+        screenViewport.apply(true);
         displayManager = new DisplayManager(cameraManager, screenViewport);
+        displayManager.connectWith(systemPort);
 
-        sharedCamera.position.set(worldWidth / 2, worldHeight / 2, 0);
-        sharedCamera.update();
-        //screenViewport = new ScreenViewport(sharedCamera);
-        spriteRender = new SpriteRenderer(sharedBatch);
+        mapRender = new MapRenderer(sharedBatch, sharedCamera);
+//        screenViewport = new ScreenViewport(sharedCamera);
+        spriteRender = new SpriteRenderer(sharedBatch, sharedCamera);
+        spriteRender.connectWith(systemPort);
 //        stageRender = new StageRenderer(sharedBatch, screenViewport);
         stageRender = new StageRenderer();
-        textureRender = new TextureRenderer(sharedBatch);
+        textureRender = new TextureRenderer(sharedBatch, sharedCamera);
+        textureRender.connectWith(systemPort);
         worldRender = new WorldRenderer(sharedCamera);
-        worldRender.combineWithWorld(physicSystem.getWorld());
+        worldRender.connectWith(systemPort);
+
+        debugRenderer = new DebugRenderer();
+        debugRenderer.setCamera(sharedCamera);
+        debugRenderer.connectWith(systemPort);
     }
 
-    public List<EventProcessor> getProcessors() {
-        List<EventProcessor> eventProcessors = new ArrayList<>();
-        eventProcessors.add(cameraManager);
-        eventProcessors.add(rendererManager);
-        eventProcessors.add(displayManager);
-        return eventProcessors;
+    public void setPhysicSystem(PhysicSystem physicSystem) {
+        worldRender.combineWithWorld(physicSystem.getWorld());
     }
 
     public void readyToRenderRole(Role role) {
@@ -132,9 +135,7 @@ public class RenderSystem implements Disposable {
         Object component = e.getViewComponent();
         if (component == null) return;
         if (component instanceof TiledMap) {
-            if (mapRender == null) {
-                mapRender = new MapRenderer(sharedBatch, sharedCamera, (TiledMap) component);
-            }
+            mapRender.setMap((TiledMap) component);
         }
     }
 
@@ -142,31 +143,47 @@ public class RenderSystem implements Disposable {
         AnimationSetting.DeltaTime += delta;
         AnimationTimer.synchronize();
 
-        //sharedCamera.translate(-10.0f * delta, 0);
-        //sharedCamera.rotate(10 * delta);
-        sharedCamera.update();
+        cameraManager.updateCamera();
         sharedBatch.setProjectionMatrix(sharedCamera.combined);
 
-        if (rendererManager.DoRenderMap & mapRender != null) {
-            mapRender.updateCamera(sharedCamera);
-            mapRender.render(delta);
-        }
-        if (rendererManager.DoRenderSprite)
-            spriteRender.render(delta);
-        if (rendererManager.DoRenderTexture)
-            textureRender.render(delta);
-        if (rendererManager.DoRenderStage)
-            stageRender.render(delta);
-        if (rendererManager.DoRenderWorld)
-            worldRender.render(delta);
+        mapRender.setWorking(rendererManager.DoRenderMap);
+        mapRender.render(delta);
+
+        spriteRender.setWorking(rendererManager.DoRenderSprite);
+        spriteRender.render(delta);
+
+        textureRender.setWorking(rendererManager.DoRenderTexture);
+        textureRender.render(delta);
+
+        stageRender.setWorking(rendererManager.DoRenderStage);
+        stageRender.render(delta);
+
+        worldRender.setWorking(rendererManager.DoRenderWorld);
+        worldRender.render(delta);
+
+        debugRenderer.setWorking(rendererManager.DoRenderDebug);
+        debugRenderer.render(delta);
     }
 
     @Override
     public void dispose() {
+        rendererManager.disconnectWith(systemPort);
+        cameraManager.disconnectWith(systemPort);
+        displayManager.disconnectWith(systemPort);
+
+        mapRender.disconnectWith(systemPort);
+        spriteRender.disconnectWith(systemPort);
+        worldRender.disconnectWith(systemPort);
+        stageRender.disconnectWith(systemPort);
+        textureRender.disconnectWith(systemPort);
+        debugRenderer.disconnectWith(systemPort);
+
         mapRender.dispose();
         spriteRender.dispose();
         worldRender.dispose();
         stageRender.dispose();
         textureRender.dispose();
+        debugRenderer.dispose();
+        sharedBatch.dispose();
     }
 }

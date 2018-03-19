@@ -9,7 +9,7 @@ import com.sunday.engine.driver.DriverSystem;
 import com.sunday.engine.event.EventSystem;
 import com.sunday.engine.event.collision.CollisionEventTransfer;
 import com.sunday.engine.event.driver.DriverEventTransfer;
-import com.sunday.engine.event.window.WindowEvent;
+import com.sunday.engine.event.window.WindowEventTransfer;
 import com.sunday.engine.physic.PhysicSystem;
 import com.sunday.engine.render.AnimationSetting;
 import com.sunday.engine.render.AnimationTimer;
@@ -26,6 +26,7 @@ public class Engine implements Disposable {
     private ScenarioSystem scenarioSystem;
     private RenderSystem renderSystem;
     private PhysicSystem physicSystem;
+    private WindowEventTransfer windowEventTransfer;
 
     public Engine() {
         dataBank = new DataBankImpl();
@@ -34,17 +35,21 @@ public class Engine implements Disposable {
         ruleSystem = new RuleSystem(dataBank.getSystemPort(RuleSystem.class));
         scenarioSystem = new ScenarioSystem(dataBank.getSystemPort(ScenarioSystem.class));
         physicSystem = new PhysicSystem(dataBank.getSystemPort(PhysicSystem.class));
-        renderSystem = new RenderSystem(physicSystem);
+        renderSystem = new RenderSystem(dataBank.getSystemPort(PhysicSystem.class));
+        renderSystem.setPhysicSystem(physicSystem);
 
         DriverEventTransfer driverEventTransfer = new DriverEventTransfer(driverSystem);
         Gdx.input.setInputProcessor(driverEventTransfer);
         Controllers.addListener(driverEventTransfer);
 
         CollisionEventTransfer collisionEventTransfer = new CollisionEventTransfer();
+        windowEventTransfer = new WindowEventTransfer(eventSystem.getWindow());
         eventSystem.addEventTransfer(driverEventTransfer);
         eventSystem.addEventTransfer(collisionEventTransfer);
+        eventSystem.addEventTransfer(windowEventTransfer);
 
         scenarioSystem.setRender(renderSystem);
+
 
         AnimationTimer.initAnimationTimer(dataBank);
         running = true;
@@ -72,7 +77,7 @@ public class Engine implements Disposable {
     }
 
     public void resize(int width, int height) {
-        eventSystem.dispatchEvent(WindowEvent.newResizeEvent(width, height));
+        windowEventTransfer.resize(width, height);
     }
 
     @Override
@@ -81,5 +86,6 @@ public class Engine implements Disposable {
         renderSystem.dispose();
         physicSystem.dispose();
         scenarioSystem.dispose();
+        dataBank.dispose();
     }
 }

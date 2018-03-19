@@ -14,10 +14,10 @@ public class Rule implements Data {
     }
 
     protected void mountWith(SystemPort systemPort) {
-        condition.bindWith(systemPort);
+        condition.connectWith(systemPort);
     }
 
     protected void dismountWith(SystemPort systemPort) {
-        condition.unbindWith(systemPort);
+        condition.disconnectWith(systemPort);
     }
 }

@@ -17,8 +17,8 @@ public class MouseCondition extends DataCondition<Mouse> {
     }
 
     @Override
-    protected void bindWith(SystemPort systemPort) {
+    public void connectWith(SystemPort systemPort) {
         setData((Mouse) systemPort.searchInDataBank(Mouse.class).get(0));
-        super.bindWith(systemPort);
+        super.connectWith(systemPort);
     }
 }

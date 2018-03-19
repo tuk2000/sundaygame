@@ -3,13 +3,14 @@ package com.sunday.engine.model;
 import com.badlogic.gdx.utils.Disposable;
 import com.sunday.engine.common.DataSignal;
 import com.sunday.engine.databank.Port;
+import com.sunday.engine.databank.PortSharing;
 import com.sunday.engine.model.property.Movement;
 import com.sunday.engine.model.property.Outlook;
 import com.sunday.engine.model.property.PhysicReflection;
 import com.sunday.engine.rule.Rule;
 import com.sunday.engine.rule.condition.DataCondition;
 
-public abstract class AbstractModel implements Disposable {
+public abstract class AbstractModel implements PortSharing, Disposable {
 
     public Port port;
 
@@ -41,7 +42,8 @@ public abstract class AbstractModel implements Disposable {
         movement.position.set(physicReflection.body.getPosition());
     });
 
-    public void connectToDataBank(Port port) {
+    @Override
+    public void connectWith(Port port) {
         this.port = port;
         port.addDataInstance(outlook);
         port.addDataInstance(physicReflection);
@@ -49,8 +51,21 @@ public abstract class AbstractModel implements Disposable {
         port.addDataInstance(movementRule);
         port.addDataInstance(outlookRule);
         port.addDataInstance(physicReflectionRule);
-        initialPort(port);
+        connectWithInternal(port);
     }
 
-    protected abstract void initialPort(Port port);
+    @Override
+    public void disconnectWith(Port port) {
+        port.deleteDataInstance(outlook);
+        port.deleteDataInstance(physicReflection);
+        port.deleteDataInstance(movement);
+        port.deleteDataInstance(movementRule);
+        port.deleteDataInstance(outlookRule);
+        port.deleteDataInstance(physicReflectionRule);
+        disconnectWithInternal(port);
+    }
+
+    protected abstract void disconnectWithInternal(Port port);
+
+    protected abstract void connectWithInternal(Port port);
 }

@@ -3,12 +3,13 @@ package com.sunday.engine.rule;
 import com.sunday.engine.common.Data;
 import com.sunday.engine.common.Signal;
 import com.sunday.engine.databank.SystemPort;
+import com.sunday.engine.databank.SystemPortSharing;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public abstract class Condition<T extends Data> {
+public abstract class Condition<T extends Data> implements SystemPortSharing {
     private T data;
     private List<Signal> signals = new ArrayList<>();
     private List<Tracer> tracers = new ArrayList<>();
@@ -66,9 +67,9 @@ public abstract class Condition<T extends Data> {
         this.extraInfo = "ExtractInfo:\n" + extraInfo;
     }
 
-    protected abstract void bindWith(SystemPort systemPort);
+    public abstract void connectWith(SystemPort systemPort);
 
-    protected void unbindWith(SystemPort systemPort) {
+    public void disconnectWith(SystemPort systemPort) {
         tracers.forEach(tracer -> {
             systemPort.removeConnection(data, tracer);
         });

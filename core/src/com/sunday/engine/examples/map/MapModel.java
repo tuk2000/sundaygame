@@ -31,7 +31,12 @@ public class MapModel extends AbstractModel {
     }
 
     @Override
-    protected void initialPort(Port port) {
+    protected void disconnectWithInternal(Port port) {
+
+    }
+
+    @Override
+    protected void connectWithInternal(Port port) {
 
     }
 

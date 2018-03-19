@@ -69,6 +69,9 @@ public class PhysicSystem extends SubSystem implements Disposable {
 
     @Override
     public void dispose() {
+        systemPort.deleteDataInstance(physicReflectionAddRule);
+        systemPort.deleteDataInstance(physicReflectionModificationRule);
+        systemPort.deleteDataInstance(physicReflectionDeletionRule);
         world.dispose();
     }
 }

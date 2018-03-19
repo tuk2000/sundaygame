@@ -58,6 +58,11 @@ public class AutoRegister<K, V, R extends Register> implements Register<K, V> {
     }
 
     @Override
+    public void deregisterKey(K k) {
+        originalRegister.deregisterKey(k);
+    }
+
+    @Override
     public void foreachPaar(BiConsumer<K, V> biConsumer) {
         originalRegister.foreachPaar(biConsumer);
     }

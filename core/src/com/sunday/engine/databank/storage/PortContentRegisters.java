@@ -1,10 +1,11 @@
 package com.sunday.engine.databank.storage;
 
+import com.badlogic.gdx.utils.Disposable;
 import com.sunday.engine.common.Data;
 import com.sunday.engine.databank.Port;
 import com.sunday.engine.databank.register.GroupRegister;
 
-public class PortContentRegisters {
+public class PortContentRegisters implements Disposable {
     private GroupRegister<Port, Data> portDataRegister = new GroupRegister<>();
     private GroupRegister<Port, Connection<? extends Data>> portDataConnectionRegister = new GroupRegister<>();
     private GroupRegister<Port, ClassConnection<? extends Data>> portClassConnectionRegister = new GroupRegister<>();
@@ -42,5 +43,13 @@ public class PortContentRegisters {
         portDataRegister.getValues(port).forEach(data -> portDataRegister.deregister(port, data));
         portDataConnectionRegister.getValues(port).forEach(dataSensor -> portDataConnectionRegister.deregister(port, dataSensor));
         portClassConnectionRegister.getValues(port).forEach(classSensor -> portClassConnectionRegister.deregister(port, classSensor));
+    }
+
+    public void dispose() {
+        portDataRegister.getKeys().forEach(key -> {
+            portDataRegister.deregisterKey(key);
+            portDataConnectionRegister.deregisterKey(key);
+            portClassConnectionRegister.deregisterKey(key);
+        });
     }
 }
