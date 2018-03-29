@@ -1,12 +1,10 @@
 package com.sunday.engine.model;
 
 import com.badlogic.gdx.utils.Disposable;
-import com.sunday.engine.common.DataSignal;
 import com.sunday.engine.databank.Port;
 import com.sunday.engine.databank.PortSharing;
-import com.sunday.engine.model.property.Movement;
-import com.sunday.engine.model.property.Outlook;
-import com.sunday.engine.model.property.PhysicReflection;
+import com.sunday.engine.model.property.*;
+import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
 import com.sunday.engine.rule.condition.DataCondition;
 
@@ -17,13 +15,21 @@ public abstract class AbstractModel implements PortSharing, Disposable {
     public Outlook outlook = new Outlook();
     public PhysicReflection physicReflection = new PhysicReflection();
     public Movement movement = new Movement();
-    private Rule movementRule = new Rule(new DataCondition(movement, DataSignal.Modification), movement1 -> {
-        System.out.println("movementModifiedReaction");
-        port.broadcast(outlook, DataSignal.Modification);
+
+    private Rule movementRule = new Rule(new DataCondition(movement, MovementSignal.class), new Reaction<Movement, MovementSignal>() {
+        @Override
+        public void accept(Movement movement, MovementSignal movementSignal) {
+            System.out.println("movementModifiedReaction");
+            port.broadcast(outlook, OutlookSignal.Updated);
+        }
     });
-    private Rule outlookRule = new Rule(new DataCondition<>(outlook, DataSignal.Modification), outlook1 -> {
-        System.out.println("outlookModifiedReaction");
-        physicReflection.bodyDef.position.set(movement.position);
+
+    private Rule outlookRule = new Rule(new DataCondition(outlook, OutlookSignal.class), new Reaction<Outlook, OutlookSignal>() {
+        @Override
+        public void accept(Outlook outlook, OutlookSignal outlookSignal) {
+
+            System.out.println("outlookModifiedReaction");
+            physicReflection.bodyDef.position.set(movement.position);
 //        switch (physicReflection.fixtureDef.shape.getType()) {
 //            case Chain:
 //                break;
@@ -36,10 +42,14 @@ public abstract class AbstractModel implements PortSharing, Disposable {
 //            case Edge:
 //                break;
 //        }
+        }
     });
-    private Rule physicReflectionRule = new Rule(new DataCondition<>(physicReflection, DataSignal.Modification), physicReflection1 -> {
-        System.out.println("physicReflectionModifiedReaction");
-        movement.position.set(physicReflection.body.getPosition());
+    private Rule physicReflectionRule = new Rule(new DataCondition(physicReflection, PhysicReflectionSignal.class), new Reaction<PhysicReflection, PhysicReflectionSignal>() {
+        @Override
+        public void accept(PhysicReflection physicReflection, PhysicReflectionSignal physicReflectionSignal) {
+            System.out.println("physicReflectionModifiedReaction");
+            movement.position.set(physicReflection.body.getPosition());
+        }
     });
 
     @Override

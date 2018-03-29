@@ -3,8 +3,8 @@ package com.sunday.tool;
 import com.sunday.game.framework.GameFramework;
 import com.sunday.tool.datamonitor.DataMonitorUIController;
 import com.sunday.tool.datamonitor.DataRecord;
-import com.sunday.tool.drivermonitor.KeyBoardMonitorUIController;
-import com.sunday.tool.drivermonitor.MouseMonitorUIController;
+import com.sunday.tool.drivermonitor.DriverMontorUIController;
+import com.sunday.tool.drivermonitor.GamePadStatus;
 import com.sunday.tool.logger.LogRecord;
 import com.sunday.tool.logger.LoggerUIController;
 import com.sunday.tool.perfermancemonitor.PerformanceMonitorUIController;
@@ -25,8 +25,9 @@ import javafx.util.Callback;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
-public class ToolApplicationUIController implements PerformanceMonitorUIController, LoggerUIController, DataMonitorUIController, ScreenMonitorUIController, KeyBoardMonitorUIController, MouseMonitorUIController {
+public class ToolApplicationUIController implements PerformanceMonitorUIController, LoggerUIController, DataMonitorUIController, ScreenMonitorUIController, DriverMontorUIController {
     private XYChart.Series memoryUsages = new XYChart.Series();
     private XYChart.Series fpsSeries = new XYChart.Series();
     @FXML
@@ -68,13 +69,7 @@ public class ToolApplicationUIController implements PerformanceMonitorUIControll
     private Label mouseStatus;
 
     @FXML
-    private Label gamePadSignal;
-
-    @FXML
-    private Label gamePadKey;
-
-    @FXML
-    private Label gamePadStatus;
+    private TableView<GamePadStatus> gamePadTable;
 
     @FXML
     private TreeTableView<DataRecord> treeTableView;
@@ -163,6 +158,39 @@ public class ToolApplicationUIController implements PerformanceMonitorUIControll
                 return new ReadOnlyStringWrapper(param.getValue().getValue().instanceName);
             }
         });
+
+
+        TableColumn controller = gamePadTable.getColumns().get(0);
+        controller.setMinWidth(100);
+        controller.setCellValueFactory(new PropertyValueFactory<GamePadStatus, String>("Name"));
+
+        TableColumn signal = gamePadTable.getColumns().get(1);
+        signal.setMinWidth(100);
+        signal.setCellValueFactory(new PropertyValueFactory<GamePadStatus, String>("Signal"));
+
+        TableColumn buttonInfo = gamePadTable.getColumns().get(2);
+        buttonInfo.setMinWidth(100);
+        buttonInfo.setCellValueFactory(new PropertyValueFactory<GamePadStatus, String>("ButtonInfo"));
+
+        TableColumn axisInfo = gamePadTable.getColumns().get(3);
+        axisInfo.setMinWidth(100);
+        axisInfo.setCellValueFactory(new PropertyValueFactory<GamePadStatus, String>("AxisInfo"));
+
+        TableColumn povInfo = gamePadTable.getColumns().get(4);
+        povInfo.setMinWidth(100);
+        povInfo.setCellValueFactory(new PropertyValueFactory<GamePadStatus, String>("PovInfo"));
+
+        TableColumn xSliderInfo = gamePadTable.getColumns().get(5);
+        xSliderInfo.setMinWidth(100);
+        xSliderInfo.setCellValueFactory(new PropertyValueFactory<GamePadStatus, String>("xSliderInfo"));
+
+        TableColumn ySliderInfo = gamePadTable.getColumns().get(6);
+        ySliderInfo.setMinWidth(100);
+        ySliderInfo.setCellValueFactory(new PropertyValueFactory<GamePadStatus, String>("ySliderInfo"));
+
+        TableColumn accelerometerInfo = gamePadTable.getColumns().get(7);
+        accelerometerInfo.setMinWidth(200);
+        accelerometerInfo.setCellValueFactory(new PropertyValueFactory<GamePadStatus, String>("AccelerometerInfo"));
 
     }
 
@@ -327,6 +355,118 @@ public class ToolApplicationUIController implements PerformanceMonitorUIControll
             }
             if (treeItem.getChildren().size() == 0) {
                 treeTableView.getRoot().getChildren().remove(treeItem);
+            }
+        });
+    }
+
+    private GamePadStatus getGamePadStatus(String name) {
+        List<GamePadStatus> list = gamePadTable.getItems().stream().filter(gamePadStatus -> gamePadStatus.name.get().equals(name)).collect(Collectors.toList());
+        if (list.size() == 1) {
+            return list.get(0);
+        } else {
+            return null;
+        }
+    }
+
+    @Override
+    public void addGamePad(String name) {
+        Platform.runLater(() -> {
+            if (getGamePadStatus(name) == null) {
+                gamePadTable.getItems().add(new GamePadStatus(name));
+            }
+        });
+    }
+
+    @Override
+    public void removeGamePad(String name) {
+        Platform.runLater(() -> {
+            GamePadStatus gamePadStatus = getGamePadStatus(name);
+            if (gamePadStatus != null) {
+                gamePadTable.getItems().remove(gamePadStatus);
+            }
+        });
+    }
+
+    @Override
+    public void setGamePadSignal(String name, String signal) {
+        Platform.runLater(() -> {
+            GamePadStatus gamePadStatus = getGamePadStatus(name);
+            if (gamePadStatus != null) {
+                gamePadStatus.signal.set(signal);
+                gamePadTable.getItems().remove(gamePadStatus);
+                gamePadTable.getItems().add(gamePadStatus);
+            }
+        });
+    }
+
+    @Override
+    public void setButtonCode(String name, int buttonCode) {
+        Platform.runLater(() -> {
+            GamePadStatus gamePadStatus = getGamePadStatus(name);
+            if (gamePadStatus != null) {
+                gamePadStatus.buttonInfo.set(String.valueOf(buttonCode));
+            }
+            gamePadTable.getItems().remove(gamePadStatus);
+            gamePadTable.getItems().add(gamePadStatus);
+        });
+    }
+
+    @Override
+    public void setAxisInfo(String name, int axisCode, float axisMoveValue) {
+        Platform.runLater(() -> {
+            GamePadStatus gamePadStatus = getGamePadStatus(name);
+            if (gamePadStatus != null) {
+                gamePadStatus.axisInfo.set(axisCode + " " + axisMoveValue);
+            }
+            gamePadTable.getItems().remove(gamePadStatus);
+            gamePadTable.getItems().add(gamePadStatus);
+        });
+    }
+
+    @Override
+    public void setPovInfo(String name, int povCode, String povDirection) {
+        Platform.runLater(() -> {
+            GamePadStatus gamePadStatus = getGamePadStatus(name);
+            if (gamePadStatus != null) {
+                gamePadStatus.povInfo.set(povCode + " " + povDirection);
+                gamePadTable.getItems().remove(gamePadStatus);
+                gamePadTable.getItems().add(gamePadStatus);
+            }
+        });
+    }
+
+    @Override
+    public void setXSliderInfo(String name, int xSliderCode, boolean xSliderMoveValue) {
+        Platform.runLater(() -> {
+            GamePadStatus gamePadStatus = getGamePadStatus(name);
+            if (gamePadStatus != null) {
+                gamePadStatus.xSliderInfo.set(xSliderCode + " " + xSliderMoveValue);
+                gamePadTable.getItems().remove(gamePadStatus);
+                gamePadTable.getItems().add(gamePadStatus);
+            }
+        });
+    }
+
+    @Override
+    public void setYSliderInfo(String name, int ySliderCode, boolean ySliderMoveValue) {
+        Platform.runLater(() -> {
+            GamePadStatus gamePadStatus = getGamePadStatus(name);
+            if (gamePadStatus != null) {
+                gamePadStatus.ySliderInfo.set(ySliderCode + " " + ySliderMoveValue);
+                gamePadTable.getItems().remove(gamePadStatus);
+                gamePadTable.getItems().add(gamePadStatus);
+            }
+        });
+    }
+
+    @Override
+    public void setAccelerometerInfo(String name, int accelerometerCode, float x, float y, float z) {
+        Platform.runLater(() -> {
+            GamePadStatus gamePadStatus = getGamePadStatus(name);
+            if (gamePadStatus != null) {
+                gamePadStatus.axisInfo.set(accelerometerCode + " [" + x + "," + y + "," + z + "]");
+                gamePadTable.getItems().remove(gamePadStatus);
+                gamePadTable.getItems().add(gamePadStatus);
             }
         });
     }

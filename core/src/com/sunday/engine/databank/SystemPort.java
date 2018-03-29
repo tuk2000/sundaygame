@@ -15,9 +15,9 @@ public interface SystemPort<T extends Data> extends Port<T> {
 
     void removeConnection(T source, Target target);
 
-    void addConnection(SourceClass sourceClass, Target target);
+    void addConnection(Class<T> clazz, Target target);
 
-    void removeConnection(SourceClass sourceClass, Target target);
+    void removeConnection(Class<T> clazz, Target target);
 
     List<T> getDataList(Predicate<T> predicate);
 

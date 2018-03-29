@@ -8,7 +8,9 @@ import com.badlogic.gdx.math.Vector3;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.databank.SystemPortSharing;
 import com.sunday.engine.driver.gamepad.GamePad;
+import com.sunday.engine.driver.gamepad.GamePadSignal;
 import com.sunday.engine.driver.keyboard.KeyBoard;
+import com.sunday.engine.driver.keyboard.KeyBoardSignal;
 import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
 import com.sunday.engine.rule.condition.GamePadCondition;
@@ -44,9 +46,9 @@ public class CameraManager implements SystemPortSharing {
 
     @Override
     public void connectWith(SystemPort systemPort) {
-        systemPort.addDataInstance(new Rule(KeyBoardCondition.keyPressed("Up", "Down", "Left", "Right"), new Reaction<KeyBoard>() {
+        systemPort.addDataInstance(new Rule(KeyBoardCondition.keyPressed("Up", "Down", "Left", "Right"), new Reaction<KeyBoard, KeyBoardSignal>() {
             @Override
-            public void accept(KeyBoard keyBoard) {
+            public void accept(KeyBoard keyBoard, KeyBoardSignal keyBoardSignal) {
                 System.out.println("keyBoard---CameraManager---" + keyBoard.character);
                 switch (keyBoard.keyCode) {
                     case Input.Keys.UP:
@@ -64,9 +66,9 @@ public class CameraManager implements SystemPortSharing {
                 }
             }
         }));
-        systemPort.addDataInstance(new Rule(KeyBoardCondition.keyReleased("Up", "Down", "Left", "Right"), new Reaction<KeyBoard>() {
+        systemPort.addDataInstance(new Rule(KeyBoardCondition.keyReleased("Up", "Down", "Left", "Right"), new Reaction<KeyBoard, KeyBoardSignal>() {
             @Override
-            public void accept(KeyBoard keyBoard) {
+            public void accept(KeyBoard keyBoard, KeyBoardSignal keyBoardSignal) {
                 System.out.println("keyBoard---CameraManager---" + keyBoard.character);
                 switch (keyBoard.keyCode) {
                     case Input.Keys.UP:
@@ -84,9 +86,9 @@ public class CameraManager implements SystemPortSharing {
                 }
             }
         }));
-        systemPort.addDataInstance(new Rule(KeyBoardCondition.keyTyped("<", ">", ",", "."), new Reaction<KeyBoard>() {
+        systemPort.addDataInstance(new Rule(KeyBoardCondition.keyTyped("<", ">", ",", "."), new Reaction<KeyBoard, KeyBoardSignal>() {
             @Override
-            public void accept(KeyBoard keyBoard) {
+            public void accept(KeyBoard keyBoard, KeyBoardSignal keyBoardSignal) {
                 System.out.println("keyBoard---CameraManager---" + keyBoard.character);
                 if (keyBoard.character.equals(",")) {
                     rotateSpeed = 1f;
@@ -105,9 +107,9 @@ public class CameraManager implements SystemPortSharing {
             }
         }));
 
-        systemPort.addDataInstance(new Rule(GamePadCondition.pivotMoved(), new Reaction<GamePad>() {
+        systemPort.addDataInstance(new Rule(GamePadCondition.pivotMoved(), new Reaction<GamePad, GamePadSignal>() {
             @Override
-            public void accept(GamePad gamePad) {
+            public void accept(GamePad gamePad, GamePadSignal gamePadSignal) {
                 switch (gamePad.povDirection) {
                     case north:
                         camera.translate(0, 100);

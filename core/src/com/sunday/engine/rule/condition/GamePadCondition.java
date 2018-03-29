@@ -4,11 +4,11 @@ import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.driver.gamepad.GamePad;
 import com.sunday.engine.driver.gamepad.GamePadSignal;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
-public class GamePadCondition extends DataCondition<GamePad> {
-    private GamePadCondition() {
+public class GamePadCondition extends DataCondition<GamePad, GamePadSignal> {
+    public GamePadCondition() {
 
     }
 
@@ -18,17 +18,24 @@ public class GamePadCondition extends DataCondition<GamePad> {
         gamePadCondition.predicates.add(gamePad ->
                 gamePad.buttonCode == buttonCode
         );
+        gamePadCondition.setExtraInfo("Button=[" + buttonCode + "]");
         return gamePadCondition;
     }
 
     public static GamePadCondition buttonDown(int... buttonCodes) {
         GamePadCondition gamePadCondition = new GamePadCondition();
         gamePadCondition.setSignals(GamePadSignal.ButtonDown);
-        List list = Arrays.asList(buttonCodes);
-        gamePadCondition.predicates.add(gamePad ->
-                list.contains(gamePad.buttonCode)
-        );
+        List<Integer> list = new ArrayList<>();
+        for (int i = 0; i < buttonCodes.length; i++) {
+            list.add(buttonCodes[i]);
+        }
+        list.stream().forEach(buttonCode -> gamePadCondition.predicates.add(gamePad -> gamePad.buttonCode == buttonCode));
+        String extraInfo = "Button=[";
+        for (int i = 0; i < list.size(); i++) {
+            extraInfo += list.get(i) + " ";
+        }
         gamePadCondition.setAndOperation(false);
+        gamePadCondition.setExtraInfo(extraInfo + "]");
         return gamePadCondition;
     }
 

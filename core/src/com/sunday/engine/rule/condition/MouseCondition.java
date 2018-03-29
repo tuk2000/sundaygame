@@ -4,16 +4,11 @@ import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.driver.mouse.Mouse;
 import com.sunday.engine.driver.mouse.MouseSignal;
 
-public class MouseCondition extends DataCondition<Mouse> {
+public class MouseCondition extends DataCondition<Mouse, MouseSignal> {
     public static MouseCondition mouseDragged() {
         MouseCondition mouseCondition = new MouseCondition();
-        mouseCondition.getSignals().add(MouseSignal.Draged);
+        mouseCondition.getSignals().add(MouseSignal.Dragged);
         return mouseCondition;
-    }
-
-    @Override
-    protected boolean isSatisfied() {
-        return true;
     }
 
     @Override

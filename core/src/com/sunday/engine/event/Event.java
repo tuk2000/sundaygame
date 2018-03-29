@@ -23,6 +23,6 @@ public class Event implements Data {
 
     @Override
     public String toString() {
-        return " from " + getSource() + " " + getSignal();
+        return super.toString() + " from " + getSource() + " " + getSignal();
     }
 }

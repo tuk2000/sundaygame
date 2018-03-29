@@ -1,7 +1,7 @@
 package com.sunday.engine.driver.mouse;
 
-import com.sunday.engine.common.Signal;
+import com.sunday.engine.common.SpecificSignal;
 
-public enum MouseSignal implements Signal {
-    None, Moved, Pressed, Released, Draged,
+public enum MouseSignal implements SpecificSignal {
+    None, Moved, Pressed, Released, Dragged,
 }

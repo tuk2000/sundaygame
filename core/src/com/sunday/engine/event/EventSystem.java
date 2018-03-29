@@ -1,6 +1,6 @@
 package com.sunday.engine.event;
 
-import com.sunday.engine.common.SubSystem;
+import com.sunday.engine.SubSystem;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.event.window.Window;
 
@@ -22,7 +22,9 @@ public class EventSystem extends SubSystem implements EventPoster {
     @Override
     public void dispatchEvent(Event event) {
         systemPort.addDataInstance(event);
+        //System.out.println("Dispatching:\nEvent"+event.toString()+"\nsource:"+event.getSource()+"\nsignal:"+event.getSignal());
         eventProcessor.processEvent(event);
+        //System.out.println("finishing Dispatching:\nEvent"+event.toString()+"\nsource:"+event.getSource()+"\nsignal:"+event.getSignal());
         systemPort.deleteDataInstance(event);
     }
 

@@ -4,23 +4,29 @@ import com.sunday.engine.common.Data;
 import com.sunday.engine.common.Signal;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.rule.Condition;
-import com.sunday.engine.rule.Tracer;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Predicate;
 
-public class DataCondition<T extends Data> extends Condition<T> {
+public class DataCondition<T extends Data, S extends Signal> extends Condition<T, S> {
 
     protected List<Predicate<T>> predicates = new ArrayList<>();
     private boolean isAndOperation = true;
+    private List<Boolean> result = new ArrayList<>();
 
-    public DataCondition(T t, Signal... signals) {
+    public DataCondition(T t, S... signals) {
         setData(t);
         setSignals(signals);
     }
 
+    public DataCondition(T t, Class<S> signalTypeClass) {
+        setData(t);
+        setSignals(signalTypeClass.getEnumConstants());
+    }
+
     protected DataCondition() {
+
     }
 
     protected void setAndOperation(boolean isAndOperation) {
@@ -32,29 +38,27 @@ public class DataCondition<T extends Data> extends Condition<T> {
     }
 
     @Override
-    protected boolean isSatisfied() {
-        List<Boolean> result = new ArrayList<>();
-        predicates.forEach(predicate -> result.add(predicate.test(getData())));
-        if (isAndOperation) {
-            result.add(true);
-            return result.stream().reduce(((aBoolean, aBoolean2) -> aBoolean & aBoolean2)).get();
-        } else {
-            result.add(false);
-            return result.stream().reduce(((aBoolean, aBoolean2) -> aBoolean || aBoolean2)).get();
-        }
+    public void connectWith(SystemPort systemPort) {
+        if (getData() == null) return;
+        systemPort.addConnection(getData(), this);
+        generateMainInfo();
     }
 
     @Override
-    public void connectWith(SystemPort systemPort) {
-        if (getData() == null) return;
-        getTracers().clear();
-        getSignals().forEach(signal -> {
-            Tracer tracer = new Tracer(this, getData(), signal);
-            getTracers().add(tracer);
-        });
-        getTracers().forEach(tracer -> {
-            systemPort.addConnection(getData(), tracer);
-        });
-        generateMainInfo();
+    public void notify(Data data, Signal signal) {
+        result.clear();
+        predicates.forEach(predicate -> result.add(predicate.test(getData())));
+        boolean isSatisfied;
+        if (isAndOperation) {
+            result.add(true);
+            isSatisfied = result.stream().reduce(((aBoolean, aBoolean2) -> aBoolean & aBoolean2)).get();
+        } else {
+            result.add(false);
+            isSatisfied = result.stream().reduce(((aBoolean, aBoolean2) -> aBoolean || aBoolean2)).get();
+        }
+        isSatisfied = isSatisfied & getSignals().contains(signal);
+        if (isSatisfied) {
+            getReaction().accept(data, signal);
+        }
     }
 }

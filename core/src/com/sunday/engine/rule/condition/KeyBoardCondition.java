@@ -6,7 +6,7 @@ import com.sunday.engine.driver.keyboard.KeyBoardSignal;
 
 import java.util.function.Predicate;
 
-public class KeyBoardCondition extends DataCondition<KeyBoard> {
+public class KeyBoardCondition extends DataCondition<KeyBoard, KeyBoardSignal> {
     private static Predicate<KeyBoard> getKeyPredicate(String keyName) {
         String newKeyName = keyName.length() == 1 ? keyName.toUpperCase() : keyName;
         return keyBoard -> keyBoard.character.equals(newKeyName);

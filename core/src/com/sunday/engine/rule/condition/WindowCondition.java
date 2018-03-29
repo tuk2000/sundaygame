@@ -4,7 +4,7 @@ import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.event.window.Window;
 import com.sunday.engine.event.window.WindowSignal;
 
-public class WindowCondition extends DataCondition<Window> {
+public class WindowCondition extends DataCondition<Window, WindowSignal> {
 
     private WindowCondition() {
     }

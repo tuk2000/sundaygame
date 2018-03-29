@@ -32,13 +32,13 @@ public class SystemPortImpl<T extends Data> extends PortImpl<T> implements Syste
     }
 
     @Override
-    public void addConnection(SourceClass sourceClass, Target target) {
-        dataStorage.addClassConnection(this, sourceClass, target);
+    public void addConnection(Class<T> clazz, Target target) {
+        dataStorage.addClassConnection(this, clazz, target);
     }
 
     @Override
-    public void removeConnection(SourceClass sourceClass, Target target) {
-        dataStorage.removeClassConnection(this, sourceClass, target);
+    public void removeConnection(Class<T> clazz, Target target) {
+        dataStorage.removeClassConnection(this, clazz, target);
     }
 
     @Override

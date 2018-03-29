@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.sunday.engine.common.SubSystem;
+import com.sunday.engine.SubSystem;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.examples.Label;
 import com.sunday.engine.examples.Role;

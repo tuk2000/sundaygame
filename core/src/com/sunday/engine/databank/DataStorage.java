@@ -59,11 +59,10 @@ class DataStorage<T extends Data> implements Disposable {
     protected void solve(T t, Signal signal) {
         Class<T> clazz = (Class<T>) t.getClass();
         SourceClass sourceClass = sourceClassRegister.getSourceClass(clazz);
-        sourceClass.setSensedData(t);
         sourceClassConnectionRegister.getValues(sourceClass).forEach(connection -> {
-            connection.target.notify(signal);
+            connection.target.notify(t, signal);
         });
-        dataConnectionRegister.getValues(t).forEach(connection -> connection.target.notify(signal));
+        dataConnectionRegister.getValues(t).forEach(connection -> connection.target.notify(t, signal));
     }
 
     public void addDataConnection(Port port, T source, Target target) {
@@ -83,13 +82,15 @@ class DataStorage<T extends Data> implements Disposable {
         }
     }
 
-    public void addClassConnection(Port port, SourceClass sourceClass, Target target) {
+    public void addClassConnection(Port port, Class<T> clazz, Target target) {
+        SourceClass<T> sourceClass = getSourceClass(clazz);
         ClassConnection classConnection = new ClassConnection(sourceClass, target);
         sourceClassConnectionRegister.register(classConnection);
         portContentRegisters.registerConnection(port, classConnection);
     }
 
-    public void removeClassConnection(Port port, SourceClass sourceClass, Target target) {
+    public void removeClassConnection(Port port, Class<T> clazz, Target target) {
+        SourceClass<T> sourceClass = getSourceClass(clazz);
         sourceClassConnectionRegister.getValues(sourceClass).forEach(classConnection -> {
             if (classConnection.target.equals(target)) {
                 sourceClassConnectionRegister.deregister(sourceClass, classConnection);

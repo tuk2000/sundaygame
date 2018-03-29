@@ -26,7 +26,7 @@
     <children>
         <TabPane prefHeight="558.0" prefWidth="1063.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
             <tabs>
-                <Tab text="GameMonitor">
+                <Tab text="Peformance">
                     <content>
                         <SplitPane dividerPositions="0.5" orientation="VERTICAL">
                             <items>
@@ -85,7 +85,7 @@
                     <content>
                         <AnchorPane>
                             <children>
-                                <TableView fx:id="logTable" layoutX="14.0" layoutY="14.0" prefHeight="529.0" prefWidth="1063.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <TableView fx:id="logTable" layoutX="14.0" layoutY="14.0" prefHeight="571.0" prefWidth="1120.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <columns>
                                         <TableColumn prefWidth="167.0" sortable="false" text="Type" />
                                         <TableColumn prefWidth="579.0" sortable="false" text="Tag" />
@@ -103,31 +103,31 @@
                     <content>
                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                             <children>
-                                <SplitPane dividerPositions="0.33, 0.66" layoutX="172.0" layoutY="105.0" prefHeight="529.0" prefWidth="1063.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                <SplitPane dividerPositions="0.38372093023255816" layoutX="172.0" layoutY="105.0" prefHeight="529.0" prefWidth="1063.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                     <items>
-                                        <AnchorPane prefHeight="527.0" prefWidth="268.0">
-                                            <children>
-                                                <TitledPane animated="false" layoutX="14.0" layoutY="60.0" prefHeight="527.0" prefWidth="347.0" text="Keyboard" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-                                                    <content>
-                                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                                            <children>
-                                                                <TextArea fx:id="keyBoardHistory" layoutX="14.0" layoutY="265.0" prefHeight="200.0" prefWidth="305.0" />
-                                                                <Label layoutX="47.0" layoutY="47.0" text="Signal" />
-                                                                <Label fx:id="keyboardSignal" layoutX="113.0" layoutY="47.0" text="None" />
-                                                                <Label layoutX="47.0" layoutY="95.0" text="Key" />
-                                                                <Label fx:id="keyboardKey" layoutX="119.0" layoutY="95.0" text="......." />
-                                                                <Label layoutX="14.0" layoutY="237.0" text="History" />
-                                                                <Label layoutX="47.0" layoutY="151.0" text="Status" />
-                                                                <Label fx:id="keyBoardStatus" layoutX="120.0" layoutY="151.0" text="......" />
-                                                            </children>
-                                                        </AnchorPane>
-                                                    </content>
-                                                </TitledPane>
-                                            </children>
-                                        </AnchorPane>
-                                        <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
-                                            <children>
-                                                <TitledPane animated="false" layoutX="23.0" layoutY="131.0" prefHeight="527.0" prefWidth="344.0" text="Mouse" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                              <SplitPane dividerPositions="0.5" orientation="VERTICAL">
+                                 <items>
+                                              <AnchorPane prefHeight="527.0" prefWidth="268.0">
+                                                  <children>
+                                                      <TitledPane animated="false" layoutX="14.0" layoutY="60.0" prefHeight="527.0" prefWidth="347.0" text="Keyboard" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                          <content>
+                                                              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="470.0" prefWidth="424.0">
+                                                                  <children>
+                                                                      <TextArea fx:id="keyBoardHistory" layoutX="234.0" layoutY="47.0" prefHeight="197.0" prefWidth="143.0" />
+                                                                      <Label layoutX="47.0" layoutY="47.0" text="Signal" />
+                                                                      <Label fx:id="keyboardSignal" layoutX="113.0" layoutY="47.0" text="None" />
+                                                                      <Label layoutX="47.0" layoutY="95.0" text="Key" />
+                                                                      <Label fx:id="keyboardKey" layoutX="119.0" layoutY="95.0" text="......." />
+                                                                      <Label layoutX="234.0" layoutY="22.0" text="History" />
+                                                                      <Label layoutX="50.0" layoutY="151.0" text="Status" />
+                                                                      <Label fx:id="keyBoardStatus" layoutX="120.0" layoutY="151.0" text="......" />
+                                                                  </children>
+                                                              </AnchorPane>
+                                                          </content>
+                                                      </TitledPane>
+                                                  </children>
+                                              </AnchorPane>
+                                                <TitledPane animated="false" prefHeight="527.0" prefWidth="344.0" text="Mouse">
                                                     <content>
                                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                                             <children>
@@ -141,21 +141,27 @@
                                                         </AnchorPane>
                                                     </content>
                                                 </TitledPane>
-                                            </children>
-                                        </AnchorPane>
+                                 </items>
+                              </SplitPane>
                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="527.0" prefWidth="789.0">
                                             <children>
                                                 <TitledPane animated="false" layoutX="26.0" layoutY="98.0" prefHeight="527.0" prefWidth="358.0" text="GamePad" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
                                                     <content>
                                                         <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                                                            <children>
-                                                                <Label layoutX="53.0" layoutY="48.0" text="Signal" />
-                                                                <Label layoutX="53.0" layoutY="101.0" text="Key" />
-                                                                <Label layoutX="53.0" layoutY="150.0" text="Status" />
-                                                                <Label fx:id="gamePadSignal" layoutX="139.0" layoutY="48.0" text="None" />
-                                                                <Label fx:id="gamePadKey" layoutX="146.0" layoutY="101.0" text="......" />
-                                                                <Label fx:id="gamePadStatus" layoutX="146.0" layoutY="150.0" text="......" />
-                                                            </children>
+                                             <children>
+                                                <TableView fx:id="gamePadTable" layoutX="-0.40000000000000036" layoutY="-0.40000000000000036" prefHeight="545.0" prefWidth="684.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                  <columns>
+                                                    <TableColumn prefWidth="101.00000154972076" text="Controller" />
+                                                    <TableColumn prefWidth="84.99999237060547" text="Signal" />
+                                                      <TableColumn prefWidth="75.0" text="Button" />
+                                                      <TableColumn prefWidth="75.0" text="Axis" />
+                                                      <TableColumn prefWidth="75.0" text="Povit" />
+                                                      <TableColumn prefWidth="75.0" text="XSlider" />
+                                                      <TableColumn prefWidth="75.0" text="YSlieder" />
+                                                      <TableColumn prefWidth="101.79999999999995" text="Accelerometer" />
+                                                  </columns>
+                                                </TableView>
+                                             </children>
                                                         </AnchorPane>
                                                     </content>
                                                 </TitledPane>
@@ -185,15 +191,19 @@
                                         </FlowPane>
                                         <ScrollPane hbarPolicy="NEVER">
                                             <content>
-                                                <TreeTableView fx:id="treeTableView" prefHeight="508.0" prefWidth="1120.0">
-                                                    <columns>
-                                                        <TreeTableColumn fx:id="groupColumn" prefWidth="363.0" text="Group" />
-                                                        <TreeTableColumn fx:id="instanceColumn" minWidth="0.0" prefWidth="755.0" text="Instance" />
-                                                    </columns>
-                                                    <columnResizePolicy>
-                                                        <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                                                    </columnResizePolicy>
-                                                </TreeTableView>
+                                    <AnchorPane>
+                                       <children>
+                                                      <TreeTableView fx:id="treeTableView" prefHeight="508.0" prefWidth="1120.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+                                                          <columns>
+                                                              <TreeTableColumn fx:id="groupColumn" prefWidth="363.0" text="Group" />
+                                                              <TreeTableColumn fx:id="instanceColumn" minWidth="0.0" prefWidth="755.0" text="Instance" />
+                                                          </columns>
+                                                          <columnResizePolicy>
+                                                              <TreeTableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                                          </columnResizePolicy>
+                                                      </TreeTableView>
+                                       </children>
+                                    </AnchorPane>
                                             </content>
                                         </ScrollPane>
                                         <FlowPane prefHeight="157.0" prefWidth="1120.0">

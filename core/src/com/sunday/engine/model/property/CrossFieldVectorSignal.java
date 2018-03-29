@@ -1,7 +1,7 @@
 package com.sunday.engine.model.property;
 
-import com.sunday.engine.common.Signal;
+import com.sunday.engine.common.SpecificSignal;
 
-public enum CrossFieldVectorSignal implements Signal {
-    FromWindow, FromViewPort, FromPhysic, FromGL
+public enum CrossFieldVectorSignal implements SpecificSignal {
+    None, FromWindow, FromViewPort, FromPhysic, FromGL
 }

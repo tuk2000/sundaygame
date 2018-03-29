@@ -80,7 +80,7 @@ public class DriverEventTransfer extends EventTransfer implements InputProcessor
         defaultMouse.reset();
         defaultMouse.screenX = screenX;
         defaultMouse.screenY = screenY;
-        eventPoster.dispatchEvent(new MouseEvent(defaultMouse, MouseSignal.Draged));
+        eventPoster.dispatchEvent(new MouseEvent(defaultMouse, MouseSignal.Dragged));
         return true;
     }
 
@@ -102,6 +102,7 @@ public class DriverEventTransfer extends EventTransfer implements InputProcessor
     //GamePad
     @Override
     public void connected(Controller controller) {
+        System.out.println(controller.toString());
         GamePad gamePad = new GamePad();
         gamePad.controller = controller;
         gamePad.reset();
@@ -159,8 +160,8 @@ public class DriverEventTransfer extends EventTransfer implements InputProcessor
     public boolean xSliderMoved(Controller controller, int sliderCode, boolean value) {
         GamePad gamePad = driverSystem.getMatchGamePad(controller);
         gamePad.reset();
-        gamePad.sliderCode = sliderCode;
-        gamePad.sliderMoveValue = value;
+        gamePad.xSliderCode = sliderCode;
+        gamePad.xSliderMoveValue = value;
         eventPoster.dispatchEvent(new GamePadEvent(gamePad, GamePadSignal.XSliderMove));
         return true;
     }
@@ -169,8 +170,8 @@ public class DriverEventTransfer extends EventTransfer implements InputProcessor
     public boolean ySliderMoved(Controller controller, int sliderCode, boolean value) {
         GamePad gamePad = driverSystem.getMatchGamePad(controller);
         gamePad.reset();
-        gamePad.sliderCode = sliderCode;
-        gamePad.sliderMoveValue = value;
+        gamePad.ySliderCode = sliderCode;
+        gamePad.ySliderMoveValue = value;
         eventPoster.dispatchEvent(new GamePadEvent(gamePad, GamePadSignal.YSliderMove));
         return true;
     }

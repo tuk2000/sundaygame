@@ -1,10 +1,8 @@
 package com.sunday.engine.rule;
 
+import com.sunday.engine.SubSystem;
 import com.sunday.engine.common.DataSignal;
-import com.sunday.engine.common.SourceClass;
-import com.sunday.engine.common.SubSystem;
 import com.sunday.engine.databank.SystemPort;
-import com.sunday.engine.rule.condition.ClassCondition;
 
 public class RuleSystem extends SubSystem {
     public RuleSystem(SystemPort systemPort) {
@@ -14,27 +12,24 @@ public class RuleSystem extends SubSystem {
 
     private void initRuleSystem() {
 
-        Rule addRule = new Rule(new ClassCondition(Rule.class, DataSignal.Add), new Reaction<SourceClass<Rule>>() {
+        Rule ruleDataRule = new Rule(Rule.class, DataSignal.class, new Reaction<Rule, DataSignal>() {
             @Override
-            public void accept(SourceClass<Rule> ruleSourceClass) {
-                Rule rule = ruleSourceClass.getSensedData();
-                System.out.println("Rule added!");
-                rule.mountWith(systemPort);
-                System.out.println(rule.condition.getInfo());
+            public void accept(Rule rule, DataSignal dataSignal) {
+                switch (dataSignal) {
+                    case Add:
+                        System.out.println("Rule added!");
+                        rule.mountWith(systemPort);
+                        System.out.println(rule.condition.getInfo());
+                        break;
+                    case Deletion:
+                        //System.out.println("Rule removed!");
+                        System.out.println(rule.condition.getInfo());
+                        //rule.dismountWith(systemPort);
+                        break;
+                }
             }
         });
-        systemPort.addDataInstance(addRule);
-        addRule.mountWith(systemPort);
-
-        Rule deleteRule = new Rule(new ClassCondition(Rule.class, DataSignal.Deletion), new Reaction<SourceClass<Rule>>() {
-            @Override
-            public void accept(SourceClass<Rule> ruleSourceClass) {
-                Rule rule = ruleSourceClass.getSensedData();
-                System.out.println("Rule removed!");
-                System.out.println(rule.condition.getInfo());
-                rule.dismountWith(systemPort);
-            }
-        });
-        systemPort.addDataInstance(deleteRule);
+        systemPort.addDataInstance(ruleDataRule);
+        ruleDataRule.mountWith(systemPort);
     }
 }

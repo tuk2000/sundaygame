@@ -16,8 +16,12 @@ public class GamePad extends Driver {
     public int povCode;
     public PovDirection povDirection;
 
-    public int sliderCode;
-    public boolean sliderMoveValue;
+    public int xSliderCode;
+    public boolean xSliderMoveValue;
+
+    public int ySliderCode;
+    public boolean ySliderMoveValue;
+
     public int accelerometerCode;
     public Vector3 accelerometerMoveValue;
 
@@ -33,8 +37,10 @@ public class GamePad extends Driver {
         axisMoveValue = 0.0f;
         povCode = 0;
         povDirection = PovDirection.center;
-        sliderCode = 0;
-        sliderMoveValue = false;
+        xSliderCode = 0;
+        xSliderMoveValue = false;
+        ySliderCode = 0;
+        ySliderMoveValue = false;
         accelerometerCode = 0;
         accelerometerMoveValue = Vector3.Zero;
     }

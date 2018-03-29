@@ -1,6 +1,7 @@
 package com.sunday.tool;
 
 import com.sunday.tool.datamonitor.DataMonitor;
+import com.sunday.tool.drivermonitor.GamePadMonitor;
 import com.sunday.tool.drivermonitor.KeyBoardMonitor;
 import com.sunday.tool.drivermonitor.MouseMonitor;
 import com.sunday.tool.logger.Logger;
@@ -21,6 +22,7 @@ public class ToolApplication extends Application implements Runnable {
     public static PerformanceMonitor performanceMonitor = new PerformanceMonitor();
     public static KeyBoardMonitor keyBoardMonitor = new KeyBoardMonitor();
     public static MouseMonitor mouseMonitor = new MouseMonitor();
+    public static GamePadMonitor gamePadMonitor = new GamePadMonitor();
 
     private static Stage wnd;
     private static ToolApplicationUIController toolApplicationUIController;
@@ -53,6 +55,7 @@ public class ToolApplication extends Application implements Runnable {
         performanceMonitor.setUIController(toolApplicationUIController);
         keyBoardMonitor.setUIController(toolApplicationUIController);
         mouseMonitor.setUIController(toolApplicationUIController);
+        gamePadMonitor.setUIController(toolApplicationUIController);
 
         Platform.runLater(afterInitialRunnable);
     }

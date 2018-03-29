@@ -4,7 +4,9 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.databank.SystemPortSharing;
 import com.sunday.engine.driver.gamepad.GamePad;
+import com.sunday.engine.driver.gamepad.GamePadSignal;
 import com.sunday.engine.event.window.Window;
+import com.sunday.engine.event.window.WindowSignal;
 import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
 import com.sunday.engine.rule.condition.GamePadCondition;
@@ -21,20 +23,19 @@ public class DisplayManager implements SystemPortSharing {
 
     @Override
     public void connectWith(SystemPort systemPort) {
-        systemPort.addDataInstance(new Rule(WindowCondition.resized(), new Reaction<Window>() {
+        systemPort.addDataInstance(new Rule(WindowCondition.resized(), new Reaction<Window, WindowSignal>() {
             @Override
-            public void accept(Window window) {
+            public void accept(Window window, WindowSignal windowSignal) {
                 System.out.println("window---RenderManager---[" + window.width + "," + window.height + "]");
                 cameraManager.recordCameraState();
                 viewport.update(window.width, window.height);
                 viewport.apply();
                 cameraManager.recoverCameraState();
             }
-
         }));
-        systemPort.addDataInstance(new Rule(GamePadCondition.buttonDown(5), new Reaction<GamePad>() {
+        systemPort.addDataInstance(new Rule(GamePadCondition.buttonDown(5), new Reaction<GamePad, GamePadSignal>() {
             @Override
-            public void accept(GamePad gamePad) {
+            public void accept(GamePad gamePad, GamePadSignal gamePadSignal) {
                 System.out.println("gamePad---RenderManager---" + gamePad.buttonCode);
                 //
             }

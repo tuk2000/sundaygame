@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.driver.keyboard.KeyBoard;
+import com.sunday.engine.driver.keyboard.KeyBoardSignal;
 import com.sunday.engine.render.IndependentRenderer;
 import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
@@ -129,19 +130,18 @@ public class DebugRenderer extends IndependentRenderer {
 
     @Override
     public void connectWith(SystemPort systemPort) {
-        systemPort.addDataInstance(new Rule(KeyBoardCondition.keyPressed("["), new Reaction<KeyBoard>() {
-
+        systemPort.addDataInstance(new Rule(KeyBoardCondition.keyPressed("["), new Reaction<KeyBoard, KeyBoardSignal>() {
             @Override
-            public void accept(KeyBoard keyBoard) {
+            public void accept(KeyBoard keyBoard, KeyBoardSignal keyBoardSignal) {
                 selectedMatrix++;
                 if (selectedMatrix == 4) selectedMatrix = 0;
                 printOptions();
             }
         }));
-        systemPort.addDataInstance(new Rule(KeyBoardCondition.keyPressed("]"), new Reaction<KeyBoard>() {
+        systemPort.addDataInstance(new Rule(KeyBoardCondition.keyPressed("]"), new Reaction<KeyBoard, KeyBoardSignal>() {
 
             @Override
-            public void accept(KeyBoard keyBoard) {
+            public void accept(KeyBoard keyBoard, KeyBoardSignal keyBoardSignal) {
                 smallRenderingSelected = !smallRenderingSelected;
                 printOptions();
             }

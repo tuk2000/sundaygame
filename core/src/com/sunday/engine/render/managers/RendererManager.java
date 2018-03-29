@@ -5,7 +5,9 @@ import com.badlogic.gdx.Input;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.databank.SystemPortSharing;
 import com.sunday.engine.driver.gamepad.GamePad;
+import com.sunday.engine.driver.gamepad.GamePadSignal;
 import com.sunday.engine.driver.keyboard.KeyBoard;
+import com.sunday.engine.driver.keyboard.KeyBoardSignal;
 import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
 import com.sunday.engine.rule.condition.GamePadCondition;
@@ -21,9 +23,9 @@ public class RendererManager implements SystemPortSharing {
 
     @Override
     public void connectWith(SystemPort systemPort) {
-        systemPort.addDataInstance(new Rule(KeyBoardCondition.keyPressed("F2", "F3", "F4", "F5", "F6", "F7"), new Reaction<KeyBoard>() {
+        systemPort.addDataInstance(new Rule(KeyBoardCondition.keyPressed("F2", "F3", "F4", "F5", "F6", "F7"), new Reaction<KeyBoard, KeyBoardSignal>() {
             @Override
-            public void accept(KeyBoard keyBoard) {
+            public void accept(KeyBoard keyBoard, KeyBoardSignal keyBoardSignal) {
                 System.out.println("keyBoard---RenderManager---" + keyBoard.character);
                 switch (keyBoard.keyCode) {
                     case Input.Keys.F2:
@@ -47,9 +49,9 @@ public class RendererManager implements SystemPortSharing {
             }
         }));
 
-        systemPort.addDataInstance(new Rule(GamePadCondition.buttonDown(0, 1, 2, 3, 9), new Reaction<GamePad>() {
+        systemPort.addDataInstance(new Rule(GamePadCondition.buttonDown(0, 1, 2, 3, 9), new Reaction<GamePad, GamePadSignal>() {
             @Override
-            public void accept(GamePad gamePad) {
+            public void accept(GamePad gamePad, GamePadSignal gamePadSignal) {
                 System.out.println("gamePad---RenderManager---" + gamePad.buttonCode);
                 switch (gamePad.buttonCode) {
                     case 0:

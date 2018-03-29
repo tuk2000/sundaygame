@@ -5,37 +5,36 @@ import com.sunday.engine.common.Signal;
 import com.sunday.engine.common.SourceClass;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.rule.Condition;
-import com.sunday.engine.rule.Tracer;
 
 
-public class ClassCondition<T extends Data> extends Condition<SourceClass<T>> {
+public class ClassCondition<T extends Data, S extends Signal> extends Condition<SourceClass<T>, S> {
 
     private Class<T> sensedSourceClass;
 
-    public ClassCondition(Class<T> clazz, Signal... signals) {
+    public ClassCondition(Class<T> clazz, S... signals) {
         sensedSourceClass = clazz;
         setSignals(signals);
         setExtraInfo("Type = [ClassCondition]\n" +
                 "SensedSourceClass=[" + clazz.getSimpleName() + "]");
     }
 
-    @Override
-    protected boolean isSatisfied() {
-        return true;
+    public ClassCondition(Class<T> clazz, Class<S> signalTypeClass) {
+        sensedSourceClass = clazz;
+        setSignals(signalTypeClass.getEnumConstants());
+        setExtraInfo("Type = [ClassCondition]\n" +
+                "SensedSourceClass=[" + clazz.getSimpleName() + "]");
     }
 
     @Override
     public void connectWith(SystemPort systemPort) {
         setData(systemPort.getSourceClass(sensedSourceClass));
-        getTracers().clear();
-        getSignals().forEach(signal -> {
-            Tracer tracer = new Tracer(this, getData(), signal);
-            getTracers().add(tracer);
-        });
-        getTracers().forEach(tracer -> {
-            systemPort.addConnection(getData(), tracer);
-        });
+        systemPort.addConnection(sensedSourceClass, this);
         generateMainInfo();
     }
 
+    @Override
+    public void notify(Data data, Signal signal) {
+        if (getSignals().contains(signal))
+            getReaction().accept(data, signal);
+    }
 }

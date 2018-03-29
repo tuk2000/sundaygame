@@ -1,5 +1,5 @@
 package com.sunday.engine.driver;
 
 public enum DriverType {
-    Keyboard, TouchScreen, Mouse, GamePad
+    Keyboard, TouchScreen, Mouse, GamePad, GamePadHub
 }

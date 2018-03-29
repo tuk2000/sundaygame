@@ -4,13 +4,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.sunday.engine.Engine;
-import com.sunday.engine.common.DataSignal;
 import com.sunday.engine.databank.Port;
 import com.sunday.engine.driver.keyboard.KeyBoard;
+import com.sunday.engine.driver.keyboard.KeyBoardSignal;
 import com.sunday.engine.driver.mouse.Mouse;
+import com.sunday.engine.driver.mouse.MouseSignal;
 import com.sunday.engine.examples.Label;
 import com.sunday.engine.examples.Role;
 import com.sunday.engine.model.AbstractModel;
+import com.sunday.engine.model.property.MovementSignal;
 import com.sunday.engine.model.property.viewlayers.TextureViewLayer;
 import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
@@ -51,20 +53,20 @@ public class DemoBallRolling implements Screen {
         Role backGroundRole = new Role(Label.Hero, backGroundModel);
 
         AbstractModel heroModel = new AbstractModel() {
-            Rule moveRule = new Rule(KeyBoardCondition.keyPressed("x"), new Reaction<KeyBoard>() {
+            Rule moveRule = new Rule(KeyBoardCondition.keyPressed("x"), new Reaction<KeyBoard, KeyBoardSignal>() {
                 @Override
-                public void accept(KeyBoard keyBoard) {
+                public void accept(KeyBoard keyBoard, KeyBoardSignal keyBoardSignal) {
                     System.out.println("KeyDown");
                     movement.position.add(10, 10);
-                    port.broadcast(movement, DataSignal.Modification);
+                    port.broadcast(movement, MovementSignal.ReLocated);
                 }
             });
-            Rule followMouseRule = new Rule(MouseCondition.mouseDragged(), new Reaction<Mouse>() {
+            Rule followMouseRule = new Rule(MouseCondition.mouseDragged(), new Reaction<Mouse, MouseSignal>() {
                 @Override
-                public void accept(Mouse mouse) {
+                public void accept(Mouse mouse, MouseSignal mouseSignal) {
                     System.out.println("MouseDragged");
                     movement.position.set(mouse.screenX, Gdx.graphics.getHeight() - mouse.screenY);
-                    port.broadcast(movement, DataSignal.Modification);
+                    port.broadcast(movement, MovementSignal.ReLocated);
                 }
             });
 

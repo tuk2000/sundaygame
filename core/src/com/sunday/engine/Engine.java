@@ -1,6 +1,7 @@
 package com.sunday.engine;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.utils.Disposable;
 import com.sunday.engine.databank.DataBank;
@@ -38,8 +39,13 @@ public class Engine implements Disposable {
         renderSystem = new RenderSystem(dataBank.getSystemPort(PhysicSystem.class));
         renderSystem.setPhysicSystem(physicSystem);
 
+        driverSystem.connectToDriverMonitor();
+
         DriverEventTransfer driverEventTransfer = new DriverEventTransfer(driverSystem);
         Gdx.input.setInputProcessor(driverEventTransfer);
+        for (Controller controller : Controllers.getControllers()) {
+            driverEventTransfer.connected(controller);
+        }
         Controllers.addListener(driverEventTransfer);
 
         CollisionEventTransfer collisionEventTransfer = new CollisionEventTransfer();
