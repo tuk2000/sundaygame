@@ -4,9 +4,9 @@ import com.badlogic.gdx.utils.Disposable;
 import com.sunday.engine.databank.Port;
 import com.sunday.engine.databank.PortSharing;
 import com.sunday.engine.model.property.*;
+import com.sunday.engine.rule.DataCondition;
 import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
-import com.sunday.engine.rule.condition.DataCondition;
 
 public abstract class AbstractModel implements PortSharing, Disposable {
 

@@ -6,14 +6,13 @@ import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.utils.Disposable;
 import com.sunday.engine.databank.DataBank;
 import com.sunday.engine.databank.DataBankImpl;
-import com.sunday.engine.driver.DriverSystem;
-import com.sunday.engine.event.EventSystem;
-import com.sunday.engine.event.collision.CollisionEventTransfer;
-import com.sunday.engine.event.driver.DriverEventTransfer;
-import com.sunday.engine.event.window.WindowEventTransfer;
+import com.sunday.engine.environment.driver.DriverSystem;
+import com.sunday.engine.environment.event.EventSystem;
+import com.sunday.engine.environment.event.collision.CollisionEventTransfer;
+import com.sunday.engine.environment.event.driver.DriverEventTransfer;
+import com.sunday.engine.environment.event.window.WindowEventTransfer;
+import com.sunday.engine.environment.time.TimeSystem;
 import com.sunday.engine.physic.PhysicSystem;
-import com.sunday.engine.render.AnimationSetting;
-import com.sunday.engine.render.AnimationTimer;
 import com.sunday.engine.render.RenderSystem;
 import com.sunday.engine.rule.RuleSystem;
 import com.sunday.engine.scenario.ScenarioSystem;
@@ -21,9 +20,11 @@ import com.sunday.engine.scenario.ScenarioSystem;
 public class Engine implements Disposable {
     private boolean running;
     private DataBank dataBank;
+    private RuleSystem ruleSystem;
     private DriverSystem driverSystem;
     private EventSystem eventSystem;
-    private RuleSystem ruleSystem;
+
+    private TimeSystem timeSystem;
     private ScenarioSystem scenarioSystem;
     private RenderSystem renderSystem;
     private PhysicSystem physicSystem;
@@ -31,9 +32,10 @@ public class Engine implements Disposable {
 
     public Engine() {
         dataBank = new DataBankImpl();
+        ruleSystem = new RuleSystem(dataBank.getSystemPort(RuleSystem.class));
         driverSystem = new DriverSystem(dataBank.getSystemPort(DriverSystem.class));
         eventSystem = new EventSystem(dataBank.getSystemPort(EventSystem.class));
-        ruleSystem = new RuleSystem(dataBank.getSystemPort(RuleSystem.class));
+        timeSystem = new TimeSystem(dataBank.getSystemPort(TimeSystem.class));
         scenarioSystem = new ScenarioSystem(dataBank.getSystemPort(ScenarioSystem.class));
         physicSystem = new PhysicSystem(dataBank.getSystemPort(PhysicSystem.class));
         renderSystem = new RenderSystem(dataBank.getSystemPort(PhysicSystem.class));
@@ -56,8 +58,6 @@ public class Engine implements Disposable {
 
         scenarioSystem.setRender(renderSystem);
 
-
-        AnimationTimer.initAnimationTimer(dataBank);
         running = true;
     }
 
@@ -75,8 +75,7 @@ public class Engine implements Disposable {
 
     public void render(float delta) {
         if (!running) return;
-        AnimationSetting.DeltaTime += delta;
-        AnimationTimer.synchronize();
+        timeSystem.updateTime(delta);
         scenarioSystem.analyse();
         physicSystem.worldStep();
         renderSystem.render(delta);

@@ -3,9 +3,9 @@ package com.sunday.engine.examples.hero;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.utils.Array;
+import com.sunday.engine.environment.time.AnimationSetting;
 import com.sunday.engine.model.property.Movement;
 import com.sunday.engine.model.state.Direction;
-import com.sunday.engine.render.AnimationSetting;
 import com.sunday.game.framework.GameFramework;
 
 public class HeroAnimation {
@@ -13,6 +13,7 @@ public class HeroAnimation {
     private Animation fightingAnimation;
     private Animation standstillAnimation;
     private Animation jumpingAnimation;
+    private float stateTime = 0.0f;
 
     public HeroAnimation() {
         float frameDuration = AnimationSetting.FrameDuration;
@@ -44,11 +45,15 @@ public class HeroAnimation {
                 currentAnimation = standstillAnimation;
         }
         if (currentAnimation != null) {
-            texture = (Texture) currentAnimation.getKeyFrame(AnimationSetting.DeltaTime);
+            texture = (Texture) currentAnimation.getKeyFrame(stateTime);
             if (movement.direction == Direction.Left) {
                 //
             }
         }
         return texture;
+    }
+
+    public void setStateTime(float stateTime) {
+        this.stateTime = stateTime;
     }
 }

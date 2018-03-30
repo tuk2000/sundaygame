@@ -16,7 +16,6 @@ public class GameScreenGenerator implements ScreenGenerator {
         classes.add(GamePlay.class);
         classes.add(GamePause.class);
         classes.add(GameTest.class);
-        classes.add(TiledGameMap.class);
         classes.add(DemoBallRolling.class);
         classes.add(RenderTest.class);
     }

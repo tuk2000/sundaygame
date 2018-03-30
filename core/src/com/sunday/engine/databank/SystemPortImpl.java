@@ -52,8 +52,8 @@ public class SystemPortImpl<T extends Data> extends PortImpl<T> implements Syste
     }
 
     @Override
-    public List<T> searchInDataBank(Class<T> clazz) {
-        return dataStorage.getDataInstances(clazz);
+    public List<T> instancesOf(Class<T> clazz) {
+        return (List<T>) dataStorage.getDataInstances(clazz);
     }
 
     @Override

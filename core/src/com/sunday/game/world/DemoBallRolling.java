@@ -5,22 +5,24 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.sunday.engine.Engine;
 import com.sunday.engine.databank.Port;
-import com.sunday.engine.driver.keyboard.KeyBoard;
-import com.sunday.engine.driver.keyboard.KeyBoardSignal;
-import com.sunday.engine.driver.mouse.Mouse;
-import com.sunday.engine.driver.mouse.MouseSignal;
+import com.sunday.engine.environment.driver.keyboard.KeyBoard;
+import com.sunday.engine.environment.driver.keyboard.KeyBoardCondition;
+import com.sunday.engine.environment.driver.keyboard.KeyBoardSignal;
+import com.sunday.engine.environment.driver.mouse.Mouse;
+import com.sunday.engine.environment.driver.mouse.MouseCondition;
+import com.sunday.engine.environment.driver.mouse.MouseSignal;
+import com.sunday.engine.environment.time.AnimationSetting;
+import com.sunday.engine.environment.time.Timer;
+import com.sunday.engine.environment.time.TimerCondition;
+import com.sunday.engine.environment.time.TimerSignal;
 import com.sunday.engine.examples.Label;
 import com.sunday.engine.examples.Role;
 import com.sunday.engine.examples.enemy.SawAnimation;
 import com.sunday.engine.model.AbstractModel;
 import com.sunday.engine.model.property.MovementSignal;
 import com.sunday.engine.model.property.viewlayers.TextureViewLayer;
-import com.sunday.engine.render.AnimationTimer;
-import com.sunday.engine.render.AnimationTimerSignal;
 import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
-import com.sunday.engine.rule.condition.KeyBoardCondition;
-import com.sunday.engine.rule.condition.MouseCondition;
 import com.sunday.engine.scenario.Scenario;
 import com.sunday.engine.scenario.ScopeType;
 import com.sunday.game.framework.GameFramework;
@@ -30,45 +32,13 @@ public class DemoBallRolling implements Screen {
 
     private Engine engine;
     private Scenario scenario;
-
-
-    private class SawModel extends AbstractModel {
-        public SawModel(float x, float y) {
-            movement.position.set(x, y);
-        }
-
-        private SawAnimation sawAnimation = new SawAnimation();
-        private TextureViewLayer sawTextureViewLayer = new TextureViewLayer(GameFramework.Resource.getAsset("saws/saw1.png"));
-        private Rule movingRule = new Rule(AnimationTimer.class, AnimationTimerSignal.class, new Reaction<AnimationTimer, AnimationTimerSignal>() {
-            @Override
-            public void accept(AnimationTimer animationTimer, AnimationTimerSignal animationTimerSignal) {
-                sawTextureViewLayer.updateTexture(sawAnimation.getKeyFrame());
-                if (Math.random() < 0.5) return;
-                float x = (float) (Math.random() - 0.5) * 4;
-                float y = (float) (Math.random() - 0.5) * 4;
-                movement.position.add(x, y);
-                port.broadcast(movement, MovementSignal.ReLocated);
-            }
-        });
-
+    private SawAnimation sawAnimation = new SawAnimation();
+    private Rule sawAnimationRule = new Rule(TimerCondition.animationTimerCondition(), new Reaction<Timer, TimerSignal>() {
         @Override
-        protected void disconnectWithInternal(Port port) {
-
+        public void accept(Timer timer, TimerSignal timerSignal) {
+            sawAnimation.setStateTime(timer.lastTriggeredTime);
         }
-
-        @Override
-        protected void connectWithInternal(Port port) {
-            outlook.dimension.set(40, 40);
-            outlook.shape = Shape.Type.Circle;
-            outlook.viewLayers.add(sawTextureViewLayer);
-            port.addDataInstance(movingRule);
-        }
-
-        @Override
-        public void dispose() {
-
-        }
-    }
+    });
 
     public DemoBallRolling() {
         engine = new Engine();
@@ -84,6 +54,7 @@ public class DemoBallRolling implements Screen {
                 outlook.shape = Shape.Type.Edge;
                 outlook.viewLayers.add(new TextureViewLayer<>(GameFramework.Resource.getAsset("buttons/buttons.png")));
                 movement.position.set(0, 0);
+                port.addDataInstance(sawAnimationRule);
             }
 
             @Override
@@ -139,14 +110,13 @@ public class DemoBallRolling implements Screen {
         scenario = new Scenario(ScopeType.EntireLevel);
         scenario.addRole(backGroundRole);
         for (int i = 0; i < 100; i++) {
-            AbstractModel sawModel = new SawModel((float) ((Math.random()-0.5) * 2000), (float) ((Math.random()-0.5) * 2000));
+            AbstractModel sawModel = new SawModel((float) ((Math.random() - 0.5) * 1000), (float) ((Math.random() - 0.5) * 1000));
             Role movingSaw = new Role(Label.Enemy, sawModel);
             scenario.addRole(movingSaw);
         }
         scenario.addRole(heroRole);
         engine.getScenarioSystem().setRoot(scenario);
     }
-
 
     @Override
     public void show() {
@@ -181,5 +151,41 @@ public class DemoBallRolling implements Screen {
     @Override
     public void dispose() {
         engine.dispose();
+    }
+
+    private class SawModel extends AbstractModel {
+        private TextureViewLayer sawTextureViewLayer = new TextureViewLayer(GameFramework.Resource.getAsset("saws/saw1.png"));
+        private Timer timer = new Timer();
+        private Rule sawMovingRule = new Rule(TimerCondition.bind(timer), new Reaction<Timer, TimerSignal>() {
+            @Override
+            public void accept(Timer timer, TimerSignal timerSignal) {
+                sawTextureViewLayer.updateTexture(sawAnimation.getKeyFrame());
+                movement.position.add((float) (Math.random() - 0.5) * 10, (float) (Math.random() - 0.5) * 10);
+                port.broadcast(movement, MovementSignal.ReLocated);
+            }
+        });
+
+        public SawModel(float x, float y) {
+            movement.position.set(x, y);
+            timer.setPeriod(AnimationSetting.FrameDuration);
+        }
+
+        @Override
+        protected void disconnectWithInternal(Port port) {
+
+        }
+
+        @Override
+        protected void connectWithInternal(Port port) {
+            outlook.dimension.set(40, 40);
+            outlook.shape = Shape.Type.Circle;
+            outlook.viewLayers.add(sawTextureViewLayer);
+            port.addDataInstance(sawMovingRule);
+        }
+
+        @Override
+        public void dispose() {
+
+        }
     }
 }

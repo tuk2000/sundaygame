@@ -140,8 +140,6 @@ public class RenderSystem extends SubSystem implements Disposable {
     }
 
     public void render(float delta) {
-        AnimationSetting.DeltaTime += delta;
-        AnimationTimer.synchronize();
 
         cameraManager.updateCamera();
         sharedBatch.setProjectionMatrix(sharedCamera.combined);

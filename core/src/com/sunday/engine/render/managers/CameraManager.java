@@ -7,14 +7,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.databank.SystemPortSharing;
-import com.sunday.engine.driver.gamepad.GamePad;
-import com.sunday.engine.driver.gamepad.GamePadSignal;
-import com.sunday.engine.driver.keyboard.KeyBoard;
-import com.sunday.engine.driver.keyboard.KeyBoardSignal;
+import com.sunday.engine.environment.driver.gamepad.GamePad;
+import com.sunday.engine.environment.driver.gamepad.GamePadCondition;
+import com.sunday.engine.environment.driver.gamepad.GamePadSignal;
+import com.sunday.engine.environment.driver.keyboard.KeyBoard;
+import com.sunday.engine.environment.driver.keyboard.KeyBoardCondition;
+import com.sunday.engine.environment.driver.keyboard.KeyBoardSignal;
 import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
-import com.sunday.engine.rule.condition.GamePadCondition;
-import com.sunday.engine.rule.condition.KeyBoardCondition;
 
 public class CameraManager implements SystemPortSharing {
     private OrthographicCamera camera;

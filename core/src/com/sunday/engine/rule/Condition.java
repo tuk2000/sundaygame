@@ -21,7 +21,7 @@ public abstract class Condition<T extends Data, S extends Signal> implements Sys
         return data;
     }
 
-    protected void setData(T t) {
+    public void setData(T t) {
         data = t;
     }
 
@@ -29,7 +29,7 @@ public abstract class Condition<T extends Data, S extends Signal> implements Sys
         return signals;
     }
 
-    protected void setSignals(S... signals) {
+    public void setSignals(S... signals) {
         this.signals.clear();
         this.signals.addAll(Arrays.asList(signals));
     }

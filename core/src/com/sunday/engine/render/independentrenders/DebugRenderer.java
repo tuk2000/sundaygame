@@ -6,12 +6,12 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.sunday.engine.databank.SystemPort;
-import com.sunday.engine.driver.keyboard.KeyBoard;
-import com.sunday.engine.driver.keyboard.KeyBoardSignal;
+import com.sunday.engine.environment.driver.keyboard.KeyBoard;
+import com.sunday.engine.environment.driver.keyboard.KeyBoardCondition;
+import com.sunday.engine.environment.driver.keyboard.KeyBoardSignal;
 import com.sunday.engine.render.IndependentRenderer;
 import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
-import com.sunday.engine.rule.condition.KeyBoardCondition;
 
 public class DebugRenderer extends IndependentRenderer {
     private ShapeRenderer shapeRenderer;

@@ -67,11 +67,11 @@ public class GameIntro implements Screen {
                ScreenManager.getInstance().setCurrentScreen(GameStatus.Test);
             }
         });*/
-        test = new TextButton("Tiled Map", textButtonStyle);
+        test = new TextButton("Game Test", textButtonStyle);
         test.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                GameFramework.Screen.setCurrentScreen(TiledGameMap.class);
+                GameFramework.Screen.setCurrentScreen(GameTest.class);
             }
         });
 

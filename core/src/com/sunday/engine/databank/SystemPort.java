@@ -23,7 +23,7 @@ public interface SystemPort<T extends Data> extends Port<T> {
 
     List<Class<T>> getDataClassList();
 
-    List<T> searchInDataBank(Class<T> clazz);
+    List<T> instancesOf(Class<T> clazz);
 
     Port requestPort(Object owner);
 }

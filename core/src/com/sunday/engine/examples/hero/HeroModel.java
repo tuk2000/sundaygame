@@ -5,8 +5,12 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.sunday.engine.databank.Port;
-import com.sunday.engine.driver.keyboard.KeyBoard;
-import com.sunday.engine.driver.keyboard.KeyBoardSignal;
+import com.sunday.engine.environment.driver.keyboard.KeyBoard;
+import com.sunday.engine.environment.driver.keyboard.KeyBoardCondition;
+import com.sunday.engine.environment.driver.keyboard.KeyBoardSignal;
+import com.sunday.engine.environment.time.Timer;
+import com.sunday.engine.environment.time.TimerCondition;
+import com.sunday.engine.environment.time.TimerSignal;
 import com.sunday.engine.model.AbstractModel;
 import com.sunday.engine.model.property.MovementSignal;
 import com.sunday.engine.model.property.Outlook;
@@ -14,12 +18,9 @@ import com.sunday.engine.model.property.OutlookSignal;
 import com.sunday.engine.model.property.viewlayers.TextureViewLayer;
 import com.sunday.engine.model.state.Action;
 import com.sunday.engine.model.state.Direction;
-import com.sunday.engine.render.AnimationTimer;
-import com.sunday.engine.render.AnimationTimerSignal;
+import com.sunday.engine.rule.DataCondition;
 import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
-import com.sunday.engine.rule.condition.DataCondition;
-import com.sunday.engine.rule.condition.KeyBoardCondition;
 
 public class HeroModel extends AbstractModel {
     private HeroAnimation heroAnimation = new HeroAnimation();
@@ -62,9 +63,10 @@ public class HeroModel extends AbstractModel {
             }
         }));
 
-        port.addDataInstance(new Rule(AnimationTimer.getCondition(), new Reaction<AnimationTimer, AnimationTimerSignal>() {
+        port.addDataInstance(new Rule(TimerCondition.animationTimerCondition(), new Reaction<Timer, TimerSignal>() {
             @Override
-            public void accept(AnimationTimer animationTimer, AnimationTimerSignal animationTimerSignal) {
+            public void accept(Timer timer, TimerSignal timerSignal) {
+                heroAnimation.setStateTime(timer.lastTriggeredTime);
                 textureViewLayer.updateTexture(heroAnimation.getKeyFrame(movement));
             }
         }));
