@@ -12,7 +12,7 @@ public class SawAnimation {
     public SawAnimation() {
         Array<Texture> keyFrames = new Array<>();
         for (int i = 1; i <= 20; i++) {
-            keyFrames.add(GameFramework.Resource.getAsset("Enemies/saw" + i + ".png"));
+            keyFrames.add(GameFramework.Resource.getAsset("saws/saw" + i + ".png"));
         }
         spinningAnimation = new Animation(AnimationSetting.FrameDuration, keyFrames, Animation.PlayMode.LOOP);
     }
