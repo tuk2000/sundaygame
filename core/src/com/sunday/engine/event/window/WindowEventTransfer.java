@@ -12,6 +12,6 @@ public class WindowEventTransfer extends EventTransfer {
     public void resize(int width, int height) {
         window.width = width;
         window.height = height;
-        eventPoster.dispatchEvent(new WindowEvent(window, WindowSignal.Resized));
+        eventDispatcher.dispatch(new WindowEvent(window, WindowSignal.Resized));
     }
 }

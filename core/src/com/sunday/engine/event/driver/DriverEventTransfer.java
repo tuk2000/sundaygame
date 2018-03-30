@@ -32,7 +32,7 @@ public class DriverEventTransfer extends EventTransfer implements InputProcessor
         defaultKeyBoard.reset();
         defaultKeyBoard.keyCode = keycode;
         defaultKeyBoard.character = Input.Keys.toString(keycode);
-        eventPoster.dispatchEvent(new KeyBoardEvent(defaultKeyBoard, KeyBoardSignal.Pressed));
+        eventDispatcher.dispatch(new KeyBoardEvent(defaultKeyBoard, KeyBoardSignal.Pressed));
         return true;
     }
 
@@ -41,7 +41,7 @@ public class DriverEventTransfer extends EventTransfer implements InputProcessor
         defaultKeyBoard.reset();
         defaultKeyBoard.keyCode = keycode;
         defaultKeyBoard.character = Input.Keys.toString(keycode);
-        eventPoster.dispatchEvent(new KeyBoardEvent(defaultKeyBoard, KeyBoardSignal.Released));
+        eventDispatcher.dispatch(new KeyBoardEvent(defaultKeyBoard, KeyBoardSignal.Released));
         return true;
     }
 
@@ -50,7 +50,7 @@ public class DriverEventTransfer extends EventTransfer implements InputProcessor
         defaultKeyBoard.reset();
         defaultKeyBoard.keyCode = Input.Keys.valueOf(String.valueOf(character).toUpperCase());
         defaultKeyBoard.character = String.valueOf(character);
-        eventPoster.dispatchEvent(new KeyBoardEvent(defaultKeyBoard, KeyBoardSignal.Typed));
+        eventDispatcher.dispatch(new KeyBoardEvent(defaultKeyBoard, KeyBoardSignal.Typed));
         return true;
     }
 
@@ -61,7 +61,7 @@ public class DriverEventTransfer extends EventTransfer implements InputProcessor
         defaultMouse.screenX = screenX;
         defaultMouse.screenY = screenY;
         defaultMouse.key = button;
-        eventPoster.dispatchEvent(new MouseEvent(defaultMouse, MouseSignal.Pressed));
+        eventDispatcher.dispatch(new MouseEvent(defaultMouse, MouseSignal.Pressed));
         return true;
     }
 
@@ -71,7 +71,7 @@ public class DriverEventTransfer extends EventTransfer implements InputProcessor
         defaultMouse.screenX = screenX;
         defaultMouse.screenY = screenY;
         defaultMouse.key = button;
-        eventPoster.dispatchEvent(new MouseEvent(defaultMouse, MouseSignal.Released));
+        eventDispatcher.dispatch(new MouseEvent(defaultMouse, MouseSignal.Released));
         return true;
     }
 
@@ -80,7 +80,7 @@ public class DriverEventTransfer extends EventTransfer implements InputProcessor
         defaultMouse.reset();
         defaultMouse.screenX = screenX;
         defaultMouse.screenY = screenY;
-        eventPoster.dispatchEvent(new MouseEvent(defaultMouse, MouseSignal.Dragged));
+        eventDispatcher.dispatch(new MouseEvent(defaultMouse, MouseSignal.Dragged));
         return true;
     }
 
@@ -89,7 +89,7 @@ public class DriverEventTransfer extends EventTransfer implements InputProcessor
         defaultMouse.reset();
         defaultMouse.screenX = screenX;
         defaultMouse.screenY = screenY;
-        eventPoster.dispatchEvent(new MouseEvent(defaultMouse, MouseSignal.Moved));
+        eventDispatcher.dispatch(new MouseEvent(defaultMouse, MouseSignal.Moved));
         return true;
     }
 
@@ -107,7 +107,7 @@ public class DriverEventTransfer extends EventTransfer implements InputProcessor
         gamePad.controller = controller;
         gamePad.reset();
         driverSystem.addDriver(gamePad);
-        eventPoster.dispatchEvent(new GamePadEvent(gamePad, GamePadSignal.Connect));
+        eventDispatcher.dispatch(new GamePadEvent(gamePad, GamePadSignal.Connect));
     }
 
     @Override
@@ -115,7 +115,7 @@ public class DriverEventTransfer extends EventTransfer implements InputProcessor
         GamePad gamePad = driverSystem.getMatchGamePad(controller);
         gamePad.reset();
         driverSystem.removeDriver(gamePad);
-        eventPoster.dispatchEvent(new GamePadEvent(gamePad, GamePadSignal.Disconnect));
+        eventDispatcher.dispatch(new GamePadEvent(gamePad, GamePadSignal.Disconnect));
     }
 
     @Override
@@ -123,7 +123,7 @@ public class DriverEventTransfer extends EventTransfer implements InputProcessor
         GamePad gamePad = driverSystem.getMatchGamePad(controller);
         gamePad.reset();
         gamePad.buttonCode = buttonCode;
-        eventPoster.dispatchEvent(new GamePadEvent(gamePad, GamePadSignal.ButtonDown));
+        eventDispatcher.dispatch(new GamePadEvent(gamePad, GamePadSignal.ButtonDown));
         return true;
     }
 
@@ -132,7 +132,7 @@ public class DriverEventTransfer extends EventTransfer implements InputProcessor
         GamePad gamePad = driverSystem.getMatchGamePad(controller);
         gamePad.reset();
         gamePad.buttonCode = buttonCode;
-        eventPoster.dispatchEvent(new GamePadEvent(gamePad, GamePadSignal.ButtonUp));
+        eventDispatcher.dispatch(new GamePadEvent(gamePad, GamePadSignal.ButtonUp));
         return true;
     }
 
@@ -142,7 +142,7 @@ public class DriverEventTransfer extends EventTransfer implements InputProcessor
         gamePad.reset();
         gamePad.axisCode = axisCode;
         gamePad.axisMoveValue = value;
-        eventPoster.dispatchEvent(new GamePadEvent(gamePad, GamePadSignal.AxisMove));
+        eventDispatcher.dispatch(new GamePadEvent(gamePad, GamePadSignal.AxisMove));
         return true;
     }
 
@@ -152,7 +152,7 @@ public class DriverEventTransfer extends EventTransfer implements InputProcessor
         gamePad.reset();
         gamePad.povCode = povCode;
         gamePad.povDirection = value;
-        eventPoster.dispatchEvent(new GamePadEvent(gamePad, GamePadSignal.PovMove));
+        eventDispatcher.dispatch(new GamePadEvent(gamePad, GamePadSignal.PovMove));
         return true;
     }
 
@@ -162,7 +162,7 @@ public class DriverEventTransfer extends EventTransfer implements InputProcessor
         gamePad.reset();
         gamePad.xSliderCode = sliderCode;
         gamePad.xSliderMoveValue = value;
-        eventPoster.dispatchEvent(new GamePadEvent(gamePad, GamePadSignal.XSliderMove));
+        eventDispatcher.dispatch(new GamePadEvent(gamePad, GamePadSignal.XSliderMove));
         return true;
     }
 
@@ -172,7 +172,7 @@ public class DriverEventTransfer extends EventTransfer implements InputProcessor
         gamePad.reset();
         gamePad.ySliderCode = sliderCode;
         gamePad.ySliderMoveValue = value;
-        eventPoster.dispatchEvent(new GamePadEvent(gamePad, GamePadSignal.YSliderMove));
+        eventDispatcher.dispatch(new GamePadEvent(gamePad, GamePadSignal.YSliderMove));
         return true;
     }
 
@@ -182,7 +182,7 @@ public class DriverEventTransfer extends EventTransfer implements InputProcessor
         gamePad.reset();
         gamePad.accelerometerCode = accelerometerCode;
         gamePad.accelerometerMoveValue = value;
-        eventPoster.dispatchEvent(new GamePadEvent(gamePad, GamePadSignal.AccelerometerMove));
+        eventDispatcher.dispatch(new GamePadEvent(gamePad, GamePadSignal.AccelerometerMove));
         return true;
     }
 }

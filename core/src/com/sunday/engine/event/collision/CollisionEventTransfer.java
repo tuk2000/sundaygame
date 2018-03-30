@@ -16,7 +16,7 @@ public class CollisionEventTransfer extends EventTransfer implements ContactList
         if (contact.getFixtureA().getUserData() != null & contact.getFixtureA().getUserData() != null) {
 //            CollisionEvent collisionEvent =
 //                    new CollisionEvent(this, contact.getFixtureA().getUserData(), contact.getFixtureB().getUserData());
-//            eventPoster.dispatchEvent(collisionEvent);
+//            eventDispatcher.dispatch(collisionEvent);
         }
     }
 

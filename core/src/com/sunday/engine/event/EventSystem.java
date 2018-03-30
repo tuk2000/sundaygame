@@ -4,14 +4,8 @@ import com.sunday.engine.SubSystem;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.event.window.Window;
 
-public class EventSystem extends SubSystem implements EventPoster {
+public class EventSystem extends SubSystem implements EventDispatcher {
     private Window window;
-    private EventProcessor eventProcessor = new EventProcessor() {
-        @Override
-        public void processEvent(Event event) {
-            systemPort.broadcast(event.getSource(), event.getSignal());
-        }
-    };
 
     public EventSystem(SystemPort systemPort) {
         super("EventSystem", systemPort);
@@ -20,29 +14,20 @@ public class EventSystem extends SubSystem implements EventPoster {
     }
 
     @Override
-    public void dispatchEvent(Event event) {
+    public void dispatch(Event event) {
         systemPort.addDataInstance(event);
-        //System.out.println("Dispatching:\nEvent"+event.toString()+"\nsource:"+event.getSource()+"\nsignal:"+event.getSignal());
-        eventProcessor.processEvent(event);
-        //System.out.println("finishing Dispatching:\nEvent"+event.toString()+"\nsource:"+event.getSource()+"\nsignal:"+event.getSignal());
+        systemPort.broadcast(event.getSource(), event.getSignal());
         systemPort.deleteDataInstance(event);
-    }
-
-    public void addEventProcessor(EventProcessor eventProcessor) {
-        systemPort.addDataInstance(eventProcessor);
-    }
-
-    public void deleteEventPorcessor(EventProcessor eventProcessor) {
-        systemPort.deleteDataInstance(eventProcessor);
     }
 
     public void addEventTransfer(EventTransfer eventTransfer) {
         systemPort.addDataInstance(eventTransfer);
-        eventTransfer.setEventPoster(this);
+        eventTransfer.setEventDispatcher(this);
     }
 
     public void deleteEventTransfer(EventTransfer eventTransfer) {
         systemPort.deleteDataInstance(eventTransfer);
+        eventTransfer.useDummyDispatcher();
     }
 
     public Window getWindow() {
