@@ -2,7 +2,8 @@ package com.sunday.game.world;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.physics.box2d.Shape;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.sunday.engine.Engine;
 import com.sunday.engine.databank.Port;
 import com.sunday.engine.environment.driver.keyboard.KeyBoard;
@@ -51,7 +52,6 @@ public class DemoBallRolling implements Screen {
             @Override
             protected void connectWithInternal(Port port) {
                 outlook.dimension.set(1000, 1000);
-                outlook.shape = Shape.Type.Edge;
                 outlook.viewLayers.add(new TextureViewLayer<>(GameFramework.Resource.getAsset("buttons/buttons.png")));
                 movement.position.set(0, 0);
                 port.addDataInstance(sawAnimationRule);
@@ -65,46 +65,9 @@ public class DemoBallRolling implements Screen {
 
         Role backGroundRole = new Role(Label.Hero, backGroundModel);
 
-        AbstractModel heroModel = new AbstractModel() {
-            Rule moveRule = new Rule(KeyBoardCondition.keyPressed("x"), new Reaction<KeyBoard, KeyBoardSignal>() {
-                @Override
-                public void accept(KeyBoard keyBoard, KeyBoardSignal keyBoardSignal) {
-                    System.out.println("KeyDown");
-                    movement.position.add(10, 10);
-                    port.broadcast(movement, MovementSignal.ReLocated);
-                }
-            });
-            Rule followMouseRule = new Rule(MouseCondition.mouseDragged(), new Reaction<Mouse, MouseSignal>() {
-                @Override
-                public void accept(Mouse mouse, MouseSignal mouseSignal) {
-                    System.out.println("MouseDragged");
-                    movement.position.set(mouse.screenX, Gdx.graphics.getHeight() - mouse.screenY);
-                    port.broadcast(movement, MovementSignal.ReLocated);
-                }
-            });
+        AbstractModel squareModel = new SquareModel();
 
-            @Override
-            protected void disconnectWithInternal(Port port) {
-
-            }
-
-            @Override
-            protected void connectWithInternal(Port port) {
-                outlook.dimension.set(20, 20);
-                outlook.shape = Shape.Type.Edge;
-                outlook.viewLayers.add(new TextureViewLayer<>(GameFramework.Resource.getAsset("buttons/button.png")));
-                movement.position.set(100, 100);
-                port.addDataInstance(moveRule);
-                port.addDataInstance(followMouseRule);
-            }
-
-            @Override
-            public void dispose() {
-
-            }
-        };
-
-        Role heroRole = new Role(Label.Hero, heroModel);
+        Role heroRole = new Role(Label.Hero, squareModel);
 
 
         scenario = new Scenario(ScopeType.EntireLevel);
@@ -153,6 +116,55 @@ public class DemoBallRolling implements Screen {
         engine.dispose();
     }
 
+
+    private class SquareModel extends AbstractModel {
+
+        public SquareModel() {
+            outlook.dimension.set(20, 20);
+            outlook.viewLayers.add(new TextureViewLayer<>(GameFramework.Resource.getAsset("buttons/button.png")));
+            movement.position.set(100, 100);
+            PolygonShape shape = new PolygonShape();
+            shape.setAsBox(20, 20);
+            physicReflection.fixtureDef.shape = shape;
+            physicReflection.fixtureDef.density = 1.0f;
+
+            physicReflection.bodyDef.gravityScale = 0;
+            physicReflection.bodyDef.type = BodyDef.BodyType.DynamicBody;
+            physicReflection.bodyDef.position.set(movement.position);
+        }
+
+        Rule moveRule = new Rule(KeyBoardCondition.keyPressed("x"), new Reaction<KeyBoard, KeyBoardSignal>() {
+            @Override
+            public void accept(KeyBoard keyBoard, KeyBoardSignal keyBoardSignal) {
+                movement.position.add(10, 10);
+                port.broadcast(movement, MovementSignal.ReLocated);
+            }
+        });
+        Rule followMouseRule = new Rule(MouseCondition.mouseDragged(), new Reaction<Mouse, MouseSignal>() {
+            @Override
+            public void accept(Mouse mouse, MouseSignal mouseSignal) {
+                movement.position.set(mouse.screenX, Gdx.graphics.getHeight() - mouse.screenY);
+                port.broadcast(movement, MovementSignal.ReLocated);
+            }
+        });
+
+        @Override
+        protected void disconnectWithInternal(Port port) {
+
+        }
+
+        @Override
+        protected void connectWithInternal(Port port) {
+            port.addDataInstance(moveRule);
+            port.addDataInstance(followMouseRule);
+        }
+
+        @Override
+        public void dispose() {
+
+        }
+    }
+
     private class SawModel extends AbstractModel {
         private TextureViewLayer sawTextureViewLayer = new TextureViewLayer(GameFramework.Resource.getAsset("saws/saw1.png"));
         private Timer timer = new Timer();
@@ -167,6 +179,14 @@ public class DemoBallRolling implements Screen {
 
         public SawModel(float x, float y) {
             movement.position.set(x, y);
+            outlook.dimension.set(40, 40);
+            outlook.viewLayers.add(sawTextureViewLayer);
+            physicReflection.fixtureDef.shape.setRadius(2);
+            physicReflection.fixtureDef.density = 0.5f;
+            physicReflection.fixtureDef.friction = 0.2f;
+            physicReflection.bodyDef.position.set(movement.position);
+            physicReflection.bodyDef.type = BodyDef.BodyType.StaticBody;
+            physicReflection.bodyDef.gravityScale = 0;
             timer.setPeriod(AnimationSetting.FrameDuration);
         }
 
@@ -177,9 +197,6 @@ public class DemoBallRolling implements Screen {
 
         @Override
         protected void connectWithInternal(Port port) {
-            outlook.dimension.set(40, 40);
-            outlook.shape = Shape.Type.Circle;
-            outlook.viewLayers.add(sawTextureViewLayer);
             port.addDataInstance(sawMovingRule);
         }
 

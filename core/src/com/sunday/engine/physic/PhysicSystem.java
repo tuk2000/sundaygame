@@ -27,11 +27,11 @@ public class PhysicSystem extends SubSystem implements Disposable {
                     }
                     physicReflection.bodyCreated = true;
                     physicReflection.body = world.createBody(physicReflection.bodyDef);
-                    //physicReflection.createFixture();
+                    physicReflection.fixture = physicReflection.body.createFixture(physicReflection.fixtureDef);
+                    physicReflection.fixture.setUserData(physicReflection.owner);
                     break;
                 case Deletion:
-                    physicReflection.bodyCreated = false;
-                    world.destroyBody(physicReflection.body);
+                    physicReflection.reset();
             }
         }
     });

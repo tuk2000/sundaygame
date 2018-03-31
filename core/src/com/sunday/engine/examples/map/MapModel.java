@@ -12,7 +12,6 @@ import com.sunday.engine.model.property.viewlayers.MapViewLayer;
 public class MapModel extends AbstractModel {
 
     public MapModel() {
-        outlook.shape = Shape.Type.Chain;
         outlook.dimension.set(1000, 1000);
         outlook.viewLayers.add(new MapViewLayer("TileMap/sTest/sTest.tmx"));
 

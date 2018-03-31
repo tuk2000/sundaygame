@@ -14,7 +14,7 @@ import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
 
 public class RendererManager implements SystemPortSharing {
-    public boolean DoRenderDebug = true;
+    public boolean DoRenderDebug = false;
     public boolean DoRenderMap = true;
     public boolean DoRenderSprite = false;
     public boolean DoRenderStage = false;

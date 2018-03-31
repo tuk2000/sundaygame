@@ -13,13 +13,13 @@ public abstract class AbstractModel implements PortSharing, Disposable {
     public Port port;
 
     public Outlook outlook = new Outlook();
-    public PhysicReflection physicReflection = new PhysicReflection();
+    public PhysicReflection physicReflection = new PhysicReflection(this);
     public Movement movement = new Movement();
 
     private Rule movementRule = new Rule(new DataCondition(movement, MovementSignal.class), new Reaction<Movement, MovementSignal>() {
         @Override
         public void accept(Movement movement, MovementSignal movementSignal) {
-            System.out.println("movementModifiedReaction");
+            physicReflection.forceMoveTo(movement.position);
             port.broadcast(outlook, OutlookSignal.Updated);
         }
     });
@@ -27,8 +27,6 @@ public abstract class AbstractModel implements PortSharing, Disposable {
     private Rule outlookRule = new Rule(new DataCondition(outlook, OutlookSignal.class), new Reaction<Outlook, OutlookSignal>() {
         @Override
         public void accept(Outlook outlook, OutlookSignal outlookSignal) {
-
-            System.out.println("outlookModifiedReaction");
             physicReflection.bodyDef.position.set(movement.position);
 //        switch (physicReflection.fixtureDef.shape.getType()) {
 //            case Chain:
@@ -47,7 +45,6 @@ public abstract class AbstractModel implements PortSharing, Disposable {
     private Rule physicReflectionRule = new Rule(new DataCondition(physicReflection, PhysicReflectionSignal.class), new Reaction<PhysicReflection, PhysicReflectionSignal>() {
         @Override
         public void accept(PhysicReflection physicReflection, PhysicReflectionSignal physicReflectionSignal) {
-            System.out.println("physicReflectionModifiedReaction");
             movement.position.set(physicReflection.body.getPosition());
         }
     });

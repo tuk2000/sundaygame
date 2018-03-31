@@ -28,7 +28,6 @@ public class HeroModel extends AbstractModel {
 
     public HeroModel() {
 
-        outlook.shape = Shape.Type.Polygon;
         outlook.dimension.set(16.f, 20.f);
         outlook.viewLayers.add(textureViewLayer);
         movement.position.set(32, 32);
@@ -38,14 +37,13 @@ public class HeroModel extends AbstractModel {
         bodyDef.position.set(movement.position);
 
         PolygonShape polygonShape = new PolygonShape();
-        polygonShape.setRadius(1.0f);
         polygonShape.setAsBox(outlook.dimension.x, outlook.dimension.y);
 
         FixtureDef fixtureDef = physicReflection.fixtureDef;
         fixtureDef.shape = polygonShape;
-        fixtureDef.friction = .1f;
-        fixtureDef.restitution = 0.2f;
-        fixtureDef.density = 0.1f;
+        fixtureDef.friction = 1;
+        fixtureDef.restitution = 0;
+        fixtureDef.density = 2f;
     }
 
     @Override

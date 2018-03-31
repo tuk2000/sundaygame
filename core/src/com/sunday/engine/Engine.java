@@ -56,6 +56,8 @@ public class Engine implements Disposable {
         eventSystem.addEventTransfer(collisionEventTransfer);
         eventSystem.addEventTransfer(windowEventTransfer);
 
+        physicSystem.setContactListener(collisionEventTransfer);
+
         scenarioSystem.setRender(renderSystem);
 
         running = true;

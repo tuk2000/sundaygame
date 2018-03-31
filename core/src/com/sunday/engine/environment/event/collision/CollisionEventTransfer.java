@@ -13,25 +13,29 @@ public class CollisionEventTransfer extends EventTransfer implements ContactList
 
     @Override
     public void beginContact(Contact contact) {
-        if (contact.getFixtureA().getUserData() != null & contact.getFixtureA().getUserData() != null) {
-//            CollisionEvent collisionEvent =
-//                    new CollisionEvent(this, contact.getFixtureA().getUserData(), contact.getFixtureB().getUserData());
-//            eventDispatcher.dispatch(collisionEvent);
-        }
+        System.out.println("beginContact");
+        System.out.println(contact.getFixtureA().getUserData());
+        System.out.println(contact.getFixtureB().getUserData());
     }
 
     @Override
     public void endContact(Contact contact) {
-
+        System.out.println("endContact");
+        System.out.println(contact.getFixtureA().getUserData());
+        System.out.println(contact.getFixtureB().getUserData());
     }
 
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {
-
+        System.out.println("preSolve");
+        System.out.println(contact.getFixtureA().getUserData());
+        System.out.println(contact.getFixtureB().getUserData());
     }
 
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
-
+        System.out.println("postSolve");
+        System.out.println(contact.getFixtureA().getUserData());
+        System.out.println(contact.getFixtureB().getUserData());
     }
 }

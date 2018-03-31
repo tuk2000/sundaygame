@@ -10,7 +10,6 @@ import com.sunday.engine.model.AbstractModel;
 public class EnemyModel extends AbstractModel {
 
     public EnemyModel() {
-        outlook.shape = Shape.Type.Circle;
         outlook.dimension.set(40.0f, 40.0f);
         movement.position.set(112, 32);
 
