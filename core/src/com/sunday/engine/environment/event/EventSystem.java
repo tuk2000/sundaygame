@@ -1,20 +1,23 @@
 package com.sunday.engine.environment.event;
 
 import com.sunday.engine.SubSystem;
+import com.sunday.engine.common.ClassContext;
+import com.sunday.engine.common.MetaDataContext;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.environment.event.window.Window;
-import com.sunday.engine.environment.event.window.WindowCondition;
 import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
 import com.sunday.engine.rule.RuleSignal;
 
 public class EventSystem extends SubSystem implements EventDispatcher {
     private Window window;
-    private Rule windowConditionMountingRule = new Rule(Rule.class, RuleSignal.Mounting, new Reaction<Rule, RuleSignal>() {
+    private Rule windowConditionMountingRule = new Rule(Rule.class, RuleSignal.Mounting, new Reaction<ClassContext<Rule>>() {
         @Override
-        public void accept(Rule rule, RuleSignal ruleSignal) {
-            if (rule.getCondition() instanceof WindowCondition) {
-                rule.getCondition().setData(window);
+        public void accept(ClassContext<Rule> ruleClassContext) {
+            Class sensedClass = ruleClassContext.getSensedClass();
+            Rule rule = ruleClassContext.getInstance();
+            if (sensedClass.equals(Window.class)) {
+                ((MetaDataContext) rule.getContext()).setMetaData(window);
             }
         }
     });
@@ -30,7 +33,7 @@ public class EventSystem extends SubSystem implements EventDispatcher {
     public void dispatch(Event event) {
         systemPort.addDataInstance(event);
         systemPort.broadcast(event.getSource(), event.getSignal());
-        systemPort.deleteDataInstance(event);
+        systemPort.removeDataInstance(event);
     }
 
     public void addEventTransfer(EventTransfer eventTransfer) {
@@ -39,7 +42,7 @@ public class EventSystem extends SubSystem implements EventDispatcher {
     }
 
     public void deleteEventTransfer(EventTransfer eventTransfer) {
-        systemPort.deleteDataInstance(eventTransfer);
+        systemPort.removeDataInstance(eventTransfer);
         eventTransfer.useDummyDispatcher();
     }
 

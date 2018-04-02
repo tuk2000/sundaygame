@@ -34,13 +34,13 @@ public class PortImpl<T extends Data> implements Port<T> {
     }
 
     @Override
-    public void deleteDataInstance(T t) {
+    public void removeDataInstance(T t) {
         if (owner instanceof Class) {
             ToolApplication.dataMonitor.deleteData(t);
         } else {
             ToolApplication.dataMonitor.deleteData(t);
         }
-        dataStorage.deleteDataInstance(this, t);
+        dataStorage.removeDataInstance(this, t);
     }
 
     @Override

@@ -5,10 +5,10 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
+import com.sunday.engine.common.MetaDataContext;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.environment.driver.keyboard.KeyBoard;
 import com.sunday.engine.environment.driver.keyboard.KeyBoardCondition;
-import com.sunday.engine.environment.driver.keyboard.KeyBoardSignal;
 import com.sunday.engine.render.IndependentRenderer;
 import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
@@ -130,18 +130,18 @@ public class DebugRenderer extends IndependentRenderer {
 
     @Override
     public void connectWith(SystemPort systemPort) {
-        systemPort.addDataInstance(new Rule(KeyBoardCondition.keyPressed("["), new Reaction<KeyBoard, KeyBoardSignal>() {
+        systemPort.addDataInstance(new Rule(KeyBoardCondition.keyPressed("["), new Reaction<MetaDataContext<KeyBoard>>() {
             @Override
-            public void accept(KeyBoard keyBoard, KeyBoardSignal keyBoardSignal) {
+            public void accept(MetaDataContext<KeyBoard> metaDataContext) {
                 selectedMatrix++;
                 if (selectedMatrix == 4) selectedMatrix = 0;
                 printOptions();
             }
         }));
-        systemPort.addDataInstance(new Rule(KeyBoardCondition.keyPressed("]"), new Reaction<KeyBoard, KeyBoardSignal>() {
+        systemPort.addDataInstance(new Rule(KeyBoardCondition.keyPressed("]"), new Reaction<MetaDataContext<KeyBoard>>() {
 
             @Override
-            public void accept(KeyBoard keyBoard, KeyBoardSignal keyBoardSignal) {
+            public void accept(MetaDataContext<KeyBoard> metaDataContext) {
                 smallRenderingSelected = !smallRenderingSelected;
                 printOptions();
             }

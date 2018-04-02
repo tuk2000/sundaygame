@@ -5,20 +5,26 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
 import com.sunday.engine.SubSystem;
+import com.sunday.engine.common.ClassContext;
 import com.sunday.engine.common.DataSignal;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.model.property.PhysicReflection;
 import com.sunday.engine.model.property.PhysicReflectionSignal;
+import com.sunday.engine.rule.ClassCondition;
 import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
+
+import static com.sunday.engine.environment.driver.gamepad.GamePadSignal.None;
 
 public class PhysicSystem extends SubSystem implements Disposable {
     protected Vector2 defaultGravity = new Vector2(0, -9.8f);
     protected World world;
 
-    private Rule physicReflectionDataRule = new Rule(PhysicReflection.class, DataSignal.class, new Reaction<PhysicReflection, DataSignal>() {
+    private Rule physicReflectionDataRule = new Rule<>(new ClassCondition<>(PhysicReflection.class, DataSignal.class), new Reaction<ClassContext<PhysicReflection>>() {
         @Override
-        public void accept(PhysicReflection physicReflection, DataSignal dataSignal) {
+        public void accept(ClassContext<PhysicReflection> physicReflectionClassContext) {
+            PhysicReflection physicReflection = physicReflectionClassContext.getInstance();
+            DataSignal dataSignal = (DataSignal) physicReflectionClassContext.getSignal();
             switch (dataSignal) {
                 case Add:
                     if (physicReflection.bodyCreated) {
@@ -28,7 +34,7 @@ public class PhysicSystem extends SubSystem implements Disposable {
                     physicReflection.bodyCreated = true;
                     physicReflection.body = world.createBody(physicReflection.bodyDef);
                     physicReflection.fixture = physicReflection.body.createFixture(physicReflection.fixtureDef);
-                    physicReflection.fixture.setUserData(physicReflection.owner);
+                    physicReflection.fixture.setUserData(physicReflection);
                     break;
                 case Deletion:
                     physicReflection.reset();
@@ -36,9 +42,11 @@ public class PhysicSystem extends SubSystem implements Disposable {
         }
     });
 
-    private Rule physicReflectionModificationRule = new Rule(PhysicReflection.class, PhysicReflectionSignal.class, new Reaction<PhysicReflection, PhysicReflectionSignal>() {
+    private Rule physicReflectionModificationRule = new Rule(new ClassCondition<>(PhysicReflection.class, PhysicReflectionSignal.class), new Reaction<ClassContext<PhysicReflection>>() {
         @Override
-        public void accept(PhysicReflection physicReflection, PhysicReflectionSignal physicReflectionSignal) {
+        public void accept(ClassContext<PhysicReflection> physicReflectionClassContext) {
+            PhysicReflection physicReflection = physicReflectionClassContext.getInstance();
+            PhysicReflectionSignal physicReflectionSignal = (PhysicReflectionSignal) physicReflectionClassContext.getSignal();
             switch (physicReflectionSignal) {
                 case None:
                 case Updated:
@@ -68,8 +76,8 @@ public class PhysicSystem extends SubSystem implements Disposable {
 
     @Override
     public void dispose() {
-        systemPort.deleteDataInstance(physicReflectionDataRule);
-        systemPort.deleteDataInstance(physicReflectionModificationRule);
+        systemPort.removeDataInstance(physicReflectionDataRule);
+        systemPort.removeDataInstance(physicReflectionModificationRule);
         world.dispose();
     }
 }

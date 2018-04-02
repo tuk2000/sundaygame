@@ -1,5 +1,6 @@
 package com.sunday.tool.drivermonitor;
 
+import com.sunday.engine.common.ClassContext;
 import com.sunday.engine.common.DataSignal;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.databank.SystemPortSharing;
@@ -18,9 +19,11 @@ public class GamePadMonitor extends ToolExtender<GamePadMonitorUIController> imp
     private Set<GamePad> waitingToBeAddedSet = new HashSet<>();
 
     private GamePadSignal currentGamePadSignal = GamePadSignal.None;
-    private Rule gamePadDataMonitorRule = new Rule(GamePad.class, DataSignal.class, new Reaction<GamePad, DataSignal>() {
+    private Rule gamePadDataMonitorRule = new Rule(GamePad.class, DataSignal.class, new Reaction<ClassContext<GamePad>>() {
         @Override
-        public void accept(GamePad gamePad, DataSignal dataSignal) {
+        public void accept(ClassContext<GamePad> gamePadClassContext) {
+            DataSignal dataSignal = (DataSignal) gamePadClassContext.getSignal();
+            GamePad gamePad = gamePadClassContext.getInstance();
             switch (dataSignal) {
                 case Add:
                     addGamePad(gamePad);
@@ -31,13 +34,14 @@ public class GamePadMonitor extends ToolExtender<GamePadMonitorUIController> imp
             }
         }
     });
-    private Rule gamePadStatusMonitorRule = new Rule(GamePad.class, GamePadSignal.class, new Reaction<GamePad, GamePadSignal>() {
+    private Rule gamePadStatusMonitorRule = new Rule(GamePad.class, GamePadSignal.class, new Reaction<ClassContext<GamePad>>() {
         @Override
-        public void accept(GamePad gamePad, GamePadSignal gamePadSignal) {
+        public void accept(ClassContext<GamePad> gamePadClassContext) {
+            currentGamePadSignal = (GamePadSignal) gamePadClassContext.getSignal();
+            GamePad gamePad = gamePadClassContext.getInstance();
             if (!set.contains(gamePad)) {
                 addGamePad(gamePad);
             }
-            currentGamePadSignal = gamePadSignal;
             flushBuffer();
         }
     });
@@ -111,7 +115,7 @@ public class GamePadMonitor extends ToolExtender<GamePadMonitorUIController> imp
 
     @Override
     public void disconnectWith(SystemPort systemPort) {
-        systemPort.deleteDataInstance(gamePadDataMonitorRule);
-        systemPort.deleteDataInstance(gamePadStatusMonitorRule);
+        systemPort.removeDataInstance(gamePadDataMonitorRule);
+        systemPort.removeDataInstance(gamePadStatusMonitorRule);
     }
 }

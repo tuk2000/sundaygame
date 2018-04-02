@@ -1,10 +1,8 @@
 package com.sunday.engine.rule;
 
-import com.sunday.engine.common.Data;
-import com.sunday.engine.common.Signal;
+import com.sunday.engine.common.Context;
 
-import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
-public interface Reaction<T extends Data, S extends Signal> extends BiConsumer<T, S> {
-
+public interface Reaction<C extends Context> extends Consumer<C> {
 }

@@ -1,6 +1,7 @@
 package com.sunday.engine.model;
 
 import com.badlogic.gdx.utils.Disposable;
+import com.sunday.engine.common.DataContext;
 import com.sunday.engine.databank.Port;
 import com.sunday.engine.databank.PortSharing;
 import com.sunday.engine.model.property.*;
@@ -16,18 +17,18 @@ public abstract class AbstractModel implements PortSharing, Disposable {
     public PhysicReflection physicReflection = new PhysicReflection(this);
     public Movement movement = new Movement();
 
-    private Rule movementRule = new Rule(new DataCondition(movement, MovementSignal.class), new Reaction<Movement, MovementSignal>() {
+    private Rule movementRule = new Rule(new DataCondition(movement, MovementSignal.class), new Reaction<DataContext<Movement>>() {
         @Override
-        public void accept(Movement movement, MovementSignal movementSignal) {
+        public void accept(DataContext<Movement> movementDataContext) {
             physicReflection.forceMoveTo(movement.position);
             port.broadcast(outlook, OutlookSignal.Updated);
         }
     });
 
-    private Rule outlookRule = new Rule(new DataCondition(outlook, OutlookSignal.class), new Reaction<Outlook, OutlookSignal>() {
+    private Rule outlookRule = new Rule(new DataCondition(outlook, OutlookSignal.class), new Reaction<DataContext<Outlook>>() {
         @Override
-        public void accept(Outlook outlook, OutlookSignal outlookSignal) {
-            physicReflection.bodyDef.position.set(movement.position);
+        public void accept(DataContext<Outlook> outlookDataContext) {
+            //            physicReflection.bodyDef.position.set(movement.position);
 //        switch (physicReflection.fixtureDef.shape.getType()) {
 //            case Chain:
 //                break;
@@ -39,13 +40,19 @@ public abstract class AbstractModel implements PortSharing, Disposable {
 //                break;
 //            case Edge:
 //                break;
-//        }
         }
     });
-    private Rule physicReflectionRule = new Rule(new DataCondition(physicReflection, PhysicReflectionSignal.class), new Reaction<PhysicReflection, PhysicReflectionSignal>() {
+    private Rule physicReflectionRule = new Rule(new DataCondition(physicReflection, PhysicReflectionSignal.class), new Reaction<DataContext<PhysicReflection>>() {
         @Override
-        public void accept(PhysicReflection physicReflection, PhysicReflectionSignal physicReflectionSignal) {
-            movement.position.set(physicReflection.body.getPosition());
+        public void accept(DataContext<PhysicReflection> physicReflectionDataContext) {
+            PhysicReflectionSignal physicReflectionSignal = (PhysicReflectionSignal) physicReflectionDataContext.getSignal();
+            switch (physicReflectionSignal) {
+                case Updated:
+                    movement.position.set(physicReflection.body.getPosition());
+                    movement.speed.set(physicReflection.body.getLinearVelocity());
+                    movement.angularVelocity = physicReflection.body.getAngularVelocity();
+                    movement.angle = physicReflection.body.getAngle();
+            }
         }
     });
 
@@ -63,16 +70,16 @@ public abstract class AbstractModel implements PortSharing, Disposable {
 
     @Override
     public void disconnectWith(Port port) {
-        port.deleteDataInstance(outlook);
-        port.deleteDataInstance(physicReflection);
-        port.deleteDataInstance(movement);
-        port.deleteDataInstance(movementRule);
-        port.deleteDataInstance(outlookRule);
-        port.deleteDataInstance(physicReflectionRule);
+        port.removeDataInstance(outlook);
+        port.removeDataInstance(physicReflection);
+        port.removeDataInstance(movement);
+        port.removeDataInstance(movementRule);
+        port.removeDataInstance(outlookRule);
+        port.removeDataInstance(physicReflectionRule);
         disconnectWithInternal(port);
     }
 
-    protected abstract void disconnectWithInternal(Port port);
-
     protected abstract void connectWithInternal(Port port);
+
+    protected abstract void disconnectWithInternal(Port port);
 }

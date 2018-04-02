@@ -1,13 +1,15 @@
 package com.sunday.engine.environment.driver.keyboard;
 
-import com.sunday.engine.rule.DataCondition;
+import com.sunday.engine.common.MetaDataContext;
+import com.sunday.engine.environment.driver.Driver;
+import com.sunday.engine.rule.MetaDataCondition;
 
 import java.util.function.Predicate;
 
-public class KeyBoardCondition extends DataCondition<KeyBoard, KeyBoardSignal> {
-    private static Predicate<KeyBoard> getKeyPredicate(String keyName) {
+public class KeyBoardCondition extends MetaDataCondition<KeyBoard> {
+    private static Predicate<MetaDataContext<KeyBoard>> getKeyPredicate(String keyName) {
         String newKeyName = keyName.length() == 1 ? keyName.toUpperCase() : keyName;
-        return keyBoard -> keyBoard.character.equals(newKeyName);
+        return metaDataContext -> metaDataContext.getMetaData().character.equals(newKeyName);
     }
 
     private static Predicate<KeyBoard> getKeyPredicate(int keyCode) {

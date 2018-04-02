@@ -1,5 +1,6 @@
 package com.sunday.tool.drivermonitor;
 
+import com.sunday.engine.common.ClassContext;
 import com.sunday.engine.common.DataSignal;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.databank.SystemPortSharing;
@@ -14,9 +15,11 @@ import java.util.function.BiConsumer;
 public class MouseMonitor extends ToolExtender<MouseMonitorUIController> implements SystemPortSharing {
     private Mouse currentMouse;
     private MouseSignal currentMouseSignal = MouseSignal.None;
-    private Rule mouseDataMonitorRule = new Rule(Mouse.class, DataSignal.class, new Reaction<Mouse, DataSignal>() {
+    private Rule mouseDataMonitorRule = new Rule(Mouse.class, DataSignal.class, new Reaction<ClassContext<Mouse>>() {
         @Override
-        public void accept(Mouse mouse, DataSignal dataSignal) {
+        public void accept(ClassContext<Mouse> mouseClassContext) {
+            Mouse mouse = mouseClassContext.getInstance();
+            DataSignal dataSignal = (DataSignal) mouseClassContext.getSignal();
             switch (dataSignal) {
                 case Add:
                     setCurrentMouse(mouse);
@@ -24,12 +27,13 @@ public class MouseMonitor extends ToolExtender<MouseMonitorUIController> impleme
             }
         }
     });
-    private Rule mouseStatusMonitorRule = new Rule(Mouse.class, MouseSignal.class, new Reaction<Mouse, MouseSignal>() {
+    private Rule mouseStatusMonitorRule = new Rule(Mouse.class, MouseSignal.class, new Reaction<ClassContext<Mouse>>() {
         @Override
-        public void accept(Mouse mouse, MouseSignal mouseSignal) {
+        public void accept(ClassContext<Mouse> mouseClassContext) {
+            Mouse mouse = mouseClassContext.getInstance();
+            currentMouseSignal = (MouseSignal) mouseClassContext.getSignal();
             if (currentMouse != mouse)
                 setCurrentMouse(mouse);
-            currentMouseSignal = mouseSignal;
             flushBuffer();
         }
     });
@@ -58,7 +62,7 @@ public class MouseMonitor extends ToolExtender<MouseMonitorUIController> impleme
 
     @Override
     public void disconnectWith(SystemPort systemPort) {
-        systemPort.deleteDataInstance(mouseDataMonitorRule);
-        systemPort.deleteDataInstance(mouseStatusMonitorRule);
+        systemPort.removeDataInstance(mouseDataMonitorRule);
+        systemPort.removeDataInstance(mouseStatusMonitorRule);
     }
 }

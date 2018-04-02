@@ -10,7 +10,7 @@ public interface Port<T extends Data> {
 
     boolean containsDataInstance(T t);
 
-    void deleteDataInstance(T t);
+    void removeDataInstance(T t);
 
     void broadcast(T t, Signal signal);
 }

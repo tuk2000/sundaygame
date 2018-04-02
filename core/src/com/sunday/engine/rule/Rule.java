@@ -1,41 +1,50 @@
 package com.sunday.engine.rule;
 
-import com.sunday.engine.common.Data;
-import com.sunday.engine.common.Signal;
+import com.sunday.engine.common.*;
 import com.sunday.engine.databank.SystemPort;
 
-public class Rule implements Data {
-    protected Condition condition;
-    protected Reaction reaction;
+public class Rule<C extends Context> implements Data {
+    protected C context;
+    protected Condition<C> condition;
+    protected Reaction<C> reaction;
 
-    public <T extends Data, S extends Signal> Rule(Condition<T, S> condition, Reaction<T, S> reaction) {
-        this.condition = condition;
-        this.reaction = reaction;
+    public <RC extends Context> Rule(Condition<RC> condition, Reaction<RC> reaction) {
+        this.condition = (Condition<C>) condition;
+        this.reaction = (Reaction<C>) reaction;
         condition.setReaction(reaction);
     }
 
-    public <T extends Data, S extends Signal> Rule(T t, S signal, Reaction<T, S> reaction) {
-        condition = new DataCondition(t, signal);
-        this.reaction = reaction;
+    public <D extends Data, S extends Signal> Rule(D d, S signal, Reaction<DataContext<D>> reaction) {
+        this.reaction = (Reaction<C>) reaction;
+        condition = new DataCondition(d, signal);
         condition.setReaction(reaction);
     }
 
-    public <T extends Data, S extends Signal> Rule(Class<T> clazz, S signal, Reaction<T, S> reaction) {
+    public <D extends Data, S extends Signal> Rule(Class<D> clazz, S signal, Reaction<ClassContext<D>> reaction) {
+        this.reaction = (Reaction<C>) reaction;
         condition = new ClassCondition(clazz, signal);
-        this.reaction = reaction;
         condition.setReaction(reaction);
     }
 
-    public <T extends Data, S extends Signal> Rule(T t, Class<S> signalClass, Reaction<T, S> reaction) {
+    public <D extends Data, S extends Signal> Rule(D t, Class<S> signalClass, Reaction<DataContext<D>> reaction) {
+        this.reaction = (Reaction<C>) reaction;
         condition = new DataCondition(t, signalClass);
-        this.reaction = reaction;
         condition.setReaction(reaction);
     }
 
-    public <T extends Data, S extends Signal> Rule(Class<T> clazz, Class<S> signalClass, Reaction<T, S> reaction) {
+    public <D extends Data, S extends Signal> Rule(Class<D> clazz, Class<S> signalClass, Reaction<ClassContext<D>> reaction) {
+        this.reaction = (Reaction<C>) reaction;
         condition = new ClassCondition(clazz, signalClass);
-        this.reaction = reaction;
         condition.setReaction(reaction);
+    }
+
+    public C getContext() {
+        return context;
+    }
+
+    public void setContext(C context) {
+        this.context = context;
+        condition.setContext(context);
     }
 
     public Condition getCondition() {
@@ -51,7 +60,7 @@ public class Rule implements Data {
         condition.connectWith(systemPort);
     }
 
-    protected void dismountWith(SystemPort systemPort) {
+    protected void dismountWith(SystemPort<Data> systemPort) {
         condition.disconnectWith(systemPort);
     }
 }

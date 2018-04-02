@@ -1,5 +1,6 @@
 package com.sunday.tool.drivermonitor;
 
+import com.sunday.engine.common.ClassContext;
 import com.sunday.engine.common.DataSignal;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.databank.SystemPortSharing;
@@ -14,9 +15,11 @@ import java.util.function.BiConsumer;
 public class KeyBoardMonitor extends ToolExtender<KeyBoardMonitorUIController> implements SystemPortSharing {
     private KeyBoard currentKeyBoard;
     private KeyBoardSignal currentKeyBoardSignal = KeyBoardSignal.None;
-    private Rule keyBoardDataMonitorRule = new Rule(KeyBoard.class, DataSignal.class, new Reaction<KeyBoard, DataSignal>() {
+    private Rule keyBoardDataMonitorRule = new Rule(KeyBoard.class, DataSignal.class, new Reaction<ClassContext<KeyBoard>>() {
         @Override
-        public void accept(KeyBoard keyBoard, DataSignal dataSignal) {
+        public void accept(ClassContext<KeyBoard> keyBoardClassContext) {
+            KeyBoard keyBoard = keyBoardClassContext.getInstance();
+            DataSignal dataSignal = (DataSignal) keyBoardClassContext.getSignal();
             switch (dataSignal) {
                 case Add:
                     setCurrentKeyBoard(keyBoard);
@@ -24,13 +27,14 @@ public class KeyBoardMonitor extends ToolExtender<KeyBoardMonitorUIController> i
             }
         }
     });
-    private Rule keyBoardStatusMonitorRule = new Rule(KeyBoard.class, KeyBoardSignal.class, new Reaction<KeyBoard, KeyBoardSignal>() {
+    private Rule keyBoardStatusMonitorRule = new Rule(KeyBoard.class, KeyBoardSignal.class, new Reaction<ClassContext<KeyBoard>>() {
         @Override
-        public void accept(KeyBoard keyBoard, KeyBoardSignal keyBoardSignal) {
+        public void accept(ClassContext<KeyBoard> keyBoardClassContext) {
+            KeyBoard keyBoard = keyBoardClassContext.getInstance();
+            currentKeyBoardSignal = (KeyBoardSignal) keyBoardClassContext.getSignal();
             if (currentKeyBoard != keyBoard) {
                 setCurrentKeyBoard(keyBoard);
             }
-            currentKeyBoardSignal = keyBoardSignal;
             flushBuffer();
         }
     });
@@ -60,7 +64,7 @@ public class KeyBoardMonitor extends ToolExtender<KeyBoardMonitorUIController> i
 
     @Override
     public void disconnectWith(SystemPort systemPort) {
-        systemPort.deleteDataInstance(keyBoardDataMonitorRule);
-        systemPort.deleteDataInstance(keyBoardStatusMonitorRule);
+        systemPort.removeDataInstance(keyBoardDataMonitorRule);
+        systemPort.removeDataInstance(keyBoardStatusMonitorRule);
     }
 }

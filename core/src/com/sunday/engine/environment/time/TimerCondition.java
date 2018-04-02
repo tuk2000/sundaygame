@@ -1,9 +1,10 @@
 package com.sunday.engine.environment.time;
 
-import com.sunday.engine.rule.DataCondition;
+import com.sunday.engine.rule.ContextBuilder;
+import com.sunday.engine.rule.MetaDataCondition;
 
 
-public class TimerCondition extends DataCondition<Timer, TimerSignal> {
+public class TimerCondition extends MetaDataCondition<Timer> {
 
     private static TimerCondition AnimationTimerCondition = null;
 
@@ -18,7 +19,8 @@ public class TimerCondition extends DataCondition<Timer, TimerSignal> {
 
     public static TimerCondition bind(Timer timer) {
         TimerCondition timerCondition = new TimerCondition();
-        timerCondition.setData(timer);
+        timerCondition.context = ContextBuilder.buildMetaDataContext(Timer.class);
+        timerCondition.context.setMetaData(timer);
         timerCondition.setSignals(TimerSignal.Triggered);
         return timerCondition;
     }

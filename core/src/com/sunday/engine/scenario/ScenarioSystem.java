@@ -21,7 +21,7 @@ public class ScenarioSystem extends SubSystem implements Disposable {
     }
 
     public void setRoot(Scenario root) {
-        systemPort.deleteDataInstance(this.root);
+        systemPort.removeDataInstance(this.root);
         this.root = root;
         init(root);
     }
@@ -42,7 +42,7 @@ public class ScenarioSystem extends SubSystem implements Disposable {
     }
 
     private void dispose(Scenario scenario) {
-        systemPort.deleteDataInstance(scenario);
+        systemPort.removeDataInstance(scenario);
         scenario.getRoles().forEach(role -> {
             Port port = systemPort.requestPort(role);
             role.abstractModel.disconnectWith(port);

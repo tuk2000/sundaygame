@@ -35,7 +35,7 @@ class DataStorage<T extends Data> implements Disposable {
         solve(t, DataSignal.Add);
     }
 
-    protected void deleteDataInstance(Port port, T t) {
+    protected void removeDataInstance(Port port, T t) {
         portContentRegisters.deregisterData(port, t);
         dataInstanceRegister.deregister(t);
         dataConnectionRegister.deregisterKey(t);

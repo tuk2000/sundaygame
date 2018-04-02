@@ -2,14 +2,13 @@ package com.sunday.engine.render.managers;
 
 
 import com.badlogic.gdx.Input;
+import com.sunday.engine.common.MetaDataContext;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.databank.SystemPortSharing;
 import com.sunday.engine.environment.driver.gamepad.GamePad;
 import com.sunday.engine.environment.driver.gamepad.GamePadCondition;
-import com.sunday.engine.environment.driver.gamepad.GamePadSignal;
 import com.sunday.engine.environment.driver.keyboard.KeyBoard;
 import com.sunday.engine.environment.driver.keyboard.KeyBoardCondition;
-import com.sunday.engine.environment.driver.keyboard.KeyBoardSignal;
 import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
 
@@ -23,9 +22,10 @@ public class RendererManager implements SystemPortSharing {
 
     @Override
     public void connectWith(SystemPort systemPort) {
-        systemPort.addDataInstance(new Rule(KeyBoardCondition.keyPressed("F2", "F3", "F4", "F5", "F6", "F7"), new Reaction<KeyBoard, KeyBoardSignal>() {
+        systemPort.addDataInstance(new Rule(KeyBoardCondition.keyPressed("F2", "F3", "F4", "F5", "F6", "F7"), new Reaction<MetaDataContext<KeyBoard>>() {
             @Override
-            public void accept(KeyBoard keyBoard, KeyBoardSignal keyBoardSignal) {
+            public void accept(MetaDataContext<KeyBoard> metaDataContext) {
+                KeyBoard keyBoard = metaDataContext.getMetaData();
                 System.out.println("keyBoard---RenderManager---" + keyBoard.character);
                 switch (keyBoard.keyCode) {
                     case Input.Keys.F2:
@@ -49,9 +49,10 @@ public class RendererManager implements SystemPortSharing {
             }
         }));
 
-        systemPort.addDataInstance(new Rule(GamePadCondition.buttonDown(0, 1, 2, 3, 9), new Reaction<GamePad, GamePadSignal>() {
+        systemPort.addDataInstance(new Rule(GamePadCondition.buttonDown(0, 1, 2, 3, 9), new Reaction<MetaDataContext<GamePad>>() {
             @Override
-            public void accept(GamePad gamePad, GamePadSignal gamePadSignal) {
+            public void accept(MetaDataContext<GamePad> metaDataContext) {
+                GamePad gamePad = metaDataContext.getMetaData();
                 System.out.println("gamePad---RenderManager---" + gamePad.buttonCode);
                 switch (gamePad.buttonCode) {
                     case 0:

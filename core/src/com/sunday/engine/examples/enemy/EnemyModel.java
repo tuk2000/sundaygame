@@ -3,7 +3,6 @@ package com.sunday.engine.examples.enemy;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.Shape;
 import com.sunday.engine.databank.Port;
 import com.sunday.engine.model.AbstractModel;
 

@@ -5,13 +5,13 @@ import com.badlogic.gdx.physics.box2d.*;
 import com.sunday.engine.common.MetaData;
 
 public class PhysicReflection implements MetaData {
-    private Shape dummyShape = new CircleShape();
     public final FixtureDef fixtureDef = new FixtureDef();
-    public Fixture fixture;
     public final BodyDef bodyDef = new BodyDef();
+    public Fixture fixture;
     public Body body;
     public boolean bodyCreated = false;
     public Object owner;
+    private Shape dummyShape = new CircleShape();
 
     public PhysicReflection(Object owner) {
         fixtureDef.shape = dummyShape;
@@ -26,6 +26,9 @@ public class PhysicReflection implements MetaData {
 
     @Override
     public void reset() {
+        fixtureDef.shape.dispose();
+        dummyShape.dispose();
+        dummyShape = new CircleShape();
         fixtureDef.shape = dummyShape;
         fixtureDef.friction = 0.2f;
         fixtureDef.restitution = 0;

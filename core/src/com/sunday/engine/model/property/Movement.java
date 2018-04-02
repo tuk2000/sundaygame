@@ -8,6 +8,8 @@ import com.sunday.engine.model.state.Direction;
 public class Movement implements Data {
     public Direction direction = Direction.Right;
     public Action action = Action.StandStill;
+    public float angularVelocity = 0;
+    public float angle = 0;
     public Vector2 speed = new Vector2(0, 0);
     public Vector2 position = new Vector2(0, 0);
 }

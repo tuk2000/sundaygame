@@ -2,14 +2,14 @@ package com.sunday.engine.environment.driver;
 
 import com.badlogic.gdx.controllers.Controller;
 import com.sunday.engine.SubSystem;
+import com.sunday.engine.common.ClassContext;
+import com.sunday.engine.common.MetaDataContext;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.environment.driver.gamepad.GamePad;
-import com.sunday.engine.environment.driver.gamepad.GamePadCondition;
 import com.sunday.engine.environment.driver.gamepad.GamePadHub;
 import com.sunday.engine.environment.driver.keyboard.KeyBoard;
-import com.sunday.engine.environment.driver.keyboard.KeyBoardCondition;
 import com.sunday.engine.environment.driver.mouse.Mouse;
-import com.sunday.engine.environment.driver.mouse.MouseCondition;
+import com.sunday.engine.rule.ClassCondition;
 import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
 import com.sunday.engine.rule.RuleSignal;
@@ -20,32 +20,22 @@ import java.util.stream.Collectors;
 
 public class DriverSystem extends SubSystem {
     private KeyBoard keyBoard = new KeyBoard();
+    private DriverContext<KeyBoard> keyBoardDriverContext = new DriverContext<>(keyBoard);
     private Mouse mouse = new Mouse();
+    private DriverContext<Mouse> mouseDriverContext = new DriverContext<>(mouse);
     private GamePadHub gamePadHub = new GamePadHub();
 
-    private Rule keyBoardConditionMountingRule = new Rule(Rule.class, RuleSignal.Mounting, new Reaction<Rule, RuleSignal>() {
+    private Rule driverRuleContextRule = new Rule(new ClassCondition(Rule.class, RuleSignal.Mounting), new Reaction<ClassContext<Rule>>() {
         @Override
-        public void accept(Rule rule, RuleSignal ruleSignal) {
-            if (rule.getCondition() instanceof KeyBoardCondition) {
-                rule.getCondition().setData(keyBoard);
-            }
-        }
-    });
-
-    private Rule mouseConditionMountingRule = new Rule(Rule.class, RuleSignal.Mounting, new Reaction<Rule, RuleSignal>() {
-        @Override
-        public void accept(Rule rule, RuleSignal ruleSignal) {
-            if (rule.getCondition() instanceof MouseCondition) {
-                rule.getCondition().setData(mouse);
-            }
-        }
-    });
-
-    private Rule gamePadConditionMountingRule = new Rule(Rule.class, RuleSignal.Mounting, new Reaction<Rule, RuleSignal>() {
-        @Override
-        public void accept(Rule rule, RuleSignal ruleSignal) {
-            if (rule.getCondition() instanceof GamePadCondition) {
-                rule.getCondition().setData(gamePadHub);
+        public void accept(ClassContext<Rule> ruleClassContext) {
+            Class sensedClass = ruleClassContext.getSensedClass();
+            Rule rule = ruleClassContext.getInstance();
+            if (sensedClass.equals(KeyBoard.class)) {
+                ((MetaDataContext<KeyBoard>) rule.getContext()).setMetaData(keyBoard);
+            } else if (sensedClass.equals(KeyBoard.class)) {
+                ((MetaDataContext<Mouse>) rule.getContext()).setMetaData(mouse);
+            } else if (sensedClass.equals(GamePadHub.class)) {
+                ((MetaDataContext<GamePadHub>) rule.getContext()).setMetaData(gamePadHub);
             }
         }
     });
@@ -55,9 +45,7 @@ public class DriverSystem extends SubSystem {
         addDriver(keyBoard);
         addDriver(mouse);
         addDriver(gamePadHub);
-        systemPort.addDataInstance(keyBoardConditionMountingRule);
-        systemPort.addDataInstance(mouseConditionMountingRule);
-        systemPort.addDataInstance(gamePadConditionMountingRule);
+        systemPort.addDataInstance(driverRuleContextRule);
     }
 
     public void addDriver(Driver driver) {
@@ -65,7 +53,7 @@ public class DriverSystem extends SubSystem {
     }
 
     public void removeDriver(Driver driver) {
-        systemPort.deleteDataInstance(driver);
+        systemPort.removeDataInstance(driver);
     }
 
     public KeyBoard getDefaultKeyBoard() {

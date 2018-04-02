@@ -5,17 +5,15 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.sunday.engine.Engine;
+import com.sunday.engine.common.MetaDataContext;
 import com.sunday.engine.databank.Port;
 import com.sunday.engine.environment.driver.keyboard.KeyBoard;
 import com.sunday.engine.environment.driver.keyboard.KeyBoardCondition;
-import com.sunday.engine.environment.driver.keyboard.KeyBoardSignal;
 import com.sunday.engine.environment.driver.mouse.Mouse;
 import com.sunday.engine.environment.driver.mouse.MouseCondition;
-import com.sunday.engine.environment.driver.mouse.MouseSignal;
 import com.sunday.engine.environment.time.AnimationSetting;
 import com.sunday.engine.environment.time.Timer;
 import com.sunday.engine.environment.time.TimerCondition;
-import com.sunday.engine.environment.time.TimerSignal;
 import com.sunday.engine.examples.Label;
 import com.sunday.engine.examples.Role;
 import com.sunday.engine.examples.enemy.SawAnimation;
@@ -34,9 +32,10 @@ public class DemoBallRolling implements Screen {
     private Engine engine;
     private Scenario scenario;
     private SawAnimation sawAnimation = new SawAnimation();
-    private Rule sawAnimationRule = new Rule(TimerCondition.animationTimerCondition(), new Reaction<Timer, TimerSignal>() {
+    private Rule sawAnimationRule = new Rule(TimerCondition.animationTimerCondition(), new Reaction<MetaDataContext<Timer>>() {
         @Override
-        public void accept(Timer timer, TimerSignal timerSignal) {
+        public void accept(MetaDataContext<Timer> timerMetaDataContext) {
+            Timer timer = timerMetaDataContext.getMetaData();
             sawAnimation.setStateTime(timer.lastTriggeredTime);
         }
     });
@@ -119,6 +118,22 @@ public class DemoBallRolling implements Screen {
 
     private class SquareModel extends AbstractModel {
 
+        Rule moveRule = new Rule(KeyBoardCondition.keyPressed("x"), new Reaction<MetaDataContext<KeyBoard>>() {
+            @Override
+            public void accept(MetaDataContext<KeyBoard> metaDataContext) {
+                movement.position.add(10, 10);
+                port.broadcast(movement, MovementSignal.ReLocated);
+            }
+        });
+        Rule followMouseRule = new Rule(MouseCondition.mouseDragged(), new Reaction<MetaDataContext<Mouse>>() {
+            @Override
+            public void accept(MetaDataContext<Mouse> metaDataContext) {
+                Mouse mouse = metaDataContext.getMetaData();
+                movement.position.set(mouse.screenX, Gdx.graphics.getHeight() - mouse.screenY);
+                port.broadcast(movement, MovementSignal.ReLocated);
+            }
+        });
+
         public SquareModel() {
             outlook.dimension.set(20, 20);
             outlook.viewLayers.add(new TextureViewLayer<>(GameFramework.Resource.getAsset("buttons/button.png")));
@@ -132,21 +147,6 @@ public class DemoBallRolling implements Screen {
             physicReflection.bodyDef.type = BodyDef.BodyType.DynamicBody;
             physicReflection.bodyDef.position.set(movement.position);
         }
-
-        Rule moveRule = new Rule(KeyBoardCondition.keyPressed("x"), new Reaction<KeyBoard, KeyBoardSignal>() {
-            @Override
-            public void accept(KeyBoard keyBoard, KeyBoardSignal keyBoardSignal) {
-                movement.position.add(10, 10);
-                port.broadcast(movement, MovementSignal.ReLocated);
-            }
-        });
-        Rule followMouseRule = new Rule(MouseCondition.mouseDragged(), new Reaction<Mouse, MouseSignal>() {
-            @Override
-            public void accept(Mouse mouse, MouseSignal mouseSignal) {
-                movement.position.set(mouse.screenX, Gdx.graphics.getHeight() - mouse.screenY);
-                port.broadcast(movement, MovementSignal.ReLocated);
-            }
-        });
 
         @Override
         protected void disconnectWithInternal(Port port) {
@@ -168,9 +168,9 @@ public class DemoBallRolling implements Screen {
     private class SawModel extends AbstractModel {
         private TextureViewLayer sawTextureViewLayer = new TextureViewLayer(GameFramework.Resource.getAsset("saws/saw1.png"));
         private Timer timer = new Timer();
-        private Rule sawMovingRule = new Rule(TimerCondition.bind(timer), new Reaction<Timer, TimerSignal>() {
+        private Rule sawMovingRule = new Rule(TimerCondition.bind(timer), new Reaction<MetaDataContext<Timer>>() {
             @Override
-            public void accept(Timer timer, TimerSignal timerSignal) {
+            public void accept(MetaDataContext<Timer> timerMetaDataContext) {
                 sawTextureViewLayer.updateTexture(sawAnimation.getKeyFrame());
                 movement.position.add((float) (Math.random() - 0.5) * 10, (float) (Math.random() - 0.5) * 10);
                 port.broadcast(movement, MovementSignal.ReLocated);

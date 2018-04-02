@@ -3,14 +3,13 @@ package com.sunday.engine.examples.hero;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.Shape;
+import com.sunday.engine.common.DataContext;
+import com.sunday.engine.common.MetaDataContext;
 import com.sunday.engine.databank.Port;
 import com.sunday.engine.environment.driver.keyboard.KeyBoard;
 import com.sunday.engine.environment.driver.keyboard.KeyBoardCondition;
-import com.sunday.engine.environment.driver.keyboard.KeyBoardSignal;
 import com.sunday.engine.environment.time.Timer;
 import com.sunday.engine.environment.time.TimerCondition;
-import com.sunday.engine.environment.time.TimerSignal;
 import com.sunday.engine.model.AbstractModel;
 import com.sunday.engine.model.property.MovementSignal;
 import com.sunday.engine.model.property.Outlook;
@@ -54,43 +53,44 @@ public class HeroModel extends AbstractModel {
     @Override
     protected void connectWithInternal(Port port) {
 
-        port.addDataInstance(new Rule(new DataCondition(outlook, OutlookSignal.class), new Reaction<Outlook, OutlookSignal>() {
+        port.addDataInstance(new Rule(new DataCondition(outlook, OutlookSignal.class), new Reaction<DataContext<Outlook>>() {
             @Override
-            public void accept(Outlook outlook, OutlookSignal outlookSignal) {
+            public void accept(DataContext<Outlook> outlookDataContext) {
                 textureViewLayer.updateTexture(heroAnimation.getKeyFrame(movement));
             }
         }));
 
-        port.addDataInstance(new Rule(TimerCondition.animationTimerCondition(), new Reaction<Timer, TimerSignal>() {
+        port.addDataInstance(new Rule(TimerCondition.animationTimerCondition(), new Reaction<MetaDataContext<Timer>>() {
             @Override
-            public void accept(Timer timer, TimerSignal timerSignal) {
+            public void accept(MetaDataContext<Timer> timerMetaDataContext) {
+                Timer timer = timerMetaDataContext.getMetaData();
                 heroAnimation.setStateTime(timer.lastTriggeredTime);
                 textureViewLayer.updateTexture(heroAnimation.getKeyFrame(movement));
             }
         }));
 
-        port.addDataInstance(new Rule(KeyBoardCondition.keyTyped("1"), new Reaction<KeyBoard, KeyBoardSignal>() {
+        port.addDataInstance(new Rule(KeyBoardCondition.keyTyped("1"), new Reaction<MetaDataContext<KeyBoard>>() {
 
             @Override
-            public void accept(KeyBoard keyBoard, KeyBoardSignal keyBoardSignal) {
+            public void accept(MetaDataContext<KeyBoard> metaDataContext) {
                 System.out.println("keyTyped('1')");
                 movement.position.add(-10, 0);
                 port.broadcast(movement, MovementSignal.ReLocated);
             }
         }));
-        port.addDataInstance(new Rule(KeyBoardCondition.keyTyped("2"), new Reaction<KeyBoard, KeyBoardSignal>() {
+        port.addDataInstance(new Rule(KeyBoardCondition.keyTyped("2"), new Reaction<MetaDataContext<KeyBoard>>() {
 
             @Override
-            public void accept(KeyBoard keyBoard, KeyBoardSignal keyBoardSignal) {
+            public void accept(MetaDataContext<KeyBoard> metaDataContext) {
                 System.out.println("keyTyped('2')");
                 movement.position.add(10, 0);
                 port.broadcast(movement, MovementSignal.ReLocated);
             }
         }));
-        port.addDataInstance(new Rule(KeyBoardCondition.keyPressed("3"), new Reaction<KeyBoard, KeyBoardSignal>() {
+        port.addDataInstance(new Rule(KeyBoardCondition.keyPressed("3"), new Reaction<MetaDataContext<KeyBoard>>() {
 
             @Override
-            public void accept(KeyBoard keyBoard, KeyBoardSignal keyBoardSignal) {
+            public void accept(MetaDataContext<KeyBoard> metaDataContext) {
                 System.out.println("keyTyped('3')");
                 movement.direction = movement.direction == Direction.Left ? Direction.Right : Direction.Left;
                 movement.action = Action.Fighting;
