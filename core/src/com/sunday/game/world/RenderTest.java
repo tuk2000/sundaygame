@@ -41,7 +41,7 @@ public class RenderTest implements Screen {
 
 
         texture_button = GameFramework.Resource.getAsset("buttons/button.png");
-        texture_saw = GameFramework.Resource.getAsset("Enemies/saw1.png");
+        texture_saw = GameFramework.Resource.getAsset("saws/saw1.png");
 
 
     }
