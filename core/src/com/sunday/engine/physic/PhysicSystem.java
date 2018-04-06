@@ -8,44 +8,41 @@ import com.sunday.engine.SubSystem;
 import com.sunday.engine.common.ClassContext;
 import com.sunday.engine.common.DataSignal;
 import com.sunday.engine.databank.SystemPort;
-import com.sunday.engine.model.property.PhysicReflection;
+import com.sunday.engine.model.property.PhysicBody;
+import com.sunday.engine.model.property.PhysicDefinition;
 import com.sunday.engine.model.property.PhysicReflectionSignal;
 import com.sunday.engine.rule.ClassCondition;
 import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
 
-import static com.sunday.engine.environment.driver.gamepad.GamePadSignal.None;
-
 public class PhysicSystem extends SubSystem implements Disposable {
     protected Vector2 defaultGravity = new Vector2(0, -9.8f);
     protected World world;
 
-    private Rule physicReflectionDataRule = new Rule<>(new ClassCondition<>(PhysicReflection.class, DataSignal.class), new Reaction<ClassContext<PhysicReflection>>() {
+    private Rule physicDefinitionRule = new Rule<>(new ClassCondition<>(PhysicDefinition.class, DataSignal.class), new Reaction<ClassContext<PhysicDefinition>>() {
         @Override
-        public void accept(ClassContext<PhysicReflection> physicReflectionClassContext) {
-            PhysicReflection physicReflection = physicReflectionClassContext.getInstance();
+        public void accept(ClassContext<PhysicDefinition> physicReflectionClassContext) {
+            PhysicDefinition physicDefinition = physicReflectionClassContext.getInstance();
+            PhysicBody physicBody = physicDefinition.physicBody;
             DataSignal dataSignal = (DataSignal) physicReflectionClassContext.getSignal();
             switch (dataSignal) {
                 case Add:
-                    if (physicReflection.bodyCreated) {
-                        world.destroyBody(physicReflection.body);
-                        physicReflection.bodyCreated = false;
+                    if (physicBody.isBodyCreated()) {
+                        physicBody.destroyBody(world);
                     }
-                    physicReflection.bodyCreated = true;
-                    physicReflection.body = world.createBody(physicReflection.bodyDef);
-                    physicReflection.fixture = physicReflection.body.createFixture(physicReflection.fixtureDef);
-                    physicReflection.fixture.setUserData(physicReflection);
+                    physicBody.createBody(world);
+                    physicBody.createFixture();
                     break;
                 case Deletion:
-                    physicReflection.reset();
+                    physicBody.reset();
             }
         }
     });
 
-    private Rule physicReflectionModificationRule = new Rule(new ClassCondition<>(PhysicReflection.class, PhysicReflectionSignal.class), new Reaction<ClassContext<PhysicReflection>>() {
+    private Rule physicReflectionModificationRule = new Rule(new ClassCondition<>(PhysicDefinition.class, PhysicReflectionSignal.class), new Reaction<ClassContext<PhysicDefinition>>() {
         @Override
-        public void accept(ClassContext<PhysicReflection> physicReflectionClassContext) {
-            PhysicReflection physicReflection = physicReflectionClassContext.getInstance();
+        public void accept(ClassContext<PhysicDefinition> physicReflectionClassContext) {
+            PhysicDefinition physicDefinition = physicReflectionClassContext.getInstance();
             PhysicReflectionSignal physicReflectionSignal = (PhysicReflectionSignal) physicReflectionClassContext.getSignal();
             switch (physicReflectionSignal) {
                 case None:
@@ -58,7 +55,7 @@ public class PhysicSystem extends SubSystem implements Disposable {
     public PhysicSystem(SystemPort systemPort) {
         super("PhysicSystem", systemPort);
         world = new World(defaultGravity, false);
-        systemPort.addDataInstance(physicReflectionDataRule);
+        systemPort.addDataInstance(physicDefinitionRule);
         systemPort.addDataInstance(physicReflectionModificationRule);
     }
 
@@ -76,7 +73,7 @@ public class PhysicSystem extends SubSystem implements Disposable {
 
     @Override
     public void dispose() {
-        systemPort.removeDataInstance(physicReflectionDataRule);
+        systemPort.removeDataInstance(physicDefinitionRule);
         systemPort.removeDataInstance(physicReflectionModificationRule);
         world.dispose();
     }

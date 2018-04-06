@@ -1,6 +1,5 @@
 package com.sunday.engine.databank;
 
-import com.sunday.engine.common.Context;
 import com.sunday.engine.common.Data;
 import com.sunday.engine.common.SourceClass;
 import com.sunday.engine.common.Target;
@@ -20,36 +19,6 @@ public class SystemPortImpl<T extends Data> extends PortImpl<T> implements Syste
     @Override
     public SourceClass<T> getSourceClass(Class<T> clazz) {
         return dataStorage.getSourceClass(clazz);
-    }
-
-    @Override
-    public void addContext(Context context) {
-
-    }
-
-    @Override
-    public void removeContext(Context context) {
-
-    }
-
-    @Override
-    public Context getContext(T data) {
-        return null;
-    }
-
-    @Override
-    public void addContext(Class<T> clazz) {
-
-    }
-
-    @Override
-    public void removeContext(Class<T> clazz) {
-
-    }
-
-    @Override
-    public Context getContext(Class<T> clazz) {
-        return null;
     }
 
     @Override

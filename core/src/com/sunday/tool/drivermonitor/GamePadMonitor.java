@@ -1,7 +1,7 @@
 package com.sunday.tool.drivermonitor;
 
-import com.sunday.engine.common.ClassContext;
 import com.sunday.engine.common.DataSignal;
+import com.sunday.engine.common.MetaDataContext;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.databank.SystemPortSharing;
 import com.sunday.engine.environment.driver.gamepad.GamePad;
@@ -19,11 +19,11 @@ public class GamePadMonitor extends ToolExtender<GamePadMonitorUIController> imp
     private Set<GamePad> waitingToBeAddedSet = new HashSet<>();
 
     private GamePadSignal currentGamePadSignal = GamePadSignal.None;
-    private Rule gamePadDataMonitorRule = new Rule(GamePad.class, DataSignal.class, new Reaction<ClassContext<GamePad>>() {
+    private Rule gamePadDataMonitorRule = new Rule(GamePad.class, DataSignal.class, new Reaction<MetaDataContext<GamePad>>() {
         @Override
-        public void accept(ClassContext<GamePad> gamePadClassContext) {
-            DataSignal dataSignal = (DataSignal) gamePadClassContext.getSignal();
-            GamePad gamePad = gamePadClassContext.getInstance();
+        public void accept(MetaDataContext<GamePad> gamePadMetaDataContext) {
+            DataSignal dataSignal = (DataSignal) gamePadMetaDataContext.getSignal();
+            GamePad gamePad = gamePadMetaDataContext.getMetaData();
             switch (dataSignal) {
                 case Add:
                     addGamePad(gamePad);
@@ -34,11 +34,11 @@ public class GamePadMonitor extends ToolExtender<GamePadMonitorUIController> imp
             }
         }
     });
-    private Rule gamePadStatusMonitorRule = new Rule(GamePad.class, GamePadSignal.class, new Reaction<ClassContext<GamePad>>() {
+    private Rule gamePadStatusMonitorRule = new Rule(GamePad.class, GamePadSignal.class, new Reaction<MetaDataContext<GamePad>>() {
         @Override
-        public void accept(ClassContext<GamePad> gamePadClassContext) {
-            currentGamePadSignal = (GamePadSignal) gamePadClassContext.getSignal();
-            GamePad gamePad = gamePadClassContext.getInstance();
+        public void accept(MetaDataContext<GamePad> gamePadMetaDataContext) {
+            currentGamePadSignal = (GamePadSignal) gamePadMetaDataContext.getSignal();
+            GamePad gamePad = gamePadMetaDataContext.getMetaData();
             if (!set.contains(gamePad)) {
                 addGamePad(gamePad);
             }

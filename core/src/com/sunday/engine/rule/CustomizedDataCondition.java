@@ -1,30 +1,29 @@
 package com.sunday.engine.rule;
 
-import com.sunday.engine.common.Data;
-import com.sunday.engine.common.DataContext;
+import com.sunday.engine.common.CustomizedData;
+import com.sunday.engine.common.CustomizedDataContext;
 import com.sunday.engine.common.Signal;
-import com.sunday.engine.databank.SystemPort;
 
-public class DataCondition<D extends Data> extends Condition<DataContext<D>> {
+public class CustomizedDataCondition<CD extends CustomizedData> extends Condition<CustomizedDataContext<CD>> {
+    private CD customizedData;
 
-
-    public DataCondition(D d, Signal... signals) {
-        context = ContextBuilder.buildDataContext(d);
+    public CustomizedDataCondition(CD cd, Signal... signals) {
+        customizedData = cd;
         setSignals(signals);
     }
 
-    public DataCondition(D d, Class<Signal> signalTypeClass) {
-        context = ContextBuilder.buildDataContext(d);
+    public CustomizedDataCondition(CD cd, Class<Signal> signalTypeClass) {
+        customizedData = cd;
         setSignals(signalTypeClass.getEnumConstants());
     }
 
-    protected DataCondition() {
+    protected CustomizedDataCondition() {
 
     }
 
     @Override
     protected void generateMainInfo() {
-        D data = context.getData();
+        CD data = getContext().getData();
         setMainInfo(
                 "Source = [" + data + "]\n" +
                         "SourceClass = [" + data.getClass().getSimpleName() + "]\n" +
@@ -32,20 +31,24 @@ public class DataCondition<D extends Data> extends Condition<DataContext<D>> {
         );
     }
 
-
-    @Override
-    public void connectWith(SystemPort systemPort) {
-//        getSignals().forEach(tracer -> {
-//            systemPort.removeConnection(context.getData(), this);
-//        });
-//        systemPort.addConnection(context.getData(), this);
-//        generateMainInfo();
+    public CD getCustomizedData() {
+        return customizedData;
     }
 
-    @Override
-    public void disconnectWith(SystemPort systemPort) {
 
-    }
+//    @Override
+//    public void connectWith(SystemPort systemPort) {
+////        getSignals().forEach(tracer -> {
+////            systemPort.removeConnection(context.getData(), this);
+////        });
+////        systemPort.addConnection(context.getData(), this);
+////        generateMainInfo();
+//    }
+//
+//    @Override
+//    public void disconnectWith(SystemPort systemPort) {
+//
+//    }
 
 //    @Override
 //    public void notify(Data data, Signal signal) {

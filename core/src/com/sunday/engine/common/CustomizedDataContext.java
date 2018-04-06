@@ -1,10 +1,10 @@
 package com.sunday.engine.common;
 
-public class DataContext<D extends Data> implements Context {
+public class CustomizedDataContext<D extends Data> implements Context {
     private D data;
     private Signal signal;
 
-    public DataContext(D data) {
+    public CustomizedDataContext(D data) {
         this.data = data;
     }
 

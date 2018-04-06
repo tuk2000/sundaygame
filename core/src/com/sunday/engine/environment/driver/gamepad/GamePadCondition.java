@@ -1,11 +1,14 @@
 package com.sunday.engine.environment.driver.gamepad;
 
+import com.sunday.engine.common.MetaDataContext;
+import com.sunday.engine.databank.ContextBank;
+import com.sunday.engine.databank.SystemContextUser;
 import com.sunday.engine.rule.MetaDataCondition;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GamePadCondition extends MetaDataCondition<GamePad> {
+public class GamePadCondition extends MetaDataCondition<GamePad> implements SystemContextUser {
 
     public static GamePadCondition buttonDown(int buttonCode) {
         GamePadCondition gamePadCondition = new GamePadCondition();
@@ -41,4 +44,9 @@ public class GamePadCondition extends MetaDataCondition<GamePad> {
         return gamePadCondition;
     }
 
+    @Override
+    public void useSystemContext(ContextBank contextBank) {
+        setContext((MetaDataContext<GamePad>) contextBank.getSystemContext("GamePad"));
+        generateMainInfo();
+    }
 }

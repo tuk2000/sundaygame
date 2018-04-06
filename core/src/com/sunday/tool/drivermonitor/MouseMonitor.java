@@ -1,7 +1,7 @@
 package com.sunday.tool.drivermonitor;
 
-import com.sunday.engine.common.ClassContext;
 import com.sunday.engine.common.DataSignal;
+import com.sunday.engine.common.MetaDataContext;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.databank.SystemPortSharing;
 import com.sunday.engine.environment.driver.mouse.Mouse;
@@ -15,11 +15,11 @@ import java.util.function.BiConsumer;
 public class MouseMonitor extends ToolExtender<MouseMonitorUIController> implements SystemPortSharing {
     private Mouse currentMouse;
     private MouseSignal currentMouseSignal = MouseSignal.None;
-    private Rule mouseDataMonitorRule = new Rule(Mouse.class, DataSignal.class, new Reaction<ClassContext<Mouse>>() {
+    private Rule mouseDataMonitorRule = new Rule(Mouse.class, DataSignal.class, new Reaction<MetaDataContext<Mouse>>() {
         @Override
-        public void accept(ClassContext<Mouse> mouseClassContext) {
-            Mouse mouse = mouseClassContext.getInstance();
-            DataSignal dataSignal = (DataSignal) mouseClassContext.getSignal();
+        public void accept(MetaDataContext<Mouse> mouseMetaDataContext) {
+            Mouse mouse = mouseMetaDataContext.getMetaData();
+            DataSignal dataSignal = (DataSignal) mouseMetaDataContext.getSignal();
             switch (dataSignal) {
                 case Add:
                     setCurrentMouse(mouse);
@@ -27,11 +27,11 @@ public class MouseMonitor extends ToolExtender<MouseMonitorUIController> impleme
             }
         }
     });
-    private Rule mouseStatusMonitorRule = new Rule(Mouse.class, MouseSignal.class, new Reaction<ClassContext<Mouse>>() {
+    private Rule mouseStatusMonitorRule = new Rule(Mouse.class, MouseSignal.class, new Reaction<MetaDataContext<Mouse>>() {
         @Override
-        public void accept(ClassContext<Mouse> mouseClassContext) {
-            Mouse mouse = mouseClassContext.getInstance();
-            currentMouseSignal = (MouseSignal) mouseClassContext.getSignal();
+        public void accept(MetaDataContext<Mouse> mouseMetaDataContext) {
+            Mouse mouse = mouseMetaDataContext.getMetaData();
+            currentMouseSignal = (MouseSignal) mouseMetaDataContext.getSignal();
             if (currentMouse != mouse)
                 setCurrentMouse(mouse);
             flushBuffer();

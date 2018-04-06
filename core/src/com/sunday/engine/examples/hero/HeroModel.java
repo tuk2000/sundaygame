@@ -3,7 +3,7 @@ package com.sunday.engine.examples.hero;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.sunday.engine.common.DataContext;
+import com.sunday.engine.common.CustomizedDataContext;
 import com.sunday.engine.common.MetaDataContext;
 import com.sunday.engine.databank.Port;
 import com.sunday.engine.environment.driver.keyboard.KeyBoard;
@@ -17,7 +17,7 @@ import com.sunday.engine.model.property.OutlookSignal;
 import com.sunday.engine.model.property.viewlayers.TextureViewLayer;
 import com.sunday.engine.model.state.Action;
 import com.sunday.engine.model.state.Direction;
-import com.sunday.engine.rule.DataCondition;
+import com.sunday.engine.rule.CustomizedDataCondition;
 import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
 
@@ -31,14 +31,14 @@ public class HeroModel extends AbstractModel {
         outlook.viewLayers.add(textureViewLayer);
         movement.position.set(32, 32);
 
-        BodyDef bodyDef = physicReflection.bodyDef;
+        BodyDef bodyDef = physicDefinition.bodyDef;
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(movement.position);
 
         PolygonShape polygonShape = new PolygonShape();
         polygonShape.setAsBox(outlook.dimension.x, outlook.dimension.y);
 
-        FixtureDef fixtureDef = physicReflection.fixtureDef;
+        FixtureDef fixtureDef = physicDefinition.fixtureDef;
         fixtureDef.shape = polygonShape;
         fixtureDef.friction = 1;
         fixtureDef.restitution = 0;
@@ -53,9 +53,9 @@ public class HeroModel extends AbstractModel {
     @Override
     protected void connectWithInternal(Port port) {
 
-        port.addDataInstance(new Rule(new DataCondition(outlook, OutlookSignal.class), new Reaction<DataContext<Outlook>>() {
+        port.addDataInstance(new Rule(new CustomizedDataCondition(outlook, OutlookSignal.class), new Reaction<CustomizedDataContext<Outlook>>() {
             @Override
-            public void accept(DataContext<Outlook> outlookDataContext) {
+            public void accept(CustomizedDataContext<Outlook> outlookCustomizedDataContext) {
                 textureViewLayer.updateTexture(heroAnimation.getKeyFrame(movement));
             }
         }));

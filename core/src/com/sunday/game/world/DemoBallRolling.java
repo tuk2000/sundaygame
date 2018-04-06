@@ -140,12 +140,12 @@ public class DemoBallRolling implements Screen {
             movement.position.set(100, 100);
             PolygonShape shape = new PolygonShape();
             shape.setAsBox(20, 20);
-            physicReflection.fixtureDef.shape = shape;
-            physicReflection.fixtureDef.density = 1.0f;
+            physicDefinition.fixtureDef.shape = shape;
+            physicDefinition.fixtureDef.density = 1.0f;
 
-            physicReflection.bodyDef.gravityScale = 0;
-            physicReflection.bodyDef.type = BodyDef.BodyType.DynamicBody;
-            physicReflection.bodyDef.position.set(movement.position);
+            physicDefinition.bodyDef.gravityScale = 0;
+            physicDefinition.bodyDef.type = BodyDef.BodyType.DynamicBody;
+            physicDefinition.bodyDef.position.set(movement.position);
         }
 
         @Override
@@ -181,12 +181,12 @@ public class DemoBallRolling implements Screen {
             movement.position.set(x, y);
             outlook.dimension.set(40, 40);
             outlook.viewLayers.add(sawTextureViewLayer);
-            physicReflection.fixtureDef.shape.setRadius(2);
-            physicReflection.fixtureDef.density = 0.5f;
-            physicReflection.fixtureDef.friction = 0.2f;
-            physicReflection.bodyDef.position.set(movement.position);
-            physicReflection.bodyDef.type = BodyDef.BodyType.StaticBody;
-            physicReflection.bodyDef.gravityScale = 0;
+            physicDefinition.fixtureDef.shape.setRadius(2);
+            physicDefinition.fixtureDef.density = 0.5f;
+            physicDefinition.fixtureDef.friction = 0.2f;
+            physicDefinition.bodyDef.position.set(movement.position);
+            physicDefinition.bodyDef.type = BodyDef.BodyType.StaticBody;
+            physicDefinition.bodyDef.gravityScale = 0;
             timer.setPeriod(AnimationSetting.FrameDuration);
         }
 

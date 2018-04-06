@@ -3,12 +3,17 @@ package com.sunday.engine.rule;
 import com.sunday.engine.SubSystem;
 import com.sunday.engine.common.ClassContext;
 import com.sunday.engine.common.DataSignal;
+import com.sunday.engine.databank.ContextBank;
+import com.sunday.engine.databank.SystemContextUser;
 import com.sunday.engine.databank.SystemPort;
 
 public class RuleSystem extends SubSystem {
-    public RuleSystem(SystemPort systemPort) {
+    private ContextBank contextBank;
+
+    public RuleSystem(SystemPort systemPort, ContextBank contextBank) {
         super("RuleSystem", systemPort);
         initRuleSystem();
+        this.contextBank = contextBank;
     }
 
     private void initRuleSystem() {
@@ -20,19 +25,21 @@ public class RuleSystem extends SubSystem {
                 DataSignal dataSignal = (DataSignal) ruleClassContext.getSignal();
                 switch (dataSignal) {
                     case Add:
-                        System.out.println("Rule added!");
-                        rule.mountWith(systemPort);
+                        //System.out.println("Rule added!");
+                        systemPort.broadcast(rule, RuleSignal.Mounting);
+                        if (rule.getCondition() instanceof SystemContextUser) {
+                            ((SystemContextUser) rule.getCondition()).useSystemContext(contextBank);
+                        }
                         System.out.println(rule.condition.getInfo());
                         break;
                     case Deletion:
                         //System.out.println("Rule removed!");
                         System.out.println(rule.condition.getInfo());
-                        //rule.dismountWith(systemPort);
+                        systemPort.broadcast(rule, RuleSignal.Dismounting);
                         break;
                 }
             }
         });
         systemPort.addDataInstance(ruleDataRule);
-        ruleDataRule.mountWith(systemPort);
     }
 }

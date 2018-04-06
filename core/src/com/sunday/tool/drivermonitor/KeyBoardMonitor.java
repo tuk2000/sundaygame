@@ -1,7 +1,7 @@
 package com.sunday.tool.drivermonitor;
 
-import com.sunday.engine.common.ClassContext;
 import com.sunday.engine.common.DataSignal;
+import com.sunday.engine.common.MetaDataContext;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.databank.SystemPortSharing;
 import com.sunday.engine.environment.driver.keyboard.KeyBoard;
@@ -15,11 +15,12 @@ import java.util.function.BiConsumer;
 public class KeyBoardMonitor extends ToolExtender<KeyBoardMonitorUIController> implements SystemPortSharing {
     private KeyBoard currentKeyBoard;
     private KeyBoardSignal currentKeyBoardSignal = KeyBoardSignal.None;
-    private Rule keyBoardDataMonitorRule = new Rule(KeyBoard.class, DataSignal.class, new Reaction<ClassContext<KeyBoard>>() {
+    private Rule keyBoardDataMonitorRule = new Rule(KeyBoard.class, DataSignal.class, new Reaction<MetaDataContext<KeyBoard>>() {
         @Override
-        public void accept(ClassContext<KeyBoard> keyBoardClassContext) {
-            KeyBoard keyBoard = keyBoardClassContext.getInstance();
-            DataSignal dataSignal = (DataSignal) keyBoardClassContext.getSignal();
+        public void accept(MetaDataContext<KeyBoard> keyBoardMetaDataContext) {
+            KeyBoard keyBoard = keyBoardMetaDataContext.getMetaData();
+            currentKeyBoardSignal = (KeyBoardSignal) keyBoardMetaDataContext.getSignal();
+            DataSignal dataSignal = (DataSignal) keyBoardMetaDataContext.getSignal();
             switch (dataSignal) {
                 case Add:
                     setCurrentKeyBoard(keyBoard);
@@ -27,11 +28,11 @@ public class KeyBoardMonitor extends ToolExtender<KeyBoardMonitorUIController> i
             }
         }
     });
-    private Rule keyBoardStatusMonitorRule = new Rule(KeyBoard.class, KeyBoardSignal.class, new Reaction<ClassContext<KeyBoard>>() {
+    private Rule keyBoardStatusMonitorRule = new Rule(KeyBoard.class, KeyBoardSignal.class, new Reaction<MetaDataContext<KeyBoard>>() {
         @Override
-        public void accept(ClassContext<KeyBoard> keyBoardClassContext) {
-            KeyBoard keyBoard = keyBoardClassContext.getInstance();
-            currentKeyBoardSignal = (KeyBoardSignal) keyBoardClassContext.getSignal();
+        public void accept(MetaDataContext<KeyBoard> keyBoardMetaDataContext) {
+            KeyBoard keyBoard = keyBoardMetaDataContext.getMetaData();
+            currentKeyBoardSignal = (KeyBoardSignal) keyBoardMetaDataContext.getSignal();
             if (currentKeyBoard != keyBoard) {
                 setCurrentKeyBoard(keyBoard);
             }

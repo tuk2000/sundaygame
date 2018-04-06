@@ -1,7 +1,7 @@
 package com.sunday.engine.common;
 
-public class ClassContext<D extends Data> implements Context, Target {
-    public Class<D> sensedClass;
+public class ClassContext<D extends Data> implements Context {
+    private Class<D> sensedClass;
     private D instance;
     private Signal signal;
 
@@ -21,9 +21,8 @@ public class ClassContext<D extends Data> implements Context, Target {
         return signal;
     }
 
-    @Override
-    public void notify(Data data, Signal signal) {
-        this.instance = (D) data;
+    public void setSensed(D instance, Signal signal) {
+        this.instance = instance;
         this.signal = signal;
     }
 }

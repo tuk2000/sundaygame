@@ -1,12 +1,13 @@
 package com.sunday.engine.environment.driver.keyboard;
 
 import com.sunday.engine.common.MetaDataContext;
-import com.sunday.engine.environment.driver.Driver;
+import com.sunday.engine.databank.ContextBank;
+import com.sunday.engine.databank.SystemContextUser;
 import com.sunday.engine.rule.MetaDataCondition;
 
 import java.util.function.Predicate;
 
-public class KeyBoardCondition extends MetaDataCondition<KeyBoard> {
+public class KeyBoardCondition extends MetaDataCondition<KeyBoard> implements SystemContextUser {
     private static Predicate<MetaDataContext<KeyBoard>> getKeyPredicate(String keyName) {
         String newKeyName = keyName.length() == 1 ? keyName.toUpperCase() : keyName;
         return metaDataContext -> metaDataContext.getMetaData().character.equals(newKeyName);
@@ -102,5 +103,11 @@ public class KeyBoardCondition extends MetaDataCondition<KeyBoard> {
     protected void setExtraInfo(String info) {
         String tmp = "Type=[KeyBoardCondition]\n";
         super.setExtraInfo(tmp + info);
+    }
+
+    @Override
+    public void useSystemContext(ContextBank contextBank) {
+        setContext((MetaDataContext<KeyBoard>) contextBank.getSystemContext("KeyBoard"));
+        generateMainInfo();
     }
 }

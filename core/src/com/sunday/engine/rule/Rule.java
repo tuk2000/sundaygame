@@ -1,10 +1,8 @@
 package com.sunday.engine.rule;
 
 import com.sunday.engine.common.*;
-import com.sunday.engine.databank.SystemPort;
 
 public class Rule<C extends Context> implements Data {
-    protected C context;
     protected Condition<C> condition;
     protected Reaction<C> reaction;
 
@@ -14,9 +12,15 @@ public class Rule<C extends Context> implements Data {
         condition.setReaction(reaction);
     }
 
-    public <D extends Data, S extends Signal> Rule(D d, S signal, Reaction<DataContext<D>> reaction) {
+    public <CD extends CustomizedData, S extends Signal> Rule(CD cd, S signal, Reaction<CustomizedDataContext<CD>> reaction) {
         this.reaction = (Reaction<C>) reaction;
-        condition = new DataCondition(d, signal);
+        condition = new CustomizedDataCondition(cd, signal);
+        condition.setReaction(reaction);
+    }
+
+    public <CD extends CustomizedData, S extends Signal> Rule(CD cd, Class<S> signalClass, Reaction<CustomizedDataContext<CD>> reaction) {
+        this.reaction = (Reaction<C>) reaction;
+        condition = new CustomizedDataCondition(cd, signalClass);
         condition.setReaction(reaction);
     }
 
@@ -26,25 +30,10 @@ public class Rule<C extends Context> implements Data {
         condition.setReaction(reaction);
     }
 
-    public <D extends Data, S extends Signal> Rule(D t, Class<S> signalClass, Reaction<DataContext<D>> reaction) {
-        this.reaction = (Reaction<C>) reaction;
-        condition = new DataCondition(t, signalClass);
-        condition.setReaction(reaction);
-    }
-
     public <D extends Data, S extends Signal> Rule(Class<D> clazz, Class<S> signalClass, Reaction<ClassContext<D>> reaction) {
         this.reaction = (Reaction<C>) reaction;
         condition = new ClassCondition(clazz, signalClass);
         condition.setReaction(reaction);
-    }
-
-    public C getContext() {
-        return context;
-    }
-
-    public void setContext(C context) {
-        this.context = context;
-        condition.setContext(context);
     }
 
     public Condition getCondition() {
@@ -55,12 +44,7 @@ public class Rule<C extends Context> implements Data {
         return reaction;
     }
 
-    protected void mountWith(SystemPort systemPort) {
-        systemPort.broadcast(this, RuleSignal.Mounting);
-        condition.connectWith(systemPort);
-    }
-
-    protected void dismountWith(SystemPort<Data> systemPort) {
-        condition.disconnectWith(systemPort);
+    public C getContext() {
+        return condition.getContext();
     }
 }

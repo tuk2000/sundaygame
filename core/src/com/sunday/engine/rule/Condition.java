@@ -2,22 +2,25 @@ package com.sunday.engine.rule;
 
 import com.sunday.engine.common.Context;
 import com.sunday.engine.common.Signal;
-import com.sunday.engine.databank.SystemPortSharing;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Predicate;
 
-public abstract class Condition<C extends Context> implements SystemPortSharing {
-    protected C context;
+public abstract class Condition<C extends Context> {
     protected Reaction<C> reaction;
     protected List<Predicate<C>> predicates = new ArrayList<>();
     protected List<Boolean> result = new ArrayList<>();
     protected boolean isAndOperation = true;
+    private C context;
     private List<Signal> signals = new ArrayList<>();
     private String mainInfo = "MainInfo:\nn/a";
     private String extraInfo = "ExtractInfo:\nn/a";
+
+    protected C getContext() {
+        return context;
+    }
 
     protected void setContext(C context) {
         this.context = context;
