@@ -4,9 +4,10 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.World;
-import com.sunday.engine.common.MetaData;
+import com.sunday.engine.common.data.SystemRelatedData;
+import com.sunday.engine.common.propertyholder.Resettable;
 
-public class PhysicBody implements MetaData {
+public class PhysicBody implements SystemRelatedData, Resettable {
     public PhysicDefinition physicDefinition;
     private boolean bodyCreated;
     private Body body;

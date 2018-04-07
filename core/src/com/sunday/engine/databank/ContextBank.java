@@ -1,23 +1,22 @@
 package com.sunday.engine.databank;
 
 import com.badlogic.gdx.utils.Disposable;
-import com.sunday.engine.common.*;
+import com.sunday.engine.common.Context;
+import com.sunday.engine.common.Data;
+import com.sunday.engine.common.context.ClassContext;
 
-public interface ContextBank<D extends Data, M extends MetaData, C extends CustomizedData> extends Disposable {
-    void addSystemContext(String name, Context context);
+import java.util.List;
 
-    void removeSystemContext(String name, Context context);
+public interface ContextBank<D extends Data, C extends Context> extends Disposable {
+    void addClassContext(ClassContext<D, C> classContext);
 
-    Context getSystemContext(String name);
+    boolean hasClassContext(Class<D> clazz);
 
-    void addContext(Context context);
+    ClassContext<D, C> getClassContext(Class<D> clazz);
 
-    void removeContext(Context context);
+    List<C> getContexts(Class<D> clazz);
 
-    CustomizedDataContext<C> getContext(C customizedData);
+    void addContext(Class<D> clazz, C context);
 
-    MetaDataContext<M> getContext(M metadata);
-
-    ClassContext<D> getContext(Class<D> clazz);
-
+    void removeContext(C context);
 }

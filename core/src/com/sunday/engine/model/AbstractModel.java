@@ -1,7 +1,7 @@
 package com.sunday.engine.model;
 
 import com.badlogic.gdx.utils.Disposable;
-import com.sunday.engine.common.CustomizedDataContext;
+import com.sunday.engine.common.context.CustomizedDataContext;
 import com.sunday.engine.databank.Port;
 import com.sunday.engine.databank.PortSharing;
 import com.sunday.engine.model.property.*;

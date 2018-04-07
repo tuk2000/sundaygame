@@ -1,7 +1,11 @@
 package com.sunday.engine.databank;
 
 import com.badlogic.gdx.utils.Disposable;
-import com.sunday.engine.common.*;
+import com.sunday.engine.common.Data;
+import com.sunday.engine.common.Signal;
+import com.sunday.engine.common.Target;
+import com.sunday.engine.common.data.SourceClass;
+import com.sunday.engine.common.signal.DataSignal;
 import com.sunday.engine.databank.storage.*;
 
 import java.util.ArrayList;

@@ -1,7 +1,7 @@
 package com.sunday.engine.environment.event;
 
 import com.sunday.engine.SubSystem;
-import com.sunday.engine.common.MetaDataContext;
+import com.sunday.engine.common.context.ClassContext;
 import com.sunday.engine.databank.ContextBank;
 import com.sunday.engine.databank.SystemContextBuilder;
 import com.sunday.engine.databank.SystemPort;
@@ -39,6 +39,6 @@ public class EventSystem extends SubSystem implements EventDispatcher, SystemCon
 
     @Override
     public void buildSystemContext(ContextBank contextBank) {
-        contextBank.addSystemContext("Window", new MetaDataContext(window));
+        contextBank.addClassContext(new ClassContext(Window.class));
     }
 }

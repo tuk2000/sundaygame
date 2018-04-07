@@ -1,11 +1,10 @@
 package com.sunday.engine.environment.event.window;
 
-import com.sunday.engine.common.MetaDataContext;
-import com.sunday.engine.databank.ContextBank;
-import com.sunday.engine.databank.SystemContextUser;
-import com.sunday.engine.rule.MetaDataCondition;
+import com.sunday.engine.environment.EnvironmentCondition;
+import com.sunday.engine.environment.EnvironmentDataContext;
+import com.sunday.engine.environment.event.WindowRelated;
 
-public class WindowCondition extends MetaDataCondition<Window> implements SystemContextUser {
+public class WindowCondition extends EnvironmentCondition<Window, EnvironmentDataContext<Window>> implements WindowRelated {
 
     private WindowCondition() {
     }
@@ -14,11 +13,5 @@ public class WindowCondition extends MetaDataCondition<Window> implements System
         WindowCondition windowCondition = new WindowCondition();
         windowCondition.setSignals(WindowSignal.Resized);
         return windowCondition;
-    }
-
-    @Override
-    public void useSystemContext(ContextBank contextBank) {
-        setContext((MetaDataContext<Window>) contextBank.getSystemContext("Window"));
-        generateMainInfo();
     }
 }

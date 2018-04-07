@@ -1,8 +1,14 @@
 package com.sunday.engine.rule;
 
-import com.sunday.engine.common.*;
+import com.sunday.engine.common.Context;
+import com.sunday.engine.common.Data;
+import com.sunday.engine.common.Signal;
+import com.sunday.engine.common.context.ClassContext;
+import com.sunday.engine.common.context.CustomizedDataContext;
+import com.sunday.engine.common.data.CustomizedData;
+import com.sunday.engine.common.data.SystemRelatedData;
 
-public class Rule<C extends Context> implements Data {
+public class Rule<C extends Context> implements SystemRelatedData {
     protected Condition<C> condition;
     protected Reaction<C> reaction;
 
@@ -24,13 +30,13 @@ public class Rule<C extends Context> implements Data {
         condition.setReaction(reaction);
     }
 
-    public <D extends Data, S extends Signal> Rule(Class<D> clazz, S signal, Reaction<ClassContext<D>> reaction) {
+    public <D extends Data, S extends Signal, DC extends Context> Rule(Class<D> clazz, S signal, Reaction<ClassContext<D, DC>> reaction) {
         this.reaction = (Reaction<C>) reaction;
         condition = new ClassCondition(clazz, signal);
         condition.setReaction(reaction);
     }
 
-    public <D extends Data, S extends Signal> Rule(Class<D> clazz, Class<S> signalClass, Reaction<ClassContext<D>> reaction) {
+    public <D extends Data, S extends Signal, DC extends Context> Rule(Class<D> clazz, Class<S> signalClass, Reaction<ClassContext<D, DC>> reaction) {
         this.reaction = (Reaction<C>) reaction;
         condition = new ClassCondition(clazz, signalClass);
         condition.setReaction(reaction);

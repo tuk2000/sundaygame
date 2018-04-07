@@ -5,8 +5,8 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
 import com.sunday.engine.SubSystem;
-import com.sunday.engine.common.ClassContext;
-import com.sunday.engine.common.DataSignal;
+import com.sunday.engine.common.context.CustomizedDataContext;
+import com.sunday.engine.common.signal.DataSignal;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.model.property.PhysicBody;
 import com.sunday.engine.model.property.PhysicDefinition;
@@ -19,12 +19,12 @@ public class PhysicSystem extends SubSystem implements Disposable {
     protected Vector2 defaultGravity = new Vector2(0, -9.8f);
     protected World world;
 
-    private Rule physicDefinitionRule = new Rule<>(new ClassCondition<>(PhysicDefinition.class, DataSignal.class), new Reaction<ClassContext<PhysicDefinition>>() {
+    private Rule physicDefinitionRule = new Rule(new ClassCondition(PhysicDefinition.class, DataSignal.class), new Reaction<CustomizedDataContext<PhysicDefinition>>() {
         @Override
-        public void accept(ClassContext<PhysicDefinition> physicReflectionClassContext) {
-            PhysicDefinition physicDefinition = physicReflectionClassContext.getInstance();
+        public void accept(CustomizedDataContext<PhysicDefinition> physicDefinitionCustomizedDataContext) {
+            PhysicDefinition physicDefinition = physicDefinitionCustomizedDataContext.getCustomizedData();
             PhysicBody physicBody = physicDefinition.physicBody;
-            DataSignal dataSignal = (DataSignal) physicReflectionClassContext.getSignal();
+            DataSignal dataSignal = (DataSignal) physicDefinitionCustomizedDataContext.getSignal();
             switch (dataSignal) {
                 case Add:
                     if (physicBody.isBodyCreated()) {
@@ -39,11 +39,12 @@ public class PhysicSystem extends SubSystem implements Disposable {
         }
     });
 
-    private Rule physicReflectionModificationRule = new Rule(new ClassCondition<>(PhysicDefinition.class, PhysicReflectionSignal.class), new Reaction<ClassContext<PhysicDefinition>>() {
+    private Rule physicReflectionModificationRule = new Rule(new ClassCondition(PhysicDefinition.class, PhysicReflectionSignal.class), new Reaction<CustomizedDataContext<PhysicDefinition>>() {
         @Override
-        public void accept(ClassContext<PhysicDefinition> physicReflectionClassContext) {
-            PhysicDefinition physicDefinition = physicReflectionClassContext.getInstance();
-            PhysicReflectionSignal physicReflectionSignal = (PhysicReflectionSignal) physicReflectionClassContext.getSignal();
+        public void accept(CustomizedDataContext<PhysicDefinition> physicDefinitionCustomizedDataContext) {
+            PhysicDefinition physicDefinition = physicDefinitionCustomizedDataContext.getCustomizedData();
+            PhysicBody physicBody = physicDefinition.physicBody;
+            PhysicReflectionSignal physicReflectionSignal = (PhysicReflectionSignal) physicDefinitionCustomizedDataContext.getSignal();
             switch (physicReflectionSignal) {
                 case None:
                 case Updated:

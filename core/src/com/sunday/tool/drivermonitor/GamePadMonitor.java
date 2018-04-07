@@ -1,9 +1,9 @@
 package com.sunday.tool.drivermonitor;
 
-import com.sunday.engine.common.DataSignal;
-import com.sunday.engine.common.MetaDataContext;
+import com.sunday.engine.common.signal.DataSignal;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.databank.SystemPortSharing;
+import com.sunday.engine.environment.driver.DriverContext;
 import com.sunday.engine.environment.driver.gamepad.GamePad;
 import com.sunday.engine.environment.driver.gamepad.GamePadSignal;
 import com.sunday.engine.rule.Reaction;
@@ -19,11 +19,11 @@ public class GamePadMonitor extends ToolExtender<GamePadMonitorUIController> imp
     private Set<GamePad> waitingToBeAddedSet = new HashSet<>();
 
     private GamePadSignal currentGamePadSignal = GamePadSignal.None;
-    private Rule gamePadDataMonitorRule = new Rule(GamePad.class, DataSignal.class, new Reaction<MetaDataContext<GamePad>>() {
+    private Rule gamePadDataMonitorRule = new Rule(GamePad.class, DataSignal.class, new Reaction<DriverContext<GamePad>>() {
         @Override
-        public void accept(MetaDataContext<GamePad> gamePadMetaDataContext) {
-            DataSignal dataSignal = (DataSignal) gamePadMetaDataContext.getSignal();
-            GamePad gamePad = gamePadMetaDataContext.getMetaData();
+        public void accept(DriverContext<GamePad> gamePadDriverContext) {
+            DataSignal dataSignal = (DataSignal) gamePadDriverContext.getSignal();
+            GamePad gamePad = gamePadDriverContext.getEnvironmentData();
             switch (dataSignal) {
                 case Add:
                     addGamePad(gamePad);
@@ -34,11 +34,11 @@ public class GamePadMonitor extends ToolExtender<GamePadMonitorUIController> imp
             }
         }
     });
-    private Rule gamePadStatusMonitorRule = new Rule(GamePad.class, GamePadSignal.class, new Reaction<MetaDataContext<GamePad>>() {
+    private Rule gamePadStatusMonitorRule = new Rule(GamePad.class, GamePadSignal.class, new Reaction<DriverContext<GamePad>>() {
         @Override
-        public void accept(MetaDataContext<GamePad> gamePadMetaDataContext) {
-            currentGamePadSignal = (GamePadSignal) gamePadMetaDataContext.getSignal();
-            GamePad gamePad = gamePadMetaDataContext.getMetaData();
+        public void accept(DriverContext<GamePad> gamePadDriverContext) {
+            currentGamePadSignal = (GamePadSignal) gamePadDriverContext.getSignal();
+            GamePad gamePad = gamePadDriverContext.getEnvironmentData();
             if (!set.contains(gamePad)) {
                 addGamePad(gamePad);
             }

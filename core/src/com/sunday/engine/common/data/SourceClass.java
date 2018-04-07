@@ -1,5 +1,7 @@
-package com.sunday.engine.common;
+package com.sunday.engine.common.data;
 
+
+import com.sunday.engine.common.Data;
 
 public class SourceClass<T extends Data> implements Data {
 

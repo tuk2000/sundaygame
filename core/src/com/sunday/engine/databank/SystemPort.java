@@ -2,8 +2,8 @@ package com.sunday.engine.databank;
 
 
 import com.sunday.engine.common.Data;
-import com.sunday.engine.common.SourceClass;
 import com.sunday.engine.common.Target;
+import com.sunday.engine.common.data.SourceClass;
 
 import java.util.List;
 import java.util.function.Predicate;

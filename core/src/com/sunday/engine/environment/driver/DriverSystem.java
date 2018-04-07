@@ -2,7 +2,7 @@ package com.sunday.engine.environment.driver;
 
 import com.badlogic.gdx.controllers.Controller;
 import com.sunday.engine.SubSystem;
-import com.sunday.engine.common.MetaDataContext;
+import com.sunday.engine.common.context.ClassContext;
 import com.sunday.engine.databank.ContextBank;
 import com.sunday.engine.databank.SystemContextBuilder;
 import com.sunday.engine.databank.SystemPort;
@@ -61,8 +61,9 @@ public class DriverSystem extends SubSystem implements SystemContextBuilder {
 
     @Override
     public void buildSystemContext(ContextBank contextBank) {
-        contextBank.addSystemContext("KeyBoard", new MetaDataContext(keyBoard));
-        contextBank.addSystemContext("Mouse", new MetaDataContext(mouse));
-        contextBank.addSystemContext("GamePadHub", new MetaDataContext(gamePadHub));
+        contextBank.addClassContext(new ClassContext(KeyBoard.class));
+        contextBank.addClassContext(new ClassContext(Mouse.class));
+        contextBank.addClassContext(new ClassContext(GamePad.class));
+        contextBank.addClassContext(new ClassContext(GamePadHub.class));
     }
 }

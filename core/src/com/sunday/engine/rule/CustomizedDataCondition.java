@@ -1,8 +1,8 @@
 package com.sunday.engine.rule;
 
-import com.sunday.engine.common.CustomizedData;
-import com.sunday.engine.common.CustomizedDataContext;
 import com.sunday.engine.common.Signal;
+import com.sunday.engine.common.context.CustomizedDataContext;
+import com.sunday.engine.common.data.CustomizedData;
 
 public class CustomizedDataCondition<CD extends CustomizedData> extends Condition<CustomizedDataContext<CD>> {
     private CD customizedData;
@@ -23,7 +23,7 @@ public class CustomizedDataCondition<CD extends CustomizedData> extends Conditio
 
     @Override
     protected void generateMainInfo() {
-        CD data = getContext().getData();
+        CD data = getContext().getCustomizedData();
         setMainInfo(
                 "Source = [" + data + "]\n" +
                         "SourceClass = [" + data.getClass().getSimpleName() + "]\n" +
@@ -39,9 +39,9 @@ public class CustomizedDataCondition<CD extends CustomizedData> extends Conditio
 //    @Override
 //    public void connectWith(SystemPort systemPort) {
 ////        getSignals().forEach(tracer -> {
-////            systemPort.removeConnection(context.getData(), this);
+////            systemPort.removeConnection(context.getCustomizedData(), this);
 ////        });
-////        systemPort.addConnection(context.getData(), this);
+////        systemPort.addConnection(context.getCustomizedData(), this);
 ////        generateMainInfo();
 //    }
 //

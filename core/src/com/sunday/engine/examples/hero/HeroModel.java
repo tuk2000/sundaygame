@@ -3,9 +3,9 @@ package com.sunday.engine.examples.hero;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.sunday.engine.common.CustomizedDataContext;
-import com.sunday.engine.common.MetaDataContext;
+import com.sunday.engine.common.context.CustomizedDataContext;
 import com.sunday.engine.databank.Port;
+import com.sunday.engine.environment.EnvironmentDataContext;
 import com.sunday.engine.environment.driver.keyboard.KeyBoard;
 import com.sunday.engine.environment.driver.keyboard.KeyBoardCondition;
 import com.sunday.engine.environment.time.Timer;
@@ -60,37 +60,37 @@ public class HeroModel extends AbstractModel {
             }
         }));
 
-        port.addDataInstance(new Rule(TimerCondition.animationTimerCondition(), new Reaction<MetaDataContext<Timer>>() {
+        port.addDataInstance(new Rule(TimerCondition.animationTimerCondition(), new Reaction<EnvironmentDataContext<Timer>>() {
             @Override
-            public void accept(MetaDataContext<Timer> timerMetaDataContext) {
-                Timer timer = timerMetaDataContext.getMetaData();
+            public void accept(EnvironmentDataContext<Timer> timerEnviromentDataContext) {
+                Timer timer = timerEnviromentDataContext.getEnvironmentData();
                 heroAnimation.setStateTime(timer.lastTriggeredTime);
                 textureViewLayer.updateTexture(heroAnimation.getKeyFrame(movement));
             }
         }));
 
-        port.addDataInstance(new Rule(KeyBoardCondition.keyTyped("1"), new Reaction<MetaDataContext<KeyBoard>>() {
+        port.addDataInstance(new Rule(KeyBoardCondition.keyTyped("1"), new Reaction<EnvironmentDataContext<KeyBoard>>() {
 
             @Override
-            public void accept(MetaDataContext<KeyBoard> metaDataContext) {
+            public void accept(EnvironmentDataContext<KeyBoard> enviromentDataContext) {
                 System.out.println("keyTyped('1')");
                 movement.position.add(-10, 0);
                 port.broadcast(movement, MovementSignal.ReLocated);
             }
         }));
-        port.addDataInstance(new Rule(KeyBoardCondition.keyTyped("2"), new Reaction<MetaDataContext<KeyBoard>>() {
+        port.addDataInstance(new Rule(KeyBoardCondition.keyTyped("2"), new Reaction<EnvironmentDataContext<KeyBoard>>() {
 
             @Override
-            public void accept(MetaDataContext<KeyBoard> metaDataContext) {
+            public void accept(EnvironmentDataContext<KeyBoard> enviromentDataContext) {
                 System.out.println("keyTyped('2')");
                 movement.position.add(10, 0);
                 port.broadcast(movement, MovementSignal.ReLocated);
             }
         }));
-        port.addDataInstance(new Rule(KeyBoardCondition.keyPressed("3"), new Reaction<MetaDataContext<KeyBoard>>() {
+        port.addDataInstance(new Rule(KeyBoardCondition.keyPressed("3"), new Reaction<EnvironmentDataContext<KeyBoard>>() {
 
             @Override
-            public void accept(MetaDataContext<KeyBoard> metaDataContext) {
+            public void accept(EnvironmentDataContext<KeyBoard> enviromentDataContext) {
                 System.out.println("keyTyped('3')");
                 movement.direction = movement.direction == Direction.Left ? Direction.Right : Direction.Left;
                 movement.action = Action.Fighting;

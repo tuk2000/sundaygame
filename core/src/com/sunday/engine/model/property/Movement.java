@@ -1,7 +1,7 @@
 package com.sunday.engine.model.property;
 
 import com.badlogic.gdx.math.Vector2;
-import com.sunday.engine.common.CustomizedData;
+import com.sunday.engine.common.data.CustomizedData;
 import com.sunday.engine.model.state.Action;
 import com.sunday.engine.model.state.Direction;
 

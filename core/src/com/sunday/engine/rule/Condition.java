@@ -10,7 +10,7 @@ import java.util.function.Predicate;
 
 public abstract class Condition<C extends Context> {
     protected Reaction<C> reaction;
-    protected List<Predicate<C>> predicates = new ArrayList<>();
+    protected List<Predicate<? extends C>> predicates = new ArrayList<>();
     protected List<Boolean> result = new ArrayList<>();
     protected boolean isAndOperation = true;
     private C context;
@@ -34,7 +34,7 @@ public abstract class Condition<C extends Context> {
         this.isAndOperation = isAndOperation;
     }
 
-    protected void addPredicate(Predicate<C> predicate) {
+    protected void addPredicate(Predicate<? extends C> predicate) {
         predicates.add(predicate);
     }
 

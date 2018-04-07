@@ -1,9 +1,9 @@
 package com.sunday.tool.drivermonitor;
 
-import com.sunday.engine.common.DataSignal;
-import com.sunday.engine.common.MetaDataContext;
+import com.sunday.engine.common.signal.DataSignal;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.databank.SystemPortSharing;
+import com.sunday.engine.environment.driver.DriverContext;
 import com.sunday.engine.environment.driver.keyboard.KeyBoard;
 import com.sunday.engine.environment.driver.keyboard.KeyBoardSignal;
 import com.sunday.engine.rule.Reaction;
@@ -15,12 +15,12 @@ import java.util.function.BiConsumer;
 public class KeyBoardMonitor extends ToolExtender<KeyBoardMonitorUIController> implements SystemPortSharing {
     private KeyBoard currentKeyBoard;
     private KeyBoardSignal currentKeyBoardSignal = KeyBoardSignal.None;
-    private Rule keyBoardDataMonitorRule = new Rule(KeyBoard.class, DataSignal.class, new Reaction<MetaDataContext<KeyBoard>>() {
+    private Rule keyBoardDataMonitorRule = new Rule(KeyBoard.class, DataSignal.class, new Reaction<DriverContext<KeyBoard>>() {
         @Override
-        public void accept(MetaDataContext<KeyBoard> keyBoardMetaDataContext) {
-            KeyBoard keyBoard = keyBoardMetaDataContext.getMetaData();
-            currentKeyBoardSignal = (KeyBoardSignal) keyBoardMetaDataContext.getSignal();
-            DataSignal dataSignal = (DataSignal) keyBoardMetaDataContext.getSignal();
+        public void accept(DriverContext<KeyBoard> keyBoardDriverContext) {
+            KeyBoard keyBoard = keyBoardDriverContext.getEnvironmentData();
+            currentKeyBoardSignal = (KeyBoardSignal) keyBoardDriverContext.getSignal();
+            DataSignal dataSignal = (DataSignal) keyBoardDriverContext.getSignal();
             switch (dataSignal) {
                 case Add:
                     setCurrentKeyBoard(keyBoard);
@@ -28,11 +28,11 @@ public class KeyBoardMonitor extends ToolExtender<KeyBoardMonitorUIController> i
             }
         }
     });
-    private Rule keyBoardStatusMonitorRule = new Rule(KeyBoard.class, KeyBoardSignal.class, new Reaction<MetaDataContext<KeyBoard>>() {
+    private Rule keyBoardStatusMonitorRule = new Rule(KeyBoard.class, KeyBoardSignal.class, new Reaction<DriverContext<KeyBoard>>() {
         @Override
-        public void accept(MetaDataContext<KeyBoard> keyBoardMetaDataContext) {
-            KeyBoard keyBoard = keyBoardMetaDataContext.getMetaData();
-            currentKeyBoardSignal = (KeyBoardSignal) keyBoardMetaDataContext.getSignal();
+        public void accept(DriverContext<KeyBoard> keyBoardDriverContext) {
+            KeyBoard keyBoard = keyBoardDriverContext.getEnvironmentData();
+            currentKeyBoardSignal = (KeyBoardSignal) keyBoardDriverContext.getSignal();
             if (currentKeyBoard != keyBoard) {
                 setCurrentKeyBoard(keyBoard);
             }

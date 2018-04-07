@@ -5,8 +5,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.sunday.engine.Engine;
-import com.sunday.engine.common.MetaDataContext;
 import com.sunday.engine.databank.Port;
+import com.sunday.engine.environment.EnvironmentDataContext;
 import com.sunday.engine.environment.driver.keyboard.KeyBoard;
 import com.sunday.engine.environment.driver.keyboard.KeyBoardCondition;
 import com.sunday.engine.environment.driver.mouse.Mouse;
@@ -32,10 +32,10 @@ public class DemoBallRolling implements Screen {
     private Engine engine;
     private Scenario scenario;
     private SawAnimation sawAnimation = new SawAnimation();
-    private Rule sawAnimationRule = new Rule(TimerCondition.animationTimerCondition(), new Reaction<MetaDataContext<Timer>>() {
+    private Rule sawAnimationRule = new Rule(TimerCondition.animationTimerCondition(), new Reaction<EnvironmentDataContext<Timer>>() {
         @Override
-        public void accept(MetaDataContext<Timer> timerMetaDataContext) {
-            Timer timer = timerMetaDataContext.getMetaData();
+        public void accept(EnvironmentDataContext<Timer> timerEnviromentDataContext) {
+            Timer timer = timerEnviromentDataContext.getEnvironmentData();
             sawAnimation.setStateTime(timer.lastTriggeredTime);
         }
     });
@@ -118,17 +118,17 @@ public class DemoBallRolling implements Screen {
 
     private class SquareModel extends AbstractModel {
 
-        Rule moveRule = new Rule(KeyBoardCondition.keyPressed("x"), new Reaction<MetaDataContext<KeyBoard>>() {
+        Rule moveRule = new Rule(KeyBoardCondition.keyPressed("x"), new Reaction<EnvironmentDataContext<KeyBoard>>() {
             @Override
-            public void accept(MetaDataContext<KeyBoard> metaDataContext) {
+            public void accept(EnvironmentDataContext<KeyBoard> enviromentDataContext) {
                 movement.position.add(10, 10);
                 port.broadcast(movement, MovementSignal.ReLocated);
             }
         });
-        Rule followMouseRule = new Rule(MouseCondition.mouseDragged(), new Reaction<MetaDataContext<Mouse>>() {
+        Rule followMouseRule = new Rule(MouseCondition.mouseDragged(), new Reaction<EnvironmentDataContext<Mouse>>() {
             @Override
-            public void accept(MetaDataContext<Mouse> metaDataContext) {
-                Mouse mouse = metaDataContext.getMetaData();
+            public void accept(EnvironmentDataContext<Mouse> enviromentDataContext) {
+                Mouse mouse = enviromentDataContext.getEnvironmentData();
                 movement.position.set(mouse.screenX, Gdx.graphics.getHeight() - mouse.screenY);
                 port.broadcast(movement, MovementSignal.ReLocated);
             }
@@ -168,9 +168,9 @@ public class DemoBallRolling implements Screen {
     private class SawModel extends AbstractModel {
         private TextureViewLayer sawTextureViewLayer = new TextureViewLayer(GameFramework.Resource.getAsset("saws/saw1.png"));
         private Timer timer = new Timer();
-        private Rule sawMovingRule = new Rule(TimerCondition.bind(timer), new Reaction<MetaDataContext<Timer>>() {
+        private Rule sawMovingRule = new Rule(TimerCondition.bind(timer), new Reaction<EnvironmentDataContext<Timer>>() {
             @Override
-            public void accept(MetaDataContext<Timer> timerMetaDataContext) {
+            public void accept(EnvironmentDataContext<Timer> timerEnviromentDataContext) {
                 sawTextureViewLayer.updateTexture(sawAnimation.getKeyFrame());
                 movement.position.add((float) (Math.random() - 0.5) * 10, (float) (Math.random() - 0.5) * 10);
                 port.broadcast(movement, MovementSignal.ReLocated);
