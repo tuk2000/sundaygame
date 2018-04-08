@@ -8,7 +8,7 @@ import com.sunday.engine.common.context.ClassContext;
 import java.util.List;
 
 public interface ContextBank extends Disposable {
-    <C extends Context> void addClassContext(ClassContext<C> classContext);
+    <RC extends Context> void addClassContext(ClassContext<RC> classContext);
 
     <D extends Data> boolean hasClassContext(Class<D> clazz);
 

@@ -15,7 +15,7 @@ public class ContextBankImpl implements ContextBank {
     private DataInstanceContextRegister dataInstanceContextRegister = new DataInstanceContextRegister();
 
     @Override
-    public <C extends Context> void addClassContext(ClassContext<C> classContext) {
+    public <RC extends Context> void addClassContext(ClassContext<RC> classContext) {
         classContextClassContextRegister.register(classContext);
     }
 

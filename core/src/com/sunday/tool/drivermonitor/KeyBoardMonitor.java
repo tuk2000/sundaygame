@@ -1,5 +1,6 @@
 package com.sunday.tool.drivermonitor;
 
+import com.sunday.engine.common.context.ClassContext;
 import com.sunday.engine.common.signal.DataSignal;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.databank.SystemPortSharing;
@@ -7,7 +8,7 @@ import com.sunday.engine.environment.driver.DriverContext;
 import com.sunday.engine.environment.driver.keyboard.KeyBoard;
 import com.sunday.engine.environment.driver.keyboard.KeyBoardSignal;
 import com.sunday.engine.rule.ClassCondition;
-import com.sunday.engine.rule.Reaction;
+import com.sunday.engine.rule.ClassReaction;
 import com.sunday.engine.rule.Rule;
 import com.sunday.tool.ToolExtender;
 
@@ -16,7 +17,8 @@ import java.util.function.BiConsumer;
 public class KeyBoardMonitor extends ToolExtender<KeyBoardMonitorUIController> implements SystemPortSharing {
     private KeyBoard currentKeyBoard;
     private KeyBoardSignal currentKeyBoardSignal = KeyBoardSignal.None;
-    private Rule<DriverContext<KeyBoard>> keyBoardDataMonitorRule = new Rule<DriverContext<KeyBoard>>(new ClassCondition(KeyBoard.class, DataSignal.class), new Reaction<DriverContext<KeyBoard>>() {
+    private Rule<ClassContext<DriverContext<KeyBoard>>> keyBoardDataMonitorRule
+            = new Rule<>(new ClassCondition<>(KeyBoard.class, DataSignal.class), new ClassReaction<DriverContext<KeyBoard>>() {
         @Override
         public void accept(DriverContext<KeyBoard> keyBoardDriverContext) {
             KeyBoard keyBoard = keyBoardDriverContext.getEnvironmentData();
@@ -29,7 +31,7 @@ public class KeyBoardMonitor extends ToolExtender<KeyBoardMonitorUIController> i
             }
         }
     });
-    private Rule<DriverContext<KeyBoard>> keyBoardStatusMonitorRule = new Rule<>(new ClassCondition(KeyBoard.class, KeyBoardSignal.class), new Reaction<DriverContext<KeyBoard>>() {
+    private Rule<ClassContext<DriverContext<KeyBoard>>> keyBoardStatusMonitorRule = new Rule<>(new ClassCondition<>(KeyBoard.class, KeyBoardSignal.class), new ClassReaction<DriverContext<KeyBoard>>() {
         @Override
         public void accept(DriverContext<KeyBoard> keyBoardDriverContext) {
             KeyBoard keyBoard = keyBoardDriverContext.getEnvironmentData();

@@ -13,10 +13,10 @@ public class ClassContextConstructor {
         return condition instanceof ClassCondition;
     }
 
-    public <D extends Data, C extends Context> void construct(ClassCondition<D, C> condition) {
-        Class<D> clazz = condition.getSensedClass();
+    public <RC extends Context> void construct(ClassCondition<RC> condition) {
+        Class<? extends Data> clazz = condition.getSensedClass();
         if (!contextBank.hasClassContext(clazz)) {
-            ClassContext<C> classContext = new ClassContext<>(clazz);
+            ClassContext<RC> classContext = new ClassContext<>(clazz);
             contextBank.addClassContext(classContext);
             condition.setClassContext(classContext);
         }

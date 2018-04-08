@@ -18,10 +18,10 @@ public class RuleSystem extends SubSystem {
     }
 
     private void initRuleSystem() {
-        Rule<ClassContext<RuleContext>> ruleDataRule = new Rule<>(new ClassCondition<>(Rule.class, DataSignal.class), new Reaction<ClassContext<RuleContext>>() {
+        Rule<ClassContext<RuleContext>> ruleDataRule
+                = new Rule<>(new ClassCondition<>(Rule.class, DataSignal.class), new ClassReaction<RuleContext>() {
             @Override
-            public void accept(ClassContext<RuleContext> ruleContextClassContext) {
-                RuleContext ruleContext = ruleContextClassContext.getFocusedContext();
+            public void accept(RuleContext ruleContext) {
                 Rule rule = ruleContext.getSystemData();
                 DataSignal dataSignal = (DataSignal) ruleContext.getSignal();
                 switch (dataSignal) {

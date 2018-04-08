@@ -1,6 +1,7 @@
 package com.sunday.engine.environment.time;
 
 import com.sunday.engine.SubSystem;
+import com.sunday.engine.common.context.ClassContext;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.environment.EnvironmentDataContext;
 import com.sunday.engine.rule.*;
@@ -10,29 +11,29 @@ import java.util.List;
 public class TimeSystem extends SubSystem implements ContextConstructor<TimerCondition> {
     public float currentTime = 0.0f;
 
-    private Rule<RuleContext> timerConditionMountingRule = new Rule<RuleContext>(new ClassCondition(Rule.class, RuleSignal.Mounting), new Reaction<RuleContext>() {
-        @Override
-        public void accept(RuleContext ruleContext) {
-            Rule rule = ruleContext.getSystemData();
-            if (!(rule.getCondition() instanceof TimerCondition)) return;
-            RuleSignal ruleSignal = (RuleSignal) ruleContext.getSignal();
-            EnvironmentDataContext<Timer> environmentDataContext = (EnvironmentDataContext<Timer>) rule.getContext();
-            Timer timer = environmentDataContext.getEnvironmentData();
-            if (!systemPort.containsDataInstance(timer)) {
-                systemPort.addDataInstance(timer);
-                switch (ruleSignal) {
-                    case Mounting:
-                        timer.start(currentTime);
-                        break;
-                    case Dismounting:
-                        timer.stop(currentTime);
-                }
-            }
-        }
-    });
-
     public TimeSystem(SystemPort systemPort) {
         super("TimeSystem", systemPort);
+        Rule<ClassContext<RuleContext>> timerConditionMountingRule
+                = new Rule<>(new ClassCondition<>(Rule.class, RuleSignal.Mounting), new ClassReaction<RuleContext>() {
+            @Override
+            public void accept(RuleContext ruleContext) {
+                Rule rule = ruleContext.getSystemData();
+                if (!(rule.getCondition() instanceof TimerCondition)) return;
+                RuleSignal ruleSignal = (RuleSignal) ruleContext.getSignal();
+                EnvironmentDataContext<Timer> environmentDataContext = (EnvironmentDataContext<Timer>) rule.getContext();
+                Timer timer = environmentDataContext.getEnvironmentData();
+                if (!systemPort.containsDataInstance(timer)) {
+                    systemPort.addDataInstance(timer);
+                    switch (ruleSignal) {
+                        case Mounting:
+                            timer.start(currentTime);
+                            break;
+                        case Dismounting:
+                            timer.stop(currentTime);
+                    }
+                }
+            }
+        });
         systemPort.addDataInstance(timerConditionMountingRule);
     }
 
