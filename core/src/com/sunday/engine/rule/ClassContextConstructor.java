@@ -19,6 +19,8 @@ public class ClassContextConstructor {
             ClassContext<RC> classContext = new ClassContext<>(clazz);
             contextBank.addClassContext(classContext);
             condition.setClassContext(classContext);
+        } else {
+            condition.setClassContext(contextBank.getClassContext(clazz));
         }
     }
 }
