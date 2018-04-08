@@ -1,18 +1,21 @@
 package com.sunday.engine.environment.event;
 
 import com.sunday.engine.SubSystem;
-import com.sunday.engine.common.context.ClassContext;
-import com.sunday.engine.databank.ContextBank;
-import com.sunday.engine.databank.SystemContextBuilder;
 import com.sunday.engine.databank.SystemPort;
+import com.sunday.engine.environment.EnvironmentDataContext;
 import com.sunday.engine.environment.event.window.Window;
+import com.sunday.engine.environment.event.window.WindowCondition;
+import com.sunday.engine.rule.Condition;
+import com.sunday.engine.rule.ContextConstructor;
 
-public class EventSystem extends SubSystem implements EventDispatcher, SystemContextBuilder {
+public class EventSystem extends SubSystem implements EventDispatcher, ContextConstructor<WindowCondition> {
     private Window window;
+    private EnvironmentDataContext<Window> windowEnvironmentDataContext;
 
     public EventSystem(SystemPort systemPort) {
         super("EventSystem", systemPort);
         window = new Window();
+        windowEnvironmentDataContext = new EnvironmentDataContext<>(window);
         systemPort.addDataInstance(window);
     }
 
@@ -38,7 +41,12 @@ public class EventSystem extends SubSystem implements EventDispatcher, SystemCon
     }
 
     @Override
-    public void buildSystemContext(ContextBank contextBank) {
-        contextBank.addClassContext(new ClassContext(Window.class));
+    public boolean accept(Condition condition) {
+        return condition instanceof WindowCondition;
+    }
+
+    @Override
+    public void construct(WindowCondition windowCondition) {
+        windowCondition.setEnvironmentContext(windowEnvironmentDataContext);
     }
 }

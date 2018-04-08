@@ -19,7 +19,7 @@ public class PhysicSystem extends SubSystem implements Disposable {
     protected Vector2 defaultGravity = new Vector2(0, -9.8f);
     protected World world;
 
-    private Rule physicDefinitionRule = new Rule(new ClassCondition(PhysicDefinition.class, DataSignal.class), new Reaction<CustomizedDataContext<PhysicDefinition>>() {
+    private Rule<CustomizedDataContext<PhysicDefinition>> physicDefinitionRule = new Rule<CustomizedDataContext<PhysicDefinition>>(new ClassCondition(PhysicDefinition.class, DataSignal.class), new Reaction<CustomizedDataContext<PhysicDefinition>>() {
         @Override
         public void accept(CustomizedDataContext<PhysicDefinition> physicDefinitionCustomizedDataContext) {
             PhysicDefinition physicDefinition = physicDefinitionCustomizedDataContext.getCustomizedData();
@@ -39,7 +39,7 @@ public class PhysicSystem extends SubSystem implements Disposable {
         }
     });
 
-    private Rule physicReflectionModificationRule = new Rule(new ClassCondition(PhysicDefinition.class, PhysicReflectionSignal.class), new Reaction<CustomizedDataContext<PhysicDefinition>>() {
+    private Rule<CustomizedDataContext<PhysicDefinition>> physicReflectionModificationRule = new Rule<CustomizedDataContext<PhysicDefinition>>(new ClassCondition(PhysicDefinition.class, PhysicReflectionSignal.class), new Reaction<CustomizedDataContext<PhysicDefinition>>() {
         @Override
         public void accept(CustomizedDataContext<PhysicDefinition> physicDefinitionCustomizedDataContext) {
             PhysicDefinition physicDefinition = physicDefinitionCustomizedDataContext.getCustomizedData();

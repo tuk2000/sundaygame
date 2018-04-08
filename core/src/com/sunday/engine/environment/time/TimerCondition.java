@@ -5,8 +5,8 @@ import com.sunday.engine.environment.EnvironmentDataContext;
 
 
 public class TimerCondition extends EnvironmentCondition<Timer, EnvironmentDataContext<Timer>> implements TimeRelated {
-
     private static TimerCondition AnimationTimerCondition = null;
+    private Timer timer;
 
     public static TimerCondition animationTimerCondition() {
         if (AnimationTimerCondition == null) {
@@ -19,9 +19,12 @@ public class TimerCondition extends EnvironmentCondition<Timer, EnvironmentDataC
 
     public static TimerCondition bind(Timer timer) {
         TimerCondition timerCondition = new TimerCondition();
-        timerCondition.setContext(new EnvironmentDataContext(timer));
+        timerCondition.timer = timer;
         timerCondition.setSignals(TimerSignal.Triggered);
         return timerCondition;
     }
 
+    public Timer getTimer() {
+        return timer;
+    }
 }

@@ -8,22 +8,22 @@ import com.sunday.engine.common.data.SourceClass;
 import java.util.List;
 import java.util.function.Predicate;
 
-public interface SystemPort<T extends Data> extends Port<T> {
-    SourceClass<T> getSourceClass(Class<T> clazz);
+public interface SystemPort extends Port {
+    <D extends Data> SourceClass<D> getSourceClass(Class<D> clazz);
 
-    void addConnection(T source, Target target);
+    void addConnection(Data source, Target target);
 
-    void removeConnection(T source, Target target);
+    void removeConnection(Data source, Target target);
 
-    void addConnection(Class<T> clazz, Target target);
+    <D extends Data> void addConnection(Class<D> clazz, Target target);
 
-    void removeConnection(Class<T> clazz, Target target);
+    <D extends Data> void removeConnection(Class<D> clazz, Target target);
 
-    List<T> getDataList(Predicate<T> predicate);
+    <D extends Data> List<D> getDataList(Predicate<D> predicate);
 
-    List<Class<T>> getDataClassList();
+    <D extends Data> List<Class<D>> getDataClassList();
 
-    List<T> instancesOf(Class<T> clazz);
+    <D extends Data> List<D> instancesOf(Class<D> clazz);
 
     Port requestPort(Object owner);
 }

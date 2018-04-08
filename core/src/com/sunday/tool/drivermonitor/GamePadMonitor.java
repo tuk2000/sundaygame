@@ -6,6 +6,7 @@ import com.sunday.engine.databank.SystemPortSharing;
 import com.sunday.engine.environment.driver.DriverContext;
 import com.sunday.engine.environment.driver.gamepad.GamePad;
 import com.sunday.engine.environment.driver.gamepad.GamePadSignal;
+import com.sunday.engine.rule.ClassCondition;
 import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
 import com.sunday.tool.ToolExtender;
@@ -19,7 +20,7 @@ public class GamePadMonitor extends ToolExtender<GamePadMonitorUIController> imp
     private Set<GamePad> waitingToBeAddedSet = new HashSet<>();
 
     private GamePadSignal currentGamePadSignal = GamePadSignal.None;
-    private Rule gamePadDataMonitorRule = new Rule(GamePad.class, DataSignal.class, new Reaction<DriverContext<GamePad>>() {
+    private Rule<DriverContext<GamePad>> gamePadDataMonitorRule = new Rule<>(new ClassCondition(GamePad.class, DataSignal.class), new Reaction<DriverContext<GamePad>>() {
         @Override
         public void accept(DriverContext<GamePad> gamePadDriverContext) {
             DataSignal dataSignal = (DataSignal) gamePadDriverContext.getSignal();
@@ -34,7 +35,7 @@ public class GamePadMonitor extends ToolExtender<GamePadMonitorUIController> imp
             }
         }
     });
-    private Rule gamePadStatusMonitorRule = new Rule(GamePad.class, GamePadSignal.class, new Reaction<DriverContext<GamePad>>() {
+    private Rule<DriverContext<GamePad>> gamePadStatusMonitorRule = new Rule<>(new ClassCondition(GamePad.class, GamePadSignal.class), new Reaction<DriverContext<GamePad>>() {
         @Override
         public void accept(DriverContext<GamePad> gamePadDriverContext) {
             currentGamePadSignal = (GamePadSignal) gamePadDriverContext.getSignal();

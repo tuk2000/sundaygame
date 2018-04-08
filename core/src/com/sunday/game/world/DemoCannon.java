@@ -88,7 +88,7 @@ public class DemoCannon implements Screen {
 
         @Override
         protected void connectWithInternal(Port port) {
-            port.addDataInstance(new Rule(KeyBoardCondition.keyPressed("R"), new Reaction<DriverContext<KeyBoard>>() {
+            port.addDataInstance(new Rule<>(KeyBoardCondition.keyPressed("R"), new Reaction<DriverContext<KeyBoard>>() {
                 @Override
                 public void accept(DriverContext<KeyBoard> keyBoardDriverContext) {
                     PhysicBody physicBody = physicDefinition.physicBody;
@@ -128,7 +128,7 @@ public class DemoCannon implements Screen {
 
         @Override
         protected void connectWithInternal(Port port) {
-            port.addDataInstance(new Rule(CollisionCondition.collideBetween(physicDefinition, PhysicDefinition.class), new Reaction<CustomizedDataContext<PhysicDefinition>>() {
+            port.addDataInstance(new Rule<>(CollisionCondition.collideBetween(physicDefinition, PhysicDefinition.class), new Reaction<CustomizedDataContext<PhysicDefinition>>() {
                 @Override
                 public void accept(CustomizedDataContext<PhysicDefinition> physicDefinitionCustomizedDataContext) {
                     PhysicBody physicBody = physicDefinitionCustomizedDataContext.getCustomizedData().physicBody;

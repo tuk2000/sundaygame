@@ -6,6 +6,7 @@ import com.sunday.engine.databank.SystemPortSharing;
 import com.sunday.engine.environment.driver.DriverContext;
 import com.sunday.engine.environment.driver.keyboard.KeyBoard;
 import com.sunday.engine.environment.driver.keyboard.KeyBoardSignal;
+import com.sunday.engine.rule.ClassCondition;
 import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
 import com.sunday.tool.ToolExtender;
@@ -15,7 +16,7 @@ import java.util.function.BiConsumer;
 public class KeyBoardMonitor extends ToolExtender<KeyBoardMonitorUIController> implements SystemPortSharing {
     private KeyBoard currentKeyBoard;
     private KeyBoardSignal currentKeyBoardSignal = KeyBoardSignal.None;
-    private Rule keyBoardDataMonitorRule = new Rule(KeyBoard.class, DataSignal.class, new Reaction<DriverContext<KeyBoard>>() {
+    private Rule<DriverContext<KeyBoard>> keyBoardDataMonitorRule = new Rule<DriverContext<KeyBoard>>(new ClassCondition(KeyBoard.class, DataSignal.class), new Reaction<DriverContext<KeyBoard>>() {
         @Override
         public void accept(DriverContext<KeyBoard> keyBoardDriverContext) {
             KeyBoard keyBoard = keyBoardDriverContext.getEnvironmentData();
@@ -28,7 +29,7 @@ public class KeyBoardMonitor extends ToolExtender<KeyBoardMonitorUIController> i
             }
         }
     });
-    private Rule keyBoardStatusMonitorRule = new Rule(KeyBoard.class, KeyBoardSignal.class, new Reaction<DriverContext<KeyBoard>>() {
+    private Rule<DriverContext<KeyBoard>> keyBoardStatusMonitorRule = new Rule<>(new ClassCondition(KeyBoard.class, KeyBoardSignal.class), new Reaction<DriverContext<KeyBoard>>() {
         @Override
         public void accept(DriverContext<KeyBoard> keyBoardDriverContext) {
             KeyBoard keyBoard = keyBoardDriverContext.getEnvironmentData();

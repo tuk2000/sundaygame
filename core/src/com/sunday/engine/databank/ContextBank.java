@@ -7,16 +7,16 @@ import com.sunday.engine.common.context.ClassContext;
 
 import java.util.List;
 
-public interface ContextBank<D extends Data, C extends Context> extends Disposable {
-    void addClassContext(ClassContext<D, C> classContext);
+public interface ContextBank extends Disposable {
+    <C extends Context> void addClassContext(ClassContext<C> classContext);
 
-    boolean hasClassContext(Class<D> clazz);
+    <D extends Data> boolean hasClassContext(Class<D> clazz);
 
-    ClassContext<D, C> getClassContext(Class<D> clazz);
+    <D extends Data, C extends Context> ClassContext<C> getClassContext(Class<D> clazz);
 
-    List<C> getContexts(Class<D> clazz);
+    <D extends Data, C extends Context> List<C> getContexts(Class<D> clazz);
 
-    void addContext(Class<D> clazz, C context);
+    <D extends Data, C extends Context> void addContext(Class<D> clazz, C context);
 
-    void removeContext(C context);
+    <C extends Context> void removeContext(C context);
 }

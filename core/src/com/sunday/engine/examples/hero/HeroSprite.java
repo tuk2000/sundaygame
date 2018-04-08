@@ -22,7 +22,7 @@ public class HeroSprite extends Sprite {
         movement.action = Action.Jumping;
     }
 
-    public void trunaround() {
+    public void turnAround() {
         movement.direction = Direction.Left;
     }
 

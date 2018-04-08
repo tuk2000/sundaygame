@@ -7,12 +7,12 @@ import com.sunday.engine.databank.register.AutoMappingRegister;
 
 import java.util.function.Function;
 
-public class ClassContextRegister<K extends Data, C extends Context> extends AutoMappingRegister<Class<K>, ClassContext<K, C>> {
+public class ClassContextRegister extends AutoMappingRegister<Class<? extends Data>, ClassContext<? extends Context>> {
     public ClassContextRegister() {
-        super(new Function<ClassContext<K, C>, Class<K>>() {
+        super(new Function<ClassContext<? extends Context>, Class<? extends Data>>() {
             @Override
-            public Class<K> apply(ClassContext<K, C> kcClassContext) {
-                return kcClassContext.getSensedClass();
+            public Class<? extends Data> apply(ClassContext<? extends Context> classContext) {
+                return classContext.getSensedClass();
             }
         });
     }

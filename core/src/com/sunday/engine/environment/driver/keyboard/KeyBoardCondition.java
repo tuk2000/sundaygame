@@ -18,7 +18,7 @@ public class KeyBoardCondition extends DriverCondition<KeyBoard> {
     public static KeyBoardCondition keyPressed() {
         KeyBoardCondition keyBoardCondition = new KeyBoardCondition();
         keyBoardCondition.setSignals(KeyBoardSignal.Pressed);
-        keyBoardCondition.setExtraInfo("Key=[AnyKey]");
+        keyBoardCondition.setExtraInfoEntry("Key", "AnyKey");
         return keyBoardCondition;
     }
 
@@ -26,19 +26,19 @@ public class KeyBoardCondition extends DriverCondition<KeyBoard> {
         KeyBoardCondition keyBoardCondition = new KeyBoardCondition();
         keyBoardCondition.setSignals(KeyBoardSignal.Pressed);
         keyBoardCondition.addPredicate(getKeyPredicate(keyName));
-        keyBoardCondition.setExtraInfo("Key=[" + keyName + "]");
+        keyBoardCondition.setExtraInfoEntry("Key", keyName);
         return keyBoardCondition;
     }
 
     public static KeyBoardCondition keyPressed(String... keyNames) {
         KeyBoardCondition keyBoardCondition = new KeyBoardCondition();
         keyBoardCondition.setSignals(KeyBoardSignal.Pressed);
-        String extraInfo = "Key=[";
+        String extraInfo = "Key";
         for (String keyName : keyNames) {
             keyBoardCondition.addPredicate(getKeyPredicate(keyName));
             extraInfo += keyName + "  ";
         }
-        keyBoardCondition.setExtraInfo(extraInfo + "]");
+        keyBoardCondition.setExtraInfoEntry("Key", extraInfo);
         keyBoardCondition.setAndOperation(false);
         return keyBoardCondition;
     }
@@ -51,7 +51,7 @@ public class KeyBoardCondition extends DriverCondition<KeyBoard> {
 //        Map<Data, Predicate<Data>> clusters = keyBoardCondition.clusters;
 //        clusters.put(keyBoard, keyPressed);
 //        clusters.put(keyBoardState, keyCombo);
-//        keyBoardCondition.setMainInfo("keyCombination " + combination);
+//        keyBoardCondition.setMainInfoEntry("keyCombination " + combination);
 //        return keyBoardCondition;
 //    }
 
@@ -59,19 +59,19 @@ public class KeyBoardCondition extends DriverCondition<KeyBoard> {
         KeyBoardCondition keyBoardCondition = new KeyBoardCondition();
         keyBoardCondition.setSignals(KeyBoardSignal.Released);
         keyBoardCondition.addPredicate(getKeyPredicate(keyName));
-        keyBoardCondition.setExtraInfo("Key=[" + keyName + "]");
+        keyBoardCondition.setExtraInfoEntry("Key", keyName);
         return keyBoardCondition;
     }
 
     public static KeyBoardCondition keyReleased(String... keyNames) {
         KeyBoardCondition keyBoardCondition = new KeyBoardCondition();
         keyBoardCondition.setSignals(KeyBoardSignal.Released);
-        String extraInfo = "Key=[";
+        String extraInfo = "";
         for (String keyName : keyNames) {
             keyBoardCondition.addPredicate(getKeyPredicate(keyName));
             extraInfo += keyName + "  ";
         }
-        keyBoardCondition.setExtraInfo(extraInfo + "]");
+        keyBoardCondition.setExtraInfoEntry("Key", extraInfo);
         keyBoardCondition.setAndOperation(false);
         return keyBoardCondition;
     }
@@ -80,27 +80,21 @@ public class KeyBoardCondition extends DriverCondition<KeyBoard> {
         KeyBoardCondition keyBoardCondition = new KeyBoardCondition();
         keyBoardCondition.setSignals(KeyBoardSignal.Typed);
         keyBoardCondition.addPredicate(getKeyPredicate(keyName));
-        keyBoardCondition.setExtraInfo("Key=[" + keyName + "]");
+        keyBoardCondition.setExtraInfoEntry("Key", keyName);
         return keyBoardCondition;
     }
 
     public static KeyBoardCondition keyTyped(String... keyNames) {
         KeyBoardCondition keyBoardCondition = new KeyBoardCondition();
         keyBoardCondition.setSignals(KeyBoardSignal.Typed);
-        String extraInfo = "Key=[";
+        String extraInfo = "";
         for (String keyName : keyNames) {
             keyBoardCondition.addPredicate(getKeyPredicate(keyName));
             extraInfo += keyName + "  ";
         }
-        keyBoardCondition.setExtraInfo(extraInfo + "]");
+        keyBoardCondition.setExtraInfoEntry("Key", extraInfo);
         keyBoardCondition.setAndOperation(false);
         return keyBoardCondition;
-    }
-
-    @Override
-    protected void setExtraInfo(String info) {
-        String tmp = "Type=[KeyBoardCondition]\n";
-        super.setExtraInfo(tmp + info);
     }
 
 }

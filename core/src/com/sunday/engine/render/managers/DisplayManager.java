@@ -4,6 +4,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.databank.SystemPortSharing;
 import com.sunday.engine.environment.EnvironmentDataContext;
+import com.sunday.engine.environment.driver.DriverContext;
 import com.sunday.engine.environment.driver.gamepad.GamePad;
 import com.sunday.engine.environment.driver.gamepad.GamePadCondition;
 import com.sunday.engine.environment.event.window.Window;
@@ -22,10 +23,10 @@ public class DisplayManager implements SystemPortSharing {
 
     @Override
     public void connectWith(SystemPort systemPort) {
-        systemPort.addDataInstance(new Rule(WindowCondition.resized(), new Reaction<EnvironmentDataContext<Window>>() {
+        systemPort.addDataInstance(new Rule<>(WindowCondition.resized(), new Reaction<EnvironmentDataContext<Window>>() {
             @Override
-            public void accept(EnvironmentDataContext<Window> windowEnviromentDataContext) {
-                Window window = windowEnviromentDataContext.getEnvironmentData();
+            public void accept(EnvironmentDataContext<Window> windowEnvironmentDataContext) {
+                Window window = windowEnvironmentDataContext.getEnvironmentData();
                 System.out.println("window---RenderManager---[" + window.width + "," + window.height + "]");
                 cameraManager.recordCameraState();
                 viewport.update(window.width, window.height);
@@ -33,10 +34,10 @@ public class DisplayManager implements SystemPortSharing {
                 cameraManager.recoverCameraState();
             }
         }));
-        systemPort.addDataInstance(new Rule(GamePadCondition.buttonDown(5), new Reaction<EnvironmentDataContext<GamePad>>() {
+        systemPort.addDataInstance(new Rule<>(GamePadCondition.buttonDown(5), new Reaction<DriverContext<GamePad>>() {
             @Override
-            public void accept(EnvironmentDataContext<GamePad> enviromentDataContext) {
-                GamePad gamePad = enviromentDataContext.getEnvironmentData();
+            public void accept(DriverContext<GamePad> gamePadDriverContext) {
+                GamePad gamePad = gamePadDriverContext.getEnvironmentData();
                 System.out.println("gamePad---RenderManager---" + gamePad.buttonCode);
                 //
             }

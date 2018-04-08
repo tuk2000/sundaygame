@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
-public class SystemPortImpl<T extends Data> extends PortImpl<T> implements SystemPort<T> {
+public class SystemPortImpl extends PortImpl implements SystemPort {
     private DataBank dataBank;
 
     public SystemPortImpl(Object owner, DataBank dataBank, DataStorage dataStorage) {
@@ -17,43 +17,43 @@ public class SystemPortImpl<T extends Data> extends PortImpl<T> implements Syste
     }
 
     @Override
-    public SourceClass<T> getSourceClass(Class<T> clazz) {
+    public <D extends Data> SourceClass<D> getSourceClass(Class<D> clazz) {
         return dataStorage.getSourceClass(clazz);
     }
 
     @Override
-    public void addConnection(T source, Target target) {
+    public void addConnection(Data source, Target target) {
         dataStorage.addDataConnection(this, source, target);
     }
 
     @Override
-    public void removeConnection(T source, Target target) {
+    public void removeConnection(Data source, Target target) {
         dataStorage.removeDataConnection(this, source, target);
     }
 
     @Override
-    public void addConnection(Class<T> clazz, Target target) {
+    public <D extends Data> void addConnection(Class<D> clazz, Target target) {
         dataStorage.addClassConnection(this, clazz, target);
     }
 
     @Override
-    public void removeConnection(Class<T> clazz, Target target) {
+    public <D extends Data> void removeConnection(Class<D> clazz, Target target) {
         dataStorage.removeClassConnection(this, clazz, target);
     }
 
     @Override
-    public List<T> getDataList(Predicate<T> predicate) {
-        return (List<T>) dataStorage.getDataList(this).stream().filter(predicate).collect(Collectors.toList());
+    public <D extends Data> List<D> getDataList(Predicate<D> predicate) {
+        return (List<D>) dataStorage.getDataList(this).stream().filter(predicate).collect(Collectors.toList());
     }
 
     @Override
-    public List<Class<T>> getDataClassList() {
+    public <D extends Data> List<Class<D>> getDataClassList() {
         return dataStorage.getDataClassList(this);
     }
 
     @Override
-    public List<T> instancesOf(Class<T> clazz) {
-        return (List<T>) dataStorage.getDataInstances(clazz);
+    public <D extends Data> List<D> instancesOf(Class<D> clazz) {
+        return (List<D>) dataStorage.getDataInstances(clazz);
     }
 
     @Override

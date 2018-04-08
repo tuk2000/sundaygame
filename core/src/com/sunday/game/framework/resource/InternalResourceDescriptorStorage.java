@@ -11,8 +11,8 @@ public class InternalResourceDescriptorStorage implements DescriptorStorage {
     private ArrayList<AssetDescriptor> arrayLists = new ArrayList<AssetDescriptor>();
 
     public InternalResourceDescriptorStorage() {
-        ArrayList<String> filepaths = findAllInternalResourceFile();
-        filepaths.forEach(e -> {
+        ArrayList<String> filePaths = findAllInternalResourceFile();
+        filePaths.forEach(e -> {
             FileHandle fileHandle = Gdx.files.internal(e);
             arrayLists.add(new AssetDescriptor(fileHandle, GameResourceType.getRelatedClass(fileHandle)));
         });
@@ -24,11 +24,11 @@ public class InternalResourceDescriptorStorage implements DescriptorStorage {
     }
 
     private ArrayList<String> findAllInternalResourceFile() {
-        ArrayList<String> filepaths = new ArrayList<>();
+        ArrayList<String> filePaths = new ArrayList<>();
         String rootPath = Gdx.files.getLocalStoragePath();
-        searchFiles(new File(rootPath), filepaths);
-        filepaths = trimRootPaths(filepaths, rootPath.length());
-        return filterFiles(filepaths);
+        searchFiles(new File(rootPath), filePaths);
+        filePaths = trimRootPaths(filePaths, rootPath.length());
+        return filterFiles(filePaths);
     }
 
     private void searchFiles(File rootFile, ArrayList<String> container) {

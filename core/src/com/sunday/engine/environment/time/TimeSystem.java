@@ -3,20 +3,17 @@ package com.sunday.engine.environment.time;
 import com.sunday.engine.SubSystem;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.environment.EnvironmentDataContext;
-import com.sunday.engine.rule.Reaction;
-import com.sunday.engine.rule.Rule;
-import com.sunday.engine.rule.RuleContext;
-import com.sunday.engine.rule.RuleSignal;
+import com.sunday.engine.rule.*;
 
 import java.util.List;
 
-public class TimeSystem extends SubSystem {
+public class TimeSystem extends SubSystem implements ContextConstructor<TimerCondition> {
     public float currentTime = 0.0f;
 
-    private Rule timerConditionMountingRule = new Rule(Rule.class, RuleSignal.Mounting, new Reaction<RuleContext>() {
+    private Rule<RuleContext> timerConditionMountingRule = new Rule<RuleContext>(new ClassCondition(Rule.class, RuleSignal.Mounting), new Reaction<RuleContext>() {
         @Override
         public void accept(RuleContext ruleContext) {
-            Rule rule = ruleContext.getSystemRelatedData();
+            Rule rule = ruleContext.getSystemData();
             if (!(rule.getCondition() instanceof TimerCondition)) return;
             RuleSignal ruleSignal = (RuleSignal) ruleContext.getSignal();
             EnvironmentDataContext<Timer> environmentDataContext = (EnvironmentDataContext<Timer>) rule.getContext();
@@ -47,5 +44,17 @@ public class TimeSystem extends SubSystem {
                 systemPort.broadcast(timer, TimerSignal.Triggered);
             }
         });
+    }
+
+    @Override
+    public boolean accept(Condition condition) {
+        return condition instanceof TimerCondition;
+    }
+
+    @Override
+    public void construct(TimerCondition timerCondition) {
+        EnvironmentDataContext<Timer> timerEnvironmentDataContext = new EnvironmentDataContext<>(timerCondition.getTimer());
+        timerCondition.setEnvironmentContext(timerEnvironmentDataContext);
+        timerCondition.getTimer().start(currentTime);
     }
 }

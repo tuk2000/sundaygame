@@ -1,44 +1,56 @@
 package com.sunday.engine.rule;
 
 import com.sunday.engine.SubSystem;
+import com.sunday.engine.common.context.ClassContext;
 import com.sunday.engine.common.signal.DataSignal;
-import com.sunday.engine.databank.ContextBank;
-import com.sunday.engine.databank.SystemContextUser;
 import com.sunday.engine.databank.SystemPort;
 
-public class RuleSystem extends SubSystem {
-    private ContextBank contextBank;
+import java.util.ArrayList;
+import java.util.List;
 
-    public RuleSystem(SystemPort systemPort, ContextBank contextBank) {
+public class RuleSystem extends SubSystem {
+    private ClassContextConstructor classConditionConstructor = new ClassContextConstructor();
+    private List<ContextConstructor> contextConstructors = new ArrayList<>();
+
+    public RuleSystem(SystemPort systemPort) {
         super("RuleSystem", systemPort);
         initRuleSystem();
-        this.contextBank = contextBank;
     }
 
     private void initRuleSystem() {
-
-        Rule ruleDataRule = new Rule(Rule.class, DataSignal.class, new Reaction<RuleContext>() {
+        Rule<ClassContext<RuleContext>> ruleDataRule = new Rule<>(new ClassCondition<>(Rule.class, DataSignal.class), new Reaction<ClassContext<RuleContext>>() {
             @Override
-            public void accept(RuleContext ruleContext) {
-                Rule rule = ruleContext.getSystemRelatedData();
+            public void accept(ClassContext<RuleContext> ruleContextClassContext) {
+                RuleContext ruleContext = ruleContextClassContext.getFocusedContext();
+                Rule rule = ruleContext.getSystemData();
                 DataSignal dataSignal = (DataSignal) ruleContext.getSignal();
                 switch (dataSignal) {
                     case Add:
-                        //System.out.println("Rule added!");
+                        System.out.println("Rule added!");
                         systemPort.broadcast(rule, RuleSignal.Mounting);
-                        if (rule.getCondition() instanceof SystemContextUser) {
-                            ((SystemContextUser) rule.getCondition()).useSystemContext(contextBank);
+                        if (classConditionConstructor.accept(rule.getCondition())) {
+                            classConditionConstructor.construct((ClassCondition) rule.getCondition());
                         }
+                        contextConstructors.forEach(contextConstructor -> {
+                            if (contextConstructor.accept(rule.getCondition())) {
+                                contextConstructor.construct(rule.getCondition());
+                            }
+                        });
                         System.out.println(rule.condition.getInfo());
                         break;
                     case Deletion:
-                        //System.out.println("Rule removed!");
+                        System.out.println("Rule removed!");
                         System.out.println(rule.condition.getInfo());
                         systemPort.broadcast(rule, RuleSignal.Dismounting);
                         break;
                 }
             }
         });
+        classConditionConstructor.construct((ClassCondition) ruleDataRule.getCondition());
         systemPort.addDataInstance(ruleDataRule);
+    }
+
+    public void addContextConstructor(ContextConstructor contextConstructor) {
+        contextConstructors.add(contextConstructor);
     }
 }

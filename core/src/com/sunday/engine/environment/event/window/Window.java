@@ -1,10 +1,9 @@
 package com.sunday.engine.environment.event.window;
 
 import com.sunday.engine.common.propertyholder.Resettable;
-import com.sunday.engine.environment.EnvironmentRelatedData;
-import com.sunday.engine.environment.event.WindowRelated;
+import com.sunday.engine.environment.EnvironmentData;
 
-public class Window implements EnvironmentRelatedData, Resettable, WindowRelated {
+public class Window implements EnvironmentData, Resettable, WindowRelated {
     public int width;
     public int height;
 

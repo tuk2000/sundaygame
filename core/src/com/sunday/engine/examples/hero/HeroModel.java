@@ -6,6 +6,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.sunday.engine.common.context.CustomizedDataContext;
 import com.sunday.engine.databank.Port;
 import com.sunday.engine.environment.EnvironmentDataContext;
+import com.sunday.engine.environment.driver.DriverContext;
 import com.sunday.engine.environment.driver.keyboard.KeyBoard;
 import com.sunday.engine.environment.driver.keyboard.KeyBoardCondition;
 import com.sunday.engine.environment.time.Timer;
@@ -23,7 +24,7 @@ import com.sunday.engine.rule.Rule;
 
 public class HeroModel extends AbstractModel {
     private HeroAnimation heroAnimation = new HeroAnimation();
-    private TextureViewLayer textureViewLayer = new TextureViewLayer(heroAnimation.getKeyFrame(movement));
+    private TextureViewLayer<com.badlogic.gdx.graphics.Texture> textureViewLayer = new TextureViewLayer<>(heroAnimation.getKeyFrame(movement));
 
     public HeroModel() {
 
@@ -53,44 +54,44 @@ public class HeroModel extends AbstractModel {
     @Override
     protected void connectWithInternal(Port port) {
 
-        port.addDataInstance(new Rule(new CustomizedDataCondition(outlook, OutlookSignal.class), new Reaction<CustomizedDataContext<Outlook>>() {
+        port.addDataInstance(new Rule<>(new CustomizedDataCondition<Outlook>(outlook, OutlookSignal.class), new Reaction<CustomizedDataContext<Outlook>>() {
             @Override
             public void accept(CustomizedDataContext<Outlook> outlookCustomizedDataContext) {
                 textureViewLayer.updateTexture(heroAnimation.getKeyFrame(movement));
             }
         }));
 
-        port.addDataInstance(new Rule(TimerCondition.animationTimerCondition(), new Reaction<EnvironmentDataContext<Timer>>() {
+        port.addDataInstance(new Rule<>(TimerCondition.animationTimerCondition(), new Reaction<EnvironmentDataContext<Timer>>() {
             @Override
-            public void accept(EnvironmentDataContext<Timer> timerEnviromentDataContext) {
-                Timer timer = timerEnviromentDataContext.getEnvironmentData();
+            public void accept(EnvironmentDataContext<Timer> timerEnvironmentDataContext) {
+                Timer timer = timerEnvironmentDataContext.getEnvironmentData();
                 heroAnimation.setStateTime(timer.lastTriggeredTime);
                 textureViewLayer.updateTexture(heroAnimation.getKeyFrame(movement));
             }
         }));
 
-        port.addDataInstance(new Rule(KeyBoardCondition.keyTyped("1"), new Reaction<EnvironmentDataContext<KeyBoard>>() {
+        port.addDataInstance(new Rule<>(KeyBoardCondition.keyTyped("1"), new Reaction<DriverContext<KeyBoard>>() {
 
             @Override
-            public void accept(EnvironmentDataContext<KeyBoard> enviromentDataContext) {
+            public void accept(DriverContext<KeyBoard> keyBoardDriverContext) {
                 System.out.println("keyTyped('1')");
                 movement.position.add(-10, 0);
                 port.broadcast(movement, MovementSignal.ReLocated);
             }
         }));
-        port.addDataInstance(new Rule(KeyBoardCondition.keyTyped("2"), new Reaction<EnvironmentDataContext<KeyBoard>>() {
+        port.addDataInstance(new Rule<>(KeyBoardCondition.keyTyped("2"), new Reaction<DriverContext<KeyBoard>>() {
 
             @Override
-            public void accept(EnvironmentDataContext<KeyBoard> enviromentDataContext) {
+            public void accept(DriverContext<KeyBoard> keyBoardDriverContext) {
                 System.out.println("keyTyped('2')");
                 movement.position.add(10, 0);
                 port.broadcast(movement, MovementSignal.ReLocated);
             }
         }));
-        port.addDataInstance(new Rule(KeyBoardCondition.keyPressed("3"), new Reaction<EnvironmentDataContext<KeyBoard>>() {
+        port.addDataInstance(new Rule<>(KeyBoardCondition.keyPressed("3"), new Reaction<DriverContext<KeyBoard>>() {
 
             @Override
-            public void accept(EnvironmentDataContext<KeyBoard> enviromentDataContext) {
+            public void accept(DriverContext<KeyBoard> keyBoardDriverContext) {
                 System.out.println("keyTyped('3')");
                 movement.direction = movement.direction == Direction.Left ? Direction.Right : Direction.Left;
                 movement.action = Action.Fighting;

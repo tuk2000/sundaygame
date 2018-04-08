@@ -17,7 +17,7 @@ public abstract class AbstractModel implements PortSharing, Disposable {
     public PhysicDefinition physicDefinition = new PhysicDefinition(this);
     public Movement movement = new Movement();
 
-    private Rule movementRule = new Rule(new CustomizedDataCondition(movement, MovementSignal.class), new Reaction<CustomizedDataContext<Movement>>() {
+    private Rule<CustomizedDataContext<Movement>> movementRule = new Rule<>(new CustomizedDataCondition<>(movement, MovementSignal.class), new Reaction<CustomizedDataContext<Movement>>() {
         @Override
         public void accept(CustomizedDataContext<Movement> movementCustomizedDataContext) {
             physicDefinition.physicBody.forceMoveTo(movement.position);
@@ -25,7 +25,7 @@ public abstract class AbstractModel implements PortSharing, Disposable {
         }
     });
 
-    private Rule outlookRule = new Rule(new CustomizedDataCondition(outlook, OutlookSignal.class), new Reaction<CustomizedDataContext<Outlook>>() {
+    private Rule<CustomizedDataContext<Outlook>> outlookRule = new Rule<>(new CustomizedDataCondition<>(outlook, OutlookSignal.class), new Reaction<CustomizedDataContext<Outlook>>() {
         @Override
         public void accept(CustomizedDataContext<Outlook> outlookCustomizedDataContext) {
             //            physicDefinition.bodyDef.position.set(movement.position);
@@ -42,7 +42,7 @@ public abstract class AbstractModel implements PortSharing, Disposable {
 //                break;
         }
     });
-    private Rule physicReflectionRule = new Rule(new CustomizedDataCondition(physicDefinition, PhysicReflectionSignal.class), new Reaction<CustomizedDataContext<PhysicDefinition>>() {
+    private Rule<CustomizedDataContext<PhysicDefinition>> physicReflectionRule = new Rule<>(new CustomizedDataCondition<>(physicDefinition, PhysicReflectionSignal.class), new Reaction<CustomizedDataContext<PhysicDefinition>>() {
         @Override
         public void accept(CustomizedDataContext<PhysicDefinition> physicReflectionCustomizedDataContext) {
             PhysicReflectionSignal physicReflectionSignal = (PhysicReflectionSignal) physicReflectionCustomizedDataContext.getSignal();

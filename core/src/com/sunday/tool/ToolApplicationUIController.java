@@ -3,7 +3,7 @@ package com.sunday.tool;
 import com.sunday.game.framework.GameFramework;
 import com.sunday.tool.datamonitor.DataMonitorUIController;
 import com.sunday.tool.datamonitor.DataRecord;
-import com.sunday.tool.drivermonitor.DriverMontorUIController;
+import com.sunday.tool.drivermonitor.DriverMonitorUIController;
 import com.sunday.tool.drivermonitor.GamePadStatus;
 import com.sunday.tool.logger.LogRecord;
 import com.sunday.tool.logger.LoggerUIController;
@@ -27,7 +27,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ToolApplicationUIController implements PerformanceMonitorUIController, LoggerUIController, DataMonitorUIController, ScreenMonitorUIController, DriverMontorUIController {
+public class ToolApplicationUIController implements PerformanceMonitorUIController, LoggerUIController, DataMonitorUIController, ScreenMonitorUIController, DriverMonitorUIController {
     private XYChart.Series memoryUsages = new XYChart.Series();
     private XYChart.Series fpsSeries = new XYChart.Series();
     @FXML

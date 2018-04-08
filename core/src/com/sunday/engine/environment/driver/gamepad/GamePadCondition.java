@@ -10,10 +10,10 @@ public class GamePadCondition extends DriverCondition<GamePad> {
     public static GamePadCondition buttonDown(int buttonCode) {
         GamePadCondition gamePadCondition = new GamePadCondition();
         gamePadCondition.setSignals(GamePadSignal.ButtonDown);
-        gamePadCondition.predicates.add(metaDataContext ->
-                metaDataContext.getEnvironmentData().buttonCode == buttonCode
+        gamePadCondition.predicates.add(driverContext ->
+                driverContext.getEnvironmentData().buttonCode == buttonCode
         );
-        gamePadCondition.setExtraInfo("Button=[" + buttonCode + "]");
+        gamePadCondition.setExtraInfoEntry("Button", String.valueOf(buttonCode));
         return gamePadCondition;
     }
 
@@ -24,14 +24,14 @@ public class GamePadCondition extends DriverCondition<GamePad> {
         for (int i = 0; i < buttonCodes.length; i++) {
             list.add(buttonCodes[i]);
         }
-        list.stream().forEach(buttonCode -> gamePadCondition.predicates.add(metaDataContext ->
-                metaDataContext.getEnvironmentData().buttonCode == buttonCode));
-        String extraInfo = "Button=[";
+        list.stream().forEach(buttonCode -> gamePadCondition.predicates.add(driverContext ->
+                driverContext.getEnvironmentData().buttonCode == buttonCode));
+        String extraInfo = "";
         for (int i = 0; i < list.size(); i++) {
             extraInfo += list.get(i) + " ";
         }
         gamePadCondition.setAndOperation(false);
-        gamePadCondition.setExtraInfo(extraInfo + "]");
+        gamePadCondition.setExtraInfoEntry("Button", extraInfo);
         return gamePadCondition;
     }
 

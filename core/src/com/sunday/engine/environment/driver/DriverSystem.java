@@ -2,23 +2,28 @@ package com.sunday.engine.environment.driver;
 
 import com.badlogic.gdx.controllers.Controller;
 import com.sunday.engine.SubSystem;
-import com.sunday.engine.common.context.ClassContext;
-import com.sunday.engine.databank.ContextBank;
-import com.sunday.engine.databank.SystemContextBuilder;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.environment.driver.gamepad.GamePad;
+import com.sunday.engine.environment.driver.gamepad.GamePadCondition;
 import com.sunday.engine.environment.driver.gamepad.GamePadHub;
 import com.sunday.engine.environment.driver.keyboard.KeyBoard;
+import com.sunday.engine.environment.driver.keyboard.KeyBoardCondition;
 import com.sunday.engine.environment.driver.mouse.Mouse;
+import com.sunday.engine.environment.driver.mouse.MouseCondition;
+import com.sunday.engine.rule.Condition;
+import com.sunday.engine.rule.ContextConstructor;
 import com.sunday.tool.ToolApplication;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class DriverSystem extends SubSystem implements SystemContextBuilder {
+public class DriverSystem extends SubSystem implements ContextConstructor<DriverCondition> {
     private KeyBoard keyBoard = new KeyBoard();
+    private DriverContext<KeyBoard> keyBoardDriverContext = new DriverContext<>(keyBoard);
     private Mouse mouse = new Mouse();
+    private DriverContext<Mouse> mouseDriverContext = new DriverContext<>(mouse);
     private GamePadHub gamePadHub = new GamePadHub();
+    private DriverContext<GamePadHub> gamePadHubDriverContext = new DriverContext<>(gamePadHub);
 
     public DriverSystem(SystemPort systemPort) {
         super("DriverSystem", systemPort);
@@ -60,10 +65,18 @@ public class DriverSystem extends SubSystem implements SystemContextBuilder {
     }
 
     @Override
-    public void buildSystemContext(ContextBank contextBank) {
-        contextBank.addClassContext(new ClassContext(KeyBoard.class));
-        contextBank.addClassContext(new ClassContext(Mouse.class));
-        contextBank.addClassContext(new ClassContext(GamePad.class));
-        contextBank.addClassContext(new ClassContext(GamePadHub.class));
+    public boolean accept(Condition condition) {
+        return (condition instanceof KeyBoardCondition) || (condition instanceof MouseCondition) || (condition instanceof GamePadCondition);
+    }
+
+    @Override
+    public void construct(DriverCondition driverCondition) {
+        if (driverCondition instanceof KeyBoardCondition) {
+            driverCondition.setEnvironmentContext(keyBoardDriverContext);
+        } else if (driverCondition instanceof MouseCondition) {
+            driverCondition.setEnvironmentContext(mouseDriverContext);
+        } else if (driverCondition instanceof GamePadCondition) {
+            //
+        }
     }
 }

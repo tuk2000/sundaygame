@@ -4,8 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.utils.Disposable;
-import com.sunday.engine.databank.ContextBank;
-import com.sunday.engine.databank.ContextBankImpl;
 import com.sunday.engine.databank.DataBank;
 import com.sunday.engine.databank.DataBankImpl;
 import com.sunday.engine.environment.driver.DriverSystem;
@@ -22,7 +20,6 @@ import com.sunday.engine.scenario.ScenarioSystem;
 public class Engine implements Disposable {
     private boolean running;
     private DataBank dataBank;
-    private ContextBank contextBank;
     private RuleSystem ruleSystem;
     private DriverSystem driverSystem;
     private EventSystem eventSystem;
@@ -35,18 +32,21 @@ public class Engine implements Disposable {
 
     public Engine() {
         dataBank = new DataBankImpl();
-        contextBank = new ContextBankImpl();
-        ruleSystem = new RuleSystem(dataBank.getSystemPort(RuleSystem.class), contextBank);
+        ruleSystem = new RuleSystem(dataBank.getSystemPort(RuleSystem.class));
+
         driverSystem = new DriverSystem(dataBank.getSystemPort(DriverSystem.class));
         eventSystem = new EventSystem(dataBank.getSystemPort(EventSystem.class));
         timeSystem = new TimeSystem(dataBank.getSystemPort(TimeSystem.class));
+
+        ruleSystem.addContextConstructor(driverSystem);
+        ruleSystem.addContextConstructor(eventSystem);
+        ruleSystem.addContextConstructor(timeSystem);
+
         scenarioSystem = new ScenarioSystem(dataBank.getSystemPort(ScenarioSystem.class));
         physicSystem = new PhysicSystem(dataBank.getSystemPort(PhysicSystem.class));
         renderSystem = new RenderSystem(dataBank.getSystemPort(PhysicSystem.class));
         renderSystem.setPhysicSystem(physicSystem);
 
-        driverSystem.buildSystemContext(contextBank);
-        eventSystem.buildSystemContext(contextBank);
 
         driverSystem.connectToDriverMonitor();
 

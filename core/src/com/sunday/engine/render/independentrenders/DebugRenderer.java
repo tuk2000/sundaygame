@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Matrix4;
 import com.sunday.engine.databank.SystemPort;
-import com.sunday.engine.environment.EnvironmentDataContext;
+import com.sunday.engine.environment.driver.DriverContext;
 import com.sunday.engine.environment.driver.keyboard.KeyBoard;
 import com.sunday.engine.environment.driver.keyboard.KeyBoardCondition;
 import com.sunday.engine.render.IndependentRenderer;
@@ -130,18 +130,18 @@ public class DebugRenderer extends IndependentRenderer {
 
     @Override
     public void connectWith(SystemPort systemPort) {
-        systemPort.addDataInstance(new Rule(KeyBoardCondition.keyPressed("["), new Reaction<EnvironmentDataContext<KeyBoard>>() {
+        systemPort.addDataInstance(new Rule<>(KeyBoardCondition.keyPressed("["), new Reaction<DriverContext<KeyBoard>>() {
             @Override
-            public void accept(EnvironmentDataContext<KeyBoard> enviromentDataContext) {
+            public void accept(DriverContext<KeyBoard> keyBoardDriverContext) {
                 selectedMatrix++;
                 if (selectedMatrix == 4) selectedMatrix = 0;
                 printOptions();
             }
         }));
-        systemPort.addDataInstance(new Rule(KeyBoardCondition.keyPressed("]"), new Reaction<EnvironmentDataContext<KeyBoard>>() {
+        systemPort.addDataInstance(new Rule<>(KeyBoardCondition.keyPressed("]"), new Reaction<DriverContext<KeyBoard>>() {
 
             @Override
-            public void accept(EnvironmentDataContext<KeyBoard> enviromentDataContext) {
+            public void accept(DriverContext<KeyBoard> keyBoardDriverContext) {
                 smallRenderingSelected = !smallRenderingSelected;
                 printOptions();
             }

@@ -5,16 +5,16 @@ import com.sunday.engine.common.Data;
 import com.sunday.engine.common.Signal;
 import com.sunday.engine.common.propertyholder.SystemRelated;
 
-public class ClassContext<D extends Data, C extends Context> implements Context, SystemRelated {
-    private Class<D> sensedClass;
+public class ClassContext<C extends Context> implements Context, SystemRelated {
+    private Class<? extends Data> sensedClass;
     private C focusedContext;
     private Signal signal;
 
-    public ClassContext(Class<D> sensedClass) {
+    public ClassContext(Class<? extends Data> sensedClass) {
         this.sensedClass = sensedClass;
     }
 
-    public Class<D> getSensedClass() {
+    public Class getSensedClass() {
         return sensedClass;
     }
 
@@ -22,7 +22,12 @@ public class ClassContext<D extends Data, C extends Context> implements Context,
         return focusedContext;
     }
 
+    public void setFocusedContext(C context) {
+        focusedContext = context;
+    }
+
     public Signal getSignal() {
         return signal;
     }
+
 }
