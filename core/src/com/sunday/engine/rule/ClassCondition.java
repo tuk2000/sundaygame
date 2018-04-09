@@ -7,8 +7,8 @@ import com.sunday.engine.common.context.ClassContext;
 import com.sunday.engine.common.propertyholder.SystemRelated;
 
 public class ClassCondition<RC extends Context> extends Condition<ClassContext<RC>> implements SystemRelated {
-    private Class<? extends Data> sensedClass;
     protected SignalCondition<RC> signalCondition = new SignalCondition<>();
+    private Class<? extends Data> sensedClass;
 
     public <D extends Data, S extends Signal> ClassCondition(Class<D> clazz, S... signals) {
         sensedClass = clazz;

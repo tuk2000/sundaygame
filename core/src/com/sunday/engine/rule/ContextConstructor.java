@@ -1,7 +1,7 @@
 package com.sunday.engine.rule;
 
-public interface ContextConstructor<C extends Condition> {
-    boolean accept(Condition condition);
+import java.util.function.Consumer;
 
-    void construct(C condition);
+public interface ContextConstructor<C extends Condition> extends Consumer<C> {
+    boolean test(Condition condition);
 }

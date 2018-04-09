@@ -25,15 +25,15 @@ public class SignalCondition<C extends Context> implements Predicate<C> {
         return signals;
     }
 
-    public String getSignalNames() {
-        return signals.stream().map(signal -> signal.name()).collect(Collectors.joining(","));
-    }
-
     public void setSignals(Signal... signals) {
         this.signals.clear();
         for (Signal signal : signals) {
             this.signals.add(signal);
         }
+    }
+
+    public String getSignalNames() {
+        return signals.stream().map(signal -> signal.name()).collect(Collectors.joining(","));
     }
 
     public void setSignalFunction(Function<C, Signal> signalFunction) {

@@ -5,9 +5,9 @@ import com.sunday.engine.common.context.CustomizedDataContext;
 import com.sunday.engine.common.data.CustomizedData;
 
 public class CustomizedDataCondition<CD extends CustomizedData> extends Condition<CustomizedDataContext<CD>> {
-    private CD customizedData;
     protected SignalCondition<CustomizedDataContext<CD>> signalCondition
             = new SignalCondition<>(CustomizedDataContext::getSignal);
+    private CD customizedData;
 
     public CustomizedDataCondition(CD cd, Signal... signals) {
         customizedData = cd;

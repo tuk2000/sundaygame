@@ -55,6 +55,8 @@ public class Engine implements Disposable {
 
         windowEnvironment = new WindowEnvironment();
 
+        ruleSystem.addContextConstructor(windowEnvironment);
+
         physicSystem.setContactListener(new CollisionListener());
 
         scenarioSystem.setRender(renderSystem);
