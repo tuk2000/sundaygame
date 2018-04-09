@@ -1,6 +1,7 @@
 package com.sunday.engine.rule;
 
 import com.sunday.engine.SubSystem;
+import com.sunday.engine.common.Context;
 import com.sunday.engine.common.context.ClassContext;
 import com.sunday.engine.common.signal.DataSignal;
 import com.sunday.engine.databank.SystemPort;
@@ -22,7 +23,7 @@ public class RuleSystem extends SubSystem {
                 = new Rule<>(new ClassCondition<>(Rule.class, DataSignal.class), new ClassReaction<RuleContext>() {
             @Override
             public void accept(RuleContext ruleContext) {
-                Rule rule = ruleContext.getSystemData();
+                Rule<? extends Context> rule = ruleContext.getSystemData();
                 DataSignal dataSignal = (DataSignal) ruleContext.getSignal();
                 switch (dataSignal) {
                     case Add:

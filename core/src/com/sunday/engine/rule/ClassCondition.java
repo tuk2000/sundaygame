@@ -38,6 +38,13 @@ public class ClassCondition<RC extends Context> extends Condition<ClassContext<R
         setMainInfoEntry("Signals ", getSignalNames());
     }
 
+    @Override
+    public void check() {
+        if (isSatisfied()) {
+            reaction.accept(getContext());
+        }
+    }
+
     protected void generateExtraInfo() {
         setExtraInfoEntry("ConditionType", "Class");
         setExtraInfoEntry("SensedClass", sensedClass.getSimpleName());

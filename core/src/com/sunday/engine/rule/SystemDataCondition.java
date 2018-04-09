@@ -15,6 +15,13 @@ public class SystemDataCondition<SC extends SystemDataContext> extends Condition
         setMainInfoEntry("Signals", getSignalNames());
     }
 
+    @Override
+    public void check() {
+        if (isSatisfied()) {
+            reaction.accept(getContext());
+        }
+    }
+
     public void setSystemDataContext(SC systemDataContext) {
         setContext(systemDataContext);
     }

@@ -19,6 +19,10 @@ public class CustomizedDataContext<CD extends CustomizedData> implements Context
         return customizedData;
     }
 
+    public void setSignal(Signal signal) {
+        this.signal = signal;
+    }
+
     public Signal getSignal() {
         return signal;
     }

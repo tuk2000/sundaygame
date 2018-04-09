@@ -1,4 +1,4 @@
-package com.sunday.engine.environment.event.window;
+package com.sunday.engine.environment.window;
 
 import com.sunday.engine.environment.EnvironmentRelated;
 

@@ -30,40 +30,15 @@ public class CustomizedDataCondition<CD extends CustomizedData> extends Conditio
         setMainInfoEntry("Signals", getSignalNames());
     }
 
+    @Override
+    public void check() {
+        if (isSatisfied()) {
+            reaction.accept(getContext());
+        }
+    }
+
     public CD getCustomizedData() {
         return customizedData;
     }
 
-
-//    @Override
-//    public void connectWith(SystemPort systemPort) {
-////        getSignals().forEach(tracer -> {
-////            systemPort.removeConnection(context.getCustomizedData(), this);
-////        });
-////        systemPort.addConnection(context.getCustomizedData(), this);
-////        generateMainInfo();
-//    }
-//
-//    @Override
-//    public void disconnectWith(SystemPort systemPort) {
-//
-//    }
-
-//    @Override
-//    public void notify(Data data, Signal signal) {
-//        result.clear();
-//        predicates.forEach(predicate -> result.add(predicate.test(context)));
-//        boolean isSatisfied;
-//        if (isAndOperation) {
-//            result.add(true);
-//            isSatisfied = result.stream().reduce(((aBoolean, aBoolean2) -> aBoolean & aBoolean2)).get();
-//        } else {
-//            result.add(false);
-//            isSatisfied = result.stream().reduce(((aBoolean, aBoolean2) -> aBoolean || aBoolean2)).get();
-//        }
-//        isSatisfied = isSatisfied & getSignals().contains(signal);
-//        if (isSatisfied) {
-//            reaction.accept(context);
-//        }
-//    }
 }

@@ -13,20 +13,23 @@ public class EnvironmentDataContext<ED extends EnvironmentData> implements Conte
         this.environmentData = environmentRelatedData;
     }
 
-    public EnvironmentDataContext(Class<ED> clazz) {
-        environmentsDataClazz = clazz;
-    }
-
     public ED getEnvironmentData() {
         return environmentData;
+    }
+
+    public void setSignal(Signal signal) {
+        this.signal = signal;
     }
 
     public Signal getSignal() {
         return signal;
     }
 
-
     public Class<ED> getEnvironmentsDataClazz() {
         return environmentsDataClazz;
+    }
+
+    public void evaluate() {
+        System.out.println("Evaluating : "+getEnvironmentsDataClazz()+" - "+getEnvironmentData()+" "+getSignal());
     }
 }

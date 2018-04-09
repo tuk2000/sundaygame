@@ -7,8 +7,8 @@ import com.sunday.engine.environment.EnvironmentDataContext;
 import com.sunday.engine.environment.driver.DriverContext;
 import com.sunday.engine.environment.driver.gamepad.GamePad;
 import com.sunday.engine.environment.driver.gamepad.GamePadCondition;
-import com.sunday.engine.environment.event.window.Window;
-import com.sunday.engine.environment.event.window.WindowCondition;
+import com.sunday.engine.environment.window.Window;
+import com.sunday.engine.environment.window.WindowCondition;
 import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
 

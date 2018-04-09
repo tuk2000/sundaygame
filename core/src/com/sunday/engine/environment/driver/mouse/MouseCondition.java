@@ -5,7 +5,7 @@ import com.sunday.engine.environment.driver.DriverCondition;
 public class MouseCondition extends DriverCondition<Mouse> {
     public static MouseCondition mouseDragged() {
         MouseCondition mouseCondition = new MouseCondition();
-        mouseCondition.getSignals().add(MouseSignal.Dragged);
+        mouseCondition.setSignals(MouseSignal.Dragged);
         return mouseCondition;
     }
 }

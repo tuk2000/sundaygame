@@ -1,9 +1,7 @@
 package com.sunday.engine.environment.driver;
 
-import com.badlogic.gdx.controllers.Controller;
 import com.sunday.engine.SubSystem;
 import com.sunday.engine.databank.SystemPort;
-import com.sunday.engine.environment.driver.gamepad.GamePad;
 import com.sunday.engine.environment.driver.gamepad.GamePadCondition;
 import com.sunday.engine.environment.driver.gamepad.GamePadHub;
 import com.sunday.engine.environment.driver.keyboard.KeyBoard;
@@ -13,9 +11,6 @@ import com.sunday.engine.environment.driver.mouse.MouseCondition;
 import com.sunday.engine.rule.Condition;
 import com.sunday.engine.rule.ContextConstructor;
 import com.sunday.tool.ToolApplication;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class DriverSystem extends SubSystem implements ContextConstructor<DriverCondition> {
     private KeyBoard keyBoard = new KeyBoard();
@@ -40,23 +35,18 @@ public class DriverSystem extends SubSystem implements ContextConstructor<Driver
         systemPort.removeDataInstance(driver);
     }
 
-    public KeyBoard getDefaultKeyBoard() {
-        return keyBoard;
+    public DriverContext<KeyBoard> getKeyBoardDriverContext() {
+        return keyBoardDriverContext;
     }
 
-    public Mouse getDefaultMouse() {
-        return mouse;
+    public DriverContext<Mouse> getMouseDriverContext() {
+        return mouseDriverContext;
     }
 
-    public GamePadHub getGamePadHub() {
-        return gamePadHub;
+    public DriverContext<GamePadHub> getGamePadHubDriverContext() {
+        return gamePadHubDriverContext;
     }
 
-    public GamePad getMatchGamePad(Controller controller) {
-        List<GamePad> list = systemPort.instancesOf(GamePad.class);
-        list = list.stream().filter(gamePad -> gamePad.controller.equals(controller)).collect(Collectors.toList());
-        return list.get(0);
-    }
 
     public void connectToDriverMonitor() {
         ToolApplication.keyBoardMonitor.connectWith(systemPort);

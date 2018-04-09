@@ -6,8 +6,6 @@ import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.environment.EnvironmentDataContext;
 import com.sunday.engine.rule.*;
 
-import java.util.List;
-
 public class TimeSystem extends SubSystem implements ContextConstructor<TimerCondition> {
     public float currentTime = 0.0f;
 
@@ -39,12 +37,6 @@ public class TimeSystem extends SubSystem implements ContextConstructor<TimerCon
 
     public void updateTime(float deltaTime) {
         currentTime += deltaTime;
-        List<Timer> timers = systemPort.instancesOf(Timer.class);
-        timers.forEach(timer -> {
-            if (timer.isTriggered(currentTime)) {
-                systemPort.broadcast(timer, TimerSignal.Triggered);
-            }
-        });
     }
 
     @Override
@@ -52,9 +44,23 @@ public class TimeSystem extends SubSystem implements ContextConstructor<TimerCon
         return condition instanceof TimerCondition;
     }
 
+
+    private EnvironmentDataContext<Timer> createTimerContext(TimerCondition timerCondition) {
+        Timer timer = timerCondition.getTimer();
+        return new EnvironmentDataContext<Timer>(timer) {
+            @Override
+            public void evaluate() {
+                super.evaluate();
+                if (timer.isTriggered(currentTime))
+                    this.setSignal(TimerSignal.Triggered);
+                timerCondition.check();
+            }
+        };
+    }
+
     @Override
     public void construct(TimerCondition timerCondition) {
-        EnvironmentDataContext<Timer> timerEnvironmentDataContext = new EnvironmentDataContext<>(timerCondition.getTimer());
+        EnvironmentDataContext<Timer> timerEnvironmentDataContext = createTimerContext(timerCondition);
         timerCondition.setEnvironmentContext(timerEnvironmentDataContext);
         timerCondition.getTimer().start(currentTime);
     }

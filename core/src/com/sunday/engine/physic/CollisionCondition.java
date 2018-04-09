@@ -1,7 +1,6 @@
 package com.sunday.engine.physic;
 
 import com.sunday.engine.common.Signal;
-import com.sunday.engine.environment.event.collision.CollisionSignal;
 import com.sunday.engine.model.property.PhysicDefinition;
 import com.sunday.engine.rule.CustomizedDataCondition;
 

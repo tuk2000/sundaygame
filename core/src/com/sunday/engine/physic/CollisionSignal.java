@@ -1,4 +1,4 @@
-package com.sunday.engine.environment.event.collision;
+package com.sunday.engine.physic;
 
 import com.sunday.engine.common.signal.SpecificSignal;
 

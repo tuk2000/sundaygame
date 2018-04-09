@@ -1,15 +1,12 @@
-package com.sunday.engine.environment.event.collision;
+package com.sunday.engine.physic;
 
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
-import com.sunday.engine.environment.event.EventTransfer;
 
-public class CollisionEventTransfer extends EventTransfer implements ContactListener {
+public class CollisionListener implements ContactListener {
 
-    public CollisionEventTransfer() {
-    }
 
     @Override
     public void beginContact(Contact contact) {

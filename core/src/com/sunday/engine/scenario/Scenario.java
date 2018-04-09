@@ -1,9 +1,7 @@
 package com.sunday.engine.scenario;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Disposable;
 import com.sunday.engine.common.Data;
-import com.sunday.engine.environment.event.Event;
 import com.sunday.engine.examples.Role;
 
 import java.util.ArrayList;
@@ -43,13 +41,6 @@ public class Scenario implements Data, Disposable {
 
     public ArrayList<Role> getRoles() {
         return roles;
-    }
-
-    public void notifyAllRoles(Event event) {
-        Gdx.app.log("Scenario", "Receive a Event : " + event.toString());
-        for (Role role : roles) {
-//            role.abstractModel.notifyEvent(event);
-        }
     }
 
     @Override

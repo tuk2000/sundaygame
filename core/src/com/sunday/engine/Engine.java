@@ -6,12 +6,11 @@ import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.utils.Disposable;
 import com.sunday.engine.databank.DataBank;
 import com.sunday.engine.databank.DataBankImpl;
+import com.sunday.engine.environment.driver.DriverEnvironment;
 import com.sunday.engine.environment.driver.DriverSystem;
-import com.sunday.engine.environment.event.EventSystem;
-import com.sunday.engine.environment.event.collision.CollisionEventTransfer;
-import com.sunday.engine.environment.event.driver.DriverEventTransfer;
-import com.sunday.engine.environment.event.window.WindowEventTransfer;
 import com.sunday.engine.environment.time.TimeSystem;
+import com.sunday.engine.environment.window.WindowEnvironment;
+import com.sunday.engine.physic.CollisionListener;
 import com.sunday.engine.physic.PhysicSystem;
 import com.sunday.engine.render.RenderSystem;
 import com.sunday.engine.rule.RuleSystem;
@@ -22,24 +21,21 @@ public class Engine implements Disposable {
     private DataBank dataBank;
     private RuleSystem ruleSystem;
     private DriverSystem driverSystem;
-    private EventSystem eventSystem;
 
     private TimeSystem timeSystem;
     private ScenarioSystem scenarioSystem;
     private RenderSystem renderSystem;
     private PhysicSystem physicSystem;
-    private WindowEventTransfer windowEventTransfer;
+    private WindowEnvironment windowEnvironment;
 
     public Engine() {
         dataBank = new DataBankImpl();
         ruleSystem = new RuleSystem(dataBank.getSystemPort(RuleSystem.class));
 
         driverSystem = new DriverSystem(dataBank.getSystemPort(DriverSystem.class));
-        eventSystem = new EventSystem(dataBank.getSystemPort(EventSystem.class));
         timeSystem = new TimeSystem(dataBank.getSystemPort(TimeSystem.class));
 
         ruleSystem.addContextConstructor(driverSystem);
-        ruleSystem.addContextConstructor(eventSystem);
         ruleSystem.addContextConstructor(timeSystem);
 
         scenarioSystem = new ScenarioSystem(dataBank.getSystemPort(ScenarioSystem.class));
@@ -50,20 +46,16 @@ public class Engine implements Disposable {
 
         driverSystem.connectToDriverMonitor();
 
-        DriverEventTransfer driverEventTransfer = new DriverEventTransfer(driverSystem);
-        Gdx.input.setInputProcessor(driverEventTransfer);
+        DriverEnvironment driverEnvironment = new DriverEnvironment(driverSystem);
+        Gdx.input.setInputProcessor(driverEnvironment);
         for (Controller controller : Controllers.getControllers()) {
-            driverEventTransfer.connected(controller);
+            driverEnvironment.connected(controller);
         }
-        Controllers.addListener(driverEventTransfer);
+        Controllers.addListener(driverEnvironment);
 
-        CollisionEventTransfer collisionEventTransfer = new CollisionEventTransfer();
-        windowEventTransfer = new WindowEventTransfer(eventSystem.getWindow());
-        eventSystem.addEventTransfer(driverEventTransfer);
-        eventSystem.addEventTransfer(collisionEventTransfer);
-        eventSystem.addEventTransfer(windowEventTransfer);
+        windowEnvironment = new WindowEnvironment();
 
-        physicSystem.setContactListener(collisionEventTransfer);
+        physicSystem.setContactListener(new CollisionListener());
 
         scenarioSystem.setRender(renderSystem);
 
@@ -91,7 +83,7 @@ public class Engine implements Disposable {
     }
 
     public void resize(int width, int height) {
-        windowEventTransfer.resize(width, height);
+        windowEnvironment.resize(width, height);
     }
 
     @Override
