@@ -9,11 +9,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class GamePadHub extends Driver {
+    private Map<Controller, DriverContext<GamePad>> map = new HashMap<>();
+
     public GamePadHub() {
         super(DriverType.GamePadHub);
     }
-
-    private Map<Controller, DriverContext<GamePad>> map = new HashMap<>();
 
     public DriverContext<GamePad> getGamePadDriverContext(Controller controller) {
         if (map.containsKey(controller)) {

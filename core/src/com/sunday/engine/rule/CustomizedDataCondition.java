@@ -6,15 +6,17 @@ import com.sunday.engine.common.data.CustomizedData;
 
 public class CustomizedDataCondition<CD extends CustomizedData> extends Condition<CustomizedDataContext<CD>> {
     private CD customizedData;
+    protected SignalCondition<CustomizedDataContext<CD>> signalCondition
+            = new SignalCondition<>(CustomizedDataContext::getSignal);
 
     public CustomizedDataCondition(CD cd, Signal... signals) {
         customizedData = cd;
-        setSignals(signals);
+        signalCondition.setSignals(signals);
     }
 
     public <S extends Signal> CustomizedDataCondition(CD cd, Class<S> signalTypeClass) {
         customizedData = cd;
-        setSignals(signalTypeClass.getEnumConstants());
+        signalCondition.setSignals(signalTypeClass.getEnumConstants());
     }
 
     @Override
@@ -27,18 +29,15 @@ public class CustomizedDataCondition<CD extends CustomizedData> extends Conditio
         CD data = getContext().getCustomizedData();
         setMainInfoEntry("Source ", data.toString());
         setMainInfoEntry("SourceClass ", data.getClass().getSimpleName());
-        setMainInfoEntry("Signals", getSignalNames());
-    }
-
-    @Override
-    public void check() {
-        if (isSatisfied()) {
-            reaction.accept(getContext());
-        }
+        setMainInfoEntry("Signals", signalCondition.getSignalNames());
     }
 
     public CD getCustomizedData() {
         return customizedData;
     }
 
+    @Override
+    public boolean test(CustomizedDataContext<CD> cdCustomizedDataContext) {
+        return false;
+    }
 }

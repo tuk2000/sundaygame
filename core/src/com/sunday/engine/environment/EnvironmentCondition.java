@@ -1,25 +1,13 @@
 package com.sunday.engine.environment;
 
-import com.sunday.engine.common.Signal;
 import com.sunday.engine.rule.Condition;
-
-import java.util.function.Predicate;
+import com.sunday.engine.rule.SignalCondition;
 
 public abstract class EnvironmentCondition<E extends EnvironmentData, EC extends EnvironmentDataContext<E>> extends Condition<EC> implements EnvironmentRelated {
+    protected SignalCondition<EC> signalCondition = new SignalCondition<>(ec -> ec.getSignal());
+
     protected EnvironmentCondition() {
 
-    }
-
-    @Override
-    protected void setSignals(Signal... signals) {
-        super.setSignals(signals);
-        for (Signal signal : signals) {
-            addSignalPredicate(generateSignalPredicate(signal));
-        }
-    }
-
-    protected Predicate<EC> generateSignalPredicate(Signal signal) {
-        return ec -> ec.getSignal().equals(signal);
     }
 
     @Override
@@ -32,17 +20,10 @@ public abstract class EnvironmentCondition<E extends EnvironmentData, EC extends
         E e = getContext().getEnvironmentData();
         setMainInfoEntry("Source ", (e == null ? " n/a" : e.toString()));
         setMainInfoEntry("SourceClass", getContext().getEnvironmentsDataClazz().getSimpleName());
-        setMainInfoEntry("Signals", getSignalNames());
+        setMainInfoEntry("Signals", signalCondition.getSignalNames());
     }
 
     public void setEnvironmentContext(EC environmentContext) {
         setContext(environmentContext);
-    }
-
-    @Override
-    public void check() {
-        if (isSatisfied()) {
-            reaction.accept(getContext());
-        }
     }
 }

@@ -17,12 +17,12 @@ public class EnvironmentDataContext<ED extends EnvironmentData> implements Conte
         return environmentData;
     }
 
-    public void setSignal(Signal signal) {
-        this.signal = signal;
-    }
-
     public Signal getSignal() {
         return signal;
+    }
+
+    public void setSignal(Signal signal) {
+        this.signal = signal;
     }
 
     public Class<ED> getEnvironmentsDataClazz() {
@@ -30,6 +30,6 @@ public class EnvironmentDataContext<ED extends EnvironmentData> implements Conte
     }
 
     public void evaluate() {
-        System.out.println("Evaluating : "+getEnvironmentsDataClazz()+" - "+getEnvironmentData()+" "+getSignal());
+        System.out.println("Evaluating : " + getEnvironmentsDataClazz() + " - " + getEnvironmentData() + " " + getSignal());
     }
 }

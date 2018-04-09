@@ -20,11 +20,16 @@ public class TimerCondition extends EnvironmentCondition<Timer, EnvironmentDataC
     public static TimerCondition bind(Timer timer) {
         TimerCondition timerCondition = new TimerCondition();
         timerCondition.timer = timer;
-        timerCondition.setSignals(TimerSignal.Triggered);
+        timerCondition.signalCondition.setSignals(TimerSignal.Triggered);
         return timerCondition;
     }
 
     public Timer getTimer() {
         return timer;
+    }
+
+    @Override
+    public boolean test(EnvironmentDataContext<Timer> timerEnvironmentDataContext) {
+        return false;
     }
 }

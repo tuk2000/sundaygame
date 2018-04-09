@@ -19,12 +19,12 @@ public class SystemDataContext<SD extends SystemData> implements Context, System
         return systemData;
     }
 
-    public void setSignal(Signal signal) {
-        this.signal = signal;
-    }
-
     public Signal getSignal() {
         return signal;
+    }
+
+    public void setSignal(Signal signal) {
+        this.signal = signal;
     }
 
     public Class<SD> getSystemDataClass() {

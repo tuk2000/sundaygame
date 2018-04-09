@@ -53,7 +53,6 @@ public class TimeSystem extends SubSystem implements ContextConstructor<TimerCon
                 super.evaluate();
                 if (timer.isTriggered(currentTime))
                     this.setSignal(TimerSignal.Triggered);
-                timerCondition.check();
             }
         };
     }

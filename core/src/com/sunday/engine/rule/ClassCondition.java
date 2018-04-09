@@ -8,17 +8,18 @@ import com.sunday.engine.common.propertyholder.SystemRelated;
 
 public class ClassCondition<RC extends Context> extends Condition<ClassContext<RC>> implements SystemRelated {
     private Class<? extends Data> sensedClass;
+    protected SignalCondition<RC> signalCondition = new SignalCondition<>();
 
     public <D extends Data, S extends Signal> ClassCondition(Class<D> clazz, S... signals) {
         sensedClass = clazz;
-        setSignals(signals);
+        signalCondition.setSignals(signals);
         generateMainInfo();
         generateExtraInfo();
     }
 
     public <D extends Data, S extends Signal> ClassCondition(Class<D> clazz, Class<S> signalTypeClass) {
         sensedClass = clazz;
-        setSignals(signalTypeClass.getEnumConstants());
+        signalCondition.setSignals(signalTypeClass.getEnumConstants());
         generateMainInfo();
         generateExtraInfo();
     }
@@ -35,18 +36,16 @@ public class ClassCondition<RC extends Context> extends Condition<ClassContext<R
     protected void generateMainInfo() {
         setMainInfoEntry("Source", sensedClass.toGenericString());
         setMainInfoEntry("SourceClass ", sensedClass.getClass().getSimpleName());
-        setMainInfoEntry("Signals ", getSignalNames());
-    }
-
-    @Override
-    public void check() {
-        if (isSatisfied()) {
-            reaction.accept(getContext());
-        }
+        setMainInfoEntry("Signals ", signalCondition.getSignalNames());
     }
 
     protected void generateExtraInfo() {
         setExtraInfoEntry("ConditionType", "Class");
         setExtraInfoEntry("SensedClass", sensedClass.getSimpleName());
+    }
+
+    @Override
+    public boolean test(ClassContext<RC> classContext) {
+        return false;
     }
 }

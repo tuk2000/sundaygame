@@ -10,7 +10,12 @@ public class WindowCondition extends EnvironmentCondition<Window, EnvironmentDat
 
     public static WindowCondition resized() {
         WindowCondition windowCondition = new WindowCondition();
-        windowCondition.setSignals(WindowSignal.Resized);
+        windowCondition.signalCondition.setSignals(WindowSignal.Resized);
         return windowCondition;
+    }
+
+    @Override
+    public boolean test(EnvironmentDataContext<Window> windowEnvironmentDataContext) {
+        return signalCondition.test(windowEnvironmentDataContext);
     }
 }
