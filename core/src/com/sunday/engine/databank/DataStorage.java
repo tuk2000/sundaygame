@@ -1,17 +1,21 @@
 package com.sunday.engine.databank;
 
 import com.badlogic.gdx.utils.Disposable;
-import com.sunday.engine.common.*;
+import com.sunday.engine.common.Data;
+import com.sunday.engine.common.Signal;
+import com.sunday.engine.common.Target;
+import com.sunday.engine.common.data.SourceClass;
+import com.sunday.engine.common.signal.DataSignal;
 import com.sunday.engine.databank.storage.*;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-class DataStorage<T extends Data> implements Disposable {
-    private DataInstanceRegister<T> dataInstanceRegister = new DataInstanceRegister();
-    private DataConnectionRegister<T> dataConnectionRegister = new DataConnectionRegister<>();
-    private SourceClassRegister<T> sourceClassRegister = new SourceClassRegister<>();
+class DataStorage<D extends Data> implements Disposable {
+    private DataInstanceRegister<D> dataInstanceRegister = new DataInstanceRegister<>();
+    private DataConnectionRegister<D> dataConnectionRegister = new DataConnectionRegister<>();
+    private SourceClassRegister<D> sourceClassRegister = new SourceClassRegister<>();
     private SourceClassConnectionRegister sourceClassConnectionRegister = new SourceClassConnectionRegister();
     private PortContentRegisters portContentRegisters = new PortContentRegisters();
 
@@ -21,29 +25,29 @@ class DataStorage<T extends Data> implements Disposable {
     }
 
 
-    protected List<Class<T>> getDataClasses() {
+    protected List<Class<D>> getDataClasses() {
         return dataInstanceRegister.getKeys();
     }
 
-    protected List<T> getDataInstances(Class<T> clazz) {
+    protected List<D> getDataInstances(Class<D> clazz) {
         return dataInstanceRegister.getValues(clazz);
     }
 
-    protected void addDataInstance(Port port, T t) {
-        dataInstanceRegister.register(t);
-        portContentRegisters.registerData(port, t);
-        solve(t, DataSignal.Add);
+    protected void addDataInstance(Port port, D d) {
+        dataInstanceRegister.register(d);
+        portContentRegisters.registerData(port, d);
+        solve(d, DataSignal.Add);
     }
 
-    protected void removeDataInstance(Port port, T t) {
-        portContentRegisters.deregisterData(port, t);
-        dataInstanceRegister.deregister(t);
-        dataConnectionRegister.deregisterKey(t);
-        solve(t, DataSignal.Deletion);
+    protected void removeDataInstance(Port port, D d) {
+        portContentRegisters.deregisterData(port, d);
+        dataInstanceRegister.deregister(d);
+        dataConnectionRegister.deregisterKey(d);
+        solve(d, DataSignal.Deletion);
     }
 
-    protected List<T> getDataList(Port port) {
-        return (List<T>) portContentRegisters.getPortDataRegister().getValues(port);
+    protected List<D> getDataList(Port port) {
+        return (List<D>) portContentRegisters.getPortDataRegister().getValues(port);
     }
 
     protected <T extends Data> List<Class<T>> getDataClassList(Port port) {
@@ -56,22 +60,22 @@ class DataStorage<T extends Data> implements Disposable {
         portContentRegisters.destroy(port);
     }
 
-    protected void solve(T t, Signal signal) {
-        Class<T> clazz = (Class<T>) t.getClass();
+    protected void solve(D d, Signal signal) {
+        Class<D> clazz = (Class<D>) d.getClass();
         SourceClass sourceClass = sourceClassRegister.getSourceClass(clazz);
         sourceClassConnectionRegister.getValues(sourceClass).forEach(connection -> {
-            connection.target.notify(t, signal);
+            connection.target.notify(d, signal);
         });
-        dataConnectionRegister.getValues(t).forEach(connection -> connection.target.notify(t, signal));
+        dataConnectionRegister.getValues(d).forEach(connection -> connection.target.notify(d, signal));
     }
 
-    public void addDataConnection(Port port, T source, Target target) {
+    public void addDataConnection(Port port, D source, Target target) {
         Connection connection = new Connection<>(source, target);
         dataConnectionRegister.register(connection);
         portContentRegisters.registerConnection(port, connection);
     }
 
-    public void removeDataConnection(Port port, T source, Target target) {
+    public void removeDataConnection(Port port, D source, Target target) {
         if (dataConnectionRegister.hasKey(source)) {
             dataConnectionRegister.getValues(source).forEach(connection -> {
                 if (connection.target.equals(target)) {
@@ -82,15 +86,15 @@ class DataStorage<T extends Data> implements Disposable {
         }
     }
 
-    public void addClassConnection(Port port, Class<T> clazz, Target target) {
-        SourceClass<T> sourceClass = getSourceClass(clazz);
+    public void addClassConnection(Port port, Class<D> clazz, Target target) {
+        SourceClass<D> sourceClass = getSourceClass(clazz);
         ClassConnection classConnection = new ClassConnection(sourceClass, target);
         sourceClassConnectionRegister.register(classConnection);
         portContentRegisters.registerConnection(port, classConnection);
     }
 
-    public void removeClassConnection(Port port, Class<T> clazz, Target target) {
-        SourceClass<T> sourceClass = getSourceClass(clazz);
+    public void removeClassConnection(Port port, Class<D> clazz, Target target) {
+        SourceClass<D> sourceClass = getSourceClass(clazz);
         sourceClassConnectionRegister.getValues(sourceClass).forEach(classConnection -> {
             if (classConnection.target.equals(target)) {
                 sourceClassConnectionRegister.deregister(sourceClass, classConnection);
@@ -99,16 +103,16 @@ class DataStorage<T extends Data> implements Disposable {
         });
     }
 
-    public SourceClass<T> getSourceClass(Class<T> clazz) {
+    public SourceClass<D> getSourceClass(Class<D> clazz) {
         return sourceClassRegister.getSourceClass(clazz);
     }
 
     @Override
     public void dispose() {
-        dataInstanceRegister.getKeys().stream().forEach(key -> dataInstanceRegister.deregisterKey(key));
-        dataConnectionRegister.getKeys().stream().forEach(key -> dataConnectionRegister.deregisterKey(key));
-        sourceClassRegister.getKeys().stream().forEach(key -> sourceClassRegister.deregisterKey(key));
-        sourceClassConnectionRegister.getKeys().stream().forEach(key -> sourceClassConnectionRegister.deregisterKey(key));
+        dataInstanceRegister.getKeys().forEach(key -> dataInstanceRegister.deregisterKey(key));
+        dataConnectionRegister.getKeys().forEach(key -> dataConnectionRegister.deregisterKey(key));
+        sourceClassRegister.getKeys().forEach(key -> sourceClassRegister.deregisterKey(key));
+        sourceClassConnectionRegister.getKeys().forEach(key -> sourceClassConnectionRegister.deregisterKey(key));
         portContentRegisters.dispose();
     }
 }

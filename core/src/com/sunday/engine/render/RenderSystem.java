@@ -127,7 +127,7 @@ public class RenderSystem extends SubSystem implements Disposable {
         if (component instanceof Texture) {
             Vector2 position = model.movement.position;
             Vector2 dimension = model.outlook.dimension;
-            textureRender.renderLater((Texture) component, position.x, position.y, dimension.x, dimension.y);
+            textureRender.renderLater(component, position.x, position.y, dimension.x, dimension.y);
         }
     }
 

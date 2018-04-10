@@ -1,8 +1,9 @@
 package com.sunday.engine.environment.time;
 
-import com.sunday.engine.common.MetaData;
+import com.sunday.engine.common.propertyholder.Resettable;
+import com.sunday.engine.environment.EnvironmentData;
 
-public class Timer implements MetaData {
+public class Timer implements EnvironmentData, Resettable, TimeRelated {
     public boolean isRunning = false;
     public float period = 1.0f;
     public float frequency = 1;

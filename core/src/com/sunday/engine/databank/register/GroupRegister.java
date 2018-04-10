@@ -85,4 +85,9 @@ public class GroupRegister<K, V> implements Register<K, V>, UsingMultiValue<K, V
         }
         return list;
     }
+
+    public void deregister(V v) {
+        K k = keyOf(v);
+        deregister(k, v);
+    }
 }

@@ -5,8 +5,8 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.sunday.engine.Engine;
-import com.sunday.engine.common.MetaDataContext;
 import com.sunday.engine.databank.Port;
+import com.sunday.engine.environment.driver.DriverContext;
 import com.sunday.engine.environment.driver.keyboard.KeyBoard;
 import com.sunday.engine.environment.driver.keyboard.KeyBoardCondition;
 import com.sunday.engine.environment.driver.mouse.Mouse;
@@ -14,6 +14,7 @@ import com.sunday.engine.environment.driver.mouse.MouseCondition;
 import com.sunday.engine.environment.time.AnimationSetting;
 import com.sunday.engine.environment.time.Timer;
 import com.sunday.engine.environment.time.TimerCondition;
+import com.sunday.engine.environment.time.TimerContext;
 import com.sunday.engine.examples.Label;
 import com.sunday.engine.examples.Role;
 import com.sunday.engine.examples.enemy.SawAnimation;
@@ -32,10 +33,11 @@ public class DemoBallRolling implements Screen {
     private Engine engine;
     private Scenario scenario;
     private SawAnimation sawAnimation = new SawAnimation();
-    private Rule sawAnimationRule = new Rule(TimerCondition.animationTimerCondition(), new Reaction<MetaDataContext<Timer>>() {
+    private Timer sawRandomMovingTimer = new Timer();
+    private Rule<TimerContext<Timer>> sawAnimationRule = new Rule<>(TimerCondition.animationTimerCondition(), new Reaction<TimerContext<Timer>>() {
         @Override
-        public void accept(MetaDataContext<Timer> timerMetaDataContext) {
-            Timer timer = timerMetaDataContext.getMetaData();
+        public void accept(TimerContext<Timer> timerContext) {
+            Timer timer = timerContext.getEnvironmentData();
             sawAnimation.setStateTime(timer.lastTriggeredTime);
         }
     });
@@ -71,6 +73,7 @@ public class DemoBallRolling implements Screen {
 
         scenario = new Scenario(ScopeType.EntireLevel);
         scenario.addRole(backGroundRole);
+        sawRandomMovingTimer.setPeriod(AnimationSetting.FrameDuration);
         for (int i = 0; i < 100; i++) {
             AbstractModel sawModel = new SawModel((float) ((Math.random() - 0.5) * 1000), (float) ((Math.random() - 0.5) * 1000));
             Role movingSaw = new Role(Label.Enemy, sawModel);
@@ -118,17 +121,17 @@ public class DemoBallRolling implements Screen {
 
     private class SquareModel extends AbstractModel {
 
-        Rule moveRule = new Rule(KeyBoardCondition.keyPressed("x"), new Reaction<MetaDataContext<KeyBoard>>() {
+        Rule<DriverContext<KeyBoard>> moveRule = new Rule<>(KeyBoardCondition.keyPressed("x"), new Reaction<DriverContext<KeyBoard>>() {
             @Override
-            public void accept(MetaDataContext<KeyBoard> metaDataContext) {
+            public void accept(DriverContext<KeyBoard> keyBoardDriverContext) {
                 movement.position.add(10, 10);
                 port.broadcast(movement, MovementSignal.ReLocated);
             }
         });
-        Rule followMouseRule = new Rule(MouseCondition.mouseDragged(), new Reaction<MetaDataContext<Mouse>>() {
+        Rule<DriverContext<Mouse>> followMouseRule = new Rule<>(MouseCondition.mouseDragged(), new Reaction<DriverContext<Mouse>>() {
             @Override
-            public void accept(MetaDataContext<Mouse> metaDataContext) {
-                Mouse mouse = metaDataContext.getMetaData();
+            public void accept(DriverContext<Mouse> mouseDriverContext) {
+                Mouse mouse = mouseDriverContext.getEnvironmentData();
                 movement.position.set(mouse.screenX, Gdx.graphics.getHeight() - mouse.screenY);
                 port.broadcast(movement, MovementSignal.ReLocated);
             }
@@ -140,12 +143,12 @@ public class DemoBallRolling implements Screen {
             movement.position.set(100, 100);
             PolygonShape shape = new PolygonShape();
             shape.setAsBox(20, 20);
-            physicReflection.fixtureDef.shape = shape;
-            physicReflection.fixtureDef.density = 1.0f;
+            physicDefinition.fixtureDef.shape = shape;
+            physicDefinition.fixtureDef.density = 1.0f;
 
-            physicReflection.bodyDef.gravityScale = 0;
-            physicReflection.bodyDef.type = BodyDef.BodyType.DynamicBody;
-            physicReflection.bodyDef.position.set(movement.position);
+            physicDefinition.bodyDef.gravityScale = 0;
+            physicDefinition.bodyDef.type = BodyDef.BodyType.DynamicBody;
+            physicDefinition.bodyDef.position.set(movement.position);
         }
 
         @Override
@@ -167,10 +170,10 @@ public class DemoBallRolling implements Screen {
 
     private class SawModel extends AbstractModel {
         private TextureViewLayer sawTextureViewLayer = new TextureViewLayer(GameFramework.Resource.getAsset("saws/saw1.png"));
-        private Timer timer = new Timer();
-        private Rule sawMovingRule = new Rule(TimerCondition.bind(timer), new Reaction<MetaDataContext<Timer>>() {
+
+        private Rule<TimerContext<Timer>> sawMovingRule = new Rule<>(TimerCondition.bind(sawRandomMovingTimer), new Reaction<TimerContext<Timer>>() {
             @Override
-            public void accept(MetaDataContext<Timer> timerMetaDataContext) {
+            public void accept(TimerContext<Timer> timerContext) {
                 sawTextureViewLayer.updateTexture(sawAnimation.getKeyFrame());
                 movement.position.add((float) (Math.random() - 0.5) * 10, (float) (Math.random() - 0.5) * 10);
                 port.broadcast(movement, MovementSignal.ReLocated);
@@ -181,13 +184,12 @@ public class DemoBallRolling implements Screen {
             movement.position.set(x, y);
             outlook.dimension.set(40, 40);
             outlook.viewLayers.add(sawTextureViewLayer);
-            physicReflection.fixtureDef.shape.setRadius(2);
-            physicReflection.fixtureDef.density = 0.5f;
-            physicReflection.fixtureDef.friction = 0.2f;
-            physicReflection.bodyDef.position.set(movement.position);
-            physicReflection.bodyDef.type = BodyDef.BodyType.StaticBody;
-            physicReflection.bodyDef.gravityScale = 0;
-            timer.setPeriod(AnimationSetting.FrameDuration);
+            physicDefinition.fixtureDef.shape.setRadius(2);
+            physicDefinition.fixtureDef.density = 0.5f;
+            physicDefinition.fixtureDef.friction = 0.2f;
+            physicDefinition.bodyDef.position.set(movement.position);
+            physicDefinition.bodyDef.type = BodyDef.BodyType.StaticBody;
+            physicDefinition.bodyDef.gravityScale = 0;
         }
 
         @Override

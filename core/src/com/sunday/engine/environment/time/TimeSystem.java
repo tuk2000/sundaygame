@@ -1,52 +1,47 @@
 package com.sunday.engine.environment.time;
 
 import com.sunday.engine.SubSystem;
-import com.sunday.engine.common.ClassContext;
-import com.sunday.engine.common.MetaDataContext;
 import com.sunday.engine.databank.SystemPort;
-import com.sunday.engine.rule.Reaction;
-import com.sunday.engine.rule.Rule;
-import com.sunday.engine.rule.RuleSignal;
+import com.sunday.engine.rule.Condition;
+import com.sunday.engine.rule.ContextConstructor;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
-public class TimeSystem extends SubSystem {
+public class TimeSystem extends SubSystem implements ContextConstructor<TimerCondition> {
     public float currentTime = 0.0f;
-
-    private Rule timerConditionMountingRule = new Rule(Rule.class, RuleSignal.Mounting, new Reaction<ClassContext<Rule>>() {
-        @Override
-        public void accept(ClassContext<Rule> ruleClassContext) {
-            Class sensedClass = ruleClassContext.getSensedClass();
-            if (!sensedClass.equals(Timer.class)) return;
-            Rule rule = ruleClassContext.getInstance();
-            RuleSignal ruleSignal = (RuleSignal) ruleClassContext.getSignal();
-            MetaDataContext<Timer> metaDataContext = (MetaDataContext<Timer>) rule.getContext();
-            Timer timer = metaDataContext.getMetaData();
-            if (!systemPort.containsDataInstance(timer)) {
-                systemPort.addDataInstance(timer);
-                switch (ruleSignal) {
-                    case Mounting:
-                        timer.start(currentTime);
-                        break;
-                    case Dismounting:
-                        timer.stop(currentTime);
-                }
-            }
-        }
-    });
+    private Map<Timer, TimerContext<Timer>> map = new HashMap<>();
+    private TimerContext<Timer> animationTimerContext;
 
     public TimeSystem(SystemPort systemPort) {
         super("TimeSystem", systemPort);
-        systemPort.addDataInstance(timerConditionMountingRule);
+        Timer animationTimer = TimerCondition.animationTimerCondition().getTimer();
+        animationTimerContext = new TimerContext<Timer>(animationTimer);
+        map.put(animationTimer, animationTimerContext);
     }
 
     public void updateTime(float deltaTime) {
         currentTime += deltaTime;
-        List<Timer> timers = systemPort.instancesOf(Timer.class);
-        timers.forEach(timer -> {
-            if (timer.isTriggered(currentTime)) {
-                systemPort.broadcast(timer, TimerSignal.Triggered);
-            }
-        });
+        map.values().forEach(timerContext -> timerContext.evaluate(currentTime));
+    }
+
+    @Override
+    public boolean test(Condition condition) {
+        return condition instanceof TimerCondition;
+    }
+
+    @Override
+    public void accept(TimerCondition timerCondition) {
+        Timer timer = timerCondition.getTimer();
+        if (map.containsKey(timer)) {
+            timerCondition.setEnvironmentContext(animationTimerContext);
+            animationTimerContext.setEvaluateConnection(timerCondition, timerCondition.getReaction());
+        } else {
+            TimerContext<Timer> timerContext = new TimerContext<Timer>(timer);
+            map.put(timer, timerContext);
+            timerContext.setEvaluateConnection(timerCondition, timerCondition.getReaction());
+            timerCondition.setEnvironmentContext(timerContext);
+            timer.start(currentTime);
+        }
     }
 }

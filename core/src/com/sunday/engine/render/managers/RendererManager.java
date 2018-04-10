@@ -2,9 +2,9 @@ package com.sunday.engine.render.managers;
 
 
 import com.badlogic.gdx.Input;
-import com.sunday.engine.common.MetaDataContext;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.databank.SystemPortSharing;
+import com.sunday.engine.environment.driver.DriverContext;
 import com.sunday.engine.environment.driver.gamepad.GamePad;
 import com.sunday.engine.environment.driver.gamepad.GamePadCondition;
 import com.sunday.engine.environment.driver.keyboard.KeyBoard;
@@ -22,10 +22,10 @@ public class RendererManager implements SystemPortSharing {
 
     @Override
     public void connectWith(SystemPort systemPort) {
-        systemPort.addDataInstance(new Rule(KeyBoardCondition.keyPressed("F2", "F3", "F4", "F5", "F6", "F7"), new Reaction<MetaDataContext<KeyBoard>>() {
+        systemPort.addDataInstance(new Rule<>(KeyBoardCondition.keyPressed("F2", "F3", "F4", "F5", "F6", "F7"), new Reaction<DriverContext<KeyBoard>>() {
             @Override
-            public void accept(MetaDataContext<KeyBoard> metaDataContext) {
-                KeyBoard keyBoard = metaDataContext.getMetaData();
+            public void accept(DriverContext<KeyBoard> keyBoardDriverContext) {
+                KeyBoard keyBoard = keyBoardDriverContext.getEnvironmentData();
                 System.out.println("keyBoard---RenderManager---" + keyBoard.character);
                 switch (keyBoard.keyCode) {
                     case Input.Keys.F2:
@@ -49,10 +49,10 @@ public class RendererManager implements SystemPortSharing {
             }
         }));
 
-        systemPort.addDataInstance(new Rule(GamePadCondition.buttonDown(0, 1, 2, 3, 9), new Reaction<MetaDataContext<GamePad>>() {
+        systemPort.addDataInstance(new Rule<>(GamePadCondition.buttonDown(0, 1, 2, 3, 9), new Reaction<DriverContext<GamePad>>() {
             @Override
-            public void accept(MetaDataContext<GamePad> metaDataContext) {
-                GamePad gamePad = metaDataContext.getMetaData();
+            public void accept(DriverContext<GamePad> gamePadDriverContext) {
+                GamePad gamePad = gamePadDriverContext.getEnvironmentData();
                 System.out.println("gamePad---RenderManager---" + gamePad.buttonCode);
                 switch (gamePad.buttonCode) {
                     case 0:

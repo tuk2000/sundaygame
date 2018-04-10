@@ -1,70 +1,64 @@
 package com.sunday.engine.rule;
 
 import com.sunday.engine.common.Context;
-import com.sunday.engine.common.Signal;
-import com.sunday.engine.databank.SystemPortSharing;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.function.Predicate;
 
-public abstract class Condition<C extends Context> implements SystemPortSharing {
-    protected C context;
+public abstract class Condition<C extends Context> implements Predicate<C> {
     protected Reaction<C> reaction;
-    protected List<Predicate<C>> predicates = new ArrayList<>();
-    protected List<Boolean> result = new ArrayList<>();
-    protected boolean isAndOperation = true;
-    private List<Signal> signals = new ArrayList<>();
-    private String mainInfo = "MainInfo:\nn/a";
-    private String extraInfo = "ExtractInfo:\nn/a";
+    private C context;
+    private Map<String, String> mainInfo = new HashMap<>();
+    private Map<String, String> extraInfo = new HashMap<>();
+
+    protected C getContext() {
+        return context;
+    }
 
     protected void setContext(C context) {
         this.context = context;
     }
 
-    protected void setReaction(Reaction reaction) {
+    public Reaction<C> getReaction() {
+        return reaction;
+    }
+
+    protected void setReaction(Reaction<C> reaction) {
         this.reaction = reaction;
     }
 
-    protected void setAndOperation(boolean isAndOperation) {
-        this.isAndOperation = isAndOperation;
-    }
-
-    protected void addPredicate(Predicate<C> predicate) {
-        predicates.add(predicate);
-    }
-
-    protected List<Signal> getSignals() {
-        return signals;
-    }
-
-    protected void setSignals(Signal... signals) {
-        this.signals.clear();
-        this.signals.addAll(Arrays.asList(signals));
-    }
-
-    protected String getSignalNames() {
-        String names = "";
-        for (Signal signal : getSignals()) {
-            names += signal.name() + ",";
-        }
-        names = names.substring(0, names.lastIndexOf(","));
-        return names;
-    }
+    protected abstract void generateExtraInfo();
 
     protected abstract void generateMainInfo();
 
-    protected void setMainInfo(String mainInfo) {
-        this.mainInfo = "MainInfo:\n" + mainInfo;
+    protected void setMainInfoEntry(String key, String value) {
+        mainInfo.put(key, value);
     }
 
-    protected void setExtraInfo(String extraInfo) {
-        this.extraInfo = "ExtractInfo:\n" + extraInfo;
+    protected void setExtraInfoEntry(String key, String value) {
+        extraInfo.put(key, value);
     }
 
+    private String buildInfoString(Map<String, String> mainInfo) {
+        StringBuilder stringBuilder = new StringBuilder();
+        mainInfo.forEach((key, value) -> {
+            stringBuilder.append(key);
+            stringBuilder.append('=');
+            stringBuilder.append('[');
+            stringBuilder.append(value);
+            stringBuilder.append(']');
+            stringBuilder.append('\n');
+        });
+        return stringBuilder.toString();
+    }
 
     public String getInfo() {
-        return toString() + "\n" + mainInfo + "\n" + extraInfo;
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("MainInfo:\n");
+        stringBuilder.append(buildInfoString(mainInfo));
+        stringBuilder.append("ExtraInfo:\n");
+        stringBuilder.append(buildInfoString(mainInfo));
+        return stringBuilder.toString();
     }
 }

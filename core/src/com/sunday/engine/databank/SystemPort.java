@@ -1,42 +1,29 @@
 package com.sunday.engine.databank;
 
 
-import com.sunday.engine.common.Context;
 import com.sunday.engine.common.Data;
-import com.sunday.engine.common.SourceClass;
 import com.sunday.engine.common.Target;
+import com.sunday.engine.common.data.SourceClass;
 
 import java.util.List;
 import java.util.function.Predicate;
 
-public interface SystemPort<T extends Data> extends Port<T> {
-    SourceClass<T> getSourceClass(Class<T> clazz);
+public interface SystemPort extends Port {
+    <D extends Data> SourceClass<D> getSourceClass(Class<D> clazz);
 
-    void addContext(Context context);
+    void addConnection(Data source, Target target);
 
-    void removeContext(Context context);
+    void removeConnection(Data source, Target target);
 
-    Context getContext(T data);
+    <D extends Data> void addConnection(Class<D> clazz, Target target);
 
-    void addContext(Class<T> clazz);
+    <D extends Data> void removeConnection(Class<D> clazz, Target target);
 
-    void removeContext(Class<T> clazz);
+    <D extends Data> List<D> getDataList(Predicate<D> predicate);
 
-    Context getContext(Class<T> clazz);
+    <D extends Data> List<Class<D>> getDataClassList();
 
-    void addConnection(T source, Target target);
-
-    void removeConnection(T source, Target target);
-
-    void addConnection(Class<T> clazz, Target target);
-
-    void removeConnection(Class<T> clazz, Target target);
-
-    List<T> getDataList(Predicate<T> predicate);
-
-    List<Class<T>> getDataClassList();
-
-    List<T> instancesOf(Class<T> clazz);
+    <D extends Data> List<D> instancesOf(Class<D> clazz);
 
     Port requestPort(Object owner);
 }

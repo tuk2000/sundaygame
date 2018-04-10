@@ -1,14 +1,13 @@
 package com.sunday.engine.environment.time;
 
-import com.sunday.engine.rule.ContextBuilder;
-import com.sunday.engine.rule.MetaDataCondition;
+import com.sunday.engine.environment.EnvironmentCondition;
 
 
-public class TimerCondition extends MetaDataCondition<Timer> {
+public class TimerCondition<T extends Timer> extends EnvironmentCondition<T, TimerContext<T>> {
+    private static TimerCondition<Timer> AnimationTimerCondition = null;
+    private T timer;
 
-    private static TimerCondition AnimationTimerCondition = null;
-
-    public static TimerCondition animationTimerCondition() {
+    public static TimerCondition<Timer> animationTimerCondition() {
         if (AnimationTimerCondition == null) {
             Timer animationTimer = new Timer();
             animationTimer.setPeriod(AnimationSetting.FrameDuration);
@@ -17,12 +16,19 @@ public class TimerCondition extends MetaDataCondition<Timer> {
         return AnimationTimerCondition;
     }
 
-    public static TimerCondition bind(Timer timer) {
-        TimerCondition timerCondition = new TimerCondition();
-        timerCondition.context = ContextBuilder.buildMetaDataContext(Timer.class);
-        timerCondition.context.setMetaData(timer);
-        timerCondition.setSignals(TimerSignal.Triggered);
+    public static TimerCondition<Timer> bind(Timer timer) {
+        TimerCondition<Timer> timerCondition = new TimerCondition<>();
+        timerCondition.timer = timer;
+        timerCondition.signalCondition.setSignals(TimerSignal.Triggered);
         return timerCondition;
     }
 
+    public T getTimer() {
+        return timer;
+    }
+
+    @Override
+    public boolean test(TimerContext<T> timerContext) {
+        return signalCondition.test(timerContext);
+    }
 }

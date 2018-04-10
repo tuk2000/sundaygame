@@ -14,14 +14,14 @@ public class MapModel extends AbstractModel {
         outlook.dimension.set(1000, 1000);
         outlook.viewLayers.add(new MapViewLayer("TileMap/sTest/sTest.tmx"));
 
-        BodyDef bodyDef = physicReflection.bodyDef;
+        BodyDef bodyDef = physicDefinition.bodyDef;
         bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(0, 0);
 
         ChainShape chainShape = new ChainShape();
         chainShape.createChain(new Vector2[]{new Vector2(-200, 0), new Vector2(1000, 0)});
 
-        FixtureDef fixtureDef = physicReflection.fixtureDef;
+        FixtureDef fixtureDef = physicDefinition.fixtureDef;
         fixtureDef.shape = chainShape;
         fixtureDef.friction = 2.0f;
         fixtureDef.restitution = 0;

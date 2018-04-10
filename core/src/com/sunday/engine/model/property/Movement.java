@@ -1,11 +1,11 @@
 package com.sunday.engine.model.property;
 
 import com.badlogic.gdx.math.Vector2;
-import com.sunday.engine.common.Data;
+import com.sunday.engine.common.data.CustomizedData;
 import com.sunday.engine.model.state.Action;
 import com.sunday.engine.model.state.Direction;
 
-public class Movement implements Data {
+public class Movement implements CustomizedData {
     public Direction direction = Direction.Right;
     public Action action = Action.StandStill;
     public float angularVelocity = 0;

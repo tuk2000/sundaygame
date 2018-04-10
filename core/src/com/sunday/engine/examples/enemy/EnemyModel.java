@@ -12,14 +12,14 @@ public class EnemyModel extends AbstractModel {
         outlook.dimension.set(40.0f, 40.0f);
         movement.position.set(112, 32);
 
-        BodyDef bodyDef = physicReflection.bodyDef;
+        BodyDef bodyDef = physicDefinition.bodyDef;
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(movement.position);
 
         CircleShape circle = new CircleShape();
         circle.setRadius(20.0f);
 
-        FixtureDef fixtureDef = physicReflection.fixtureDef;
+        FixtureDef fixtureDef = physicDefinition.fixtureDef;
         fixtureDef.shape = circle;
         fixtureDef.friction = .75f;
         fixtureDef.restitution = 0.5f;

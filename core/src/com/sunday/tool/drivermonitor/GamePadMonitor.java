@@ -1,12 +1,14 @@
 package com.sunday.tool.drivermonitor;
 
-import com.sunday.engine.common.ClassContext;
-import com.sunday.engine.common.DataSignal;
+import com.sunday.engine.common.context.ClassContext;
+import com.sunday.engine.common.signal.DataSignal;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.databank.SystemPortSharing;
+import com.sunday.engine.environment.driver.DriverContext;
 import com.sunday.engine.environment.driver.gamepad.GamePad;
 import com.sunday.engine.environment.driver.gamepad.GamePadSignal;
-import com.sunday.engine.rule.Reaction;
+import com.sunday.engine.rule.ClassCondition;
+import com.sunday.engine.rule.ClassReaction;
 import com.sunday.engine.rule.Rule;
 import com.sunday.tool.ToolExtender;
 
@@ -19,11 +21,12 @@ public class GamePadMonitor extends ToolExtender<GamePadMonitorUIController> imp
     private Set<GamePad> waitingToBeAddedSet = new HashSet<>();
 
     private GamePadSignal currentGamePadSignal = GamePadSignal.None;
-    private Rule gamePadDataMonitorRule = new Rule(GamePad.class, DataSignal.class, new Reaction<ClassContext<GamePad>>() {
+    private Rule<ClassContext<DriverContext<GamePad>>> gamePadDataMonitorRule
+            = new Rule<>(new ClassCondition<>(GamePad.class, DataSignal.class), new ClassReaction<DriverContext<GamePad>>() {
         @Override
-        public void accept(ClassContext<GamePad> gamePadClassContext) {
-            DataSignal dataSignal = (DataSignal) gamePadClassContext.getSignal();
-            GamePad gamePad = gamePadClassContext.getInstance();
+        public void accept(DriverContext<GamePad> gamePadDriverContext) {
+            DataSignal dataSignal = (DataSignal) gamePadDriverContext.getSignal();
+            GamePad gamePad = gamePadDriverContext.getEnvironmentData();
             switch (dataSignal) {
                 case Add:
                     addGamePad(gamePad);
@@ -34,11 +37,12 @@ public class GamePadMonitor extends ToolExtender<GamePadMonitorUIController> imp
             }
         }
     });
-    private Rule gamePadStatusMonitorRule = new Rule(GamePad.class, GamePadSignal.class, new Reaction<ClassContext<GamePad>>() {
+    private Rule<ClassContext<DriverContext<GamePad>>> gamePadStatusMonitorRule
+            = new Rule<>(new ClassCondition<>(GamePad.class, GamePadSignal.class), new ClassReaction<DriverContext<GamePad>>() {
         @Override
-        public void accept(ClassContext<GamePad> gamePadClassContext) {
-            currentGamePadSignal = (GamePadSignal) gamePadClassContext.getSignal();
-            GamePad gamePad = gamePadClassContext.getInstance();
+        public void accept(DriverContext<GamePad> gamePadDriverContext) {
+            currentGamePadSignal = (GamePadSignal) gamePadDriverContext.getSignal();
+            GamePad gamePad = gamePadDriverContext.getEnvironmentData();
             if (!set.contains(gamePad)) {
                 addGamePad(gamePad);
             }

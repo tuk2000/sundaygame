@@ -1,11 +1,11 @@
 package com.sunday.engine.model;
 
 import com.badlogic.gdx.utils.Disposable;
-import com.sunday.engine.common.DataContext;
+import com.sunday.engine.common.context.CustomizedDataContext;
 import com.sunday.engine.databank.Port;
 import com.sunday.engine.databank.PortSharing;
 import com.sunday.engine.model.property.*;
-import com.sunday.engine.rule.DataCondition;
+import com.sunday.engine.rule.CustomizedDataCondition;
 import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
 
@@ -14,44 +14,44 @@ public abstract class AbstractModel implements PortSharing, Disposable {
     public Port port;
 
     public Outlook outlook = new Outlook();
-    public PhysicReflection physicReflection = new PhysicReflection(this);
+    public PhysicDefinition physicDefinition = new PhysicDefinition(this);
     public Movement movement = new Movement();
 
-    private Rule movementRule = new Rule(new DataCondition(movement, MovementSignal.class), new Reaction<DataContext<Movement>>() {
+    private Rule<CustomizedDataContext<Movement>> movementRule = new Rule<>(new CustomizedDataCondition<>(movement, MovementSignal.class), new Reaction<CustomizedDataContext<Movement>>() {
         @Override
-        public void accept(DataContext<Movement> movementDataContext) {
-            physicReflection.forceMoveTo(movement.position);
+        public void accept(CustomizedDataContext<Movement> movementCustomizedDataContext) {
+            physicDefinition.physicBody.forceMoveTo(movement.position);
             port.broadcast(outlook, OutlookSignal.Updated);
         }
     });
 
-    private Rule outlookRule = new Rule(new DataCondition(outlook, OutlookSignal.class), new Reaction<DataContext<Outlook>>() {
+    private Rule<CustomizedDataContext<Outlook>> outlookRule = new Rule<>(new CustomizedDataCondition<>(outlook, OutlookSignal.class), new Reaction<CustomizedDataContext<Outlook>>() {
         @Override
-        public void accept(DataContext<Outlook> outlookDataContext) {
-            //            physicReflection.bodyDef.position.set(movement.position);
-//        switch (physicReflection.fixtureDef.shape.getType()) {
+        public void accept(CustomizedDataContext<Outlook> outlookCustomizedDataContext) {
+            //            physicDefinition.bodyDef.position.set(movement.position);
+//        switch (physicDefinition.fixtureDef.shape.getType()) {
 //            case Chain:
 //                break;
 //            case Polygon:
-//                ((PolygonShape) physicReflection.fixtureDef.shape).setAsBox(outlook.dimension.x, outlook.dimension.y);
+//                ((PolygonShape) physicDefinition.fixtureDef.shape).setAsBox(outlook.dimension.x, outlook.dimension.y);
 //                break;
 //            case Circle:
-//                ((CircleShape) physicReflection.fixtureDef.shape).setRadius((outlook.dimension.x + outlook.dimension.y) / 2);
+//                ((CircleShape) physicDefinition.fixtureDef.shape).setRadius((outlook.dimension.x + outlook.dimension.y) / 2);
 //                break;
 //            case Edge:
 //                break;
         }
     });
-    private Rule physicReflectionRule = new Rule(new DataCondition(physicReflection, PhysicReflectionSignal.class), new Reaction<DataContext<PhysicReflection>>() {
+    private Rule<CustomizedDataContext<PhysicDefinition>> physicReflectionRule = new Rule<>(new CustomizedDataCondition<>(physicDefinition, PhysicReflectionSignal.class), new Reaction<CustomizedDataContext<PhysicDefinition>>() {
         @Override
-        public void accept(DataContext<PhysicReflection> physicReflectionDataContext) {
-            PhysicReflectionSignal physicReflectionSignal = (PhysicReflectionSignal) physicReflectionDataContext.getSignal();
+        public void accept(CustomizedDataContext<PhysicDefinition> physicReflectionCustomizedDataContext) {
+            PhysicReflectionSignal physicReflectionSignal = (PhysicReflectionSignal) physicReflectionCustomizedDataContext.getSignal();
             switch (physicReflectionSignal) {
                 case Updated:
-                    movement.position.set(physicReflection.body.getPosition());
-                    movement.speed.set(physicReflection.body.getLinearVelocity());
-                    movement.angularVelocity = physicReflection.body.getAngularVelocity();
-                    movement.angle = physicReflection.body.getAngle();
+                    movement.position.set(physicDefinition.physicBody.getPosition());
+                    movement.speed.set(physicDefinition.physicBody.getLinearVelocity());
+                    movement.angularVelocity = physicDefinition.physicBody.getAngularVelocity();
+                    movement.angle = physicDefinition.physicBody.getAngle();
             }
         }
     });
@@ -60,7 +60,7 @@ public abstract class AbstractModel implements PortSharing, Disposable {
     public void connectWith(Port port) {
         this.port = port;
         port.addDataInstance(outlook);
-        port.addDataInstance(physicReflection);
+        port.addDataInstance(physicDefinition);
         port.addDataInstance(movement);
         port.addDataInstance(movementRule);
         port.addDataInstance(outlookRule);
@@ -71,7 +71,7 @@ public abstract class AbstractModel implements PortSharing, Disposable {
     @Override
     public void disconnectWith(Port port) {
         port.removeDataInstance(outlook);
-        port.removeDataInstance(physicReflection);
+        port.removeDataInstance(physicDefinition);
         port.removeDataInstance(movement);
         port.removeDataInstance(movementRule);
         port.removeDataInstance(outlookRule);

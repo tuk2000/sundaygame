@@ -1,44 +1,51 @@
 package com.sunday.engine.rule;
 
-import com.sunday.engine.common.ClassContext;
+import com.sunday.engine.common.Context;
 import com.sunday.engine.common.Data;
 import com.sunday.engine.common.Signal;
-import com.sunday.engine.databank.SystemPort;
+import com.sunday.engine.common.context.ClassContext;
+import com.sunday.engine.common.propertyholder.SystemRelated;
 
-public class ClassCondition<D extends Data> extends Condition<ClassContext<D>> {
+public class ClassCondition<RC extends Context> extends Condition<ClassContext<RC>> implements SystemRelated {
+    protected SignalCondition<RC> signalCondition = new SignalCondition<>();
+    private Class<? extends Data> sensedClass;
 
-    public <S extends Signal> ClassCondition(Class<D> clazz, S... signals) {
-        context = ContextBuilder.buildClassContext(clazz);
-        setSignals(signals);
-        setExtraInfo("Type = [ClassCondition]\n" +
-                "SensedSourceClass=[" + clazz.getSimpleName() + "]");
-    }
-
-    public <S extends Signal> ClassCondition(Class<D> clazz, Class<S> signalTypeClass) {
-        context = ContextBuilder.buildClassContext(clazz);
-        setSignals(signalTypeClass.getEnumConstants());
-        setExtraInfo("Type = [ClassCondition]\n" +
-                "SensedSourceClass=[" + clazz.getSimpleName() + "]");
-    }
-
-    @Override
-    public void connectWith(SystemPort systemPort) {
+    public <D extends Data, S extends Signal> ClassCondition(Class<D> clazz, S... signals) {
+        sensedClass = clazz;
+        signalCondition.setSignals(signals);
         generateMainInfo();
+        generateExtraInfo();
     }
 
-    @Override
-    public void disconnectWith(SystemPort systemPort) {
-
+    public <D extends Data, S extends Signal> ClassCondition(Class<D> clazz, Class<S> signalTypeClass) {
+        sensedClass = clazz;
+        signalCondition.setSignals(signalTypeClass.getEnumConstants());
+        generateMainInfo();
+        generateExtraInfo();
     }
 
-//    @Override
-//    public void notify(Data data, Signal signal) {
-//        if (getSignals().contains(signal))
-//            getReaction().accept(context);
-//    }
+    public <D extends Data> Class<D> getSensedClass() {
+        return (Class<D>) sensedClass;
+    }
+
+    public void setClassContext(ClassContext<RC> context) {
+        setContext(context);
+    }
 
     @Override
     protected void generateMainInfo() {
+        setMainInfoEntry("Source", sensedClass.toGenericString());
+        setMainInfoEntry("SourceClass ", sensedClass.getClass().getSimpleName());
+        setMainInfoEntry("Signals ", signalCondition.getSignalNames());
+    }
 
+    protected void generateExtraInfo() {
+        setExtraInfoEntry("ConditionType", "Class");
+        setExtraInfoEntry("SensedClass", sensedClass.getSimpleName());
+    }
+
+    @Override
+    public boolean test(ClassContext<RC> classContext) {
+        return false;
     }
 }
