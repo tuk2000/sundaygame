@@ -10,9 +10,18 @@ public class MouseCondition extends DriverCondition<Mouse> {
         super(driverPredicate);
     }
 
+    public static MouseCondition anyMouseSignal() {
+        MouseCondition mouseCondition = new MouseCondition(context -> true);
+        mouseCondition.signalCondition.setSignals(MouseSignal.class);
+        return mouseCondition;
+    }
+
+
     public static MouseCondition mouseDragged() {
         MouseCondition mouseCondition = new MouseCondition(context -> true);
         mouseCondition.signalCondition.setSignals(MouseSignal.Dragged);
         return mouseCondition;
     }
+
+
 }

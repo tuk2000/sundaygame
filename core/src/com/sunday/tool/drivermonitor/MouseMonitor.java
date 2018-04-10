@@ -6,9 +6,11 @@ import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.databank.SystemPortSharing;
 import com.sunday.engine.environment.driver.DriverContext;
 import com.sunday.engine.environment.driver.mouse.Mouse;
+import com.sunday.engine.environment.driver.mouse.MouseCondition;
 import com.sunday.engine.environment.driver.mouse.MouseSignal;
 import com.sunday.engine.rule.ClassCondition;
 import com.sunday.engine.rule.ClassReaction;
+import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
 import com.sunday.tool.ToolExtender;
 
@@ -30,8 +32,8 @@ public class MouseMonitor extends ToolExtender<MouseMonitorUIController> impleme
             }
         }
     });
-    private Rule<ClassContext<DriverContext<Mouse>>> mouseStatusMonitorRule
-            = new Rule<>(new ClassCondition<>(Mouse.class, MouseSignal.class), new ClassReaction<DriverContext<Mouse>>() {
+    private Rule<DriverContext<Mouse>> mouseStatusMonitorRule
+            = new Rule<>(MouseCondition.anyMouseSignal(), new Reaction<DriverContext<Mouse>>() {
         @Override
         public void accept(DriverContext<Mouse> mouseDriverContext) {
             Mouse mouse = mouseDriverContext.getEnvironmentData();

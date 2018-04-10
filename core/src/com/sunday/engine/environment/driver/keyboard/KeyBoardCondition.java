@@ -27,6 +27,13 @@ public class KeyBoardCondition extends DriverCondition<KeyBoard> {
         return Arrays.stream(keyNames).collect(Collectors.joining(" "));
     }
 
+    public static KeyBoardCondition anyKeyBoardSignal() {
+        KeyBoardCondition keyBoardCondition = new KeyBoardCondition(context -> true);
+        keyBoardCondition.signalCondition.setSignals(KeyBoardSignal.class);
+        keyBoardCondition.setExtraInfoEntry("Key", "AnyKey");
+        return keyBoardCondition;
+    }
+
     public static KeyBoardCondition keyPressed() {
         KeyBoardCondition keyBoardCondition = new KeyBoardCondition(context -> true);
         keyBoardCondition.signalCondition.setSignals(KeyBoardSignal.Pressed);

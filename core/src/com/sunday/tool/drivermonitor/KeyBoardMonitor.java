@@ -6,9 +6,11 @@ import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.databank.SystemPortSharing;
 import com.sunday.engine.environment.driver.DriverContext;
 import com.sunday.engine.environment.driver.keyboard.KeyBoard;
+import com.sunday.engine.environment.driver.keyboard.KeyBoardCondition;
 import com.sunday.engine.environment.driver.keyboard.KeyBoardSignal;
 import com.sunday.engine.rule.ClassCondition;
 import com.sunday.engine.rule.ClassReaction;
+import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
 import com.sunday.tool.ToolExtender;
 
@@ -31,7 +33,7 @@ public class KeyBoardMonitor extends ToolExtender<KeyBoardMonitorUIController> i
             }
         }
     });
-    private Rule<ClassContext<DriverContext<KeyBoard>>> keyBoardStatusMonitorRule = new Rule<>(new ClassCondition<>(KeyBoard.class, KeyBoardSignal.class), new ClassReaction<DriverContext<KeyBoard>>() {
+    private Rule<DriverContext<KeyBoard>> keyBoardStatusMonitorRule = new Rule<>(KeyBoardCondition.anyKeyBoardSignal(), new Reaction<DriverContext<KeyBoard>>() {
         @Override
         public void accept(DriverContext<KeyBoard> keyBoardDriverContext) {
             KeyBoard keyBoard = keyBoardDriverContext.getEnvironmentData();

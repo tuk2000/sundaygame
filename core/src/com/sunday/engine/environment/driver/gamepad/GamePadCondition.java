@@ -13,6 +13,12 @@ public class GamePadCondition extends DriverCondition<GamePad> {
         super(predicate);
     }
 
+    public static GamePadCondition anyGamePadSignal() {
+        GamePadCondition gamePadCondition = new GamePadCondition(driverContext -> true);
+        gamePadCondition.signalCondition.setSignals(GamePadSignal.class);
+        return gamePadCondition;
+    }
+
     public static GamePadCondition buttonDown(int buttonCode) {
         GamePadCondition gamePadCondition = new GamePadCondition(driverContext -> driverContext.getEnvironmentData().buttonCode == buttonCode);
         gamePadCondition.signalCondition.setSignals(GamePadSignal.ButtonDown);

@@ -32,6 +32,10 @@ public class SignalCondition<C extends Context> implements Predicate<C> {
         }
     }
 
+    public void setSignals(Class<? extends Signal> signalClass) {
+        setSignals(signalClass.getEnumConstants());
+    }
+
     public String getSignalNames() {
         return signals.stream().map(signal -> signal.name()).collect(Collectors.joining(","));
     }
