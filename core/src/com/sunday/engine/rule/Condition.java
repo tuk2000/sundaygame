@@ -58,7 +58,7 @@ public abstract class Condition<C extends Context> implements Predicate<C> {
         stringBuilder.append("MainInfo:\n");
         stringBuilder.append(buildInfoString(mainInfo));
         stringBuilder.append("ExtraInfo:\n");
-        stringBuilder.append(buildInfoString(mainInfo));
+        stringBuilder.append(buildInfoString(extraInfo));
         return stringBuilder.toString();
     }
 }

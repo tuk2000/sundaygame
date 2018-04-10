@@ -12,7 +12,7 @@ public abstract class EnvironmentCondition<E extends EnvironmentData, EC extends
 
     @Override
     protected void generateExtraInfo() {
-        setExtraInfoEntry("ConditionType", "EnvironmentRelated");
+        setExtraInfoEntry("ConditionType", "EnvironmentCondition");
     }
 
     @Override
@@ -25,5 +25,7 @@ public abstract class EnvironmentCondition<E extends EnvironmentData, EC extends
 
     public void setEnvironmentContext(EC environmentContext) {
         setContext(environmentContext);
+        generateMainInfo();
+        generateExtraInfo();
     }
 }

@@ -12,23 +12,26 @@ public class CustomizedDataCondition<CD extends CustomizedData> extends Conditio
     public CustomizedDataCondition(CD cd, Signal... signals) {
         customizedData = cd;
         signalCondition.setSignals(signals);
+        generateMainInfo();
+        generateExtraInfo();
     }
 
     public <S extends Signal> CustomizedDataCondition(CD cd, Class<S> signalTypeClass) {
         customizedData = cd;
         signalCondition.setSignals(signalTypeClass.getEnumConstants());
+        generateMainInfo();
+        generateExtraInfo();
     }
 
     @Override
     protected void generateExtraInfo() {
-        setExtraInfoEntry("ConditionType", "Customized");
+        setExtraInfoEntry("ConditionType", "CustomizedDataCondition");
     }
 
     @Override
     protected void generateMainInfo() {
-        CD data = getContext().getCustomizedData();
-        setMainInfoEntry("Source ", data.toString());
-        setMainInfoEntry("SourceClass ", data.getClass().getSimpleName());
+        setMainInfoEntry("Source ", customizedData.toString());
+        setMainInfoEntry("SourceClass ", customizedData.getClass().getSimpleName());
         setMainInfoEntry("Signals", signalCondition.getSignalNames());
     }
 

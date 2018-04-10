@@ -34,13 +34,13 @@ public class ClassCondition<RC extends Context> extends Condition<ClassContext<R
 
     @Override
     protected void generateMainInfo() {
-        setMainInfoEntry("Source", sensedClass.toGenericString());
+        setMainInfoEntry("Source", sensedClass.getName());
         setMainInfoEntry("SourceClass ", sensedClass.getClass().getSimpleName());
         setMainInfoEntry("Signals ", signalCondition.getSignalNames());
     }
 
     protected void generateExtraInfo() {
-        setExtraInfoEntry("ConditionType", "Class");
+        setExtraInfoEntry("ConditionType", "ClassCondition");
         setExtraInfoEntry("SensedClass", sensedClass.getSimpleName());
     }
 
