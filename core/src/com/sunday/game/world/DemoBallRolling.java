@@ -171,7 +171,7 @@ public class DemoBallRolling implements Screen {
     private class SawModel extends AbstractModel {
         private TextureViewLayer sawTextureViewLayer = new TextureViewLayer(GameFramework.Resource.getAsset("saws/saw1.png"));
 
-        private Rule<TimerContext<Timer>> sawMovingRule = new Rule<>(TimerCondition.bind(sawRandomMovingTimer), new Reaction<TimerContext<Timer>>() {
+        private Rule<TimerContext<Timer>> sawMovingRule = new Rule<>(new TimerCondition<>(sawRandomMovingTimer), new Reaction<TimerContext<Timer>>() {
             @Override
             public void accept(TimerContext<Timer> timerContext) {
                 sawTextureViewLayer.updateTexture(sawAnimation.getKeyFrame());

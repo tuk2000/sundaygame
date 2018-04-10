@@ -7,20 +7,19 @@ public class TimerCondition<T extends Timer> extends EnvironmentCondition<T, Tim
     private static TimerCondition<Timer> AnimationTimerCondition = null;
     private T timer;
 
+    public TimerCondition(T timer) {
+        this.timer = timer;
+        signalCondition.setSignals(TimerSignal.Triggered);
+        setExtraInfoEntry("Period", String.valueOf(timer.period));
+    }
+
     public static TimerCondition<Timer> animationTimerCondition() {
         if (AnimationTimerCondition == null) {
             Timer animationTimer = new Timer();
             animationTimer.setPeriod(AnimationSetting.FrameDuration);
-            AnimationTimerCondition = bind(animationTimer);
+            AnimationTimerCondition = new TimerCondition<>(animationTimer);
         }
         return AnimationTimerCondition;
-    }
-
-    public static TimerCondition<Timer> bind(Timer timer) {
-        TimerCondition<Timer> timerCondition = new TimerCondition<>();
-        timerCondition.timer = timer;
-        timerCondition.signalCondition.setSignals(TimerSignal.Triggered);
-        return timerCondition;
     }
 
     public T getTimer() {
