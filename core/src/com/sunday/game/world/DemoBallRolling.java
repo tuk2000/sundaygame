@@ -6,7 +6,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.sunday.engine.Engine;
 import com.sunday.engine.databank.Port;
-import com.sunday.engine.environment.EnvironmentDataContext;
 import com.sunday.engine.environment.driver.DriverContext;
 import com.sunday.engine.environment.driver.keyboard.KeyBoard;
 import com.sunday.engine.environment.driver.keyboard.KeyBoardCondition;
@@ -15,6 +14,7 @@ import com.sunday.engine.environment.driver.mouse.MouseCondition;
 import com.sunday.engine.environment.time.AnimationSetting;
 import com.sunday.engine.environment.time.Timer;
 import com.sunday.engine.environment.time.TimerCondition;
+import com.sunday.engine.environment.time.TimerContext;
 import com.sunday.engine.examples.Label;
 import com.sunday.engine.examples.Role;
 import com.sunday.engine.examples.enemy.SawAnimation;
@@ -33,10 +33,11 @@ public class DemoBallRolling implements Screen {
     private Engine engine;
     private Scenario scenario;
     private SawAnimation sawAnimation = new SawAnimation();
-    private Rule<EnvironmentDataContext<Timer>> sawAnimationRule = new Rule<>(TimerCondition.animationTimerCondition(), new Reaction<EnvironmentDataContext<Timer>>() {
+    private Timer sawRandomMovingTimer = new Timer();
+    private Rule<TimerContext<Timer>> sawAnimationRule = new Rule<>(TimerCondition.animationTimerCondition(), new Reaction<TimerContext<Timer>>() {
         @Override
-        public void accept(EnvironmentDataContext<Timer> timerEnvironmentDataContext) {
-            Timer timer = timerEnvironmentDataContext.getEnvironmentData();
+        public void accept(TimerContext<Timer> timerContext) {
+            Timer timer = timerContext.getEnvironmentData();
             sawAnimation.setStateTime(timer.lastTriggeredTime);
         }
     });
@@ -72,6 +73,7 @@ public class DemoBallRolling implements Screen {
 
         scenario = new Scenario(ScopeType.EntireLevel);
         scenario.addRole(backGroundRole);
+        sawRandomMovingTimer.setPeriod(AnimationSetting.FrameDuration);
         for (int i = 0; i < 100; i++) {
             AbstractModel sawModel = new SawModel((float) ((Math.random() - 0.5) * 1000), (float) ((Math.random() - 0.5) * 1000));
             Role movingSaw = new Role(Label.Enemy, sawModel);
@@ -168,10 +170,10 @@ public class DemoBallRolling implements Screen {
 
     private class SawModel extends AbstractModel {
         private TextureViewLayer sawTextureViewLayer = new TextureViewLayer(GameFramework.Resource.getAsset("saws/saw1.png"));
-        private Timer timer = new Timer();
-        private Rule<EnvironmentDataContext<Timer>> sawMovingRule = new Rule<>(TimerCondition.bind(timer), new Reaction<EnvironmentDataContext<Timer>>() {
+
+        private Rule<TimerContext<Timer>> sawMovingRule = new Rule<>(TimerCondition.bind(sawRandomMovingTimer), new Reaction<TimerContext<Timer>>() {
             @Override
-            public void accept(EnvironmentDataContext<Timer> timerEnvironmentDataContext) {
+            public void accept(TimerContext<Timer> timerContext) {
                 sawTextureViewLayer.updateTexture(sawAnimation.getKeyFrame());
                 movement.position.add((float) (Math.random() - 0.5) * 10, (float) (Math.random() - 0.5) * 10);
                 port.broadcast(movement, MovementSignal.ReLocated);
@@ -188,7 +190,6 @@ public class DemoBallRolling implements Screen {
             physicDefinition.bodyDef.position.set(movement.position);
             physicDefinition.bodyDef.type = BodyDef.BodyType.StaticBody;
             physicDefinition.bodyDef.gravityScale = 0;
-            timer.setPeriod(AnimationSetting.FrameDuration);
         }
 
         @Override

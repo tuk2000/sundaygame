@@ -5,12 +5,12 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.sunday.engine.common.context.CustomizedDataContext;
 import com.sunday.engine.databank.Port;
-import com.sunday.engine.environment.EnvironmentDataContext;
 import com.sunday.engine.environment.driver.DriverContext;
 import com.sunday.engine.environment.driver.keyboard.KeyBoard;
 import com.sunday.engine.environment.driver.keyboard.KeyBoardCondition;
 import com.sunday.engine.environment.time.Timer;
 import com.sunday.engine.environment.time.TimerCondition;
+import com.sunday.engine.environment.time.TimerContext;
 import com.sunday.engine.model.AbstractModel;
 import com.sunday.engine.model.property.MovementSignal;
 import com.sunday.engine.model.property.Outlook;
@@ -61,10 +61,10 @@ public class HeroModel extends AbstractModel {
             }
         }));
 
-        port.addDataInstance(new Rule<>(TimerCondition.animationTimerCondition(), new Reaction<EnvironmentDataContext<Timer>>() {
+        port.addDataInstance(new Rule<>(TimerCondition.animationTimerCondition(), new Reaction<TimerContext<Timer>>() {
             @Override
-            public void accept(EnvironmentDataContext<Timer> timerEnvironmentDataContext) {
-                Timer timer = timerEnvironmentDataContext.getEnvironmentData();
+            public void accept(TimerContext<Timer> timerContext) {
+                Timer timer = timerContext.getEnvironmentData();
                 heroAnimation.setStateTime(timer.lastTriggeredTime);
                 textureViewLayer.updateTexture(heroAnimation.getKeyFrame(movement));
             }

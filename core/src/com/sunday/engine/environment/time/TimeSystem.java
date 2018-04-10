@@ -2,24 +2,27 @@ package com.sunday.engine.environment.time;
 
 import com.sunday.engine.SubSystem;
 import com.sunday.engine.databank.SystemPort;
-import com.sunday.engine.environment.EnvironmentDataContext;
 import com.sunday.engine.rule.Condition;
 import com.sunday.engine.rule.ContextConstructor;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public class TimeSystem extends SubSystem implements ContextConstructor<TimerCondition> {
     public float currentTime = 0.0f;
-    private List<EnvironmentDataContext<Timer>> timerEnvironmentDataContexts = new ArrayList<>();
+    private Map<Timer, TimerContext<Timer>> map = new HashMap<>();
+    private TimerContext<Timer> animationTimerContext;
 
     public TimeSystem(SystemPort systemPort) {
         super("TimeSystem", systemPort);
+        Timer animationTimer = TimerCondition.animationTimerCondition().getTimer();
+        animationTimerContext = new TimerContext<Timer>(animationTimer);
+        map.put(animationTimer, animationTimerContext);
     }
 
     public void updateTime(float deltaTime) {
         currentTime += deltaTime;
-        timerEnvironmentDataContexts.forEach(EnvironmentDataContext::evaluate);
+        map.values().forEach(timerContext -> timerContext.evaluate(currentTime));
     }
 
     @Override
@@ -30,10 +33,15 @@ public class TimeSystem extends SubSystem implements ContextConstructor<TimerCon
     @Override
     public void accept(TimerCondition timerCondition) {
         Timer timer = timerCondition.getTimer();
-        EnvironmentDataContext<Timer> timerEnvironmentDataContext = new EnvironmentDataContext<>(timer);
-        timerEnvironmentDataContexts.add(timerEnvironmentDataContext);
-        timerEnvironmentDataContext.setEvaluateConnection(timerCondition, timerCondition.getReaction());
-        timerCondition.setEnvironmentContext(timerEnvironmentDataContext);
-        timer.start(currentTime);
+        if (map.containsKey(timer)) {
+            timerCondition.setEnvironmentContext(animationTimerContext);
+            animationTimerContext.setEvaluateConnection(timerCondition, timerCondition.getReaction());
+        } else {
+            TimerContext<Timer> timerContext = new TimerContext<Timer>(timer);
+            map.put(timer, timerContext);
+            timerContext.setEvaluateConnection(timerCondition, timerCondition.getReaction());
+            timerCondition.setEnvironmentContext(timerContext);
+            timer.start(currentTime);
+        }
     }
 }
