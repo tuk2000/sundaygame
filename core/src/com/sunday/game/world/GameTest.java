@@ -1,12 +1,14 @@
 package com.sunday.game.world;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.sunday.engine.Engine;
 import com.sunday.engine.examples.Label;
 import com.sunday.engine.examples.RoleConstructor;
 import com.sunday.engine.scenario.Scenario;
 import com.sunday.engine.scenario.ScenarioSystem;
 import com.sunday.engine.scenario.ScopeType;
+import com.sunday.game.framework.GameFramework;
 
 
 public class GameTest implements Screen {
@@ -14,6 +16,8 @@ public class GameTest implements Screen {
     private Engine engine;
 
     private ScenarioSystem scenarioSystem;
+
+    private Music testMusic;
 
     public GameTest() {
         engine = new Engine();
@@ -32,7 +36,8 @@ public class GameTest implements Screen {
 
     @Override
     public void show() {
-
+        testMusic = GameFramework.Resource.getAsset("music/Demo.mp3");
+        testMusic.play();
     }
 
     @Override
@@ -63,6 +68,7 @@ public class GameTest implements Screen {
     @Override
     public void dispose() {
         engine.dispose();
+        testMusic.dispose();
     }
 
 }

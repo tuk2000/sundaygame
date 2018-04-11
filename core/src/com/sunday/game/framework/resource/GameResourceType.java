@@ -26,8 +26,10 @@ public enum GameResourceType {
                 break;
             case "mp3":
                 gameResourceType = Music;
+                break;
             case "ogg":
                 gameResourceType = Sound;
+                break;
             default:
                 gameResourceType = None;
         }
