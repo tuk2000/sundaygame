@@ -1,4 +1,4 @@
-package com.sunday.engine.databank.register;
+package com.sunday.engine.common.register;
 
 import java.util.function.Function;
 

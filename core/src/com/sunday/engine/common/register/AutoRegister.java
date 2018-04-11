@@ -1,4 +1,6 @@
-package com.sunday.engine.databank.register;
+package com.sunday.engine.common.register;
+
+import com.sunday.engine.common.Register;
 
 import java.util.List;
 import java.util.function.BiConsumer;

@@ -3,7 +3,7 @@ package com.sunday.engine.rule;
 import com.sunday.engine.common.context.CustomizedDataContext;
 import com.sunday.engine.common.data.CustomizedData;
 import com.sunday.engine.databank.ContextBank;
-import com.sunday.engine.databank.register.AutoMappingRegister;
+import com.sunday.engine.common.register.AutoMappingRegister;
 
 public class CustomizedDataContextConstructor<CD extends CustomizedData> implements ContextConstructor<CustomizedDataCondition<CD>> {
     private ContextBank contextBank;

@@ -1,7 +1,7 @@
 package com.sunday.engine.databank.storage;
 
 import com.sunday.engine.common.Data;
-import com.sunday.engine.databank.register.AutoGroupRegister;
+import com.sunday.engine.common.register.AutoGroupRegister;
 
 
 public class DataConnectionRegister<K extends Data> extends AutoGroupRegister<K, Connection<K>> {

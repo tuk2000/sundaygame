@@ -3,7 +3,7 @@ package com.sunday.engine.databank.storage;
 import com.sunday.engine.common.Context;
 import com.sunday.engine.common.Data;
 import com.sunday.engine.common.context.ClassContext;
-import com.sunday.engine.databank.register.AutoMappingRegister;
+import com.sunday.engine.common.register.AutoMappingRegister;
 
 import java.util.function.Function;
 
