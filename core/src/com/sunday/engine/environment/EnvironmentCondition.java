@@ -11,21 +11,15 @@ public abstract class EnvironmentCondition<E extends EnvironmentData, EC extends
     }
 
     @Override
-    protected void generateExtraInfo() {
+    protected void generateExtraInfo(EC environmentDataContext) {
         setExtraInfoEntry("ConditionType", "EnvironmentCondition");
     }
 
     @Override
-    protected void generateMainInfo() {
-        E e = getContext().getEnvironmentData();
-        setMainInfoEntry("Source ", (e == null ? " n/a" : e.toString()));
-        setMainInfoEntry("SourceClass", getContext().getEnvironmentsDataClazz().getSimpleName());
+    protected void generateMainInfo(EC environmentDataContext) {
+        setMainInfoEntry("Source ", environmentDataContext.toString());
+        setMainInfoEntry("SourceClass", environmentDataContext.getEnvironmentsDataClazz().getSimpleName());
         setMainInfoEntry("Signals", signalCondition.getSignalNames());
     }
 
-    public void setEnvironmentContext(EC environmentContext) {
-        setContext(environmentContext);
-        generateMainInfo();
-        generateExtraInfo();
-    }
 }

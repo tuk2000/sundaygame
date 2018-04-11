@@ -13,39 +13,31 @@ public class ClassCondition<RC extends Context> extends Condition<ClassContext<R
     public <D extends Data, S extends Signal> ClassCondition(Class<D> clazz, S... signals) {
         sensedClass = clazz;
         signalCondition.setSignals(signals);
-        generateMainInfo();
-        generateExtraInfo();
     }
 
     public <D extends Data, S extends Signal> ClassCondition(Class<D> clazz, Class<S> signalTypeClass) {
         sensedClass = clazz;
         signalCondition.setSignals(signalTypeClass.getEnumConstants());
-        generateMainInfo();
-        generateExtraInfo();
     }
 
     public <D extends Data> Class<D> getSensedClass() {
         return (Class<D>) sensedClass;
     }
 
-    public void setClassContext(ClassContext<RC> context) {
-        setContext(context);
-    }
-
     @Override
-    protected void generateMainInfo() {
+    protected void generateMainInfo(ClassContext<RC> classContext) {
         setMainInfoEntry("Source", sensedClass.getName());
         setMainInfoEntry("SourceClass ", sensedClass.getClass().getSimpleName());
         setMainInfoEntry("Signals ", signalCondition.getSignalNames());
     }
 
-    protected void generateExtraInfo() {
+    protected void generateExtraInfo(ClassContext<RC> classContext) {
         setExtraInfoEntry("ConditionType", "ClassCondition");
         setExtraInfoEntry("SensedClass", sensedClass.getSimpleName());
     }
 
     @Override
     public boolean test(ClassContext<RC> classContext) {
-        return false;
+        return signalCondition.test(classContext.getFocusedContext());
     }
 }

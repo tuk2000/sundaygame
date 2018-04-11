@@ -27,7 +27,8 @@ public class WindowEnvironment implements ContextConstructor<WindowCondition> {
     }
 
     @Override
-    public void accept(WindowCondition windowCondition) {
-        windowCondition.setEnvironmentContext(windowEnvironmentDataContext);
+    public void construct(WindowCondition windowCondition) {
+        windowCondition.generateInfoWith(windowEnvironmentDataContext);
+        windowEnvironmentDataContext.setEvaluateConnection(windowCondition, windowCondition.getReaction());
     }
 }

@@ -4,10 +4,14 @@ import com.sunday.engine.common.Context;
 import com.sunday.engine.common.Data;
 import com.sunday.engine.common.context.ClassContext;
 import com.sunday.engine.databank.ContextBank;
-import com.sunday.engine.databank.ContextBankImpl;
 
 public class ClassContextConstructor {
-    private ContextBank contextBank = new ContextBankImpl();
+
+    private ContextBank contextBank;
+
+    public ClassContextConstructor(ContextBank contextBank) {
+        this.contextBank = contextBank;
+    }
 
     public boolean accept(Condition condition) {
         return condition instanceof ClassCondition;
@@ -15,12 +19,18 @@ public class ClassContextConstructor {
 
     public <RC extends Context> void construct(ClassCondition<RC> condition) {
         Class<? extends Data> clazz = condition.getSensedClass();
-        if (!contextBank.hasClassContext(clazz)) {
-            ClassContext<RC> classContext = new ClassContext<>(clazz);
-            contextBank.addClassContext(classContext);
-            condition.setClassContext(classContext);
+        ClassContext<RC> classContext;
+        if (contextBank.hasClassContext(clazz)) {
+            classContext = contextBank.getClassContext(clazz);
         } else {
-            condition.setClassContext(contextBank.getClassContext(clazz));
+            classContext = new ClassContext<>(clazz);
+            contextBank.addClassContext(classContext);
         }
+        classContext.setEvaluateConnection(condition, condition.getReaction());
+        condition.generateInfoWith(classContext);
+    }
+
+    public <RC extends Context> void bind(Rule<RC> rule) {
+
     }
 }

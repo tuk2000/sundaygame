@@ -6,25 +6,21 @@ public class SystemDataCondition<SC extends SystemDataContext> extends Condition
     protected SignalCondition<SC> scSignalCondition = new SignalCondition<>(sc -> sc.getSignal());
 
     @Override
-    protected void generateExtraInfo() {
+    protected void generateExtraInfo(SC systemDataContext) {
         setExtraInfoEntry("ConditionType", "SystemDataCondition");
     }
 
     @Override
-    protected void generateMainInfo() {
-        setMainInfoEntry("Source", getContext().getSystemData().toString());
-        setMainInfoEntry("SourceClass", getContext().getClass().getSimpleName());
+    protected void generateMainInfo(SC systemDataContext) {
+        setMainInfoEntry("Source", systemDataContext.getSystemData().toString());
+        setMainInfoEntry("SourceClass", systemDataContext.getClass().getSimpleName());
         setMainInfoEntry("Signals", scSignalCondition.getSignalNames());
     }
 
-    public void setSystemDataContext(SC systemDataContext) {
-        setContext(systemDataContext);
-        generateMainInfo();
-        generateExtraInfo();
-    }
-
     @Override
-    public boolean test(SC sc) {
+    public boolean test(SC systemDataContext) {
         return false;
     }
+
+
 }

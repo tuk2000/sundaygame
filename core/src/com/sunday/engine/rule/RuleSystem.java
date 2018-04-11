@@ -5,17 +5,22 @@ import com.sunday.engine.common.Data;
 import com.sunday.engine.common.Signal;
 import com.sunday.engine.common.Target;
 import com.sunday.engine.common.signal.DataSignal;
+import com.sunday.engine.databank.ContextBank;
+import com.sunday.engine.databank.ContextBankImpl;
 import com.sunday.engine.databank.SystemPort;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class RuleSystem extends SubSystem {
-    private ClassContextConstructor classConditionConstructor = new ClassContextConstructor();
+    private ContextBank contextBank = new ContextBankImpl();
+    private ClassContextConstructor classConditionConstructor = new ClassContextConstructor(contextBank);
+    private CustomizedDataContextConstructor customizedDataContextConstructor = new CustomizedDataContextConstructor(contextBank);
     private List<ContextConstructor> contextConstructors = new ArrayList<>();
 
     public RuleSystem(SystemPort systemPort) {
         super("RuleSystem", systemPort);
+        contextConstructors.add(customizedDataContextConstructor);
         initRuleSystem();
     }
 
@@ -35,7 +40,8 @@ public class RuleSystem extends SubSystem {
                             }
                             contextConstructors.forEach(contextConstructor -> {
                                 if (contextConstructor.test(rule.getCondition())) {
-                                    contextConstructor.accept(rule.getCondition());
+                                    contextConstructor.construct(rule.getCondition());
+                                    classConditionConstructor.bind(rule);
                                 }
                             });
                             System.out.println(rule.condition.getInfo());
@@ -49,36 +55,6 @@ public class RuleSystem extends SubSystem {
                 }
             }
         });
-//        Rule<ClassContext<RuleContext>> ruleDataRule
-//                = new Rule<>(new ClassCondition<>(Rule.class, DataSignal.class), new ClassReaction<RuleContext>() {
-//            @Override
-//            public void accept(RuleContext ruleContext) {
-//                Rule<? extends Context> rule = ruleContext.getSystemData();
-//                DataSignal dataSignal = (DataSignal) ruleContext.getSignal();
-//                switch (dataSignal) {
-//                    case Add:
-//                        System.out.println("Rule added!");
-//                        systemPort.broadcast(rule, RuleSignal.Mounting);
-//                        if (classConditionConstructor.accept(rule.getCondition())) {
-//                            classConditionConstructor.construct((ClassCondition) rule.getCondition());
-//                        }
-//                        contextConstructors.forEach(contextConstructor -> {
-//                            if (contextConstructor.test(rule.getCondition())) {
-//                                contextConstructor.accept(rule.getCondition());
-//                            }
-//                        });
-//                        System.out.println(rule.condition.getInfo());
-//                        break;
-//                    case Deletion:
-//                        System.out.println("Rule removed!");
-//                        System.out.println(rule.condition.getInfo());
-//                        systemPort.broadcast(rule, RuleSignal.Dismounting);
-//                        break;
-//                }
-//            }
-//        });
-//        classConditionConstructor.construct((ClassCondition) ruleDataRule.getCondition());
-//        systemPort.addDataInstance(ruleDataRule);
     }
 
     public void addContextConstructor(ContextConstructor contextConstructor) {

@@ -31,16 +31,16 @@ public class TimeSystem extends SubSystem implements ContextConstructor<TimerCon
     }
 
     @Override
-    public void accept(TimerCondition timerCondition) {
+    public void construct(TimerCondition timerCondition) {
         Timer timer = timerCondition.getTimer();
         if (map.containsKey(timer)) {
-            timerCondition.setEnvironmentContext(animationTimerContext);
+            timerCondition.generateInfoWith(animationTimerContext);
             animationTimerContext.setEvaluateConnection(timerCondition, timerCondition.getReaction());
         } else {
             TimerContext<Timer> timerContext = new TimerContext<Timer>(timer);
             map.put(timer, timerContext);
             timerContext.setEvaluateConnection(timerCondition, timerCondition.getReaction());
-            timerCondition.setEnvironmentContext(timerContext);
+            timerCondition.generateInfoWith(timerContext);
             timer.start(currentTime);
         }
     }

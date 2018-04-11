@@ -8,17 +8,8 @@ import java.util.function.Predicate;
 
 public abstract class Condition<C extends Context> implements Predicate<C> {
     protected Reaction<C> reaction;
-    private C context;
     private Map<String, String> mainInfo = new HashMap<>();
     private Map<String, String> extraInfo = new HashMap<>();
-
-    protected C getContext() {
-        return context;
-    }
-
-    protected void setContext(C context) {
-        this.context = context;
-    }
 
     public Reaction<C> getReaction() {
         return reaction;
@@ -28,9 +19,14 @@ public abstract class Condition<C extends Context> implements Predicate<C> {
         this.reaction = reaction;
     }
 
-    protected abstract void generateExtraInfo();
+    public void generateInfoWith(C context) {
+        generateMainInfo(context);
+        generateExtraInfo(context);
+    }
 
-    protected abstract void generateMainInfo();
+    protected abstract void generateExtraInfo(C context);
+
+    protected abstract void generateMainInfo(C context);
 
     protected void setMainInfoEntry(String key, String value) {
         mainInfo.put(key, value);

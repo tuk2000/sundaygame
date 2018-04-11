@@ -20,8 +20,4 @@ public class Rule<C extends Context> implements SystemData {
     public Reaction<C> getReaction() {
         return reaction;
     }
-
-    public C getContext() {
-        return condition.getContext();
-    }
 }
