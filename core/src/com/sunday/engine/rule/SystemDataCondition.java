@@ -1,24 +1,25 @@
 package com.sunday.engine.rule;
 
 import com.sunday.engine.common.context.SystemDataContext;
+import com.sunday.engine.common.data.SystemData;
 
-public class SystemDataCondition<SC extends SystemDataContext> extends Condition<SC> {
-    protected SignalCondition<SC> scSignalCondition = new SignalCondition<>(sc -> sc.getSignal());
+public class SystemDataCondition<SD extends SystemData> extends Condition<SystemDataContext<SD>> {
+    protected SignalCondition<SystemDataContext<SD>> scSignalCondition = new SignalCondition<>(sc -> sc.getSignal());
 
     @Override
-    protected void generateExtraInfo(SC systemDataContext) {
+    protected void generateExtraInfo(SystemDataContext<SD> systemDataContext) {
         setExtraInfoEntry("ConditionType", "SystemDataCondition");
     }
 
     @Override
-    protected void generateMainInfo(SC systemDataContext) {
+    protected void generateMainInfo(SystemDataContext<SD> systemDataContext) {
         setMainInfoEntry("Source", systemDataContext.getData().toString());
         setMainInfoEntry("SourceClass", systemDataContext.getClass().getSimpleName());
         setMainInfoEntry("Signals", scSignalCondition.getSignalNames());
     }
 
     @Override
-    public boolean test(SC systemDataContext) {
+    public boolean test(SystemDataContext<SD> systemDataContext) {
         return false;
     }
 

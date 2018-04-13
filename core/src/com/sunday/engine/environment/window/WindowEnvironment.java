@@ -2,9 +2,9 @@ package com.sunday.engine.environment.window;
 
 import com.sunday.engine.environment.EnvironmentDataContext;
 import com.sunday.engine.rule.Condition;
-import com.sunday.engine.rule.ContextConstructor;
+import com.sunday.engine.rule.DataContextConstructor;
 
-public class WindowEnvironment implements ContextConstructor<WindowCondition> {
+public class WindowEnvironment implements DataContextConstructor<WindowCondition> {
     private Window window;
     private EnvironmentDataContext<Window> windowEnvironmentDataContext;
 
@@ -27,8 +27,7 @@ public class WindowEnvironment implements ContextConstructor<WindowCondition> {
     }
 
     @Override
-    public void construct(WindowCondition windowCondition) {
-        windowCondition.generateInfoWith(windowEnvironmentDataContext);
-        windowEnvironmentDataContext.setPredicateConsumer(windowCondition, windowCondition.getReaction());
+    public EnvironmentDataContext<Window> construct(WindowCondition windowCondition) {
+        return windowEnvironmentDataContext;
     }
 }

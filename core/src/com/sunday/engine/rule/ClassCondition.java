@@ -1,13 +1,13 @@
 package com.sunday.engine.rule;
 
-import com.sunday.engine.common.Context;
 import com.sunday.engine.common.Data;
 import com.sunday.engine.common.Signal;
 import com.sunday.engine.common.context.ClassContext;
+import com.sunday.engine.common.context.DataContext;
 import com.sunday.engine.common.propertyholder.SystemRelated;
 
-public class ClassCondition<RC extends Context> extends Condition<ClassContext<RC>> implements SystemRelated {
-    protected SignalCondition<RC> signalCondition = new SignalCondition<>();
+public class ClassCondition<RC extends DataContext> extends Condition<ClassContext<RC>> implements SystemRelated {
+    protected SignalCondition<RC> signalCondition = new SignalCondition<>(dataContext->dataContext.getSignal());
     private Class<? extends Data> sensedClass;
 
     public <D extends Data, S extends Signal> ClassCondition(Class<D> clazz, S... signals) {

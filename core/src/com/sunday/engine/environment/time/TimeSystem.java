@@ -3,12 +3,12 @@ package com.sunday.engine.environment.time;
 import com.sunday.engine.SubSystem;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.rule.Condition;
-import com.sunday.engine.rule.ContextConstructor;
+import com.sunday.engine.rule.DataContextConstructor;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class TimeSystem extends SubSystem implements ContextConstructor<TimerCondition> {
+public class TimeSystem extends SubSystem implements DataContextConstructor<TimerCondition> {
     public float currentTime = 0.0f;
     private Map<Timer, TimerContext<Timer>> map = new HashMap<>();
     private TimerContext<Timer> animationTimerContext;
@@ -31,17 +31,16 @@ public class TimeSystem extends SubSystem implements ContextConstructor<TimerCon
     }
 
     @Override
-    public void construct(TimerCondition timerCondition) {
+    public TimerContext construct(TimerCondition timerCondition) {
         Timer timer = timerCondition.getTimer();
+        TimerContext timerContext;
         if (map.containsKey(timer)) {
-            timerCondition.generateInfoWith(animationTimerContext);
-            animationTimerContext.setPredicateConsumer(timerCondition, timerCondition.getReaction());
+            timerContext = animationTimerContext;
         } else {
-            TimerContext<Timer> timerContext = new TimerContext<Timer>(timer);
+            timerContext = new TimerContext(timer);
             map.put(timer, timerContext);
-            timerContext.setPredicateConsumer(timerCondition, timerCondition.getReaction());
-            timerCondition.generateInfoWith(timerContext);
             timer.start(currentTime);
         }
+        return timerContext;
     }
 }

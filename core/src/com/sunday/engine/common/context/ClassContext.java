@@ -10,7 +10,7 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class ClassContext<RC extends Context> implements Context, Reaction<RC>, SystemRelated {
+public class ClassContext<RC extends DataContext> implements Context, Reaction<RC>, SystemRelated {
     private Class<? extends Data> sensedClass;
     private RC focusedContext;
 
@@ -29,7 +29,7 @@ public class ClassContext<RC extends Context> implements Context, Reaction<RC>, 
         return focusedContext;
     }
 
-    public void setEvaluateConnection(Predicate<ClassContext<RC>> predicate, Consumer<ClassContext<RC>> consumer) {
+    public void setPredicateConsumer(Predicate<ClassContext<RC>> predicate, Consumer<ClassContext<RC>> consumer) {
         map.put(predicate, consumer);
     }
 

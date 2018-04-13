@@ -4,6 +4,8 @@ import com.sunday.engine.SubSystem;
 import com.sunday.engine.common.Data;
 import com.sunday.engine.common.Signal;
 import com.sunday.engine.common.Target;
+import com.sunday.engine.common.context.ClassContext;
+import com.sunday.engine.common.context.DataContext;
 import com.sunday.engine.common.signal.DataSignal;
 import com.sunday.engine.databank.ContextBank;
 import com.sunday.engine.databank.ContextBankImpl;
@@ -16,11 +18,11 @@ public class RuleSystem extends SubSystem {
     private ContextBank contextBank = new ContextBankImpl();
     private ClassContextConstructor classConditionConstructor = new ClassContextConstructor(contextBank);
     private CustomizedDataContextConstructor customizedDataContextConstructor = new CustomizedDataContextConstructor(contextBank);
-    private List<ContextConstructor> contextConstructors = new ArrayList<>();
+    private List<DataContextConstructor> dataContextConstructors = new ArrayList<>();
 
     public RuleSystem(SystemPort systemPort) {
         super("RuleSystem", systemPort);
-        contextConstructors.add(customizedDataContextConstructor);
+        dataContextConstructors.add(customizedDataContextConstructor);
         initRuleSystem();
     }
 
@@ -36,12 +38,18 @@ public class RuleSystem extends SubSystem {
                             System.out.println("Rule added!");
                             systemPort.broadcast(rule, RuleSignal.Mounting);
                             if (classConditionConstructor.accept(rule.getCondition())) {
-                                classConditionConstructor.construct((ClassCondition) rule.getCondition());
+                                ClassContext classContext = classConditionConstructor.construct((ClassCondition) rule.getCondition());
+                                classContext.setPredicateConsumer(rule.condition, rule.reaction);
                             }
-                            contextConstructors.forEach(contextConstructor -> {
+                            dataContextConstructors.forEach(contextConstructor -> {
                                 if (contextConstructor.test(rule.getCondition())) {
-                                    contextConstructor.construct(rule.getCondition());
-                                    classConditionConstructor.bind(rule);
+                                    DataContext dataContext = contextConstructor.construct(rule.getCondition());
+                                    if (dataContext != null) {
+                                        rule.condition.generateInfoWith(dataContext);
+                                        dataContext.setPredicateConsumer(rule.condition, rule.reaction);
+                                        ClassContext classContext = classConditionConstructor.getClassContext(dataContext.getDataClass());
+                                        dataContext.setPredicateConsumer((x) -> true, classContext);
+                                    }
                                 }
                             });
                             System.out.println(rule.condition.getInfo());
@@ -57,7 +65,7 @@ public class RuleSystem extends SubSystem {
         });
     }
 
-    public void addContextConstructor(ContextConstructor contextConstructor) {
-        contextConstructors.add(contextConstructor);
+    public void addContextConstructor(DataContextConstructor dataContextConstructor) {
+        dataContextConstructors.add(dataContextConstructor);
     }
 }

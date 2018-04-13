@@ -5,7 +5,7 @@ import com.sunday.engine.common.data.CustomizedData;
 import com.sunday.engine.common.register.AutoMappingRegister;
 import com.sunday.engine.databank.ContextBank;
 
-public class CustomizedDataContextConstructor<CD extends CustomizedData> implements ContextConstructor<CustomizedDataCondition<CD>> {
+public class CustomizedDataContextConstructor<CD extends CustomizedData> implements DataContextConstructor<CustomizedDataCondition<CD>> {
     private ContextBank contextBank;
     private AutoMappingRegister<CD, CustomizedDataContext<CD>> autoMappingRegister
             = new AutoMappingRegister<>(customizedDataContext -> customizedDataContext.getData());
@@ -20,7 +20,7 @@ public class CustomizedDataContextConstructor<CD extends CustomizedData> impleme
     }
 
     @Override
-    public void construct(CustomizedDataCondition<CD> condition) {
+    public CustomizedDataContext<CD> construct(CustomizedDataCondition<CD> condition) {
         CD cd = condition.getCustomizedData();
         CustomizedDataContext<CD> customizedDataContext;
         if (autoMappingRegister.hasKey(cd)) {
@@ -29,8 +29,6 @@ public class CustomizedDataContextConstructor<CD extends CustomizedData> impleme
             customizedDataContext = new CustomizedDataContext<>(cd);
             autoMappingRegister.register(customizedDataContext);
         }
-        customizedDataContext.setPredicateConsumer(condition, condition.getReaction());
-        condition.generateInfoWith(customizedDataContext);
-        contextBank.addContext(cd.getClass(), customizedDataContext);
+        return customizedDataContext;
     }
 }

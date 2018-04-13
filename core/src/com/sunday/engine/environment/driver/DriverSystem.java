@@ -9,10 +9,10 @@ import com.sunday.engine.environment.driver.keyboard.KeyBoardCondition;
 import com.sunday.engine.environment.driver.mouse.Mouse;
 import com.sunday.engine.environment.driver.mouse.MouseCondition;
 import com.sunday.engine.rule.Condition;
-import com.sunday.engine.rule.ContextConstructor;
+import com.sunday.engine.rule.DataContextConstructor;
 import com.sunday.tool.ToolApplication;
 
-public class DriverSystem extends SubSystem implements ContextConstructor<DriverCondition> {
+public class DriverSystem extends SubSystem implements DataContextConstructor<DriverCondition> {
     private KeyBoard keyBoard = new KeyBoard();
     private DriverContext<KeyBoard> keyBoardDriverContext = new DriverContext<>(keyBoard);
     private Mouse mouse = new Mouse();
@@ -60,15 +60,14 @@ public class DriverSystem extends SubSystem implements ContextConstructor<Driver
     }
 
     @Override
-    public void construct(DriverCondition driverCondition) {
+    public DriverContext construct(DriverCondition driverCondition) {
         if (driverCondition instanceof KeyBoardCondition) {
-            driverCondition.generateInfoWith(keyBoardDriverContext);
-            keyBoardDriverContext.setPredicateConsumer(driverCondition, driverCondition.getReaction());
+            return keyBoardDriverContext;
         } else if (driverCondition instanceof MouseCondition) {
-            driverCondition.generateInfoWith(mouseDriverContext);
-            mouseDriverContext.setPredicateConsumer(driverCondition, driverCondition.getReaction());
+            return mouseDriverContext;
         } else if (driverCondition instanceof GamePadCondition) {
             //
         }
+        return null;
     }
 }

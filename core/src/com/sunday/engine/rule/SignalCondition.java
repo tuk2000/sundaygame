@@ -13,10 +13,6 @@ public class SignalCondition<C extends Context> implements Predicate<C> {
     private List<Signal> signals = new ArrayList<>();
     private Function<C, Signal> signalFunction;
 
-    public SignalCondition() {
-
-    }
-
     public SignalCondition(Function<C, Signal> signalFunction) {
         this.signalFunction = signalFunction;
     }
@@ -38,10 +34,6 @@ public class SignalCondition<C extends Context> implements Predicate<C> {
 
     public String getSignalNames() {
         return signals.stream().map(signal -> signal.name()).collect(Collectors.joining(","));
-    }
-
-    public void setSignalFunction(Function<C, Signal> signalFunction) {
-        this.signalFunction = signalFunction;
     }
 
     @Override

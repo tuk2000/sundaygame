@@ -1,10 +1,10 @@
 package com.sunday.engine.rule;
 
-import com.sunday.engine.common.Context;
 import com.sunday.engine.common.context.ClassContext;
+import com.sunday.engine.common.context.DataContext;
 
 @FunctionalInterface
-public interface ClassReaction<RC extends Context> extends Reaction<ClassContext<RC>> {
+public interface ClassReaction<RC extends DataContext> extends Reaction<ClassContext<RC>> {
     default void accept(ClassContext<RC> classContext) {
         accept(classContext.getFocusedContext());
     }
