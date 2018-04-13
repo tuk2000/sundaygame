@@ -1,6 +1,5 @@
 package com.sunday.engine.databank;
 
-import com.sunday.engine.common.Context;
 import com.sunday.engine.common.Data;
 import com.sunday.engine.common.context.ClassContext;
 import com.sunday.engine.common.context.DataContext;

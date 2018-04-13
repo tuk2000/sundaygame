@@ -5,7 +5,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.sunday.engine.Engine;
-import com.sunday.engine.common.context.CustomizedDataContext;
 import com.sunday.engine.databank.Port;
 import com.sunday.engine.environment.driver.DriverContext;
 import com.sunday.engine.environment.driver.keyboard.KeyBoard;
@@ -18,6 +17,7 @@ import com.sunday.engine.model.property.PhysicBody;
 import com.sunday.engine.model.property.PhysicDefinition;
 import com.sunday.engine.model.property.PhysicReflectionSignal;
 import com.sunday.engine.physic.CollisionCondition;
+import com.sunday.engine.physic.CollisionContext;
 import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
 import com.sunday.engine.scenario.Scenario;
@@ -128,10 +128,10 @@ public class DemoCannon implements Screen {
 
         @Override
         protected void connectWithInternal(Port port) {
-            port.addDataInstance(new Rule<>(CollisionCondition.collideBetween(physicDefinition, PhysicDefinition.class), new Reaction<CustomizedDataContext<PhysicDefinition>>() {
+            port.addDataInstance(new Rule<>(CollisionCondition.collideBetween(physicDefinition, PhysicDefinition.class), new Reaction<CollisionContext<PhysicDefinition>>() {
                 @Override
-                public void accept(CustomizedDataContext<PhysicDefinition> physicDefinitionCustomizedDataContext) {
-                    PhysicBody physicBody = physicDefinitionCustomizedDataContext.getData().physicBody;
+                public void accept(CollisionContext<PhysicDefinition> collisionContext) {
+                    PhysicBody physicBody = collisionContext.getData().physicBody;
                     physicBody.applyLinearImpulse(new Vector2(1.7f, 1), physicBody.getWorldCenter(), true);
                     port.broadcast(physicDefinition, PhysicReflectionSignal.Updated);
                 }

@@ -54,7 +54,7 @@ public class HeroModel extends AbstractModel {
     @Override
     protected void connectWithInternal(Port port) {
 
-        port.addDataInstance(new Rule<>(new CustomizedDataCondition<Outlook>(outlook, OutlookSignal.class), new Reaction<CustomizedDataContext<Outlook>>() {
+        port.addDataInstance(new Rule<>(new CustomizedDataCondition<Outlook, CustomizedDataContext<Outlook>>(outlook, OutlookSignal.class), new Reaction<CustomizedDataContext<Outlook>>() {
             @Override
             public void accept(CustomizedDataContext<Outlook> outlookCustomizedDataContext) {
                 textureViewLayer.updateTexture(heroAnimation.getKeyFrame(movement));

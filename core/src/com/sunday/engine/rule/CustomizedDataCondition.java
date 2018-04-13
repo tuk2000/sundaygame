@@ -4,40 +4,23 @@ import com.sunday.engine.common.Signal;
 import com.sunday.engine.common.context.CustomizedDataContext;
 import com.sunday.engine.common.data.CustomizedData;
 
-public class CustomizedDataCondition<CD extends CustomizedData> extends Condition<CustomizedDataContext<CD>> {
-    protected SignalCondition<CustomizedDataContext<CD>> signalCondition
-            = new SignalCondition<>(CustomizedDataContext::getSignal);
-    private CD customizedData;
+public class CustomizedDataCondition<CD extends CustomizedData, CDC extends CustomizedDataContext<CD>> extends PreAssignedDataCondition<CD, CDC> {
 
     public CustomizedDataCondition(CD cd, Signal... signals) {
-        customizedData = cd;
-        signalCondition.setSignals(signals);
+        super(cd, signals);
     }
 
     public <S extends Signal> CustomizedDataCondition(CD cd, Class<S> signalTypeClass) {
-        customizedData = cd;
-        signalCondition.setSignals(signalTypeClass.getEnumConstants());
-    }
-
-    public CD getCustomizedData() {
-        return customizedData;
+        super(cd, signalTypeClass);
     }
 
     @Override
-    protected void generateExtraInfo(CustomizedDataContext<CD> context) {
+    protected void generateExtraInfo(CDC context) {
         setExtraInfoEntry("ConditionType", "CustomizedDataCondition");
     }
 
     @Override
-    protected void generateMainInfo(CustomizedDataContext<CD> context) {
-        setMainInfoEntry("Source ", customizedData.toString());
-        setMainInfoEntry("SourceClass ", customizedData.getClass().getSimpleName());
-        setMainInfoEntry("Signals", signalCondition.getSignalNames());
-    }
-
-    @Override
-    public boolean test(CustomizedDataContext<CD> cdCustomizedDataContext) {
+    public boolean test(CDC cdc) {
         return false;
     }
-
 }

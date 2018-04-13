@@ -21,15 +21,15 @@ public class SignalCondition<C extends Context> implements Predicate<C> {
         return signals;
     }
 
-    public void setSignals(Class<? extends Signal> signalClass) {
-        setSignals(signalClass.getEnumConstants());
-    }
-
     public void setSignals(Signal... signals) {
         this.signals.clear();
         for (Signal signal : signals) {
             this.signals.add(signal);
         }
+    }
+
+    public void setSignals(Class<? extends Signal> signalClass) {
+        setSignals(signalClass.getEnumConstants());
     }
 
     public String getSignalNames() {

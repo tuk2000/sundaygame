@@ -43,7 +43,7 @@ public class RuleSystem extends SubSystem {
                             }
                             dataContextConstructors.forEach(contextConstructor -> {
                                 if (contextConstructor.test(rule.getCondition())) {
-                                    DataContext dataContext = contextConstructor.construct(rule.getCondition());
+                                    DataContext dataContext = contextConstructor.construct((DataCondition) rule.getCondition());
                                     if (dataContext != null) {
                                         rule.condition.generateInfoWith(dataContext);
                                         dataContext.setPredicateConsumer(rule.condition, rule.reaction);

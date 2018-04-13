@@ -11,7 +11,11 @@ public class CustomizedDataContext<CD extends CustomizedData> extends DataContex
 
     @Override
     public void evaluate() {
-
+        predicateConsumerMap.forEach((predicate, consumer) -> {
+            if (predicate.test(this)) {
+                consumer.accept(this);
+            }
+        });
     }
 
 }

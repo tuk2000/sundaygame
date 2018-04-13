@@ -1,25 +1,12 @@
 package com.sunday.engine.environment;
 
-import com.sunday.engine.rule.Condition;
-import com.sunday.engine.rule.SignalCondition;
+import com.sunday.engine.rule.DataCondition;
 
-public abstract class EnvironmentCondition<E extends EnvironmentData, EC extends EnvironmentDataContext<E>> extends Condition<EC> implements EnvironmentRelated {
-    protected SignalCondition<EC> signalCondition = new SignalCondition<>(ec -> ec.getSignal());
-
-    protected EnvironmentCondition() {
-
-    }
+public abstract class EnvironmentCondition<E extends EnvironmentData, EC extends EnvironmentDataContext<E>> extends DataCondition<E, EC> implements EnvironmentRelated {
 
     @Override
     protected void generateExtraInfo(EC environmentDataContext) {
         setExtraInfoEntry("ConditionType", "EnvironmentCondition");
-    }
-
-    @Override
-    protected void generateMainInfo(EC environmentDataContext) {
-        setMainInfoEntry("Source ", environmentDataContext.toString());
-        setMainInfoEntry("SourceClass", environmentDataContext.getDataClass().getSimpleName());
-        setMainInfoEntry("Signals", signalCondition.getSignalNames());
     }
 
 }
