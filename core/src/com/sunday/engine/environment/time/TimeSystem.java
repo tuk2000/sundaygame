@@ -35,11 +35,11 @@ public class TimeSystem extends SubSystem implements ContextConstructor<TimerCon
         Timer timer = timerCondition.getTimer();
         if (map.containsKey(timer)) {
             timerCondition.generateInfoWith(animationTimerContext);
-            animationTimerContext.setEvaluateConnection(timerCondition, timerCondition.getReaction());
+            animationTimerContext.setPredicateConsumer(timerCondition, timerCondition.getReaction());
         } else {
             TimerContext<Timer> timerContext = new TimerContext<Timer>(timer);
             map.put(timer, timerContext);
-            timerContext.setEvaluateConnection(timerCondition, timerCondition.getReaction());
+            timerContext.setPredicateConsumer(timerCondition, timerCondition.getReaction());
             timerCondition.generateInfoWith(timerContext);
             timer.start(currentTime);
         }

@@ -1,39 +1,17 @@
 package com.sunday.engine.common.context;
 
-import com.sunday.engine.common.Context;
-import com.sunday.engine.common.Signal;
 import com.sunday.engine.common.data.CustomizedData;
 import com.sunday.engine.common.propertyholder.Customized;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.function.Consumer;
-import java.util.function.Predicate;
-
-public class CustomizedDataContext<CD extends CustomizedData> implements Context, Customized {
-    private CD customizedData;
-    private Signal signal;
-    private Map<Predicate<CustomizedDataContext<CD>>, Consumer<CustomizedDataContext<CD>>> map
-            = new HashMap<>();
-
+public class CustomizedDataContext<CD extends CustomizedData> extends DataContext<CD> implements Customized {
 
     public CustomizedDataContext(CD customizedData) {
-        this.customizedData = customizedData;
+        super(customizedData);
     }
 
-    public CD getCustomizedData() {
-        return customizedData;
+    @Override
+    public void evaluate() {
+
     }
 
-    public Signal getSignal() {
-        return signal;
-    }
-
-    public void setSignal(Signal signal) {
-        this.signal = signal;
-    }
-
-    public void setEvaluateConnection(Predicate<CustomizedDataContext<CD>> contextPredicate, Consumer<CustomizedDataContext<CD>> contextConsumer) {
-        map.put(contextPredicate, contextConsumer);
-    }
 }

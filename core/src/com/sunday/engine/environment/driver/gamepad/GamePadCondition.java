@@ -20,7 +20,7 @@ public class GamePadCondition extends DriverCondition<GamePad> {
     }
 
     public static GamePadCondition buttonDown(int buttonCode) {
-        GamePadCondition gamePadCondition = new GamePadCondition(driverContext -> driverContext.getEnvironmentData().buttonCode == buttonCode);
+        GamePadCondition gamePadCondition = new GamePadCondition(driverContext -> driverContext.getData().buttonCode == buttonCode);
         gamePadCondition.signalCondition.setSignals(GamePadSignal.ButtonDown);
         gamePadCondition.setExtraInfoEntry("Button", String.valueOf(buttonCode));
         return gamePadCondition;
@@ -34,7 +34,7 @@ public class GamePadCondition extends DriverCondition<GamePad> {
         }
 
         Predicate<DriverContext<GamePad>> predicate = context -> {
-            GamePad gamePad = context.getEnvironmentData();
+            GamePad gamePad = context.getData();
             return list.contains(gamePad.buttonCode);
         };
 

@@ -9,10 +9,10 @@ public class TimerContext<T extends Timer> extends EnvironmentDataContext<T> {
 
     public void evaluate(float currentTime) {
         setSignal(TimerSignal.None);
-        if (getEnvironmentData().isTriggered(currentTime)) {
+        if (getData().isTriggered(currentTime)) {
             setSignal(TimerSignal.Triggered);
         }
-        System.out.println(getEnvironmentData().getInfo());
+        System.out.println(getData().getInfo());
         evaluate();
     }
 }

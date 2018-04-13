@@ -18,7 +18,7 @@ public abstract class EnvironmentCondition<E extends EnvironmentData, EC extends
     @Override
     protected void generateMainInfo(EC environmentDataContext) {
         setMainInfoEntry("Source ", environmentDataContext.toString());
-        setMainInfoEntry("SourceClass", environmentDataContext.getEnvironmentsDataClazz().getSimpleName());
+        setMainInfoEntry("SourceClass", environmentDataContext.getDataClass().getSimpleName());
         setMainInfoEntry("Signals", signalCondition.getSignalNames());
     }
 

@@ -131,7 +131,7 @@ public class DemoCannon implements Screen {
             port.addDataInstance(new Rule<>(CollisionCondition.collideBetween(physicDefinition, PhysicDefinition.class), new Reaction<CustomizedDataContext<PhysicDefinition>>() {
                 @Override
                 public void accept(CustomizedDataContext<PhysicDefinition> physicDefinitionCustomizedDataContext) {
-                    PhysicBody physicBody = physicDefinitionCustomizedDataContext.getCustomizedData().physicBody;
+                    PhysicBody physicBody = physicDefinitionCustomizedDataContext.getData().physicBody;
                     physicBody.applyLinearImpulse(new Vector2(1.7f, 1), physicBody.getWorldCenter(), true);
                     port.broadcast(physicDefinition, PhysicReflectionSignal.Updated);
                 }

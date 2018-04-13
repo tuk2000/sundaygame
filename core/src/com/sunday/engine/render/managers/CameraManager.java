@@ -48,7 +48,7 @@ public class CameraManager implements SystemPortSharing {
         systemPort.addDataInstance(new Rule<>(KeyBoardCondition.keyPressed("Up", "Down", "Left", "Right"), new Reaction<DriverContext<KeyBoard>>() {
             @Override
             public void accept(DriverContext<KeyBoard> keyBoardDriverContext) {
-                KeyBoard keyBoard = keyBoardDriverContext.getEnvironmentData();
+                KeyBoard keyBoard = keyBoardDriverContext.getData();
                 System.out.println("keyBoard---CameraManager---" + keyBoard.character);
                 switch (keyBoard.keyCode) {
                     case Input.Keys.UP:
@@ -69,7 +69,7 @@ public class CameraManager implements SystemPortSharing {
         systemPort.addDataInstance(new Rule<>(KeyBoardCondition.keyReleased("Up", "Down", "Left", "Right"), new Reaction<DriverContext<KeyBoard>>() {
             @Override
             public void accept(DriverContext<KeyBoard> keyBoardDriverContext) {
-                KeyBoard keyBoard = keyBoardDriverContext.getEnvironmentData();
+                KeyBoard keyBoard = keyBoardDriverContext.getData();
                 System.out.println("keyBoard---CameraManager---" + keyBoard.character);
                 switch (keyBoard.keyCode) {
                     case Input.Keys.UP:
@@ -90,7 +90,7 @@ public class CameraManager implements SystemPortSharing {
         systemPort.addDataInstance(new Rule<>(KeyBoardCondition.keyTyped("<", ">", ",", "."), new Reaction<DriverContext<KeyBoard>>() {
             @Override
             public void accept(DriverContext<KeyBoard> keyBoardDriverContext) {
-                KeyBoard keyBoard = keyBoardDriverContext.getEnvironmentData();
+                KeyBoard keyBoard = keyBoardDriverContext.getData();
                 System.out.println("keyBoard---CameraManager---" + keyBoard.character);
                 if (keyBoard.character.equals(",")) {
                     rotateSpeed = 1f;
@@ -113,7 +113,7 @@ public class CameraManager implements SystemPortSharing {
 
             @Override
             public void accept(DriverContext<GamePad> gamePadDriverContext) {
-                GamePad gamePad = gamePadDriverContext.getEnvironmentData();
+                GamePad gamePad = gamePadDriverContext.getData();
                 switch (gamePad.povDirection) {
                     case north:
                         camera.translate(0, 100);

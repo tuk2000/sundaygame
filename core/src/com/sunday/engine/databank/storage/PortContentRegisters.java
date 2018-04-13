@@ -2,8 +2,8 @@ package com.sunday.engine.databank.storage;
 
 import com.badlogic.gdx.utils.Disposable;
 import com.sunday.engine.common.Data;
-import com.sunday.engine.databank.Port;
 import com.sunday.engine.common.register.GroupRegister;
+import com.sunday.engine.databank.Port;
 
 public class PortContentRegisters implements Disposable {
     private GroupRegister<Port, Data> portDataRegister = new GroupRegister<>();

@@ -8,4 +8,9 @@ public class CollisionContext<P extends PhysicDefinition> extends CustomizedData
     public CollisionContext(P physicReflection) {
         super(physicReflection);
     }
+
+    @Override
+    public void evaluate() {
+
+    }
 }

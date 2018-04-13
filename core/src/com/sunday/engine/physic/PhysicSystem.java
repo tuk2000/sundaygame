@@ -22,7 +22,7 @@ public class PhysicSystem extends SubSystem implements Disposable {
     private Rule<CustomizedDataContext<PhysicDefinition>> physicDefinitionRule = new Rule<CustomizedDataContext<PhysicDefinition>>(new ClassCondition(PhysicDefinition.class, DataSignal.class), new Reaction<CustomizedDataContext<PhysicDefinition>>() {
         @Override
         public void accept(CustomizedDataContext<PhysicDefinition> physicDefinitionCustomizedDataContext) {
-            PhysicDefinition physicDefinition = physicDefinitionCustomizedDataContext.getCustomizedData();
+            PhysicDefinition physicDefinition = physicDefinitionCustomizedDataContext.getData();
             PhysicBody physicBody = physicDefinition.physicBody;
             DataSignal dataSignal = (DataSignal) physicDefinitionCustomizedDataContext.getSignal();
             switch (dataSignal) {
@@ -42,7 +42,7 @@ public class PhysicSystem extends SubSystem implements Disposable {
     private Rule<CustomizedDataContext<PhysicDefinition>> physicReflectionModificationRule = new Rule<CustomizedDataContext<PhysicDefinition>>(new ClassCondition(PhysicDefinition.class, PhysicReflectionSignal.class), new Reaction<CustomizedDataContext<PhysicDefinition>>() {
         @Override
         public void accept(CustomizedDataContext<PhysicDefinition> physicDefinitionCustomizedDataContext) {
-            PhysicDefinition physicDefinition = physicDefinitionCustomizedDataContext.getCustomizedData();
+            PhysicDefinition physicDefinition = physicDefinitionCustomizedDataContext.getData();
             PhysicBody physicBody = physicDefinition.physicBody;
             PhysicReflectionSignal physicReflectionSignal = (PhysicReflectionSignal) physicDefinitionCustomizedDataContext.getSignal();
             switch (physicReflectionSignal) {

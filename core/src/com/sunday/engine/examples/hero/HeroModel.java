@@ -64,7 +64,7 @@ public class HeroModel extends AbstractModel {
         port.addDataInstance(new Rule<>(TimerCondition.animationTimerCondition(), new Reaction<TimerContext<Timer>>() {
             @Override
             public void accept(TimerContext<Timer> timerContext) {
-                Timer timer = timerContext.getEnvironmentData();
+                Timer timer = timerContext.getData();
                 heroAnimation.setStateTime(timer.lastTriggeredTime);
                 textureViewLayer.updateTexture(heroAnimation.getKeyFrame(movement));
             }

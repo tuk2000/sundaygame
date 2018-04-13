@@ -6,4 +6,9 @@ public class RuleContext extends SystemDataContext<Rule> {
     public RuleContext(Rule rule) {
         super(rule);
     }
+
+    @Override
+    public void evaluate() {
+
+    }
 }

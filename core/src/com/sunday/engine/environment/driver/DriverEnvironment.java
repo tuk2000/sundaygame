@@ -30,7 +30,7 @@ public class DriverEnvironment implements InputProcessor, ControllerListener {
     //KeyBoard
     @Override
     public boolean keyDown(int keycode) {
-        KeyBoard keyBoard = keyBoardDriverContext.getEnvironmentData();
+        KeyBoard keyBoard = keyBoardDriverContext.getData();
         keyBoard.keyCode = keycode;
         keyBoard.character = Input.Keys.toString(keycode);
         keyBoardDriverContext.setSignal(KeyBoardSignal.Pressed);
@@ -41,7 +41,7 @@ public class DriverEnvironment implements InputProcessor, ControllerListener {
 
     @Override
     public boolean keyUp(int keycode) {
-        KeyBoard keyBoard = keyBoardDriverContext.getEnvironmentData();
+        KeyBoard keyBoard = keyBoardDriverContext.getData();
         keyBoard.keyCode = keycode;
         keyBoard.character = Input.Keys.toString(keycode);
         keyBoardDriverContext.setSignal(KeyBoardSignal.Released);
@@ -52,7 +52,7 @@ public class DriverEnvironment implements InputProcessor, ControllerListener {
 
     @Override
     public boolean keyTyped(char character) {
-        KeyBoard keyBoard = keyBoardDriverContext.getEnvironmentData();
+        KeyBoard keyBoard = keyBoardDriverContext.getData();
         keyBoard.keyCode = Input.Keys.valueOf(String.valueOf(character).toUpperCase());
         keyBoard.character = String.valueOf(character);
         keyBoardDriverContext.setSignal(KeyBoardSignal.Typed);
@@ -64,7 +64,7 @@ public class DriverEnvironment implements InputProcessor, ControllerListener {
     //TouchScreen
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        Mouse mouse = mouseDriverContext.getEnvironmentData();
+        Mouse mouse = mouseDriverContext.getData();
         mouse.screenX = screenX;
         mouse.screenY = screenY;
         mouse.key = button;
@@ -76,7 +76,7 @@ public class DriverEnvironment implements InputProcessor, ControllerListener {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        Mouse mouse = mouseDriverContext.getEnvironmentData();
+        Mouse mouse = mouseDriverContext.getData();
         mouse.screenX = screenX;
         mouse.screenY = screenY;
         mouse.key = button;
@@ -88,7 +88,7 @@ public class DriverEnvironment implements InputProcessor, ControllerListener {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        Mouse mouse = mouseDriverContext.getEnvironmentData();
+        Mouse mouse = mouseDriverContext.getData();
         mouse.screenX = screenX;
         mouse.screenY = screenY;
         mouseDriverContext.setSignal(MouseSignal.Dragged);
@@ -99,7 +99,7 @@ public class DriverEnvironment implements InputProcessor, ControllerListener {
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        Mouse mouse = mouseDriverContext.getEnvironmentData();
+        Mouse mouse = mouseDriverContext.getData();
         mouse.screenX = screenX;
         mouse.screenY = screenY;
         mouseDriverContext.setSignal(MouseSignal.Moved);
@@ -117,7 +117,7 @@ public class DriverEnvironment implements InputProcessor, ControllerListener {
     //GamePad
 
     private DriverContext<GamePad> getGamePadContext(Controller controller) {
-        GamePadHub gamePadHub = gamePadHubDriverContext.getEnvironmentData();
+        GamePadHub gamePadHub = gamePadHubDriverContext.getData();
         return gamePadHub.getGamePadDriverContext(controller);
     }
 
@@ -140,14 +140,14 @@ public class DriverEnvironment implements InputProcessor, ControllerListener {
         gamePadDriverContext.setSignal(GamePadSignal.Disconnect);
         gamePadDriverContext.evaluate();
 
-        GamePad gamePad = gamePadDriverContext.getEnvironmentData();
+        GamePad gamePad = gamePadDriverContext.getData();
         driverSystem.removeDriver(gamePad);
     }
 
     @Override
     public boolean buttonDown(Controller controller, int buttonCode) {
         DriverContext<GamePad> gamePadDriverContext = getGamePadContext(controller);
-        GamePad gamePad = gamePadDriverContext.getEnvironmentData();
+        GamePad gamePad = gamePadDriverContext.getData();
         gamePad.buttonCode = buttonCode;
         gamePadDriverContext.setSignal(GamePadSignal.ButtonDown);
         gamePadDriverContext.evaluate();
@@ -158,7 +158,7 @@ public class DriverEnvironment implements InputProcessor, ControllerListener {
     @Override
     public boolean buttonUp(Controller controller, int buttonCode) {
         DriverContext<GamePad> gamePadDriverContext = getGamePadContext(controller);
-        GamePad gamePad = gamePadDriverContext.getEnvironmentData();
+        GamePad gamePad = gamePadDriverContext.getData();
         gamePad.buttonCode = buttonCode;
         gamePadDriverContext.setSignal(GamePadSignal.ButtonUp);
         gamePadDriverContext.evaluate();
@@ -169,7 +169,7 @@ public class DriverEnvironment implements InputProcessor, ControllerListener {
     @Override
     public boolean axisMoved(Controller controller, int axisCode, float value) {
         DriverContext<GamePad> gamePadDriverContext = getGamePadContext(controller);
-        GamePad gamePad = gamePadDriverContext.getEnvironmentData();
+        GamePad gamePad = gamePadDriverContext.getData();
         gamePad.axisCode = axisCode;
         gamePad.axisMoveValue = value;
         gamePadDriverContext.setSignal(GamePadSignal.AxisMove);
@@ -181,7 +181,7 @@ public class DriverEnvironment implements InputProcessor, ControllerListener {
     @Override
     public boolean povMoved(Controller controller, int povCode, PovDirection value) {
         DriverContext<GamePad> gamePadDriverContext = getGamePadContext(controller);
-        GamePad gamePad = gamePadDriverContext.getEnvironmentData();
+        GamePad gamePad = gamePadDriverContext.getData();
         gamePad.povCode = povCode;
         gamePad.povDirection = value;
         gamePadDriverContext.setSignal(GamePadSignal.PovMove);
@@ -193,7 +193,7 @@ public class DriverEnvironment implements InputProcessor, ControllerListener {
     @Override
     public boolean xSliderMoved(Controller controller, int sliderCode, boolean value) {
         DriverContext<GamePad> gamePadDriverContext = getGamePadContext(controller);
-        GamePad gamePad = gamePadDriverContext.getEnvironmentData();
+        GamePad gamePad = gamePadDriverContext.getData();
         gamePad.xSliderCode = sliderCode;
         gamePad.xSliderMoveValue = value;
         gamePadDriverContext.setSignal(GamePadSignal.XSliderMove);
@@ -205,7 +205,7 @@ public class DriverEnvironment implements InputProcessor, ControllerListener {
     @Override
     public boolean ySliderMoved(Controller controller, int sliderCode, boolean value) {
         DriverContext<GamePad> gamePadDriverContext = getGamePadContext(controller);
-        GamePad gamePad = gamePadDriverContext.getEnvironmentData();
+        GamePad gamePad = gamePadDriverContext.getData();
         gamePad.ySliderCode = sliderCode;
         gamePad.ySliderMoveValue = value;
         gamePadDriverContext.setSignal(GamePadSignal.YSliderMove);
@@ -217,7 +217,7 @@ public class DriverEnvironment implements InputProcessor, ControllerListener {
     @Override
     public boolean accelerometerMoved(Controller controller, int accelerometerCode, Vector3 value) {
         DriverContext<GamePad> gamePadDriverContext = getGamePadContext(controller);
-        GamePad gamePad = gamePadDriverContext.getEnvironmentData();
+        GamePad gamePad = gamePadDriverContext.getData();
         gamePad.accelerometerCode = accelerometerCode;
         gamePad.accelerometerMoveValue = value;
         gamePadDriverContext.setSignal(GamePadSignal.AccelerometerMove);

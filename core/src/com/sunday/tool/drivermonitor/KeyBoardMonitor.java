@@ -23,7 +23,7 @@ public class KeyBoardMonitor extends ToolExtender<KeyBoardMonitorUIController> i
             = new Rule<>(new ClassCondition<>(KeyBoard.class, DataSignal.class), new ClassReaction<DriverContext<KeyBoard>>() {
         @Override
         public void accept(DriverContext<KeyBoard> keyBoardDriverContext) {
-            KeyBoard keyBoard = keyBoardDriverContext.getEnvironmentData();
+            KeyBoard keyBoard = keyBoardDriverContext.getData();
             currentKeyBoardSignal = (KeyBoardSignal) keyBoardDriverContext.getSignal();
             DataSignal dataSignal = (DataSignal) keyBoardDriverContext.getSignal();
             switch (dataSignal) {
@@ -36,7 +36,7 @@ public class KeyBoardMonitor extends ToolExtender<KeyBoardMonitorUIController> i
     private Rule<DriverContext<KeyBoard>> keyBoardStatusMonitorRule = new Rule<>(KeyBoardCondition.anyKeyBoardSignal(), new Reaction<DriverContext<KeyBoard>>() {
         @Override
         public void accept(DriverContext<KeyBoard> keyBoardDriverContext) {
-            KeyBoard keyBoard = keyBoardDriverContext.getEnvironmentData();
+            KeyBoard keyBoard = keyBoardDriverContext.getData();
             currentKeyBoardSignal = (KeyBoardSignal) keyBoardDriverContext.getSignal();
             if (currentKeyBoard != keyBoard) {
                 setCurrentKeyBoard(keyBoard);

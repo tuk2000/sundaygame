@@ -15,7 +15,7 @@ public class KeyBoardCondition extends DriverCondition<KeyBoard> {
 
     private static Predicate<DriverContext<KeyBoard>> getKeyPredicate(String keyName) {
         String newKeyName = keyName.length() == 1 ? keyName.toUpperCase() : keyName;
-        return metaDataContext -> metaDataContext.getEnvironmentData().character.equals(newKeyName);
+        return metaDataContext -> metaDataContext.getData().character.equals(newKeyName);
     }
 
     private static Predicate<DriverContext<KeyBoard>> getKeysPredicate(String... keyNames) {

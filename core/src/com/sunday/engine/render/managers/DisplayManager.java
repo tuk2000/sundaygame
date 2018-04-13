@@ -26,7 +26,7 @@ public class DisplayManager implements SystemPortSharing {
         systemPort.addDataInstance(new Rule<>(WindowCondition.resized(), new Reaction<EnvironmentDataContext<Window>>() {
             @Override
             public void accept(EnvironmentDataContext<Window> windowEnvironmentDataContext) {
-                Window window = windowEnvironmentDataContext.getEnvironmentData();
+                Window window = windowEnvironmentDataContext.getData();
                 System.out.println("window---RenderManager---[" + window.width + "," + window.height + "]");
                 cameraManager.recordCameraState();
                 viewport.update(window.width, window.height);
@@ -37,7 +37,7 @@ public class DisplayManager implements SystemPortSharing {
         systemPort.addDataInstance(new Rule<>(GamePadCondition.buttonDown(5), new Reaction<DriverContext<GamePad>>() {
             @Override
             public void accept(DriverContext<GamePad> gamePadDriverContext) {
-                GamePad gamePad = gamePadDriverContext.getEnvironmentData();
+                GamePad gamePad = gamePadDriverContext.getData();
                 System.out.println("gamePad---RenderManager---" + gamePad.buttonCode);
                 //
             }

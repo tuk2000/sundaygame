@@ -37,7 +37,7 @@ public class DemoBallRolling implements Screen {
     private Rule<TimerContext<Timer>> sawAnimationRule = new Rule<>(TimerCondition.animationTimerCondition(), new Reaction<TimerContext<Timer>>() {
         @Override
         public void accept(TimerContext<Timer> timerContext) {
-            Timer timer = timerContext.getEnvironmentData();
+            Timer timer = timerContext.getData();
             sawAnimation.setStateTime(timer.lastTriggeredTime);
         }
     });
@@ -131,7 +131,7 @@ public class DemoBallRolling implements Screen {
         Rule<DriverContext<Mouse>> followMouseRule = new Rule<>(MouseCondition.mouseDragged(), new Reaction<DriverContext<Mouse>>() {
             @Override
             public void accept(DriverContext<Mouse> mouseDriverContext) {
-                Mouse mouse = mouseDriverContext.getEnvironmentData();
+                Mouse mouse = mouseDriverContext.getData();
                 movement.position.set(mouse.screenX, Gdx.graphics.getHeight() - mouse.screenY);
                 port.broadcast(movement, MovementSignal.ReLocated);
             }

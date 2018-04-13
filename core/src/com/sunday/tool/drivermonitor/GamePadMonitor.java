@@ -28,7 +28,7 @@ public class GamePadMonitor extends ToolExtender<GamePadMonitorUIController> imp
         @Override
         public void accept(DriverContext<GamePad> gamePadDriverContext) {
             DataSignal dataSignal = (DataSignal) gamePadDriverContext.getSignal();
-            GamePad gamePad = gamePadDriverContext.getEnvironmentData();
+            GamePad gamePad = gamePadDriverContext.getData();
             switch (dataSignal) {
                 case Add:
                     addGamePad(gamePad);
@@ -44,7 +44,7 @@ public class GamePadMonitor extends ToolExtender<GamePadMonitorUIController> imp
         @Override
         public void accept(DriverContext<GamePad> gamePadDriverContext) {
             currentGamePadSignal = (GamePadSignal) gamePadDriverContext.getSignal();
-            GamePad gamePad = gamePadDriverContext.getEnvironmentData();
+            GamePad gamePad = gamePadDriverContext.getData();
             if (!set.contains(gamePad)) {
                 addGamePad(gamePad);
             }

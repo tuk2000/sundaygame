@@ -23,7 +23,7 @@ public class MouseMonitor extends ToolExtender<MouseMonitorUIController> impleme
             = new Rule<>(new ClassCondition<>(Mouse.class, DataSignal.class), new ClassReaction<DriverContext<Mouse>>() {
         @Override
         public void accept(DriverContext<Mouse> mouseDriverContext) {
-            Mouse mouse = mouseDriverContext.getEnvironmentData();
+            Mouse mouse = mouseDriverContext.getData();
             DataSignal dataSignal = (DataSignal) mouseDriverContext.getSignal();
             switch (dataSignal) {
                 case Add:
@@ -36,7 +36,7 @@ public class MouseMonitor extends ToolExtender<MouseMonitorUIController> impleme
             = new Rule<>(MouseCondition.anyMouseSignal(), new Reaction<DriverContext<Mouse>>() {
         @Override
         public void accept(DriverContext<Mouse> mouseDriverContext) {
-            Mouse mouse = mouseDriverContext.getEnvironmentData();
+            Mouse mouse = mouseDriverContext.getData();
             currentMouseSignal = (MouseSignal) mouseDriverContext.getSignal();
             if (currentMouse != mouse)
                 setCurrentMouse(mouse);

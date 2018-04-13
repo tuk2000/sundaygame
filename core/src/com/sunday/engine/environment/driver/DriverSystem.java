@@ -63,10 +63,10 @@ public class DriverSystem extends SubSystem implements ContextConstructor<Driver
     public void construct(DriverCondition driverCondition) {
         if (driverCondition instanceof KeyBoardCondition) {
             driverCondition.generateInfoWith(keyBoardDriverContext);
-            keyBoardDriverContext.setEvaluateConnection(driverCondition, driverCondition.getReaction());
+            keyBoardDriverContext.setPredicateConsumer(driverCondition, driverCondition.getReaction());
         } else if (driverCondition instanceof MouseCondition) {
             driverCondition.generateInfoWith(mouseDriverContext);
-            mouseDriverContext.setEvaluateConnection(driverCondition, driverCondition.getReaction());
+            mouseDriverContext.setPredicateConsumer(driverCondition, driverCondition.getReaction());
         } else if (driverCondition instanceof GamePadCondition) {
             //
         }

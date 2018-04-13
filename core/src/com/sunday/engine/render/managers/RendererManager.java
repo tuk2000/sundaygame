@@ -25,7 +25,7 @@ public class RendererManager implements SystemPortSharing {
         systemPort.addDataInstance(new Rule<>(KeyBoardCondition.keyPressed("F2", "F3", "F4", "F5", "F6", "F7"), new Reaction<DriverContext<KeyBoard>>() {
             @Override
             public void accept(DriverContext<KeyBoard> keyBoardDriverContext) {
-                KeyBoard keyBoard = keyBoardDriverContext.getEnvironmentData();
+                KeyBoard keyBoard = keyBoardDriverContext.getData();
                 System.out.println("keyBoard---RenderManager---" + keyBoard.character);
                 switch (keyBoard.keyCode) {
                     case Input.Keys.F2:
@@ -52,7 +52,7 @@ public class RendererManager implements SystemPortSharing {
         systemPort.addDataInstance(new Rule<>(GamePadCondition.buttonDown(0, 1, 2, 3, 9), new Reaction<DriverContext<GamePad>>() {
             @Override
             public void accept(DriverContext<GamePad> gamePadDriverContext) {
-                GamePad gamePad = gamePadDriverContext.getEnvironmentData();
+                GamePad gamePad = gamePadDriverContext.getData();
                 System.out.println("gamePad---RenderManager---" + gamePad.buttonCode);
                 switch (gamePad.buttonCode) {
                     case 0:
