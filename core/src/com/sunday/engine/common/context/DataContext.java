@@ -41,4 +41,5 @@ public abstract class DataContext<D extends Data> implements Context {
     }
 
     public abstract void evaluate();
+
 }

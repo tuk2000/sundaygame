@@ -5,10 +5,9 @@ import com.sunday.engine.environment.EnvironmentCondition;
 
 public class TimerCondition<T extends Timer> extends EnvironmentCondition<T, TimerContext<T>> {
     private static TimerCondition<Timer> AnimationTimerCondition = null;
-    private T timer;
 
     public TimerCondition(T timer) {
-        this.timer = timer;
+        data = timer;
         signalCondition.setSignals(TimerSignal.Triggered);
         setExtraInfoEntry("Period", String.valueOf(timer.period));
     }
@@ -20,10 +19,6 @@ public class TimerCondition<T extends Timer> extends EnvironmentCondition<T, Tim
             AnimationTimerCondition = new TimerCondition<>(animationTimer);
         }
         return AnimationTimerCondition;
-    }
-
-    public T getTimer() {
-        return timer;
     }
 
     @Override

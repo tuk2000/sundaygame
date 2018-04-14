@@ -9,7 +9,7 @@ public class EnvironmentDataContext<ED extends EnvironmentData> extends DataCont
 
     @Override
     public void evaluate() {
-        System.out.println("Evaluating : " + getDataClass() + " - " + getData() + " " + getSignal());
+//        System.out.println("Evaluating : " + getDataClass() + " - " + getData() + " " + getSignal());
         predicateConsumerMap.forEach((contextPredicate, contextConsumer) -> {
             if (contextPredicate.test(this)) {
                 contextConsumer.accept(this);

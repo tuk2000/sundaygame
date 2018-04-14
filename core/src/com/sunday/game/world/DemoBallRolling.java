@@ -74,7 +74,7 @@ public class DemoBallRolling implements Screen {
         scenario = new Scenario(ScopeType.EntireLevel);
         scenario.addRole(backGroundRole);
         sawRandomMovingTimer.setPeriod(AnimationSetting.FrameDuration);
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 10; i++) {
             AbstractModel sawModel = new SawModel((float) ((Math.random() - 0.5) * 1000), (float) ((Math.random() - 0.5) * 1000));
             Role movingSaw = new Role(Label.Enemy, sawModel);
             scenario.addRole(movingSaw);

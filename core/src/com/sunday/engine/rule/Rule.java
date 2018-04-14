@@ -1,8 +1,12 @@
 package com.sunday.engine.rule;
 
 import com.sunday.engine.common.Context;
+import com.sunday.engine.common.annotation.DataMark;
+import com.sunday.engine.common.annotation.DataType;
 import com.sunday.engine.common.data.SystemData;
+import com.sunday.engine.common.signal.DataSignal;
 
+@DataMark(type = DataType.System, signalClass = {DataSignal.class, RuleSignal.class}, contextClass = RuleContext.class)
 public class Rule<C extends Context> implements SystemData {
     protected Condition<C> condition;
     protected Reaction<C> reaction;

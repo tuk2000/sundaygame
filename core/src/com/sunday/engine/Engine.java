@@ -4,6 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.controllers.Controller;
 import com.badlogic.gdx.controllers.Controllers;
 import com.badlogic.gdx.utils.Disposable;
+import com.sunday.engine.contextbank.ContextBank;
+import com.sunday.engine.contextbank.ContextBankImpl;
+import com.sunday.engine.contextbank.ContextPredefining;
 import com.sunday.engine.databank.DataBank;
 import com.sunday.engine.databank.DataBankImpl;
 import com.sunday.engine.environment.driver.DriverEnvironment;
@@ -18,6 +21,8 @@ import com.sunday.engine.scenario.ScenarioSystem;
 
 public class Engine implements Disposable {
     private boolean running;
+    private ContextBank contextBank;
+    private ContextPredefining contextPredefining;
     private DataBank dataBank;
     private RuleSystem ruleSystem;
     private DriverSystem driverSystem;
@@ -30,21 +35,23 @@ public class Engine implements Disposable {
 
     public Engine() {
         dataBank = new DataBankImpl();
-        ruleSystem = new RuleSystem(dataBank.getSystemPort(RuleSystem.class));
+        ContextBankImpl contextBankImpl = new ContextBankImpl();
+        contextBank = contextBankImpl;
+        ruleSystem = new RuleSystem(dataBank.getSystemPort(RuleSystem.class),contextBank);
 
-        driverSystem = new DriverSystem(dataBank.getSystemPort(DriverSystem.class));
-        timeSystem = new TimeSystem(dataBank.getSystemPort(TimeSystem.class));
+        driverSystem = new DriverSystem(dataBank.getSystemPort(DriverSystem.class), contextBankImpl);
+        timeSystem = new TimeSystem(dataBank.getSystemPort(TimeSystem.class), contextBankImpl);
 
-        ruleSystem.addContextConstructor(driverSystem);
-        ruleSystem.addContextConstructor(timeSystem);
+        windowEnvironment = new WindowEnvironment(contextBankImpl);
+
+        ruleSystem.addDataProvider(windowEnvironment);
+        ruleSystem.addDataProvider(driverSystem);
+        ruleSystem.addDataProvider(timeSystem);
 
         scenarioSystem = new ScenarioSystem(dataBank.getSystemPort(ScenarioSystem.class));
         physicSystem = new PhysicSystem(dataBank.getSystemPort(PhysicSystem.class));
         renderSystem = new RenderSystem(dataBank.getSystemPort(PhysicSystem.class));
         renderSystem.setPhysicSystem(physicSystem);
-
-
-        driverSystem.connectToDriverMonitor();
 
         DriverEnvironment driverEnvironment = new DriverEnvironment(driverSystem);
         Gdx.input.setInputProcessor(driverEnvironment);
@@ -53,9 +60,8 @@ public class Engine implements Disposable {
         }
         Controllers.addListener(driverEnvironment);
 
-        windowEnvironment = new WindowEnvironment();
 
-        ruleSystem.addContextConstructor(windowEnvironment);
+        driverSystem.connectToDriverMonitor();
 
         physicSystem.setContactListener(new CollisionListener());
 

@@ -1,6 +1,9 @@
 package com.sunday.engine.environment.driver.gamepad;
 
 import com.badlogic.gdx.controllers.Controller;
+import com.sunday.engine.common.annotation.DataMark;
+import com.sunday.engine.common.annotation.DataType;
+import com.sunday.engine.common.signal.DataSignal;
 import com.sunday.engine.environment.driver.Driver;
 import com.sunday.engine.environment.driver.DriverContext;
 import com.sunday.engine.environment.driver.DriverType;
@@ -8,6 +11,7 @@ import com.sunday.engine.environment.driver.DriverType;
 import java.util.HashMap;
 import java.util.Map;
 
+@DataMark(type = DataType.System, signalClass = {DataSignal.class, GamePadSignal.class}, contextClass = DriverContext.class)
 public class GamePadHub extends Driver {
     private Map<Controller, DriverContext<GamePad>> map = new HashMap<>();
 

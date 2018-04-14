@@ -12,7 +12,7 @@ public class TimerContext<T extends Timer> extends EnvironmentDataContext<T> {
         if (getData().isTriggered(currentTime)) {
             setSignal(TimerSignal.Triggered);
         }
-        System.out.println(getData().getInfo());
+//        System.out.println(getData().getInfo());
         evaluate();
     }
 }

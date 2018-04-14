@@ -1,16 +1,19 @@
 package com.sunday.engine.environment.window;
 
+import com.sunday.engine.common.Data;
+import com.sunday.engine.common.context.DataContext;
+import com.sunday.engine.contextbank.ContextPredefining;
 import com.sunday.engine.environment.EnvironmentDataContext;
 import com.sunday.engine.rule.Condition;
-import com.sunday.engine.rule.DataContextConstructor;
+import com.sunday.engine.rule.DataProvider;
 
-public class WindowEnvironment implements DataContextConstructor<WindowCondition> {
+public class WindowEnvironment implements DataProvider<WindowCondition> {
     private Window window;
     private EnvironmentDataContext<Window> windowEnvironmentDataContext;
 
-    public WindowEnvironment() {
+    public WindowEnvironment(ContextPredefining contextPredefining) {
         window = new Window();
-        windowEnvironmentDataContext = new EnvironmentDataContext<>(window);
+        windowEnvironmentDataContext = contextPredefining.getDataContext(window);
     }
 
     public void resize(int width, int height) {
@@ -22,12 +25,17 @@ public class WindowEnvironment implements DataContextConstructor<WindowCondition
     }
 
     @Override
-    public boolean test(Condition condition) {
+    public boolean isSuitedFor(Condition condition) {
         return condition instanceof WindowCondition;
     }
 
     @Override
-    public EnvironmentDataContext<Window> construct(WindowCondition windowCondition) {
-        return windowEnvironmentDataContext;
+    public Window requestData(WindowCondition condition) {
+        return window;
+    }
+
+    @Override
+    public <D extends Data> void feedback(D data, DataContext<D> dataContext) {
+
     }
 }

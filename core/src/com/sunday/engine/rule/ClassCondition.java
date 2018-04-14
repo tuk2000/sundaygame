@@ -20,6 +20,7 @@ public class ClassCondition<RC extends DataContext> extends Condition<ClassConte
         signalCondition.setSignals(signalTypeClass.getEnumConstants());
     }
 
+    @SuppressWarnings("unchecked")
     public <D extends Data> Class<D> getSensedClass() {
         return (Class<D>) sensedClass;
     }

@@ -1,22 +1,25 @@
 package com.sunday.engine.environment.time;
 
 import com.sunday.engine.SubSystem;
+import com.sunday.engine.common.Data;
+import com.sunday.engine.common.context.DataContext;
+import com.sunday.engine.contextbank.ContextPredefining;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.rule.Condition;
-import com.sunday.engine.rule.DataContextConstructor;
+import com.sunday.engine.rule.DataProvider;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class TimeSystem extends SubSystem implements DataContextConstructor<TimerCondition> {
+public class TimeSystem extends SubSystem implements DataProvider<TimerCondition<Timer>> {
     public float currentTime = 0.0f;
     private Map<Timer, TimerContext<Timer>> map = new HashMap<>();
     private TimerContext<Timer> animationTimerContext;
 
-    public TimeSystem(SystemPort systemPort) {
+    public TimeSystem(SystemPort systemPort, ContextPredefining contextPredefining) {
         super("TimeSystem", systemPort);
-        Timer animationTimer = TimerCondition.animationTimerCondition().getTimer();
-        animationTimerContext = new TimerContext<Timer>(animationTimer);
+        Timer animationTimer = TimerCondition.animationTimerCondition().getData();
+        animationTimerContext = contextPredefining.getDataContext(animationTimer);
         map.put(animationTimer, animationTimerContext);
     }
 
@@ -26,21 +29,22 @@ public class TimeSystem extends SubSystem implements DataContextConstructor<Time
     }
 
     @Override
-    public boolean test(Condition condition) {
+    public boolean isSuitedFor(Condition condition) {
         return condition instanceof TimerCondition;
     }
 
     @Override
-    public TimerContext construct(TimerCondition timerCondition) {
-        Timer timer = timerCondition.getTimer();
-        TimerContext timerContext;
-        if (map.containsKey(timer)) {
-            timerContext = animationTimerContext;
-        } else {
-            timerContext = new TimerContext(timer);
+    public Data requestData(TimerCondition<Timer> condition) {
+        return condition.getData();
+    }
+
+    @Override
+    public <D extends Data> void feedback(D data, DataContext<D> dataContext) {
+        Timer timer = (Timer) data;
+        TimerContext timerContext = (TimerContext) dataContext;
+        if (!map.containsKey(timer)) {
             map.put(timer, timerContext);
             timer.start(currentTime);
         }
-        return timerContext;
     }
 }
