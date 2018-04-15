@@ -3,8 +3,9 @@ package com.sunday.engine.environment.driver;
 import com.sunday.engine.SubSystem;
 import com.sunday.engine.common.Data;
 import com.sunday.engine.common.context.DataContext;
-import com.sunday.engine.contextbank.ContextPredefining;
+import com.sunday.engine.contextbank.ContextBank;
 import com.sunday.engine.databank.SystemPort;
+import com.sunday.engine.environment.driver.gamepad.GamePad;
 import com.sunday.engine.environment.driver.gamepad.GamePadCondition;
 import com.sunday.engine.environment.driver.gamepad.GamePadHub;
 import com.sunday.engine.environment.driver.keyboard.KeyBoard;
@@ -21,20 +22,29 @@ public class DriverSystem extends SubSystem implements DataProvider<DriverCondit
     private Mouse mouse = new Mouse();
     private DriverContext<Mouse> mouseDriverContext;
     private GamePadHub gamePadHub = new GamePadHub();
-    private DriverContext<GamePadHub> gamePadHubDriverContext;
 
-    public DriverSystem(SystemPort systemPort, ContextPredefining contextPredefining) {
+    private ContextBank contextBank;
+
+    public DriverSystem(SystemPort systemPort, ContextBank contextBank) {
         super("DriverSystem", systemPort);
-        addDriver(keyBoard);
-        addDriver(mouse);
-        addDriver(gamePadHub);
-        keyBoardDriverContext = contextPredefining.getDataContext(keyBoard);
-        mouseDriverContext = contextPredefining.getDataContext(mouse);
-        gamePadHubDriverContext = contextPredefining.getDataContext(gamePadHub);
+        systemPort.addDataInstance(keyBoard);
+        systemPort.addDataInstance(mouse);
+
+        this.contextBank = contextBank;
+        keyBoardDriverContext = contextBank.getDataContext(keyBoard);
+        mouseDriverContext = contextBank.getDataContext(mouse);
     }
 
     public void addDriver(Driver driver) {
         systemPort.addDataInstance(driver);
+        if (driver instanceof GamePad) {
+            GamePad gamePad = (GamePad) driver;
+            if (!gamePadHub.hasGamePad(gamePad)) {
+                DriverContext driverContext = contextBank.getDataContext(driver);
+                gamePadHub.put(gamePad, driverContext);
+                driverContext.setPredicateConsumer((c) -> true, contextBank.getClassContext(GamePad.class));
+            }
+        }
     }
 
     public void removeDriver(Driver driver) {
@@ -49,8 +59,8 @@ public class DriverSystem extends SubSystem implements DataProvider<DriverCondit
         return mouseDriverContext;
     }
 
-    public DriverContext<GamePadHub> getGamePadHubDriverContext() {
-        return gamePadHubDriverContext;
+    public GamePadHub getGamePadHub() {
+        return gamePadHub;
     }
 
 

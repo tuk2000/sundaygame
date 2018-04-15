@@ -14,6 +14,13 @@ import com.sunday.engine.common.signal.DataSignal;
 public class PhysicBody implements SystemData, Resettable {
     public PhysicDefinition physicDefinition;
     private boolean bodyCreated;
+    private Body body;
+    private Fixture fixture;
+
+    public PhysicBody(PhysicDefinition physicDefinition) {
+        this.physicDefinition = physicDefinition;
+        bodyCreated = false;
+    }
 
     public Fixture createFixture(FixtureDef def) {
         return body.createFixture(def);
@@ -55,10 +62,6 @@ public class PhysicBody implements SystemData, Resettable {
         return body.getLocalCenter();
     }
 
-    public void setLinearVelocity(Vector2 v) {
-        body.setLinearVelocity(v);
-    }
-
     public void setLinearVelocity(float vX, float vY) {
         body.setLinearVelocity(vX, vY);
     }
@@ -67,12 +70,16 @@ public class PhysicBody implements SystemData, Resettable {
         return body.getLinearVelocity();
     }
 
-    public void setAngularVelocity(float omega) {
-        body.setAngularVelocity(omega);
+    public void setLinearVelocity(Vector2 v) {
+        body.setLinearVelocity(v);
     }
 
     public float getAngularVelocity() {
         return body.getAngularVelocity();
+    }
+
+    public void setAngularVelocity(float omega) {
+        body.setAngularVelocity(omega);
     }
 
     public void applyForce(Vector2 force, Vector2 point, boolean wake) {
@@ -167,52 +174,52 @@ public class PhysicBody implements SystemData, Resettable {
         body.setAngularDamping(angularDamping);
     }
 
-    public void setType(BodyDef.BodyType type) {
-        body.setType(type);
-    }
-
     public BodyDef.BodyType getType() {
         return body.getType();
     }
 
-    public void setBullet(boolean flag) {
-        body.setBullet(flag);
+    public void setType(BodyDef.BodyType type) {
+        body.setType(type);
     }
 
     public boolean isBullet() {
         return body.isBullet();
     }
 
-    public void setSleepingAllowed(boolean flag) {
-        body.setSleepingAllowed(flag);
+    public void setBullet(boolean flag) {
+        body.setBullet(flag);
     }
 
     public boolean isSleepingAllowed() {
         return body.isSleepingAllowed();
     }
 
-    public void setAwake(boolean flag) {
-        body.setAwake(flag);
+    public void setSleepingAllowed(boolean flag) {
+        body.setSleepingAllowed(flag);
     }
 
     public boolean isAwake() {
         return body.isAwake();
     }
 
-    public void setActive(boolean flag) {
-        body.setActive(flag);
+    public void setAwake(boolean flag) {
+        body.setAwake(flag);
     }
 
     public boolean isActive() {
         return body.isActive();
     }
 
-    public void setFixedRotation(boolean flag) {
-        body.setFixedRotation(flag);
+    public void setActive(boolean flag) {
+        body.setActive(flag);
     }
 
     public boolean isFixedRotation() {
         return body.isFixedRotation();
+    }
+
+    public void setFixedRotation(boolean flag) {
+        body.setFixedRotation(flag);
     }
 
     public Array<Fixture> getFixtureList() {
@@ -241,14 +248,6 @@ public class PhysicBody implements SystemData, Resettable {
 
     public void setUserData(Object userData) {
         body.setUserData(userData);
-    }
-
-    private Body body;
-    private Fixture fixture;
-
-    public PhysicBody(PhysicDefinition physicDefinition) {
-        this.physicDefinition = physicDefinition;
-        bodyCreated = false;
     }
 
     public void forceMoveTo(Vector2 vector2) {

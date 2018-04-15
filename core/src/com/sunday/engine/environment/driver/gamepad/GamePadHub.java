@@ -1,38 +1,34 @@
 package com.sunday.engine.environment.driver.gamepad;
 
 import com.badlogic.gdx.controllers.Controller;
-import com.sunday.engine.common.annotation.DataMark;
-import com.sunday.engine.common.annotation.DataType;
-import com.sunday.engine.common.signal.DataSignal;
-import com.sunday.engine.environment.driver.Driver;
 import com.sunday.engine.environment.driver.DriverContext;
-import com.sunday.engine.environment.driver.DriverType;
 
 import java.util.HashMap;
 import java.util.Map;
 
-@DataMark(type = DataType.System, signalClass = {DataSignal.class, GamePadSignal.class}, contextClass = DriverContext.class)
-public class GamePadHub extends Driver {
-    private Map<Controller, DriverContext<GamePad>> map = new HashMap<>();
+public class GamePadHub {
+    private Map<Controller, GamePad> controllerGamePadMap;
+    private Map<GamePad, DriverContext<GamePad>> gamePadDriverContextMap;
 
     public GamePadHub() {
-        super(DriverType.GamePadHub);
+        controllerGamePadMap = new HashMap<>();
+        gamePadDriverContextMap = new HashMap<>();
+    }
+
+    public boolean hasGamePad(GamePad gamePad) {
+        return gamePadDriverContextMap.containsKey(gamePad);
+    }
+
+    public void put(GamePad gamePad, DriverContext<GamePad> driverContext) {
+        controllerGamePadMap.put(gamePad.controller, gamePad);
+        gamePadDriverContextMap.put(gamePad, driverContext);
     }
 
     public DriverContext<GamePad> getGamePadDriverContext(Controller controller) {
-        if (map.containsKey(controller)) {
-            return map.get(controller);
+        if (controllerGamePadMap.containsKey(controller)) {
+            return gamePadDriverContextMap.get(controllerGamePadMap.get(controller));
         } else {
-            GamePad gamePad = new GamePad();
-            gamePad.controller = controller;
-            DriverContext<GamePad> gamePadDriverContext = new DriverContext<>(gamePad);
-            map.put(controller, gamePadDriverContext);
-            return gamePadDriverContext;
+            return null;
         }
-    }
-
-    @Override
-    public void reset() {
-        map.clear();
     }
 }

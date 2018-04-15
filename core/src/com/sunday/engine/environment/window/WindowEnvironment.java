@@ -2,7 +2,7 @@ package com.sunday.engine.environment.window;
 
 import com.sunday.engine.common.Data;
 import com.sunday.engine.common.context.DataContext;
-import com.sunday.engine.contextbank.ContextPredefining;
+import com.sunday.engine.contextbank.ContextBank;
 import com.sunday.engine.environment.EnvironmentDataContext;
 import com.sunday.engine.rule.Condition;
 import com.sunday.engine.rule.DataProvider;
@@ -11,9 +11,9 @@ public class WindowEnvironment implements DataProvider<WindowCondition> {
     private Window window;
     private EnvironmentDataContext<Window> windowEnvironmentDataContext;
 
-    public WindowEnvironment(ContextPredefining contextPredefining) {
+    public WindowEnvironment(ContextBank contextBank) {
         window = new Window();
-        windowEnvironmentDataContext = contextPredefining.getDataContext(window);
+        windowEnvironmentDataContext = contextBank.getDataContext(window);
     }
 
     public void resize(int width, int height) {

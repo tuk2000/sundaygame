@@ -10,10 +10,25 @@ import com.sunday.engine.common.signal.DataSignal;
 
 import java.lang.reflect.Constructor;
 
-public class ContextBankImpl implements ContextBank, ContextPredefining {
+public class ContextBankImpl implements ContextBank {
 
     private MappingRegister<Data, DataContext> dataContextRegister = new MappingRegister<>();
     private MappingRegister<Class<? extends Data>, ClassContext> classContextRegister = new MappingRegister<>();
+
+    private static void printDataMarkAnnotations(DataMark[] dataMarks) {
+        for (DataMark dataMark : dataMarks) {
+            System.out.println(dataMark.toString());
+            System.out.println("DataType ");
+            System.out.println(dataMark.type());
+            System.out.println("Signal classes ");
+            for (Class<? extends Signal> aClass : dataMark.signalClass()) {
+                System.out.print(aClass.getName() + " ");
+            }
+            System.out.println();
+            System.out.println("Context class");
+            System.out.println(dataMark.contextClass().getName());
+        }
+    }
 
     @Override
     public <C extends DataContext> C getDataContext(Data data) {
@@ -57,21 +72,6 @@ public class ContextBankImpl implements ContextBank, ContextPredefining {
             }
         }
         return context;
-    }
-
-    private static void printDataMarkAnnotations(DataMark[] dataMarks) {
-        for (DataMark dataMark : dataMarks) {
-            System.out.println(dataMark.toString());
-            System.out.println("DataType ");
-            System.out.println(dataMark.type());
-            System.out.println("Signal classes ");
-            for (Class<? extends Signal> aClass : dataMark.signalClass()) {
-                System.out.print(aClass.getName() + " ");
-            }
-            System.out.println();
-            System.out.println("Context class");
-            System.out.println(dataMark.contextClass().getName());
-        }
     }
 
     @Override

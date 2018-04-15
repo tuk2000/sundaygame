@@ -18,13 +18,13 @@ public class DriverEnvironment implements InputProcessor, ControllerListener {
     private DriverSystem driverSystem;
     private DriverContext<KeyBoard> keyBoardDriverContext;
     private DriverContext<Mouse> mouseDriverContext;
-    private DriverContext<GamePadHub> gamePadHubDriverContext;
+    private GamePadHub gamePadHub;
 
     public DriverEnvironment(DriverSystem driverSystem) {
         this.driverSystem = driverSystem;
         keyBoardDriverContext = driverSystem.getKeyBoardDriverContext();
         mouseDriverContext = driverSystem.getMouseDriverContext();
-        gamePadHubDriverContext = driverSystem.getGamePadHubDriverContext();
+        gamePadHub = driverSystem.getGamePadHub();
     }
 
     //KeyBoard
@@ -117,7 +117,6 @@ public class DriverEnvironment implements InputProcessor, ControllerListener {
     //GamePad
 
     private DriverContext<GamePad> getGamePadContext(Controller controller) {
-        GamePadHub gamePadHub = gamePadHubDriverContext.getData();
         return gamePadHub.getGamePadDriverContext(controller);
     }
 

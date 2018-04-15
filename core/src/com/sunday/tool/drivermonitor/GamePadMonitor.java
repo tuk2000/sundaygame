@@ -29,6 +29,7 @@ public class GamePadMonitor extends ToolExtender<GamePadMonitorUIController> imp
         public void accept(DriverContext<GamePad> gamePadDriverContext) {
             DataSignal dataSignal = (DataSignal) gamePadDriverContext.getSignal();
             GamePad gamePad = gamePadDriverContext.getData();
+            System.out.println("GamePadMonitor---GamePad---" + dataSignal.name());
             switch (dataSignal) {
                 case Add:
                     addGamePad(gamePad);
@@ -39,12 +40,15 @@ public class GamePadMonitor extends ToolExtender<GamePadMonitorUIController> imp
             }
         }
     });
-    private Rule<DriverContext<GamePad>> gamePadStatusMonitorRule
-            = new Rule<>(GamePadCondition.anyGamePadSignal(), new Reaction<DriverContext<GamePad>>() {
+
+
+    private Rule<ClassContext<DriverContext<GamePad>>> gamePadStatusMonitorRule
+            = new Rule<>(new ClassCondition<>(GamePad.class, GamePadSignal.class), new ClassReaction<DriverContext<GamePad>>() {
         @Override
         public void accept(DriverContext<GamePad> gamePadDriverContext) {
             currentGamePadSignal = (GamePadSignal) gamePadDriverContext.getSignal();
             GamePad gamePad = gamePadDriverContext.getData();
+            System.out.println("GamePadMonitor---GamePad---" + currentGamePadSignal.name());
             if (!set.contains(gamePad)) {
                 addGamePad(gamePad);
             }

@@ -6,9 +6,11 @@ import com.sunday.engine.databank.SystemPortSharing;
 import com.sunday.engine.environment.EnvironmentDataContext;
 import com.sunday.engine.environment.driver.DriverContext;
 import com.sunday.engine.environment.driver.gamepad.GamePad;
-import com.sunday.engine.environment.driver.gamepad.GamePadCondition;
+import com.sunday.engine.environment.driver.gamepad.GamePadSignal;
 import com.sunday.engine.environment.window.Window;
 import com.sunday.engine.environment.window.WindowCondition;
+import com.sunday.engine.rule.ClassCondition;
+import com.sunday.engine.rule.ClassReaction;
 import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
 
@@ -34,12 +36,13 @@ public class DisplayManager implements SystemPortSharing {
                 cameraManager.recoverCameraState();
             }
         }));
-        systemPort.addDataInstance(new Rule<>(GamePadCondition.buttonDown(5), new Reaction<DriverContext<GamePad>>() {
+        systemPort.addDataInstance(new Rule<>(new ClassCondition<>(GamePad.class, GamePadSignal.ButtonDown), new ClassReaction<DriverContext<GamePad>>() {
             @Override
-            public void accept(DriverContext<GamePad> gamePadDriverContext) {
-                GamePad gamePad = gamePadDriverContext.getData();
+            public void accept(DriverContext<GamePad> driverContext) {
+                GamePad gamePad = driverContext.getData();
                 System.out.println("gamePad---RenderManager---" + gamePad.buttonCode);
                 //
+
             }
         }));
 

@@ -3,7 +3,7 @@ package com.sunday.engine.environment.time;
 import com.sunday.engine.SubSystem;
 import com.sunday.engine.common.Data;
 import com.sunday.engine.common.context.DataContext;
-import com.sunday.engine.contextbank.ContextPredefining;
+import com.sunday.engine.contextbank.ContextBank;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.rule.Condition;
 import com.sunday.engine.rule.DataProvider;
@@ -16,10 +16,10 @@ public class TimeSystem extends SubSystem implements DataProvider<TimerCondition
     private Map<Timer, TimerContext<Timer>> map = new HashMap<>();
     private TimerContext<Timer> animationTimerContext;
 
-    public TimeSystem(SystemPort systemPort, ContextPredefining contextPredefining) {
+    public TimeSystem(SystemPort systemPort, ContextBank contextBank) {
         super("TimeSystem", systemPort);
         Timer animationTimer = TimerCondition.animationTimerCondition().getData();
-        animationTimerContext = contextPredefining.getDataContext(animationTimer);
+        animationTimerContext = contextBank.getDataContext(animationTimer);
         map.put(animationTimer, animationTimerContext);
     }
 
