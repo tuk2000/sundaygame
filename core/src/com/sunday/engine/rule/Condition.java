@@ -1,73 +1,60 @@
 package com.sunday.engine.rule;
 
-import com.sunday.engine.common.Data;
-import com.sunday.engine.common.Signal;
-import com.sunday.engine.common.Target;
-import com.sunday.engine.databank.SystemPort;
-import com.sunday.engine.databank.SystemPortSharing;
+import com.sunday.engine.common.Context;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.function.Predicate;
 
-public abstract class Condition<T extends Data, S extends Signal> implements SystemPortSharing, Target {
-    private T data;
-    private List<S> signals = new ArrayList<>();
-    private Reaction reaction;
-    private String mainInfo = "MainInfo:\nn/a";
-    private String extraInfo = "ExtractInfo:\nn/a";
+public abstract class Condition<C extends Context> implements Predicate<C> {
+    protected Reaction<C> reaction;
+    private Map<String, String> mainInfo = new HashMap<>();
+    private Map<String, String> extraInfo = new HashMap<>();
 
-    public T getData() {
-        return data;
-    }
-
-    public void setData(T t) {
-        data = t;
-    }
-
-    public List<S> getSignals() {
-        return signals;
-    }
-
-    public void setSignals(S... signals) {
-        this.signals.clear();
-        this.signals.addAll(Arrays.asList(signals));
-    }
-
-    protected void generateMainInfo() {
-        String names = "";
-        for (Signal signal : signals) {
-            names += signal.name() + " ";
-        }
-        mainInfo =
-                "MainInfo:\n" +
-                        "Source = [" + data + "]\n" +
-                        "SourceClass = [" + data.getClass().getSimpleName() + "]\n" +
-                        "Signals = [" + names + "]";
-    }
-
-    protected void setExtraInfo(String extraInfo) {
-        this.extraInfo = "ExtractInfo:\n" + extraInfo;
-    }
-
-    public abstract void connectWith(SystemPort systemPort);
-
-    public void disconnectWith(SystemPort systemPort) {
-        signals.forEach(tracer -> {
-            systemPort.removeConnection(data, this);
-        });
-    }
-
-    public Reaction getReaction() {
+    public Reaction<C> getReaction() {
         return reaction;
     }
 
-    protected void setReaction(Reaction reaction) {
+    protected void setReaction(Reaction<C> reaction) {
         this.reaction = reaction;
     }
 
-    public String getInfo() {
-        return toString() + "\n" + mainInfo + "\n" + extraInfo;
+    public void generateInfoWith(C context) {
+        generateMainInfo(context);
+        generateExtraInfo(context);
     }
 
+    protected abstract void generateExtraInfo(C context);
+
+    protected abstract void generateMainInfo(C context);
+
+    protected void setMainInfoEntry(String key, String value) {
+        mainInfo.put(key, value);
+    }
+
+    protected void setExtraInfoEntry(String key, String value) {
+        extraInfo.put(key, value);
+    }
+
+    private String buildInfoString(Map<String, String> mainInfo) {
+        StringBuilder stringBuilder = new StringBuilder();
+        mainInfo.forEach((key, value) -> {
+            stringBuilder.append(key);
+            stringBuilder.append('=');
+            stringBuilder.append('[');
+            stringBuilder.append(value);
+            stringBuilder.append(']');
+            stringBuilder.append('\n');
+        });
+        return stringBuilder.toString();
+    }
+
+    public String getInfo() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append("MainInfo:\n");
+        stringBuilder.append(buildInfoString(mainInfo));
+        stringBuilder.append("ExtraInfo:\n");
+        stringBuilder.append(buildInfoString(extraInfo));
+        return stringBuilder.toString();
+    }
 }

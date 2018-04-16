@@ -64,7 +64,7 @@ public class GameIntro implements Screen {
         test.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-               ScreenManager.getInstance().setCurrentScreen(GameStatus.Test);
+               ScreenManager.getFocusedData().setCurrentScreen(GameStatus.Test);
             }
         });*/
         test = new TextButton("Game Test", textButtonStyle);

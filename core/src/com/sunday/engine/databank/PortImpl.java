@@ -4,7 +4,7 @@ import com.sunday.engine.common.Data;
 import com.sunday.engine.common.Signal;
 import com.sunday.tool.ToolApplication;
 
-public class PortImpl<T extends Data> implements Port<T> {
+public class PortImpl implements Port {
     protected DataStorage dataStorage;
     protected Object owner;
 
@@ -19,33 +19,33 @@ public class PortImpl<T extends Data> implements Port<T> {
     }
 
     @Override
-    public void addDataInstance(T t) {
+    public void addDataInstance(Data data) {
         if (owner instanceof Class) {
-            ToolApplication.dataMonitor.newData(t, ((Class) owner).getSimpleName());
+            ToolApplication.dataMonitor.newData(data, ((Class) owner).getSimpleName());
         } else {
-            ToolApplication.dataMonitor.newData(t, owner.getClass().getSimpleName());
+            ToolApplication.dataMonitor.newData(data, owner.getClass().getSimpleName());
         }
-        dataStorage.addDataInstance(this, t);
+        dataStorage.addDataInstance(this, data);
     }
 
     @Override
-    public boolean containsDataInstance(T t) {
-        return dataStorage.getDataList(this).contains(t);
+    public boolean containsDataInstance(Data data) {
+        return dataStorage.getDataList(this).contains(data);
     }
 
     @Override
-    public void deleteDataInstance(T t) {
+    public void removeDataInstance(Data data) {
         if (owner instanceof Class) {
-            ToolApplication.dataMonitor.deleteData(t);
+            ToolApplication.dataMonitor.deleteData(data);
         } else {
-            ToolApplication.dataMonitor.deleteData(t);
+            ToolApplication.dataMonitor.deleteData(data);
         }
-        dataStorage.deleteDataInstance(this, t);
+        dataStorage.removeDataInstance(this, data);
     }
 
     @Override
-    public void broadcast(T t, Signal signal) {
-        dataStorage.solve(t, signal);
+    public void broadcast(Data data, Signal signal) {
+        dataStorage.solve(data, signal);
     }
 
 }

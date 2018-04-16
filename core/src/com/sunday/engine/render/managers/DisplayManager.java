@@ -3,12 +3,14 @@ package com.sunday.engine.render.managers;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.databank.SystemPortSharing;
+import com.sunday.engine.environment.EnvironmentDataContext;
+import com.sunday.engine.environment.driver.DriverContext;
 import com.sunday.engine.environment.driver.gamepad.GamePad;
-import com.sunday.engine.environment.driver.gamepad.GamePadCondition;
 import com.sunday.engine.environment.driver.gamepad.GamePadSignal;
-import com.sunday.engine.environment.event.window.Window;
-import com.sunday.engine.environment.event.window.WindowCondition;
-import com.sunday.engine.environment.event.window.WindowSignal;
+import com.sunday.engine.environment.window.Window;
+import com.sunday.engine.environment.window.WindowCondition;
+import com.sunday.engine.rule.ClassCondition;
+import com.sunday.engine.rule.ClassReaction;
 import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
 
@@ -23,9 +25,10 @@ public class DisplayManager implements SystemPortSharing {
 
     @Override
     public void connectWith(SystemPort systemPort) {
-        systemPort.addDataInstance(new Rule(WindowCondition.resized(), new Reaction<Window, WindowSignal>() {
+        systemPort.addDataInstance(new Rule<>(WindowCondition.resized(), new Reaction<EnvironmentDataContext<Window>>() {
             @Override
-            public void accept(Window window, WindowSignal windowSignal) {
+            public void accept(EnvironmentDataContext<Window> windowEnvironmentDataContext) {
+                Window window = windowEnvironmentDataContext.getData();
                 System.out.println("window---RenderManager---[" + window.width + "," + window.height + "]");
                 cameraManager.recordCameraState();
                 viewport.update(window.width, window.height);
@@ -33,11 +36,13 @@ public class DisplayManager implements SystemPortSharing {
                 cameraManager.recoverCameraState();
             }
         }));
-        systemPort.addDataInstance(new Rule(GamePadCondition.buttonDown(5), new Reaction<GamePad, GamePadSignal>() {
+        systemPort.addDataInstance(new Rule<>(new ClassCondition<>(GamePad.class, GamePadSignal.ButtonDown), new ClassReaction<DriverContext<GamePad>>() {
             @Override
-            public void accept(GamePad gamePad, GamePadSignal gamePadSignal) {
+            public void accept(DriverContext<GamePad> driverContext) {
+                GamePad gamePad = driverContext.getData();
                 System.out.println("gamePad---RenderManager---" + gamePad.buttonCode);
                 //
+
             }
         }));
 

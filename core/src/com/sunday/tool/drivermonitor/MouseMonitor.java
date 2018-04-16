@@ -1,10 +1,15 @@
 package com.sunday.tool.drivermonitor;
 
-import com.sunday.engine.common.DataSignal;
+import com.sunday.engine.common.context.ClassContext;
+import com.sunday.engine.common.signal.DataSignal;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.databank.SystemPortSharing;
+import com.sunday.engine.environment.driver.DriverContext;
 import com.sunday.engine.environment.driver.mouse.Mouse;
+import com.sunday.engine.environment.driver.mouse.MouseCondition;
 import com.sunday.engine.environment.driver.mouse.MouseSignal;
+import com.sunday.engine.rule.ClassCondition;
+import com.sunday.engine.rule.ClassReaction;
 import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
 import com.sunday.tool.ToolExtender;
@@ -14,9 +19,12 @@ import java.util.function.BiConsumer;
 public class MouseMonitor extends ToolExtender<MouseMonitorUIController> implements SystemPortSharing {
     private Mouse currentMouse;
     private MouseSignal currentMouseSignal = MouseSignal.None;
-    private Rule mouseDataMonitorRule = new Rule(Mouse.class, DataSignal.class, new Reaction<Mouse, DataSignal>() {
+    private Rule<ClassContext<DriverContext<Mouse>>> mouseDataMonitorRule
+            = new Rule<>(new ClassCondition<>(Mouse.class, DataSignal.class), new ClassReaction<DriverContext<Mouse>>() {
         @Override
-        public void accept(Mouse mouse, DataSignal dataSignal) {
+        public void accept(DriverContext<Mouse> mouseDriverContext) {
+            Mouse mouse = mouseDriverContext.getData();
+            DataSignal dataSignal = (DataSignal) mouseDriverContext.getSignal();
             switch (dataSignal) {
                 case Add:
                     setCurrentMouse(mouse);
@@ -24,12 +32,14 @@ public class MouseMonitor extends ToolExtender<MouseMonitorUIController> impleme
             }
         }
     });
-    private Rule mouseStatusMonitorRule = new Rule(Mouse.class, MouseSignal.class, new Reaction<Mouse, MouseSignal>() {
+    private Rule<DriverContext<Mouse>> mouseStatusMonitorRule
+            = new Rule<>(MouseCondition.anyMouseSignal(), new Reaction<DriverContext<Mouse>>() {
         @Override
-        public void accept(Mouse mouse, MouseSignal mouseSignal) {
+        public void accept(DriverContext<Mouse> mouseDriverContext) {
+            Mouse mouse = mouseDriverContext.getData();
+            currentMouseSignal = (MouseSignal) mouseDriverContext.getSignal();
             if (currentMouse != mouse)
                 setCurrentMouse(mouse);
-            currentMouseSignal = mouseSignal;
             flushBuffer();
         }
     });
@@ -58,7 +68,7 @@ public class MouseMonitor extends ToolExtender<MouseMonitorUIController> impleme
 
     @Override
     public void disconnectWith(SystemPort systemPort) {
-        systemPort.deleteDataInstance(mouseDataMonitorRule);
-        systemPort.deleteDataInstance(mouseStatusMonitorRule);
+        systemPort.removeDataInstance(mouseDataMonitorRule);
+        systemPort.removeDataInstance(mouseStatusMonitorRule);
     }
 }

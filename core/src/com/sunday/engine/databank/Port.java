@@ -3,14 +3,14 @@ package com.sunday.engine.databank;
 import com.sunday.engine.common.Data;
 import com.sunday.engine.common.Signal;
 
-public interface Port<T extends Data> {
+public interface Port {
     Object getOwner();
 
-    void addDataInstance(T t);
+    void addDataInstance(Data data);
 
-    boolean containsDataInstance(T t);
+    boolean containsDataInstance(Data data);
 
-    void deleteDataInstance(T t);
+    void removeDataInstance(Data data);
 
-    void broadcast(T t, Signal signal);
+    void broadcast(Data data, Signal signal);
 }

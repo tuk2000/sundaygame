@@ -1,10 +1,15 @@
 package com.sunday.tool.drivermonitor;
 
-import com.sunday.engine.common.DataSignal;
+import com.sunday.engine.common.context.ClassContext;
+import com.sunday.engine.common.signal.DataSignal;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.databank.SystemPortSharing;
+import com.sunday.engine.environment.driver.DriverContext;
 import com.sunday.engine.environment.driver.keyboard.KeyBoard;
+import com.sunday.engine.environment.driver.keyboard.KeyBoardCondition;
 import com.sunday.engine.environment.driver.keyboard.KeyBoardSignal;
+import com.sunday.engine.rule.ClassCondition;
+import com.sunday.engine.rule.ClassReaction;
 import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
 import com.sunday.tool.ToolExtender;
@@ -14,9 +19,13 @@ import java.util.function.BiConsumer;
 public class KeyBoardMonitor extends ToolExtender<KeyBoardMonitorUIController> implements SystemPortSharing {
     private KeyBoard currentKeyBoard;
     private KeyBoardSignal currentKeyBoardSignal = KeyBoardSignal.None;
-    private Rule keyBoardDataMonitorRule = new Rule(KeyBoard.class, DataSignal.class, new Reaction<KeyBoard, DataSignal>() {
+    private Rule<ClassContext<DriverContext<KeyBoard>>> keyBoardDataMonitorRule
+            = new Rule<>(new ClassCondition<>(KeyBoard.class, DataSignal.class), new ClassReaction<DriverContext<KeyBoard>>() {
         @Override
-        public void accept(KeyBoard keyBoard, DataSignal dataSignal) {
+        public void accept(DriverContext<KeyBoard> keyBoardDriverContext) {
+            KeyBoard keyBoard = keyBoardDriverContext.getData();
+            currentKeyBoardSignal = (KeyBoardSignal) keyBoardDriverContext.getSignal();
+            DataSignal dataSignal = (DataSignal) keyBoardDriverContext.getSignal();
             switch (dataSignal) {
                 case Add:
                     setCurrentKeyBoard(keyBoard);
@@ -24,13 +33,14 @@ public class KeyBoardMonitor extends ToolExtender<KeyBoardMonitorUIController> i
             }
         }
     });
-    private Rule keyBoardStatusMonitorRule = new Rule(KeyBoard.class, KeyBoardSignal.class, new Reaction<KeyBoard, KeyBoardSignal>() {
+    private Rule<DriverContext<KeyBoard>> keyBoardStatusMonitorRule = new Rule<>(KeyBoardCondition.anyKeyBoardSignal(), new Reaction<DriverContext<KeyBoard>>() {
         @Override
-        public void accept(KeyBoard keyBoard, KeyBoardSignal keyBoardSignal) {
+        public void accept(DriverContext<KeyBoard> keyBoardDriverContext) {
+            KeyBoard keyBoard = keyBoardDriverContext.getData();
+            currentKeyBoardSignal = (KeyBoardSignal) keyBoardDriverContext.getSignal();
             if (currentKeyBoard != keyBoard) {
                 setCurrentKeyBoard(keyBoard);
             }
-            currentKeyBoardSignal = keyBoardSignal;
             flushBuffer();
         }
     });
@@ -60,7 +70,7 @@ public class KeyBoardMonitor extends ToolExtender<KeyBoardMonitorUIController> i
 
     @Override
     public void disconnectWith(SystemPort systemPort) {
-        systemPort.deleteDataInstance(keyBoardDataMonitorRule);
-        systemPort.deleteDataInstance(keyBoardStatusMonitorRule);
+        systemPort.removeDataInstance(keyBoardDataMonitorRule);
+        systemPort.removeDataInstance(keyBoardStatusMonitorRule);
     }
 }

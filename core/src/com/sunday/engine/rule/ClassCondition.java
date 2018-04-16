@@ -2,38 +2,43 @@ package com.sunday.engine.rule;
 
 import com.sunday.engine.common.Data;
 import com.sunday.engine.common.Signal;
-import com.sunday.engine.common.SourceClass;
-import com.sunday.engine.databank.SystemPort;
+import com.sunday.engine.common.context.ClassContext;
+import com.sunday.engine.common.context.DataContext;
+import com.sunday.engine.common.propertyholder.SystemRelated;
 
+public class ClassCondition<RC extends DataContext> extends Condition<ClassContext<RC>> implements SystemRelated {
+    protected SignalCondition<RC> signalCondition = new SignalCondition<>(dataContext -> dataContext.getSignal());
+    private Class<? extends Data> sensedClass;
 
-public class ClassCondition<T extends Data, S extends Signal> extends Condition<SourceClass<T>, S> {
-
-    private Class<T> sensedSourceClass;
-
-    public ClassCondition(Class<T> clazz, S... signals) {
-        sensedSourceClass = clazz;
-        setSignals(signals);
-        setExtraInfo("Type = [ClassCondition]\n" +
-                "SensedSourceClass=[" + clazz.getSimpleName() + "]");
+    public <D extends Data, S extends Signal> ClassCondition(Class<D> clazz, S... signals) {
+        sensedClass = clazz;
+        signalCondition.setSignals(signals);
     }
 
-    public ClassCondition(Class<T> clazz, Class<S> signalTypeClass) {
-        sensedSourceClass = clazz;
-        setSignals(signalTypeClass.getEnumConstants());
-        setExtraInfo("Type = [ClassCondition]\n" +
-                "SensedSourceClass=[" + clazz.getSimpleName() + "]");
+    public <D extends Data, S extends Signal> ClassCondition(Class<D> clazz, Class<S> signalTypeClass) {
+        sensedClass = clazz;
+        signalCondition.setSignals(signalTypeClass.getEnumConstants());
     }
 
-    @Override
-    public void connectWith(SystemPort systemPort) {
-        setData(systemPort.getSourceClass(sensedSourceClass));
-        systemPort.addConnection(sensedSourceClass, this);
-        generateMainInfo();
+    @SuppressWarnings("unchecked")
+    public <D extends Data> Class<D> getSensedClass() {
+        return (Class<D>) sensedClass;
     }
 
     @Override
-    public void notify(Data data, Signal signal) {
-        if (getSignals().contains(signal))
-            getReaction().accept(data, signal);
+    protected void generateMainInfo(ClassContext<RC> classContext) {
+        setMainInfoEntry("Source", sensedClass.getName());
+        setMainInfoEntry("SourceClass ", sensedClass.getClass().getSimpleName());
+        setMainInfoEntry("Signals ", signalCondition.getSignalNames());
+    }
+
+    protected void generateExtraInfo(ClassContext<RC> classContext) {
+        setExtraInfoEntry("ConditionType", "ClassCondition");
+        setExtraInfoEntry("SensedClass", sensedClass.getSimpleName());
+    }
+
+    @Override
+    public boolean test(ClassContext<RC> classContext) {
+        return signalCondition.test(classContext.getFocusedContext());
     }
 }

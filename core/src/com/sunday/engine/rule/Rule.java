@@ -1,57 +1,27 @@
 package com.sunday.engine.rule;
 
-import com.sunday.engine.common.Data;
-import com.sunday.engine.common.Signal;
-import com.sunday.engine.databank.SystemPort;
+import com.sunday.engine.common.Context;
+import com.sunday.engine.common.annotation.DataMark;
+import com.sunday.engine.common.annotation.DataType;
+import com.sunday.engine.common.data.SystemData;
+import com.sunday.engine.common.signal.DataSignal;
 
-public class Rule implements Data {
-    protected Condition condition;
-    protected Reaction reaction;
+@DataMark(type = DataType.System, signalClass = {DataSignal.class, RuleSignal.class}, contextClass = RuleContext.class)
+public class Rule<C extends Context> implements SystemData {
+    protected Condition<C> condition;
+    protected Reaction<C> reaction;
 
-    public <T extends Data, S extends Signal> Rule(Condition<T, S> condition, Reaction<T, S> reaction) {
+    public Rule(Condition<C> condition, Reaction<C> reaction) {
         this.condition = condition;
         this.reaction = reaction;
         condition.setReaction(reaction);
     }
 
-    public <T extends Data, S extends Signal> Rule(T t, S signal, Reaction<T, S> reaction) {
-        condition = new DataCondition(t, signal);
-        this.reaction = reaction;
-        condition.setReaction(reaction);
-    }
-
-    public <T extends Data, S extends Signal> Rule(Class<T> clazz, S signal, Reaction<T, S> reaction) {
-        condition = new ClassCondition(clazz, signal);
-        this.reaction = reaction;
-        condition.setReaction(reaction);
-    }
-
-    public <T extends Data, S extends Signal> Rule(T t, Class<S> signalClass, Reaction<T, S> reaction) {
-        condition = new DataCondition(t, signalClass);
-        this.reaction = reaction;
-        condition.setReaction(reaction);
-    }
-
-    public <T extends Data, S extends Signal> Rule(Class<T> clazz, Class<S> signalClass, Reaction<T, S> reaction) {
-        condition = new ClassCondition(clazz, signalClass);
-        this.reaction = reaction;
-        condition.setReaction(reaction);
-    }
-
-    public Condition getCondition() {
+    public Condition<C> getCondition() {
         return condition;
     }
 
-    public Reaction getReaction() {
+    public Reaction<C> getReaction() {
         return reaction;
-    }
-
-    protected void mountWith(SystemPort systemPort) {
-        systemPort.broadcast(this, RuleSignal.Mounting);
-        condition.connectWith(systemPort);
-    }
-
-    protected void dismountWith(SystemPort systemPort) {
-        condition.disconnectWith(systemPort);
     }
 }

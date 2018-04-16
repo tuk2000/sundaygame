@@ -7,12 +7,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.sunday.engine.databank.SystemPort;
 import com.sunday.engine.databank.SystemPortSharing;
+import com.sunday.engine.environment.driver.DriverContext;
 import com.sunday.engine.environment.driver.gamepad.GamePad;
-import com.sunday.engine.environment.driver.gamepad.GamePadCondition;
 import com.sunday.engine.environment.driver.gamepad.GamePadSignal;
 import com.sunday.engine.environment.driver.keyboard.KeyBoard;
 import com.sunday.engine.environment.driver.keyboard.KeyBoardCondition;
-import com.sunday.engine.environment.driver.keyboard.KeyBoardSignal;
+import com.sunday.engine.rule.ClassCondition;
+import com.sunday.engine.rule.ClassReaction;
 import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
 
@@ -46,9 +47,10 @@ public class CameraManager implements SystemPortSharing {
 
     @Override
     public void connectWith(SystemPort systemPort) {
-        systemPort.addDataInstance(new Rule(KeyBoardCondition.keyPressed("Up", "Down", "Left", "Right"), new Reaction<KeyBoard, KeyBoardSignal>() {
+        systemPort.addDataInstance(new Rule<>(KeyBoardCondition.keyPressed("Up", "Down", "Left", "Right"), new Reaction<DriverContext<KeyBoard>>() {
             @Override
-            public void accept(KeyBoard keyBoard, KeyBoardSignal keyBoardSignal) {
+            public void accept(DriverContext<KeyBoard> keyBoardDriverContext) {
+                KeyBoard keyBoard = keyBoardDriverContext.getData();
                 System.out.println("keyBoard---CameraManager---" + keyBoard.character);
                 switch (keyBoard.keyCode) {
                     case Input.Keys.UP:
@@ -66,9 +68,10 @@ public class CameraManager implements SystemPortSharing {
                 }
             }
         }));
-        systemPort.addDataInstance(new Rule(KeyBoardCondition.keyReleased("Up", "Down", "Left", "Right"), new Reaction<KeyBoard, KeyBoardSignal>() {
+        systemPort.addDataInstance(new Rule<>(KeyBoardCondition.keyReleased("Up", "Down", "Left", "Right"), new Reaction<DriverContext<KeyBoard>>() {
             @Override
-            public void accept(KeyBoard keyBoard, KeyBoardSignal keyBoardSignal) {
+            public void accept(DriverContext<KeyBoard> keyBoardDriverContext) {
+                KeyBoard keyBoard = keyBoardDriverContext.getData();
                 System.out.println("keyBoard---CameraManager---" + keyBoard.character);
                 switch (keyBoard.keyCode) {
                     case Input.Keys.UP:
@@ -86,9 +89,10 @@ public class CameraManager implements SystemPortSharing {
                 }
             }
         }));
-        systemPort.addDataInstance(new Rule(KeyBoardCondition.keyTyped("<", ">", ",", "."), new Reaction<KeyBoard, KeyBoardSignal>() {
+        systemPort.addDataInstance(new Rule<>(KeyBoardCondition.keyTyped("<", ">", ",", "."), new Reaction<DriverContext<KeyBoard>>() {
             @Override
-            public void accept(KeyBoard keyBoard, KeyBoardSignal keyBoardSignal) {
+            public void accept(DriverContext<KeyBoard> keyBoardDriverContext) {
+                KeyBoard keyBoard = keyBoardDriverContext.getData();
                 System.out.println("keyBoard---CameraManager---" + keyBoard.character);
                 if (keyBoard.character.equals(",")) {
                     rotateSpeed = 1f;
@@ -107,9 +111,11 @@ public class CameraManager implements SystemPortSharing {
             }
         }));
 
-        systemPort.addDataInstance(new Rule(GamePadCondition.pivotMoved(), new Reaction<GamePad, GamePadSignal>() {
+        systemPort.addDataInstance(new Rule<>(new ClassCondition<>(GamePad.class, GamePadSignal.ButtonDown), new ClassReaction<DriverContext<GamePad>>() {
             @Override
-            public void accept(GamePad gamePad, GamePadSignal gamePadSignal) {
+            public void accept(DriverContext<GamePad> driverContext) {
+                GamePad gamePad = driverContext.getData();
+                System.out.println("gamePad---CameraManager---" + gamePad.buttonCode);
                 switch (gamePad.povDirection) {
                     case north:
                         camera.translate(0, 100);

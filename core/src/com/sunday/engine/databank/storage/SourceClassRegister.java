@@ -1,8 +1,8 @@
 package com.sunday.engine.databank.storage;
 
 import com.sunday.engine.common.Data;
-import com.sunday.engine.common.SourceClass;
-import com.sunday.engine.databank.register.AutoMappingRegister;
+import com.sunday.engine.common.data.SourceClass;
+import com.sunday.engine.common.register.AutoMappingRegister;
 
 public class SourceClassRegister<T extends Data> extends AutoMappingRegister<Class<T>, SourceClass<T>> {
     public SourceClassRegister() {
