@@ -12,7 +12,7 @@ public class RWControl extends SubSystem implements Disposable {
         super(name, systemPort);
     }
     //creating Rule for RWController
-    private Rule rwCtrlRule = new Rule(RWData.class, RWSignal.class, new Reaction<RWData, RWSignal>() {
+   /** private Rule rwCtrlRule = new Rule(RWData.class, RWSignal.class, new Reaction<RWData, RWSignal>() {
         @Override
         public void accept(RWData rwData, RWSignal rwSignal) {
             switch (rwSignal){
@@ -30,9 +30,9 @@ public class RWControl extends SubSystem implements Disposable {
             return null;
         }
     });
-
+**/
     @Override
     public void dispose() {
-        systemPort.deleteDataInstance(rwCtrlRule);
+//        systemPort.deleteDataInstance(rwCtrlRule);
     }
 }
