@@ -24,6 +24,9 @@ public class PhysicBody implements SystemData, Resettable {
         this.physicDefinition = physicDefinition;
     }
 
+    public PhysicDefinition getPhysicDefinition() {
+        return physicDefinition;
+    }
 
     public Fixture createFixture(FixtureDef def) {
         return body.createFixture(def);

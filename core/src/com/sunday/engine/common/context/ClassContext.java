@@ -3,14 +3,13 @@ package com.sunday.engine.common.context;
 import com.sunday.engine.common.Context;
 import com.sunday.engine.common.Data;
 import com.sunday.engine.common.propertyholder.SystemRelated;
-import com.sunday.engine.rule.Reaction;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public class ClassContext<RC extends DataContext> implements Context, Reaction<RC>, SystemRelated {
+public class ClassContext<RC extends DataContext> implements Context, Consumer<RC>, SystemRelated {
     private Class<? extends Data> sensedClass;
     private RC focusedContext;
 

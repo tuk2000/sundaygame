@@ -1,8 +1,13 @@
 package com.sunday.game.world;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.EdgeShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.sunday.engine.Engine;
 import com.sunday.engine.databank.Port;
 import com.sunday.engine.environment.driver.DriverContext;
@@ -23,14 +28,18 @@ import com.sunday.engine.scenario.ScopeType;
 
 public class DemoCannon implements Screen {
     private Engine engine;
+    private float sin30 = (float) Math.sin(Math.PI / 6);
+    private float cos30 = (float) Math.cos(Math.PI / 6);
 
     public DemoCannon() {
         engine = new Engine();
         ScenarioSystem scenarioSystem = engine.getScenarioSystem();
         Scenario scenario = new Scenario(ScopeType.Game);
-        Role cannon = new Role(Label.Hero, new CannonModel());
+        Role cannon1 = new Role(Label.Hero, new CannonModel(true));
+        Role cannon2 = new Role(Label.Hero, new CannonModel(false));
         Role bomb = new Role(Label.Hero, new BombModel());
-        scenario.addRole(cannon);
+        scenario.addRole(cannon1);
+        scenario.addRole(cannon2);
         scenario.addRole(bomb);
         scenarioSystem.setRoot(scenario);
     }
@@ -42,6 +51,10 @@ public class DemoCannon implements Screen {
 
     @Override
     public void render(float delta) {
+        //ClearColor White and it needs to be  defined only once before all render
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        //clear the screen before anything rendered
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         engine.render(delta);
     }
 
@@ -77,14 +90,14 @@ public class DemoCannon implements Screen {
             bodyDef.gravityScale = 1.0f;
             bodyDef.position.set(0, 0);
             bodyDef.type = BodyDef.BodyType.DynamicBody;
-            bodyDef.linearVelocity.set(17f, 10);
+            bodyDef.linearVelocity.set(10 * cos30, 10 * sin30);
             physicDefinition.setBodyDef(bodyDef);
 
             FixtureDef fixtureDef = new FixtureDef();
             CircleShape circleShape = new CircleShape();
             circleShape.setRadius(50);
             fixtureDef.shape = circleShape;
-            fixtureDef.restitution = 0.5f;
+            fixtureDef.restitution = 0;
             fixtureDef.density = 0.05f;
             physicDefinition.addFixtureDef(fixtureDef);
         }
@@ -95,8 +108,10 @@ public class DemoCannon implements Screen {
                 @Override
                 public void accept(DriverContext<KeyBoard> keyBoardDriverContext) {
                     float mass = physicBody.getMass();
-                    Vector2 reverseImpulse = physicBody.getLinearVelocity().scl(-mass).add(17f * mass, 10 * mass);
+                    Vector2 reverseImpulse = physicBody.getLinearVelocity().scl(-mass);
                     physicBody.applyLinearImpulse(reverseImpulse, physicBody.getWorldCenter(), true);
+                    Vector2 impulse = new Vector2(cos30, sin30).scl(mass).scl(10);
+                    physicBody.applyLinearImpulse(impulse, physicBody.getWorldCenter(), true);
                     movement.position.set(0, 0);
                     physicBody.forceMoveTo(movement.position);
                     System.out.println("BombModel---" + this + "---" + keyBoardDriverContext.getSignal());
@@ -116,26 +131,26 @@ public class DemoCannon implements Screen {
     }
 
     private class CannonModel extends AbstractModel {
-        public CannonModel() {
+        public CannonModel(boolean top) {
             BodyDef bodyDef = new BodyDef();
+            if (top) {
+                movement.position.set(new Vector2(-sin30, cos30).scl(50));
+            } else {
+                movement.position.set(new Vector2(sin30, -cos30).scl(50));
+            }
+            System.out.println(movement.position.toString());
             bodyDef.position.set(movement.position);
-            bodyDef.type = BodyDef.BodyType.DynamicBody;
+            bodyDef.type = BodyDef.BodyType.StaticBody;
             bodyDef.gravityScale = 0;
-            bodyDef.angle = -0.523f;
+            bodyDef.angle = (float) (Math.PI / 6);
             physicDefinition.setBodyDef(bodyDef);
 
             FixtureDef fixtureDef = new FixtureDef();
-            PolygonShape shape = new EdgeShape();
-            shape.setAsBox(new Vector2(0, 0), new Vector2(1000, 1000));
+            EdgeShape shape = new EdgeShape();
+            shape.set(new Vector2(0, 0), new Vector2(1000, 0));
             fixtureDef.shape = shape;
-            fixtureDef.restitution = 1;
+            fixtureDef.restitution = 0;
             fixtureDef.friction = 0;
-            physicDefinition.addFixtureDef(fixtureDef);
-            fixtureDef = new FixtureDef();
-            fixtureDef.shape = shape;
-            fixtureDef.restitution = 1;
-            fixtureDef.friction = 0;
-            shape.set(new Vector2(0, 100), new Vector2(1000, 1100));
             physicDefinition.addFixtureDef(fixtureDef);
         }
 
@@ -145,7 +160,8 @@ public class DemoCannon implements Screen {
                 @Override
                 public void accept(PhysicBodyContext physicBodyContext) {
                     PhysicBody otherBody = physicBodyContext.getOtherPhysicBody();
-                    otherBody.applyLinearImpulse(new Vector2(17f, 10).scl(otherBody.getMass()), otherBody.getWorldCenter(), true);
+                    otherBody.applyForceToCenter(new Vector2(cos30, sin30).scl(20 * otherBody.getMass()), true);
+                    System.out.println("CannonModel---" + otherBody + "--- owner " + otherBody.getPhysicDefinition().owner);
                     System.out.println("CannonModel---" + this + "---" + physicBodyContext.getSignal());
                 }
             }));

@@ -13,6 +13,10 @@ public class WorldRenderer extends IndependentRenderer {
 
     public WorldRenderer(Camera camera) {
         box2DDebugRenderer = new Box2DDebugRenderer();
+        box2DDebugRenderer.setDrawAABBs(true);
+        box2DDebugRenderer.setDrawContacts(true);
+        box2DDebugRenderer.setDrawVelocities(true);
+        box2DDebugRenderer.setDrawInactiveBodies(true);
         this.camera = camera;
     }
 
