@@ -35,7 +35,7 @@ public class SpriteRenderer extends IndependentRenderer {
 
     @Override
     protected void renderInternal(float delta) {
-        batch.setProjectionMatrix(camera.projection);
+        batch.setProjectionMatrix(camera.combined);
         batch.begin();
         spriteBuffer.forEach(e -> {
             batch.draw(e, 0, 0);

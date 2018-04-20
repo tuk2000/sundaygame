@@ -38,20 +38,24 @@ public class Engine implements Disposable {
         ruleSystem = new RuleSystem(dataBank.getSystemPort(RuleSystem.class), contextBank);
 
         driverSystem = new DriverSystem(dataBank.getSystemPort(DriverSystem.class), contextBank);
-        timeSystem = new TimeSystem(dataBank.getSystemPort(TimeSystem.class), contextBank);
-
-        windowEnvironment = new WindowEnvironment(contextBank);
-
-        ruleSystem.addDataProvider(windowEnvironment);
         ruleSystem.addDataProvider(driverSystem);
+        driverSystem.connectToDriverMonitor();
+
+        timeSystem = new TimeSystem(dataBank.getSystemPort(TimeSystem.class), contextBank);
         ruleSystem.addDataProvider(timeSystem);
 
-        scenarioSystem = new ScenarioSystem(dataBank.getSystemPort(ScenarioSystem.class));
-        physicSystem = new PhysicSystem(dataBank.getSystemPort(PhysicSystem.class));
+        windowEnvironment = new WindowEnvironment(contextBank);
+        ruleSystem.addDataProvider(windowEnvironment);
+
+        physicSystem = new PhysicSystem(dataBank.getSystemPort(PhysicSystem.class), contextBank);
+        physicSystem.setContactListener(new CollisionListener(contextBank));
+        ruleSystem.addDataProvider(physicSystem);
+
         renderSystem = new RenderSystem(dataBank.getSystemPort(PhysicSystem.class));
         renderSystem.setPhysicSystem(physicSystem);
 
-        driverSystem.connectToDriverMonitor();
+        scenarioSystem = new ScenarioSystem(dataBank.getSystemPort(ScenarioSystem.class));
+        scenarioSystem.setRender(renderSystem);
 
         DriverEnvironment driverEnvironment = new DriverEnvironment(driverSystem);
         Gdx.input.setInputProcessor(driverEnvironment);
@@ -59,11 +63,6 @@ public class Engine implements Disposable {
             driverEnvironment.connected(controller);
         }
         Controllers.addListener(driverEnvironment);
-
-
-        physicSystem.setContactListener(new CollisionListener());
-
-        scenarioSystem.setRender(renderSystem);
 
         running = true;
     }

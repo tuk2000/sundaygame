@@ -9,6 +9,7 @@ public abstract class PreAssignedDataCondition<D extends Data, DC extends DataCo
     protected PreAssignedDataCondition(D data, Signal... signals) {
         this.data = data;
         signalCondition.setSignals(signals);
+        setExtraInfoEntry("ConditionType", "PreAssignedDataCondition");
     }
 
     protected <S extends Signal> PreAssignedDataCondition(D data, Class<S> signalTypeClass) {

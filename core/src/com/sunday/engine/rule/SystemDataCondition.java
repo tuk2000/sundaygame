@@ -10,8 +10,4 @@ public class SystemDataCondition<SD extends SystemData, SDC extends SystemDataCo
         setExtraInfoEntry("ConditionType", "SystemDataCondition");
     }
 
-    @Override
-    public boolean test(SDC sdc) {
-        return false;
-    }
 }

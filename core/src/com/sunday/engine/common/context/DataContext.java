@@ -40,6 +40,13 @@ public abstract class DataContext<D extends Data> implements Context {
         predicateConsumerMap.put(predicate, consumer);
     }
 
-    public abstract void evaluate();
+    @SuppressWarnings("unchecked")
+    public void evaluate() {
+        predicateConsumerMap.forEach((predicate, consumer) -> {
+            if (predicate.test(this)) {
+                consumer.accept(this);
+            }
+        });
+    }
 
 }

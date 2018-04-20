@@ -5,72 +5,41 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Disposable;
 import com.sunday.engine.SubSystem;
+import com.sunday.engine.common.Data;
 import com.sunday.engine.common.context.ClassContext;
-import com.sunday.engine.common.context.CustomizedDataContext;
-import com.sunday.engine.common.signal.DataSignal;
+import com.sunday.engine.common.context.DataContext;
+import com.sunday.engine.contextbank.ContextBank;
 import com.sunday.engine.databank.SystemPort;
-import com.sunday.engine.model.property.PhysicBody;
-import com.sunday.engine.model.property.PhysicBodyContext;
-import com.sunday.engine.model.property.PhysicDefinition;
-import com.sunday.engine.model.property.PhysicReflectionSignal;
-import com.sunday.engine.rule.ClassCondition;
-import com.sunday.engine.rule.ClassReaction;
-import com.sunday.engine.rule.Rule;
+import com.sunday.engine.rule.*;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class PhysicSystem extends SubSystem implements Disposable {
+public class PhysicSystem extends SubSystem implements DataProvider<PhysicBodyCondition>, Disposable {
     protected Vector2 defaultGravity = new Vector2(0, -9.8f);
     protected World world;
-    protected Map<PhysicDefinition, PhysicBody> definitionToBodyMap = new HashMap<>();
     protected Map<PhysicBody, PhysicBodyContext> physicBodyToContextMap = new HashMap<>();
+    protected ContextBank contextBank;
 
-    private Rule<ClassContext<CustomizedDataContext<PhysicDefinition>>> physicDefinitionRule
-            = new Rule<>(new ClassCondition<>(PhysicDefinition.class, DataSignal.class), new ClassReaction<CustomizedDataContext<PhysicDefinition>>() {
+    private Rule<ClassContext<PhysicBodyContext>> physicReflectionModificationRule
+            = new Rule<>(new ClassCondition<>(PhysicBody.class, CollisionSignal.class), new ClassReaction<PhysicBodyContext>() {
         @Override
-        public void accept(CustomizedDataContext<PhysicDefinition> physicDefinitionCustomizedDataContext) {
-            PhysicDefinition physicDefinition = physicDefinitionCustomizedDataContext.getData();
-            PhysicBody physicBody = physicDefinition.physicBody;
-            DataSignal dataSignal = (DataSignal) physicDefinitionCustomizedDataContext.getSignal();
-            switch (dataSignal) {
-                case Add:
-                    if (physicBody.isBodyCreated()) {
-                        physicBody.destroyBody(world);
-                    }
-                    physicBody.createBody(world);
-                    physicBody.createFixture();
-                    PhysicBodyContext physicBodyContext = new PhysicBodyContext(physicBody);
-                    definitionToBodyMap.put(physicDefinition, physicBody);
-                    physicBodyToContextMap.put(physicBody, physicBodyContext);
-                    break;
-                case Deletion:
-                    physicBody.reset();
-            }
-            System.out.println("PhysicSystem----" + physicDefinition.owner + " Signal---" + dataSignal.name());
-        }
-    });
-
-    private Rule<ClassContext<CustomizedDataContext<PhysicDefinition>>> physicReflectionModificationRule
-            = new Rule<>(new ClassCondition<>(PhysicDefinition.class, PhysicReflectionSignal.class), new ClassReaction<CustomizedDataContext<PhysicDefinition>>() {
-        @Override
-        public void accept(CustomizedDataContext<PhysicDefinition> physicDefinitionCustomizedDataContext) {
-            PhysicDefinition physicDefinition = physicDefinitionCustomizedDataContext.getData();
-            PhysicBody physicBody = physicDefinition.physicBody;
-            PhysicReflectionSignal physicReflectionSignal = (PhysicReflectionSignal) physicDefinitionCustomizedDataContext.getSignal();
+        public void accept(PhysicBodyContext physicBodyContext) {
+            PhysicBody physicBody = physicBodyContext.getData();
+            CollisionSignal physicReflectionSignal = (CollisionSignal) physicBodyContext.getSignal();
             switch (physicReflectionSignal) {
                 case None:
                 case Updated:
             }
-            System.out.println("PhysicSystem----" + physicDefinition.owner + " Signal---" + physicReflectionSignal.name());
+            System.out.println("PhysicSystem---" + physicBody + "---" + physicReflectionSignal.name());
         }
     });
 
 
-    public PhysicSystem(SystemPort systemPort) {
+    public PhysicSystem(SystemPort systemPort, ContextBank contextBank) {
         super("PhysicSystem", systemPort);
         world = new World(defaultGravity, false);
-        systemPort.addDataInstance(physicDefinitionRule);
+        this.contextBank = contextBank;
         systemPort.addDataInstance(physicReflectionModificationRule);
     }
 
@@ -88,8 +57,30 @@ public class PhysicSystem extends SubSystem implements Disposable {
 
     @Override
     public void dispose() {
-        systemPort.removeDataInstance(physicDefinitionRule);
         systemPort.removeDataInstance(physicReflectionModificationRule);
         world.dispose();
+    }
+
+    @Override
+    public boolean isSuitedFor(Condition condition) {
+        return condition instanceof PhysicBodyCondition;
+    }
+
+    @Override
+    public PhysicBody requestData(PhysicBodyCondition condition) {
+        PhysicBody physicBody = condition.getData();
+        if (physicBody.isBodyCreated()) {
+            physicBody.destroyWithDefinition(world);
+            physicBody.createWithDefinition(world);
+        }
+        if (!physicBody.isBodyCreated())
+            physicBody.createWithDefinition(world);
+        System.out.println("PhysicSystem----initialing PhysicCondition");
+        return physicBody;
+    }
+
+    @Override
+    public <D extends Data> void feedback(D data, DataContext<D> dataContext) {
+        physicBodyToContextMap.put((PhysicBody) data, (PhysicBodyContext) dataContext);
     }
 }

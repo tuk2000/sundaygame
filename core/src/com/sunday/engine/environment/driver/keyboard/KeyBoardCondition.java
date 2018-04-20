@@ -9,8 +9,8 @@ import java.util.stream.Collectors;
 
 public class KeyBoardCondition extends DriverCondition<KeyBoard> {
 
-    protected KeyBoardCondition(Predicate<DriverContext<KeyBoard>> predicate) {
-        super(predicate);
+    protected KeyBoardCondition(Predicate<DriverContext<KeyBoard>> driverContextPredicate) {
+        super(driverContextPredicate);
     }
 
     private static Predicate<DriverContext<KeyBoard>> getKeyPredicate(String keyName) {
@@ -81,6 +81,12 @@ public class KeyBoardCondition extends DriverCondition<KeyBoard> {
         keyBoardCondition.signalCondition.setSignals(KeyBoardSignal.Typed);
         keyBoardCondition.setExtraInfoEntry("Key", getKeysInfoValue(keyNames));
         return keyBoardCondition;
+    }
+
+    @Override
+    protected void generateExtraInfo(DriverContext<KeyBoard> keyBoardDriverContext) {
+        super.generateExtraInfo(keyBoardDriverContext);
+        setExtraInfoEntry("ConditionType", "KeyBoardCondition");
     }
 
 }

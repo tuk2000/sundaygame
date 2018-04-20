@@ -9,8 +9,8 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class GamePadCondition extends DriverCondition<GamePad> {
-    protected GamePadCondition(Predicate<DriverContext<GamePad>> predicate) {
-        super(predicate);
+    protected GamePadCondition(Predicate<DriverContext<GamePad>> driverContextPredicate) {
+        super(driverContextPredicate);
     }
 
     public static GamePadCondition anyGamePadSignal() {
@@ -50,5 +50,11 @@ public class GamePadCondition extends DriverCondition<GamePad> {
         GamePadCondition gamePadCondition = new GamePadCondition(context -> true);
         gamePadCondition.signalCondition.setSignals(GamePadSignal.PovMove);
         return gamePadCondition;
+    }
+
+    @Override
+    protected void generateExtraInfo(DriverContext<GamePad> gamePadDriverContext) {
+        super.generateExtraInfo(gamePadDriverContext);
+        setExtraInfoEntry("ConditionType", "MouseCondition");
     }
 }

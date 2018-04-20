@@ -32,18 +32,22 @@ public class HeroModel extends AbstractModel {
         outlook.viewLayers.add(textureViewLayer);
         movement.position.set(32, 32);
 
-        BodyDef bodyDef = physicDefinition.bodyDef;
+        BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(movement.position);
+
+        physicDefinition.setBodyDef(bodyDef);
 
         PolygonShape polygonShape = new PolygonShape();
         polygonShape.setAsBox(outlook.dimension.x, outlook.dimension.y);
 
-        FixtureDef fixtureDef = physicDefinition.fixtureDef;
+        FixtureDef fixtureDef = new FixtureDef();
         fixtureDef.shape = polygonShape;
         fixtureDef.friction = 1;
         fixtureDef.restitution = 0;
         fixtureDef.density = 2f;
+
+        physicDefinition.addFixtureDef(fixtureDef);
     }
 
     @Override

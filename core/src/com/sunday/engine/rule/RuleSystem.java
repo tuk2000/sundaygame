@@ -56,32 +56,33 @@ public class RuleSystem extends SubSystem {
             rule.condition.generateInfoWith(classContext);
         } else if (rule.condition instanceof DataCondition) {
             Data data = null;
-            if (rule.condition instanceof PreAssignedDataCondition) {
-                PreAssignedDataCondition preAssignedDataCondition = (PreAssignedDataCondition) rule.condition;
-                DataContext dataContext = contextBank.getDataContext(preAssignedDataCondition.getData());
-                dataContext.setPredicateConsumer(rule.condition, rule.reaction);
-                rule.condition.generateInfoWith(dataContext);
-            } else {
-
-                for (DataProvider dataProvider : dataProviders) {
-                    if (dataProvider.isSuitedFor(rule.condition)) {
-                        data = dataProvider.requestData((DataCondition) rule.condition);
-                        if (data != null) {
-                            DataContext dataContext = contextBank.getDataContext(data);
-                            dataProvider.feedback(data, dataContext);
-                            dataContext.setPredicateConsumer(rule.condition, rule.reaction);
-                            rule.condition.generateInfoWith(dataContext);
-                        }
-                        break;
+            for (DataProvider dataProvider : dataProviders) {
+                if (dataProvider.isSuitedFor(rule.condition)) {
+                    data = dataProvider.requestData((DataCondition) rule.condition);
+                    if (data != null) {
+                        DataContext dataContext = contextBank.getDataContext(data);
+                        dataProvider.feedback(data, dataContext);
+                        dataContext.setPredicateConsumer(rule.condition, rule.reaction);
+                        rule.condition.generateInfoWith(dataContext);
                     }
+                    break;
                 }
-                try {
+            }
+            try {
+                if (data == null) {
+                    if (rule.condition instanceof PreAssignedDataCondition) {
+                        PreAssignedDataCondition preAssignedDataCondition = (PreAssignedDataCondition) rule.condition;
+                        data = preAssignedDataCondition.getData();
+                        DataContext dataContext = contextBank.getDataContext(data);
+                        dataContext.setPredicateConsumer(rule.condition, rule.reaction);
+                        rule.condition.generateInfoWith(dataContext);
+                    }
                     if (data == null) {
                         throw new Exception("Unable to initial DataContext for Rule :  " + rule.toString() + " condition class : " + rule.condition.getClass().getName());
                     }
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
     }

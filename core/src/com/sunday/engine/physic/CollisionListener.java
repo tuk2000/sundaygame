@@ -4,35 +4,47 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.sunday.engine.contextbank.ContextBank;
 
 public class CollisionListener implements ContactListener {
 
+    private ContextBank contextBank;
 
-    @Override
-    public void beginContact(Contact contact) {
-        System.out.println("beginContact");
-        System.out.println(contact.getFixtureA().getUserData());
-        System.out.println(contact.getFixtureB().getUserData());
+    public CollisionListener(ContextBank contextBank) {
+        this.contextBank = contextBank;
+    }
+
+    private void solve(Contact contact, CollisionSignal collisionSignal) {
+        PhysicBody physicBodyA = (PhysicBody) contact.getFixtureA().getUserData();
+        PhysicBody physicBodyB = (PhysicBody) contact.getFixtureB().getUserData();
+        PhysicBodyContext collisionContextA = contextBank.getDataContext(physicBodyA);
+        PhysicBodyContext collisionContextB = contextBank.getDataContext(physicBodyB);
+        collisionContextA.setSignal(collisionSignal);
+        collisionContextA.setOtherPhysicBody(physicBodyA);
+        collisionContextB.setSignal(collisionSignal);
+        collisionContextA.setOtherPhysicBody(physicBodyB);
+        collisionContextA.evaluate();
+        collisionContextB.evaluate();
     }
 
     @Override
+    public void beginContact(Contact contact) {
+        solve(contact, CollisionSignal.BeginContact);
+    }
+
+
+    @Override
     public void endContact(Contact contact) {
-        System.out.println("endContact");
-        System.out.println(contact.getFixtureA().getUserData());
-        System.out.println(contact.getFixtureB().getUserData());
+        solve(contact, CollisionSignal.EndContact);
     }
 
     @Override
     public void preSolve(Contact contact, Manifold oldManifold) {
-        System.out.println("preSolve");
-        System.out.println(contact.getFixtureA().getUserData());
-        System.out.println(contact.getFixtureB().getUserData());
+        solve(contact, CollisionSignal.PreSolve);
     }
 
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
-        System.out.println("postSolve");
-        System.out.println(contact.getFixtureA().getUserData());
-        System.out.println(contact.getFixtureB().getUserData());
+        solve(contact, CollisionSignal.PostSolve);
     }
 }

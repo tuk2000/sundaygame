@@ -2,8 +2,7 @@ package com.sunday.game.world;
 
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.EdgeShape;
+import com.badlogic.gdx.physics.box2d.*;
 import com.sunday.engine.Engine;
 import com.sunday.engine.databank.Port;
 import com.sunday.engine.environment.driver.DriverContext;
@@ -12,12 +11,10 @@ import com.sunday.engine.environment.driver.keyboard.KeyBoardCondition;
 import com.sunday.engine.examples.Label;
 import com.sunday.engine.examples.Role;
 import com.sunday.engine.model.AbstractModel;
-import com.sunday.engine.model.property.MovementSignal;
-import com.sunday.engine.model.property.PhysicBody;
-import com.sunday.engine.model.property.PhysicDefinition;
-import com.sunday.engine.model.property.PhysicReflectionSignal;
-import com.sunday.engine.physic.CollisionCondition;
-import com.sunday.engine.physic.CollisionContext;
+import com.sunday.engine.physic.PhysicBody;
+import com.sunday.engine.physic.PhysicBodyCondition;
+import com.sunday.engine.physic.PhysicBodyContext;
+import com.sunday.engine.physic.PhysicDefinition;
 import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
 import com.sunday.engine.scenario.Scenario;
@@ -76,27 +73,33 @@ public class DemoCannon implements Screen {
     private class BombModel extends AbstractModel {
 
         public BombModel() {
-            physicDefinition.bodyDef.gravityScale = 1.0f;
-            physicDefinition.bodyDef.position.set(0, 0);
-            physicDefinition.bodyDef.type = BodyDef.BodyType.DynamicBody;
-            physicDefinition.bodyDef.linearVelocity.set(1.7f, 1);
+            BodyDef bodyDef = new BodyDef();
+            bodyDef.gravityScale = 1.0f;
+            bodyDef.position.set(0, 0);
+            bodyDef.type = BodyDef.BodyType.DynamicBody;
+            bodyDef.linearVelocity.set(17f, 10);
+            physicDefinition.setBodyDef(bodyDef);
 
-            physicDefinition.fixtureDef.shape.setRadius(5);
-            physicDefinition.fixtureDef.restitution = 0.5f;
-            physicDefinition.fixtureDef.density = 0.05f;
+            FixtureDef fixtureDef = new FixtureDef();
+            CircleShape circleShape = new CircleShape();
+            circleShape.setRadius(50);
+            fixtureDef.shape = circleShape;
+            fixtureDef.restitution = 0.5f;
+            fixtureDef.density = 0.05f;
+            physicDefinition.addFixtureDef(fixtureDef);
         }
 
         @Override
         protected void connectWithInternal(Port port) {
-            port.addDataInstance(new Rule<>(KeyBoardCondition.keyPressed("R"), new Reaction<DriverContext<KeyBoard>>() {
+            port.addDataInstance(new Rule<>(KeyBoardCondition.keyPressed("r"), new Reaction<DriverContext<KeyBoard>>() {
                 @Override
                 public void accept(DriverContext<KeyBoard> keyBoardDriverContext) {
-                    PhysicBody physicBody = physicDefinition.physicBody;
                     float mass = physicBody.getMass();
-                    Vector2 reverseImpulse = physicBody.getLinearVelocity().scl(-mass).add(1.7f * mass, 1 * mass);
+                    Vector2 reverseImpulse = physicBody.getLinearVelocity().scl(-mass).add(17f * mass, 10 * mass);
                     physicBody.applyLinearImpulse(reverseImpulse, physicBody.getWorldCenter(), true);
                     movement.position.set(0, 0);
-                    port.broadcast(movement, MovementSignal.ReLocated);
+                    physicBody.forceMoveTo(movement.position);
+                    System.out.println("BombModel---" + this + "---" + keyBoardDriverContext.getSignal());
                 }
             }));
         }
@@ -114,26 +117,36 @@ public class DemoCannon implements Screen {
 
     private class CannonModel extends AbstractModel {
         public CannonModel() {
-            physicDefinition.bodyDef.position.set(movement.position);
-            physicDefinition.bodyDef.type = BodyDef.BodyType.StaticBody;
-            physicDefinition.bodyDef.gravityScale = 0;
-            physicDefinition.bodyDef.angle = -0.523f;
+            BodyDef bodyDef = new BodyDef();
+            bodyDef.position.set(movement.position);
+            bodyDef.type = BodyDef.BodyType.DynamicBody;
+            bodyDef.gravityScale = 0;
+            bodyDef.angle = -0.523f;
+            physicDefinition.setBodyDef(bodyDef);
 
-            EdgeShape shape = new EdgeShape();
-            shape.set(new Vector2(0, 0), new Vector2(100, 100));
-            physicDefinition.fixtureDef.shape = shape;
-            physicDefinition.fixtureDef.restitution = 1;
-            physicDefinition.fixtureDef.friction = 0;
+            FixtureDef fixtureDef = new FixtureDef();
+            PolygonShape shape = new EdgeShape();
+            shape.setAsBox(new Vector2(0, 0), new Vector2(1000, 1000));
+            fixtureDef.shape = shape;
+            fixtureDef.restitution = 1;
+            fixtureDef.friction = 0;
+            physicDefinition.addFixtureDef(fixtureDef);
+            fixtureDef = new FixtureDef();
+            fixtureDef.shape = shape;
+            fixtureDef.restitution = 1;
+            fixtureDef.friction = 0;
+            shape.set(new Vector2(0, 100), new Vector2(1000, 1100));
+            physicDefinition.addFixtureDef(fixtureDef);
         }
 
         @Override
         protected void connectWithInternal(Port port) {
-            port.addDataInstance(new Rule<>(CollisionCondition.collideBetween(physicDefinition, PhysicDefinition.class), new Reaction<CollisionContext<PhysicDefinition>>() {
+            port.addDataInstance(new Rule<>(PhysicBodyCondition.collideBetween(physicBody, PhysicDefinition.class), new Reaction<PhysicBodyContext>() {
                 @Override
-                public void accept(CollisionContext<PhysicDefinition> collisionContext) {
-                    PhysicBody physicBody = collisionContext.getData().physicBody;
-                    physicBody.applyLinearImpulse(new Vector2(1.7f, 1), physicBody.getWorldCenter(), true);
-                    port.broadcast(physicDefinition, PhysicReflectionSignal.Updated);
+                public void accept(PhysicBodyContext physicBodyContext) {
+                    PhysicBody otherBody = physicBodyContext.getOtherPhysicBody();
+                    otherBody.applyLinearImpulse(new Vector2(17f, 10).scl(otherBody.getMass()), otherBody.getWorldCenter(), true);
+                    System.out.println("CannonModel---" + this + "---" + physicBodyContext.getSignal());
                 }
             }));
         }

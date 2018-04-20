@@ -23,5 +23,11 @@ public class MouseCondition extends DriverCondition<Mouse> {
         return mouseCondition;
     }
 
+    @Override
+    protected void generateExtraInfo(DriverContext<Mouse> mouseDriverContext) {
+        super.generateExtraInfo(mouseDriverContext);
+        setExtraInfoEntry("ConditionType", "MouseCondition");
+    }
+
 
 }

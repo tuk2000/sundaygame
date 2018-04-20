@@ -1,26 +1,29 @@
-package com.sunday.engine.model.property;
+package com.sunday.engine.physic;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Array;
 import com.sunday.engine.common.annotation.DataMark;
 import com.sunday.engine.common.annotation.DataType;
-import com.sunday.engine.common.context.SystemDataContext;
 import com.sunday.engine.common.data.SystemData;
 import com.sunday.engine.common.propertyholder.Resettable;
 import com.sunday.engine.common.signal.DataSignal;
 
-@DataMark(type = DataType.System, signalClass = {DataSignal.class}, contextClass = SystemDataContext.class)
+@DataMark(type = DataType.System, signalClass = {DataSignal.class, CollisionSignal.class}, contextClass = PhysicBodyContext.class)
 public class PhysicBody implements SystemData, Resettable {
-    public PhysicDefinition physicDefinition;
+    protected PhysicDefinition physicDefinition;
     private boolean bodyCreated;
     private Body body;
-    private Fixture fixture;
 
-    public PhysicBody(PhysicDefinition physicDefinition) {
-        this.physicDefinition = physicDefinition;
+    public PhysicBody() {
         bodyCreated = false;
     }
+
+    public PhysicBody(PhysicDefinition physicDefinition) {
+        this();
+        this.physicDefinition = physicDefinition;
+    }
+
 
     public Fixture createFixture(FixtureDef def) {
         return body.createFixture(def);
@@ -178,10 +181,6 @@ public class PhysicBody implements SystemData, Resettable {
         return body.getType();
     }
 
-    public void setType(BodyDef.BodyType type) {
-        body.setType(type);
-    }
-
     public boolean isBullet() {
         return body.isBullet();
     }
@@ -242,14 +241,6 @@ public class PhysicBody implements SystemData, Resettable {
         return body.getWorld();
     }
 
-    public Object getUserData() {
-        return body.getUserData();
-    }
-
-    public void setUserData(Object userData) {
-        body.setUserData(userData);
-    }
-
     public void forceMoveTo(Vector2 vector2) {
         if (bodyCreated) {
             body.setTransform(vector2.x, vector2.y, body.getAngle());
@@ -260,28 +251,17 @@ public class PhysicBody implements SystemData, Resettable {
         return bodyCreated;
     }
 
-    public Body getBody() {
-        return body;
-    }
-
-    public void createBody(World world) {
-        body = world.createBody(physicDefinition.bodyDef);
+    public void createWithDefinition(World world) {
+        body = physicDefinition.createBody(world);
+        body.setUserData(physicDefinition);
+        body.getFixtureList().forEach(fixture -> fixture.setUserData(this));
         bodyCreated = true;
     }
 
-    public void destroyBody(World world) {
+    public void destroyWithDefinition(World world) {
         world.destroyBody(body);
         body = null;
         bodyCreated = false;
-    }
-
-    public void createFixture() {
-        fixture = body.createFixture(physicDefinition.fixtureDef);
-        fixture.setUserData(physicDefinition);
-    }
-
-    public Fixture getFixture() {
-        return fixture;
     }
 
     @Override
@@ -289,9 +269,7 @@ public class PhysicBody implements SystemData, Resettable {
         if (bodyCreated)
             body.getWorld().destroyBody(body);
         body = null;
-        fixture = null;
         bodyCreated = false;
     }
-
 
 }

@@ -3,6 +3,8 @@ package com.sunday.game.world;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.sunday.engine.Engine;
 import com.sunday.engine.databank.Port;
@@ -19,7 +21,6 @@ import com.sunday.engine.examples.Label;
 import com.sunday.engine.examples.Role;
 import com.sunday.engine.examples.enemy.SawAnimation;
 import com.sunday.engine.model.AbstractModel;
-import com.sunday.engine.model.property.MovementSignal;
 import com.sunday.engine.model.property.viewlayers.TextureViewLayer;
 import com.sunday.engine.rule.Reaction;
 import com.sunday.engine.rule.Rule;
@@ -70,16 +71,17 @@ public class DemoBallRolling implements Screen {
 
         Role heroRole = new Role(Label.Hero, squareModel);
 
-
         scenario = new Scenario(ScopeType.EntireLevel);
         scenario.addRole(backGroundRole);
+        scenario.addRole(heroRole);
         sawRandomMovingTimer.setPeriod(AnimationSetting.FrameDuration);
         for (int i = 0; i < 10; i++) {
-            AbstractModel sawModel = new SawModel((float) ((Math.random() - 0.5) * 1000), (float) ((Math.random() - 0.5) * 1000));
+//            AbstractModel sawModel = new SawModel((float) ((Math.random() - 0.5) * 1000), (float) ((Math.random() - 0.5) * 1000));
+            AbstractModel sawModel = new SawModel((float) (Math.random() * 500), (float) (Math.random() * 500));
             Role movingSaw = new Role(Label.Enemy, sawModel);
             scenario.addRole(movingSaw);
         }
-        scenario.addRole(heroRole);
+
         engine.getScenarioSystem().setRoot(scenario);
     }
 
@@ -125,7 +127,7 @@ public class DemoBallRolling implements Screen {
             @Override
             public void accept(DriverContext<KeyBoard> keyBoardDriverContext) {
                 movement.position.add(10, 10);
-                port.broadcast(movement, MovementSignal.ReLocated);
+                physicBody.forceMoveTo(movement.position);
             }
         });
         Rule<DriverContext<Mouse>> followMouseRule = new Rule<>(MouseCondition.mouseDragged(), new Reaction<DriverContext<Mouse>>() {
@@ -133,7 +135,7 @@ public class DemoBallRolling implements Screen {
             public void accept(DriverContext<Mouse> mouseDriverContext) {
                 Mouse mouse = mouseDriverContext.getData();
                 movement.position.set(mouse.screenX, Gdx.graphics.getHeight() - mouse.screenY);
-                port.broadcast(movement, MovementSignal.ReLocated);
+                physicBody.forceMoveTo(movement.position);
             }
         });
 
@@ -141,14 +143,20 @@ public class DemoBallRolling implements Screen {
             outlook.dimension.set(20, 20);
             outlook.viewLayers.add(new TextureViewLayer<>(GameFramework.Resource.getAsset("buttons/button.png")));
             movement.position.set(100, 100);
-            PolygonShape shape = new PolygonShape();
-            shape.setAsBox(20, 20);
-            physicDefinition.fixtureDef.shape = shape;
-            physicDefinition.fixtureDef.density = 1.0f;
 
-            physicDefinition.bodyDef.gravityScale = 0;
-            physicDefinition.bodyDef.type = BodyDef.BodyType.DynamicBody;
-            physicDefinition.bodyDef.position.set(movement.position);
+            FixtureDef fixtureDef = new FixtureDef();
+            PolygonShape shape = new PolygonShape();
+            shape.setAsBox(10, 10);
+            fixtureDef.shape = shape;
+            fixtureDef.density = 1.0f;
+            physicDefinition.addFixtureDef(fixtureDef);
+
+            BodyDef bodyDef = new BodyDef();
+            bodyDef.gravityScale = 0;
+            bodyDef.type = BodyDef.BodyType.DynamicBody;
+            bodyDef.position.set(movement.position);
+            physicDefinition.setBodyDef(bodyDef);
+
         }
 
         @Override
@@ -176,7 +184,7 @@ public class DemoBallRolling implements Screen {
             public void accept(TimerContext<Timer> timerContext) {
                 sawTextureViewLayer.updateTexture(sawAnimation.getKeyFrame());
                 movement.position.add((float) (Math.random() - 0.5) * 10, (float) (Math.random() - 0.5) * 10);
-                port.broadcast(movement, MovementSignal.ReLocated);
+                physicBody.forceMoveTo(movement.position);
             }
         });
 
@@ -184,12 +192,19 @@ public class DemoBallRolling implements Screen {
             movement.position.set(x, y);
             outlook.dimension.set(40, 40);
             outlook.viewLayers.add(sawTextureViewLayer);
-            physicDefinition.fixtureDef.shape.setRadius(2);
-            physicDefinition.fixtureDef.density = 0.5f;
-            physicDefinition.fixtureDef.friction = 0.2f;
-            physicDefinition.bodyDef.position.set(movement.position);
-            physicDefinition.bodyDef.type = BodyDef.BodyType.StaticBody;
-            physicDefinition.bodyDef.gravityScale = 0;
+
+            FixtureDef fixtureDef = new FixtureDef();
+            CircleShape circleShape = new CircleShape();
+            circleShape.setRadius(20);
+            fixtureDef.shape = circleShape;
+            fixtureDef.density = 0.5f;
+            fixtureDef.friction = 0.2f;
+            physicDefinition.addFixtureDef(fixtureDef);
+            BodyDef bodyDef = new BodyDef();
+            bodyDef.position.set(movement.position);
+            bodyDef.type = BodyDef.BodyType.StaticBody;
+            bodyDef.gravityScale = 0;
+            physicDefinition.setBodyDef(bodyDef);
         }
 
         @Override

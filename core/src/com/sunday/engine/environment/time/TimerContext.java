@@ -13,6 +13,6 @@ public class TimerContext<T extends Timer> extends EnvironmentDataContext<T> {
             setSignal(TimerSignal.Triggered);
         }
 //        System.out.println(getData().getInfo());
-        evaluate();
+        super.evaluate();
     }
 }

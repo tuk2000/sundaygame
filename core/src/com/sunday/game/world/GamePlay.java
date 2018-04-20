@@ -116,7 +116,6 @@ public class GamePlay implements Screen {
         fixtureDef.restitution = .75f;
 
         //uses all the properties and creates body
-        //world.createBody(bodyDef).createFixture(fixtureDef);
         world.createBody(bodyDef).createFixture(fixtureDef);
         circleShape.dispose();
 
