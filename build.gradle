@@ -72,6 +72,23 @@ project(":core") {
     }
 }
 
+project(":builder") {
+    apply plugin: "java"
+
+    dependencies {
+        compile project(":core")
+        compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+        compile "com.badlogicgames.gdx:gdx-box2d-platform:$gdxVersion:natives-desktop"
+        compile "com.badlogicgames.gdx:gdx-controllers-desktop:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-controllers-platform:$gdxVersion:natives-desktop"
+        compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx-bullet-platform:$gdxVersion:natives-desktop"
+        compile "de.tomgrill.gdxdialogs:gdx-dialogs-desktop:1.2.1"
+
+    }
+}
+
 tasks.eclipse.doLast {
     delete ".project"
 }
