@@ -1,4 +1,4 @@
-package com.sunday.builder;
+package com.sunday.builder.simulation;
 
 import com.badlogic.gdx.ApplicationListener;
 
