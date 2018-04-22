@@ -1,5 +1,6 @@
 package com.sunday.builder.simulation;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
@@ -8,8 +9,14 @@ import com.badlogic.gdx.backends.lwjgl.audio.OpenALAudio;
 import javax.swing.*;
 import java.awt.*;
 
-public class SimulationWindow extends JInternalFrame {
+public class SimulationExecutorImpl implements SimulationExecutor {
+
     public static Thread shutdownHook;
+    private ApplicationListener listener;
+    private LwjglApplicationConfiguration config;
+    private Application application;
+    private JPanel container;
+    private boolean running;
 
     //code from LwjglFrame.setHaltOnShutdown
     public static void setHaltOnShutdown(boolean halt) {
@@ -28,28 +35,29 @@ public class SimulationWindow extends JInternalFrame {
         }
     }
 
-    private ApplicationListener listener;
-    private LwjglCanvas lwjglCanvas;
-    private LwjglApplicationConfiguration config;
-
-    public SimulationWindow(ApplicationListener listener) {
-        config = new LwjglApplicationConfiguration();
-        config.width = 1280;
-        config.height = 720;
-        config.forceExit = false;
-        this.listener = listener;
-        initialize();
+    @Override
+    public boolean isRunning() {
+        return running;
     }
 
-    public SimulationWindow(ApplicationListener listener, LwjglApplicationConfiguration config) {
-        this.config = config;
-        config.forceExit = false;
-        this.listener = listener;
-        initialize();
+    @Override
+    public void setup(SimulationTask simulationTask, JPanel container) {
+        this.listener = simulationTask.getListener();
+        this.config = simulationTask.getConfig();
+        this.container = container;
+
+        container.setSize(config.width, config.height);
+        container.setPreferredSize(new Dimension(config.width, config.height));
+        container.setMaximumSize(new Dimension(1920, 1080));
+        //container.setResizable(config.resizable);
+        running = false;
+        setHaltOnShutdown(true);
     }
 
-    private void initialize() {
-        lwjglCanvas = new LwjglCanvas(listener, config) {
+    @Override
+    public void execute() {
+        container.removeAll();
+        LwjglCanvas lwjglCanvas = new LwjglCanvas(listener, config) {
             @Override
             public void exit() {
                 postRunnable(new Runnable() {
@@ -65,22 +73,30 @@ public class SimulationWindow extends JInternalFrame {
                                 error.printStackTrace();
                             }
                         }
-                        SimulationWindow.this.dispose();
+                        container.removeAll();
+                        container.setVisible(false);
+                        container.add(new JLabel(config.title + " was terminated !"));
+                        container.setVisible(true);
                     }
                 });
             }
         };
-        setTitle("Simulation : " + config.title);
-        setSize(config.width, config.height);
-        setPreferredSize(new Dimension(config.width, config.height));
-        setMaximumSize(new Dimension(1920, 1080));
-        setResizable(config.resizable);
+        application = lwjglCanvas;
         SwingUtilities.invokeLater(() -> {
-            System.out.println(Thread.currentThread());
-            getContentPane().add(lwjglCanvas.getCanvas());
-            setVisible(true);
-            getContentPane().requestFocus();
+            container.add(lwjglCanvas.getCanvas());
+            container.setVisible(false);
+            container.setVisible(true);
+            container.requestFocus();
+            running = true;
         });
-        setHaltOnShutdown(true);
+    }
+
+    @Override
+    public void terminate() {
+        if (running) {
+            application.exit();
+            container.removeAll();
+            running = false;
+        }
     }
 }

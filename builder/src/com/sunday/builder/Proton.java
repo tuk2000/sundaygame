@@ -1,7 +1,7 @@
 package com.sunday.builder;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.sunday.builder.simulation.SimulationWindow;
+import com.sunday.builder.simulation.SimulationTask;
 import com.sunday.game.framework.GameAdaptor;
 
 public class Proton {
@@ -19,7 +19,8 @@ public class Proton {
         config.height = 720;
         config.resizable = true;
 
-        builderWindow.add(new SimulationWindow(GameAdaptor.getInstance(), config));
+        SimulationTask simulationTask = new SimulationTask(GameAdaptor.getInstance(), config);
+        builderWindow.setDemoSimulationTask(simulationTask);
 
     }
 }
