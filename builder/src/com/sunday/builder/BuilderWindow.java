@@ -69,9 +69,10 @@ public class BuilderWindow extends JFrame {
                 splashFrame.setUndecorated(true);
                 splashFrame.getContentPane().setBackground(Color.WHITE);
                 JLabel jLabel = new JLabel("Welcome");
+                jLabel.setHorizontalAlignment(JLabel.CENTER);
                 splashFrame.getContentPane().add(jLabel);
                 splashFrame.setLocationRelativeTo(BuilderWindow.this);
-                splashFrame.setSize(100, 50);
+                splashFrame.setSize(200, 100);
                 splashFrame.setVisible(true);
                 TimerTask timerTask = new TimerTask() {
                     @Override
@@ -119,6 +120,12 @@ public class BuilderWindow extends JFrame {
             @Override
             public void windowDeactivated(WindowEvent e) {
 
+            }
+        });
+        workTablePane.addFocusListener(new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                workTablePane.getSelectedComponent().requestFocus();
             }
         });
     }
